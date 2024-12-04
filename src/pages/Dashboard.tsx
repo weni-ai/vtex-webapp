@@ -7,10 +7,6 @@ import { FeatureBox } from '../components/FeatureBox';
 export function Dashboard() {
   const [period, setPeriod] = useState('Last 7 days')
 
-  function functt(test) {
-    console.log(test)
-  }
-
   return (
     <Page>
       <PageHeader>

@@ -1,7 +1,7 @@
 import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
 import iconWhatsapp from '../../assets/channels/whatsapp.svg';
 
-export function initFacebookSDK({ appId, whenFacebookIsAvailable }) {
+export function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: string, whenFacebookIsAvailable: () => void }) {
   window.fbAsyncInit = function () {
     FB.init({
       appId,
@@ -41,7 +41,7 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
         console.log('is active')
 
         FB.login(
-          (response) => {
+          (response: { authResponse: { code: string } }) => {
             console.log('test', response);
             if (response.authResponse) {
               const code = response.authResponse.code;
