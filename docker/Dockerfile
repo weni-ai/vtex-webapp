@@ -3,7 +3,7 @@
 ARG NODE_VERSION="20.18.1"
 ARG BASE_VERSION="alpine3.19"
 
-FROM node:${NODE_VERSION}-${BASE_VERSION} as builder
+FROM node:${NODE_VERSION}-${BASE_VERSION} AS builder
 
 WORKDIR /app
 
@@ -21,6 +21,9 @@ FROM nginxinc/nginx-unprivileged:1.25-alpine
 
 COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder --chown=nginx:nginx /app/dist /usr/share/nginx/html/vtex-webapp/
+COPY --chown=nginx:nginx docker/headers /usr/share/nginx/html/
+COPY docker/docker-entrypoint.sh /
+
 RUN mv /usr/share/nginx/html/vtex-webapp/index.html /usr/share/nginx/html/vtex-webapp/index.html.tmpl \
     && cd /usr/share/nginx/html/vtex-webapp/ \
     && ln -s /tmp/index.html

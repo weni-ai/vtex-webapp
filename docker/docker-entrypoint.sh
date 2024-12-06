@@ -1,4 +1,5 @@
 #!/bin/sh
+
 export JSON_STRING='window.configs = { \
   "SENTRY_DSN":"'${SENTRY_DSN}'", \
   "SENTRY_ENVIRONMENT":"'${SENTRY_ENVIRONMENT}'", \
