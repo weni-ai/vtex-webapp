@@ -46,7 +46,6 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
             if (response.authResponse) {
               const code = response.authResponse.code;
               console.log('code', code)
-            } else {
             }
           },
           {
