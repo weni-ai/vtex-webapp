@@ -2,13 +2,22 @@ import { SettingUp } from './pages/SettingUp';
 import { AgentBuilder } from './pages/AgentBuilder';
 import { Channels } from './pages/setup/Channels';
 import { Dashboard } from './pages/Dashboard';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 
 import store from './store/user.store';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { setUser } from './store/userSlice';
+import { useEffect } from 'react';
+import { getUserFromLocalStorage } from './services/user.service';
 
 function App() {
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const user = getUserFromLocalStorage();
+    if (user) {
+      dispatch(setUser(user));
+    }
+  }, [dispatch]);
   return (
     <Provider store={store}>
       <Router>
