@@ -1,11 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Button, Divider, Filter, FilterItem, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Select, SelectItem, Text } from '@vtex/shoreline';
 import WeniLogo from '../assets/weni-logo.svg';
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
+import { VTEXFetch } from '../utils/VTEXFetch';
 
 export function Dashboard() {
-  const [period, setPeriod] = useState('Last 7 days')
+  const [period, setPeriod] = useState('Last 7 days');
+  const [data, setData] = useState<{title: string; value: string; variation: number}[][]>([]);
+
+  useEffect(() => {
+    VTEXFetch('/agents/:uuid').then(
+      ({data}: {
+        data: {
+          title: string;
+          value: string;
+          variation: number
+        }[]
+      }) => {
+
+        const groupOfDetails = [[]];
+        const maxPerGroup = 3;
+
+        for (let i = 0; i < data.length; i++) {
+          console.log(groupOfDetails.at(-1));
+          if (groupOfDetails.at(-1).length === maxPerGroup) {
+            groupOfDetails.push([]);
+          }
+
+          groupOfDetails.at(-1).push(data[i]);
+        }
+
+      setData(groupOfDetails);
+    });
+  }, []);
 
   return (
     <Page>
@@ -90,66 +118,26 @@ export function Dashboard() {
             borderRadius: 'var(--sl-radius-2)',
           }}
         >
-          <Grid
-            columns="1fr 1fr 1fr"
-            gap="$space-0"
-            style={{
-              borderBottom: 'var(--sl-border-base)',
-            }}
-          >
-            <DashboardItem
-              title="Sent messages"
-              value="1325"
-              percentageDifference={5.06}
+          {data.map((line, indexOfLine) => (
+            <Grid
+              columns="1fr 1fr 1fr"
+              gap="$space-0"
               style={{
-                borderRight: 'var(--sl-border-base)',
+                borderBottom: indexOfLine !== data.length - 1 ? 'var(--sl-border-base)' : undefined,
               }}
-            />
-
-            <DashboardItem
-              title="Delivered messages"
-              value="1259"
-              percentageDifference={-1.12}
-              style={{
-                borderRight: 'var(--sl-border-base)',
-              }}
-            />
-
-            <DashboardItem
-              title="Readed messages"
-              value="956"
-              percentageDifference={-2.08}
-            />
-          </Grid>
-
-          <Grid
-            columns="1fr 1fr 1fr"
-            gap="$space-0"
-          >
-            <DashboardItem
-              title="Interactions"
-              value="569"
-              percentageDifference={6.13}
-              style={{
-                borderRight: 'var(--sl-border-base)',
-              }}
-            />
-            
-            <DashboardItem
-              title="UTM revenue"
-              value="R$ 44.566,00"
-              percentageDifference={12.2}
-              style={{
-                borderRight: 'var(--sl-border-base)',
-              }}
-            />
-            
-            <DashboardItem
-              title="Orders placed"
-              value="86"
-              percentageDifference={0}
-            />
-          </Grid>
+            >
+              {line.map((detail, indexOfDetail) => (
+                <DashboardItem
+                  title={detail.title}
+                  value={detail.value}
+                  percentageDifference={detail.variation}
+                  style={{
+                    borderRight: indexOfDetail !== line.length - 1 ? 'var(--sl-border-base)' : undefined,
+                  }}
+                />
+              ))}
+            </Grid>
+          ))}
         </Flex>
 
         <Heading
