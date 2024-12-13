@@ -45,5 +45,18 @@
         }
       ]
     }
+  },
+  "/api/vtexid/pub/authenticated/user": {
+    "GET": {
+      "data": {
+        "userId": "364fcd0f-e7e1-4b99-b5f9-55ae9b770dc3",
+        "user": "teste@vtex.com",
+        "userType": "F",
+        "tokenType": "user",
+        "account": "wenipartnerbr",
+        "audience": "admin",
+        "isRepresentative": false
+      }
+    }
   }
 }
