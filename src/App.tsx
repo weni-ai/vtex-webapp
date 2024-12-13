@@ -19,7 +19,6 @@ function App() {
     }
   }, [dispatch]);
   return (
-    <Provider store={store}>
       <Router>
       <Routes>
       <Route path='/' element={<SettingUp />}></Route>
@@ -28,7 +27,6 @@ function App() {
       <Route path='/dash' element={<Dashboard />}></Route>
       </Routes>
       </Router>
-    </Provider>
   )
 }
 

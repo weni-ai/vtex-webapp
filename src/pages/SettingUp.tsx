@@ -20,8 +20,7 @@ export function SettingUp() {
 
   useEffect(() => {
     if (!isInitialized.current) {
-    const payload = {}
-      initializeUser(payload);
+      initializeUser();
       isInitialized.current = true;
     }
   }, [initializeUser]);
