@@ -2,9 +2,8 @@ import { SettingUp } from './pages/SettingUp';
 import { AgentBuilder } from './pages/AgentBuilder';
 import { Channels } from './pages/setup/Channels';
 import { Dashboard } from './pages/Dashboard';
-import { Provider, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import store from './store/user.store';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { setUser } from './store/userSlice';
 import { useEffect } from 'react';
