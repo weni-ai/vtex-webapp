@@ -2,11 +2,13 @@ import { Bleed, Button, ContextualHelp, Divider, Field, Flex, Input, Label, Page
 import iconManageSearch from '../assets/icons/manage_search.svg';
 import iconNeurology from '../assets/icons/neurology.svg';
 import iconVolunteerActivism from '../assets/icons/volunteer_activism.svg';
+import { startFacebookLogin } from '../utils/facebook/login';
 
 export function AgentBuilder() {
   function integrateWhatsapp(){
     console.log('aloo')
-    
+    startFacebookLogin()
+
   }
   return (
     <Page>
