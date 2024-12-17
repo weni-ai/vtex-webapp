@@ -1,0 +1,62 @@
+{
+  "/agent_persona": {
+    "POST": {
+      "name": "Name",
+      "occupation": "Occupation",
+      "goal": "Goal",
+      "website": "http://example.com"
+    }
+  },
+  "/agents/:uuid": {
+    "GET": {
+      "title": "Abandoned cart agent",
+      "type": "active",
+      "description": "Recover sales by reminding customers of items forgotten in the cart.",
+      "data": [
+        {
+          "title": "Sent messages",
+          "value": "1325",
+          "variation": 5.06
+        },
+        {
+          "title": "Delivered messages",
+          "value": "1259",
+          "variation": -1.12
+        },
+        {
+          "title": "Readed messages",
+          "value": "956",
+          "variation": -2.08
+        },
+        {
+          "title": "Interactions",
+          "value": "569",
+          "variation": 6.13
+        },
+        {
+          "title": "UTM revenue",
+          "value": "R$ 44.566,00",
+          "variation": 12.2
+        },
+        {
+          "title": "Orders placed",
+          "value": "86",
+          "variation": 0
+        }
+      ]
+    }
+  },
+  "/api/vtexid/pub/authenticated/user": {
+    "GET": {
+      "data": {
+        "userId": "364fcd0f-e7e1-4b99-b5f9-55ae9b770dc3",
+        "user": "teste@vtex.com",
+        "userType": "F",
+        "tokenType": "user",
+        "account": "wenipartnerbr",
+        "audience": "admin",
+        "isRepresentative": false
+      }
+    }
+  }
+}
