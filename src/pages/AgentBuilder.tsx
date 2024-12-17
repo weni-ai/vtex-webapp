@@ -6,9 +6,7 @@ import { startFacebookLogin } from '../utils/facebook/login';
 
 export function AgentBuilder() {
   function integrateWhatsapp(){
-    console.log('aloo')
     startFacebookLogin()
-
   }
   return (
     <Page>
