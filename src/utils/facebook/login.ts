@@ -24,7 +24,7 @@ export function initFacebookSdk(appId: string, loginCallback: () => void): void 
     };
 
     // Search for the current loaded SDK and remove it
-    (function (d, s, id): void {
+    (function (d, _s, id): void {
         const existingScript = d.getElementById(id);
         if (existingScript) existingScript.remove();
         if (typeof FB !== 'undefined') {
