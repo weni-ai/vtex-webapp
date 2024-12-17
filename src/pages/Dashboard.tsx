@@ -4,10 +4,16 @@ import WeniLogo from '../assets/weni-logo.svg';
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
+import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
   const [period, setPeriod] = useState('Last 7 days');
   const [data, setData] = useState<{title: string; value: string; variation: number}[][]>([]);
+  const navigate = useNavigate();
+
+  function navigateToAgent(){
+    navigate('/agent-builder')
+  }
 
   useEffect(() => {
     VTEXFetch<{ data: { title: string; value: string; variation: number }[] }>('/agents/:uuid')
@@ -65,7 +71,7 @@ export function Dashboard() {
               Unlock the full potential of your intelligent agent by connecting to the Weni platform. Access advanced features and customizable options to enhance performance and provide a better customer experience.
             </Text>
 
-            <Button variant="primary" style={{ flex: 'none', }}>
+            <Button variant="primary" style={{ flex: 'none', }} onClick={navigateToAgent}>
               Improve your agent
 
               <IconArrowUpRight
