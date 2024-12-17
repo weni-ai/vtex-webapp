@@ -25,13 +25,13 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
   const useLocalVTEXFetch = searchParams.get('useLocalVTEXFetch')?.toLowerCase() === 'true';
 
   if (useLocalVTEXFetch) {
-    const path = args[0] as keyof typeof mocks; // Adiciona a tipagem explícita
+    const path = args[0] as keyof typeof mocks;
     const method = (args[1]?.method || 'GET') as keyof typeof mocks[keyof typeof mocks];
 
     const foundResponse = mocks[path]?.[method];
     if (!foundResponse) {
       console.error(`Mock response for ${method} ${args[0]} not found`);
-      return new Promise(() => { }); // Retorna uma promise que nunca resolve
+      return new Promise(() => { });
     }
 
     console.log('VTEXFetch Log:', method, args[0], args[1]?.body);
