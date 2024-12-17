@@ -10,29 +10,23 @@ export function Dashboard() {
   const [data, setData] = useState<{title: string; value: string; variation: number}[][]>([]);
 
   useEffect(() => {
-    VTEXFetch('/agents/:uuid').then(
-      ({data}: {
-        data: {
-          title: string;
-          value: string;
-          variation: number
-        }[]
-      }) => {
-
-        const groupOfDetails = [[]];
+    VTEXFetch<{ data: { title: string; value: string; variation: number }[] }>('/agents/:uuid')
+      .then(({ data }) => {
+        const groupOfDetails: { title: string; value: string; variation: number }[][] = [[]];
         const maxPerGroup = 3;
-
+  
         for (let i = 0; i < data.length; i++) {
-          console.log(groupOfDetails.at(-1));
-          if (groupOfDetails.at(-1).length === maxPerGroup) {
+          if (groupOfDetails.at(-1)?.length === maxPerGroup) {
             groupOfDetails.push([]);
           }
-
-          groupOfDetails.at(-1).push(data[i]);
+          groupOfDetails.at(-1)?.push(data[i]);
         }
-
-      setData(groupOfDetails);
-    });
+  
+        setData(groupOfDetails);
+      })
+      .catch((error) => {
+        console.error('VTEXFetch failed:', error);
+      });
   }, []);
 
   return (
