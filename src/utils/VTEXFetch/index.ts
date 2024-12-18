@@ -34,7 +34,7 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
       const handleMessage = (event: MessageEvent) => {
         const { name, id, data, error } = event.data;
         
-        if (name === 'VTEXFetchResponse' && id === responseId) {
+        if (name === 'VTEXFetch' && id === responseId) {
           console.log('alo', event)
           window.removeEventListener('message', handleMessage);
 
