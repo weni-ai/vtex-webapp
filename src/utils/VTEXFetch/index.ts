@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mocks from './mocks.json';
+import axios from 'axios';
 
 const requestsAwaitingResponses: Record<
   string,
@@ -25,35 +25,30 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
   const useLocalVTEXFetch = searchParams.get('useLocalVTEXFetch')?.toLowerCase() === 'true';
 
   if (useLocalVTEXFetch) {
-    const path = args[0] as keyof typeof mocks;
-    const method = (args[1]?.method || 'GET') as keyof typeof mocks[keyof typeof mocks];
+    const domain = window.location.origin; // Obtém o domínio atual
+    const path = `${domain}/api/vtexid/pub/authenticated/user`;
 
-    const foundResponse = mocks[path]?.[method];
-    if (!foundResponse) {
-      console.error(`Mock response for ${method} ${args[0]} not found`);
-      return new Promise(() => { });
-    }
-
-    console.log('VTEXFetch Log:', method, args[0], args[1]?.body);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(foundResponse as T);
-      }, 300);
-    });
+    console.log('VTEXFetch Log: GET', path);
+    return axios
+      .get<T>(path)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(`Error fetching data from ${path}:`, error);
+        throw error;
+      });
   }
 
-  const id = ((length: number) => {
-    const id = [];
-    for (let i = 0; i < length; i++) {
-      id.push(Math.floor(Math.random() * 36).toString(36));
-    }
-    return id.join('');
-  })(10);
-
+  const id = generateId(10);
   window.parent.postMessage({ name: 'VTEXFetch', args, id }, '*');
 
   return new Promise<T>((resolve, reject) => {
     requestsAwaitingResponses[id] = { resolve, reject };
   });
+}
+
+function generateId(length: number): string {
+  return Array.from({ length }, () =>
+    Math.floor(Math.random() * 36).toString(36)
+  ).join('');
 }
 
