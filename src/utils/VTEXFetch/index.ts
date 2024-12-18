@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const requestsAwaitingResponses: Record<
-  string,
-  { resolve: (value: any) => void; reject: (reason: any) => void }
-> = {};
+// const requestsAwaitingResponses: Record<
+//   string,
+//   { resolve: (value: any) => void; reject: (reason: any) => void }
+// > = {};
 
-window.addEventListener('message', (event) => {
-  if (event?.data?.name !== "VTEXFetch") {
-    return;
-  }
+// window.addEventListener('message', (event) => {
+//   if (event?.data?.name !== "VTEXFetch") {
+//     return;
+//   }
 
-  if (event.data.status === 'success') {
-    requestsAwaitingResponses[event.data.id].resolve(event.data.response);
-    delete requestsAwaitingResponses[event.data.id];
-  } else if (event.data.status === 'error') {
-    requestsAwaitingResponses[event.data.id].reject(event.data.reason);
-    delete requestsAwaitingResponses[event.data.id];
-  }
-});
+//   if (event.data.status === 'success') {
+//     requestsAwaitingResponses[event.data.id].resolve(event.data.response);
+//     delete requestsAwaitingResponses[event.data.id];
+//   } else if (event.data.status === 'error') {
+//     requestsAwaitingResponses[event.data.id].reject(event.data.reason);
+//     delete requestsAwaitingResponses[event.data.id];
+//   }
+// });
 
 export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
   const searchParams = new URLSearchParams(window.location.search);
@@ -33,6 +33,7 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const handleMessage = (event: MessageEvent) => {
         const { name, responseId, data, error } = event.data;
+        console.log('alo', event)
 
         if (name === 'VTEXFetchResponse' && responseId === id) {
           window.removeEventListener('message', handleMessage);
