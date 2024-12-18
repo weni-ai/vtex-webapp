@@ -24,10 +24,9 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
 
   if (useLocalVTEXFetch) {
     const id = generateId(10);
-    const [path, options] = args;
 
     window.parent.postMessage(
-      { name: 'VTEXFetch', id, path, options }, 
+      { name: 'VTEXFetch', id, args }, 
       '*'
     );
 
