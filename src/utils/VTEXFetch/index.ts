@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from 'axios';
-
 const requestsAwaitingResponses: Record<
   string,
   { resolve: (value: any) => void; reject: (reason: any) => void }
@@ -25,25 +23,34 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
   const useLocalVTEXFetch = searchParams.get('useLocalVTEXFetch')?.toLowerCase() === 'true';
 
   if (useLocalVTEXFetch) {
-    const domain = window.location.origin; // Obtém o domínio atual
-    const path = `${domain}/api/vtexid/pub/authenticated/user`;
+    const id = generateId(10);
+    const [path, options] = args;
 
-    console.log('VTEXFetch Log: GET', path);
-    return axios
-      .get<T>(path)
-      .then((response) => response.data)
-      .catch((error) => {
-        console.error(`Error fetching data from ${path}:`, error);
-        throw error;
-      });
+    window.parent.postMessage(
+      { name: 'VTEXFetch', id, path, options }, 
+      '*'
+    );
+
+    return new Promise<T>((resolve, reject) => {
+      const handleMessage = (event: MessageEvent) => {
+        const { name, responseId, data, error } = event.data;
+
+        if (name === 'VTEXFetchResponse' && responseId === id) {
+          window.removeEventListener('message', handleMessage);
+
+          if (error) {
+            reject(new Error(error));
+          } else {
+            resolve(data);
+          }
+        }
+      };
+
+      window.addEventListener('message', handleMessage);
+    });
   }
 
-  const id = generateId(10);
-  window.parent.postMessage({ name: 'VTEXFetch', args, id }, '*');
-
-  return new Promise<T>((resolve, reject) => {
-    requestsAwaitingResponses[id] = { resolve, reject };
-  });
+  throw new Error('useLocalVTEXFetch is disabled.');
 }
 
 function generateId(length: number): string {
@@ -51,4 +58,5 @@ function generateId(length: number): string {
     Math.floor(Math.random() * 36).toString(36)
   ).join('');
 }
+
 
