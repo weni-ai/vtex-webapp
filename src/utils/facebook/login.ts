@@ -10,20 +10,16 @@ declare global {
 }
 
 export function initFacebookSdk(appId: string, loginCallback: () => void): void {
-    // Wait for Facebook SDK to initialize before starting the Vue app
     window.fbAsyncInit = function (): void {
-        // JavaScript SDK configuration and setup
         FB.init({
-            appId, // Facebook App ID
-            xfbml: true, // Parse social plugins on this page
-            version: 'v18.0', // Graph API version
+            appId,
+            xfbml: true,
+            version: 'v18.0',
         });
 
-        // Call login code after init
         loginCallback();
     };
 
-    // Search for the current loaded SDK and remove it
     (function (d, _s, id): void {
         const existingScript = d.getElementById(id);
         if (existingScript) existingScript.remove();
@@ -32,7 +28,6 @@ export function initFacebookSdk(appId: string, loginCallback: () => void): void 
         }
     })(document, 'script', 'facebook-jssdk');
 
-    // Load the JavaScript SDK asynchronously
     (function (d, s, id): void {
         const js: HTMLScriptElement = d.createElement(s) as HTMLScriptElement;;
         const fjs = d.getElementsByTagName(s)[0];
