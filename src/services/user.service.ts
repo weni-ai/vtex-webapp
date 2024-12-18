@@ -8,6 +8,7 @@ export function getUserFromLocalStorage() {
 export async function fetchUserData() {
   try {
     const { data } = await VTEXFetch('/api/vtexid/pub/authenticated/user');
+    console.log('entrou na service: ', data)
     return data;
   } catch (error) {
     console.error('Error:', error);
