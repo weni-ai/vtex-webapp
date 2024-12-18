@@ -4,35 +4,35 @@ import WeniLogo from '../assets/weni-logo.svg';
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
+import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
   const [period, setPeriod] = useState('Last 7 days');
   const [data, setData] = useState<{title: string; value: string; variation: number}[][]>([]);
+  const navigate = useNavigate();
+
+  function navigateToAgent(){
+    navigate('/agent-builder')
+  }
 
   useEffect(() => {
-    VTEXFetch('/agents/:uuid').then(
-      ({data}: {
-        data: {
-          title: string;
-          value: string;
-          variation: number
-        }[]
-      }) => {
-
-        const groupOfDetails = [[]];
+    VTEXFetch<{ data: { title: string; value: string; variation: number }[] }>('/agents/:uuid')
+      .then(({ data }) => {
+        const groupOfDetails: { title: string; value: string; variation: number }[][] = [[]];
         const maxPerGroup = 3;
-
+  
         for (let i = 0; i < data.length; i++) {
-          console.log(groupOfDetails.at(-1));
-          if (groupOfDetails.at(-1).length === maxPerGroup) {
+          if (groupOfDetails.at(-1)?.length === maxPerGroup) {
             groupOfDetails.push([]);
           }
-
-          groupOfDetails.at(-1).push(data[i]);
+          groupOfDetails.at(-1)?.push(data[i]);
         }
-
-      setData(groupOfDetails);
-    });
+  
+        setData(groupOfDetails);
+      })
+      .catch((error) => {
+        console.error('VTEXFetch failed:', error);
+      });
   }, []);
 
   return (
@@ -71,7 +71,7 @@ export function Dashboard() {
               Unlock the full potential of your intelligent agent by connecting to the Weni platform. Access advanced features and customizable options to enhance performance and provide a better customer experience.
             </Text>
 
-            <Button variant="primary" style={{ flex: 'none', }}>
+            <Button variant="primary" style={{ flex: 'none', }} onClick={navigateToAgent}>
               Improve your agent
 
               <IconArrowUpRight
