@@ -23,19 +23,19 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
   const useLocalVTEXFetch = searchParams.get('useLocalVTEXFetch')?.toLowerCase() === 'true';
 
   if (useLocalVTEXFetch) {
-    const id = generateId(10);
+    const responseId = generateId(10);
 
     window.parent.postMessage(
-      { name: 'VTEXFetch', id, args }, 
+      { name: 'VTEXFetch', id: responseId, args }, 
       '*'
     );
 
     return new Promise<T>((resolve, reject) => {
       const handleMessage = (event: MessageEvent) => {
-        const { name, responseId, data, error } = event.data;
-        console.log('alo', event)
-
-        if (name === 'VTEXFetchResponse' && responseId === id) {
+        const { name, id, data, error } = event.data;
+        
+        if (name === 'VTEXFetchResponse' && id === responseId) {
+          console.log('alo', event)
           window.removeEventListener('message', handleMessage);
 
           if (error) {
