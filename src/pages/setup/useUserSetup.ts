@@ -12,6 +12,7 @@ export function useUserSetup() {
   const initializeUser = async () => {
     try {
       const userData = await fetchUserData();
+      console.log('userData: ', userData)
       if (userData) {
         dispatch(setUser(userData));
         const payload = {
