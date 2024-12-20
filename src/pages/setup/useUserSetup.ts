@@ -22,8 +22,7 @@ export function useUserSetup() {
           vtex_account: "org.vtex.com.br"
         }
 
-        await axios.post('https://vtex-io.apip.stg.cloud.weni.ai/create_user', payload);
-        navigate('/dash');
+        await axios.post('https://vtex-io.apip.stg.cloud.weni.ai/create_user', payload).then(() =>  navigate('/dash'));
       }
     } catch (error) {
       console.error('Error:', error);
