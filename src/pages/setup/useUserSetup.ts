@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../store/userSlice';
 import { fetchUserData } from '../../services/user.service';
-import axios from 'axios';
+import { VTEXFetch } from '../../utils/VTEXFetch';
 
 export function useUserSetup() {
   const dispatch = useDispatch();
@@ -17,12 +17,19 @@ export function useUserSetup() {
         dispatch(setUser(userData));
         const payload = {
           user_email: userData.user,
-          organization_name: "Org VTEX",
-          project_name: "Project VTEX",
-          vtex_account: "org.vtex.com.br"
+          organization_name: userData.account,
+          project_name: `${userData.account} 01`,
+          vtex_account: userData.account
         }
 
-        await axios.post('https://vtex-io.apip.stg.cloud.weni.ai/create_user', payload).then(() =>  navigate('/dash?useLocalVTEXFetch=tru'));
+        await VTEXFetch('_v/create-user-and-project', {
+          method: 'POST',
+          body: payload
+        }).then((response) => {
+          userData.project_uuid = response.data.project_uuid
+          dispatch(setUser(userData))
+          navigate('/dash?useLocalVTEXFetch=true')
+        });
       }
     } catch (error) {
       console.error('Error:', error);
