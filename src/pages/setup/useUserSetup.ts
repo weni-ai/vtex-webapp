@@ -24,11 +24,16 @@ export function useUserSetup() {
 
         await VTEXFetch('/_v/create-user-and-project', {
           method: 'POST',
-          body: payload
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
         }).then((response) => {
-          userData.project_uuid = response.data.project_uuid
-          dispatch(setUser(userData))
-          navigate('/dash?useLocalVTEXFetch=true')
+          userData.project_uuid = response.data.project_uuid;
+          dispatch(setUser(userData));
+          navigate('/dash?useLocalVTEXFetch=true');
+        }).catch((error) => {
+          console.error('Erro na criação do projeto e usuário:', error);
         });
       }
     } catch (error) {
