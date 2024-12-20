@@ -56,7 +56,7 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
     });
   }
 
-  throw new Error('useLocalVTEXFetch is disabled.');
+  console.log('useLocalVTEXFetch is disabled.')
 }
 
 
