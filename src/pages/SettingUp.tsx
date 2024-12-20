@@ -11,19 +11,23 @@ import {
   Text,
 } from '@vtex/shoreline';
 import WeniLogo from '../assets/weni-logo.svg';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useUserSetup } from './setup/useUserSetup';
 
 export function SettingUp() {
   const { initializeUser } = useUserSetup();
   const isInitialized = useRef(false);
 
+  const memoizedInitializeUser = useCallback(() => {
+    initializeUser();
+  }, [initializeUser]);
+
   useEffect(() => {
     if (!isInitialized.current) {
-      initializeUser();
+      memoizedInitializeUser();
       isInitialized.current = true;
     }
-  }, [initializeUser]);
+  }, [memoizedInitializeUser]);
 
   return (
     <Page>
