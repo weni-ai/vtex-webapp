@@ -28,8 +28,6 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
   if (useLocalVTEXFetch) {
     const responseId = generateId(10);
 
-    window.parent.postMessage({ name: 'VTEXFetch', id: responseId, args }, '*');
-
     return new Promise<T>((resolve, reject) => {
       requestsAwaitingResponses[responseId] = { resolve, reject };
 
@@ -43,19 +41,20 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
           if (error) {
             reject(new Error(error));
           } else {
-            resolve(data); 
+            resolve(data);
           }
         }
       };
 
       window.addEventListener('message', handleMessage);
+
+      window.parent.postMessage({ name: 'VTEXFetch', id: responseId, args }, '*');
     });
   }
 
   throw new Error('useLocalVTEXFetch is disabled.');
 }
 
-// Função para gerar ID único
 function generateId(length: number): string {
   return Array.from({ length }, () => Math.floor(Math.random() * 36).toString(36)).join('');
 }
