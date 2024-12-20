@@ -28,10 +28,26 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
     const responseId = generateId(10);
 
     return new Promise<T>((resolve, reject) => {
-      requestsAwaitingResponses[responseId] = { resolve, reject };
+      const handleMessage = (event: MessageEvent) => {
+        console.log('Mensagem recebida no VTEXFetch:', event.data);
+
+        const { name, id, status, response, reason } = event.data || {};
+        
+        if (name === 'VTEXFetch' && id === responseId) {
+          window.removeEventListener('message', handleMessage);
+
+          if (status === 'success') {
+            resolve(response);
+          } else if (status === 'error') {
+            reject(new Error(reason || 'Erro desconhecido'));
+          }
+        }
+      };
+
+      window.addEventListener('message', handleMessage);
 
       setTimeout(() => {
-        console.log('Mensagem enviada para o parent:', { name: 'VTEXFetch', id: responseId, args });
+        console.log('Enviando mensagem para o iframe...');
         window.parent.postMessage(
           { name: 'VTEXFetch', id: responseId, args },
           '*'
@@ -42,6 +58,7 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
 
   throw new Error('useLocalVTEXFetch is disabled.');
 }
+
 
 function generateId(length: number): string {
   return Array.from({ length }, () => Math.floor(Math.random() * 36).toString(36)).join('');
