@@ -31,10 +31,10 @@ export function useUserSetup() {
         }).then((response) => {
           userData.project_uuid = response.data.project_uuid;
           dispatch(setUser(userData));
-          navigate('/dash?useLocalVTEXFetch=true');
         }).catch((error) => {
           console.error('Erro na criação do projeto e usuário:', error);
         });
+        navigate('/dash?useLocalVTEXFetch=true');
       }
     } catch (error) {
       console.error('Error:', error);
