@@ -22,7 +22,7 @@ export function useUserSetup() {
           vtex_account: userData.account
         }
 
-        await VTEXFetch('_v/create-user-and-project', {
+        await VTEXFetch('/_v/create-user-and-project', {
           method: 'POST',
           body: payload
         }).then((response) => {
