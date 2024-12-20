@@ -2,22 +2,21 @@
 const requestsAwaitingResponses: Record<string, { resolve: (value: any) => void; reject: (reason: any) => void }> = {};
 
 window.addEventListener('message', (event: MessageEvent) => {
-  if (event?.data?.name !== 'VTEXFetch') {
+  const { name, id, status, response, reason } = event.data || {};
+
+  if (name !== 'VTEXFetch') {
     return;
   }
-
-  const { status, id, response, reason } = event.data;
-
-  if (status === 'success') {
-    if (requestsAwaitingResponses[id]) {
-      requestsAwaitingResponses[id].resolve(response);
-      delete requestsAwaitingResponses[id];
-    }
-  } else if (status === 'error') {
-    if (requestsAwaitingResponses[id]) {
-      requestsAwaitingResponses[id].reject(reason);
-      delete requestsAwaitingResponses[id];
-    }
+  if (status === 'success' && requestsAwaitingResponses[id]) {
+    console.log('Resolvendo promise para ID:', id, response);
+    requestsAwaitingResponses[id].resolve(response);
+    delete requestsAwaitingResponses[id];
+  } else if (status === 'error' && requestsAwaitingResponses[id]) {
+    console.log('Rejeitando promise para ID:', id, reason);
+    requestsAwaitingResponses[id].reject(reason);
+    delete requestsAwaitingResponses[id];
+  } else {
+    console.warn('Mensagem não corresponde a nenhuma requisição aguardando:', event.data);
   }
 });
 
@@ -31,24 +30,13 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       requestsAwaitingResponses[responseId] = { resolve, reject };
 
-      const handleMessage = (event: MessageEvent) => {
-        const { name, id, data, error } = event.data;
-
-        if (name === 'VTEXFetch' && id === responseId) {
-          console.log('Resposta recebida:', event);
-          window.removeEventListener('message', handleMessage);
-
-          if (error) {
-            reject(new Error(error));
-          } else {
-            resolve(data);
-          }
-        }
-      };
-
-      window.addEventListener('message', handleMessage);
-
-      window.parent.postMessage({ name: 'VTEXFetch', id: responseId, args }, '*');
+      setTimeout(() => {
+        console.log('Mensagem enviada para o parent:', { name: 'VTEXFetch', id: responseId, args });
+        window.parent.postMessage(
+          { name: 'VTEXFetch', id: responseId, args },
+          '*'
+        );
+      }, 0);
     });
   }
 
