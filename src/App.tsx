@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { setUser } from './store/userSlice';
 import { useEffect } from 'react';
 import { getUserFromLocalStorage } from './services/user.service';
+import { ErrorPage } from './components/ErrorPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function App() {
       <Route path='/agent-builder' element={<AgentBuilder />}></Route>
       <Route path='/channels' element={<Channels />}></Route>
       <Route path='/dash' element={<Dashboard />}></Route>
+      <Route path='/error' element={<ErrorPage title={'Something went wrong'} description={'Retry or check back later if the issue persists.'} color={'#F95D47'}  />}></Route>
       </Routes>
       </Router>
   )

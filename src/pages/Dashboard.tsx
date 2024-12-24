@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Button, Divider, Filter, FilterItem, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Select, SelectItem, Text } from '@vtex/shoreline';
+import { Alert, Button, Divider, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import WeniLogo from '../assets/weni-logo.svg';
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
@@ -7,11 +7,11 @@ import { VTEXFetch } from '../utils/VTEXFetch';
 import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
-  const [period, setPeriod] = useState('Last 7 days');
-  const [data, setData] = useState<{title: string; value: string; variation: number}[][]>([]);
+  // const [period, setPeriod] = useState('Last 7 days');
+  const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const navigate = useNavigate();
 
-  function navigateToAgent(){
+  function navigateToAgent() {
     navigate('/agent-builder')
   }
 
@@ -20,14 +20,14 @@ export function Dashboard() {
       .then(({ data }) => {
         const groupOfDetails: { title: string; value: string; variation: number }[][] = [[]];
         const maxPerGroup = 3;
-  
+
         for (let i = 0; i < data.length; i++) {
           if (groupOfDetails.at(-1)?.length === maxPerGroup) {
             groupOfDetails.push([]);
           }
           groupOfDetails.at(-1)?.push(data[i]);
         }
-  
+
         setData(groupOfDetails);
       })
       .catch((error) => {
@@ -89,7 +89,7 @@ export function Dashboard() {
         </Alert>
 
 
-        <Heading
+        {/* <Heading
           variant="display3"
           style={{
             marginBlock: 'var(--sl-space-6)'
@@ -108,8 +108,8 @@ export function Dashboard() {
           <Filter label="Period" value={period} setValue={setPeriod}>
             <FilterItem value="Last 7 days">Last 7 days</FilterItem>
           </Filter>
-        </Heading>
-        
+        </Heading> */}
+
         <Flex
           direction="column"
           gap="$space-0"
@@ -158,7 +158,7 @@ export function Dashboard() {
             description="Recover sales by reminding customers of items forgotten in the cart."
             isIntegrated={true}
           />
-
+          {/* 
           <FeatureBox
             title="Order tracking"
             type="passive"
@@ -171,7 +171,7 @@ export function Dashboard() {
             type="passive"
             description="Inform your customers about the progress of their orders in real time."
             isIntegrated={false}
-          />
+          /> */}
         </Grid>
       </PageContent>
     </Page>
