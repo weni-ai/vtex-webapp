@@ -1,7 +1,12 @@
 import { Alert, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import { Channel } from './Channel';
+import { useNavigate } from 'react-router-dom';
 
 export function Channels() {
+  const navigate = useNavigate()
+  function navigateToDash(){
+    navigate('/dash')
+  }
   return (
     <Page>
       <PageHeader>
@@ -9,7 +14,7 @@ export function Channels() {
           justifyContent: 'start',
           gap: 'var(--sl-space-3)'
         }}>
-          <IconButton variant="tertiary" label="Actions">
+          <IconButton variant="tertiary" label="Actions" onClick={navigateToDash}>
             <IconArrowLeft />
           </IconButton>
           
