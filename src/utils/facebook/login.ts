@@ -1,5 +1,4 @@
 import getEnv from '../env';
-import { FBLoginResponse } from '../../interfaces/Facebook';
 
 declare global {
     interface Window {
@@ -96,7 +95,7 @@ export function startFacebookLogin(): void {
         }
 
         FB.login(
-            (response: FBLoginResponse): void => {
+            (response: any): void => {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
                     console.log("Code: ", code)
