@@ -3,11 +3,13 @@ import iconManageSearch from '../assets/icons/manage_search.svg';
 import iconNeurology from '../assets/icons/neurology.svg';
 import iconVolunteerActivism from '../assets/icons/volunteer_activism.svg';
 import AgentDemoGif from '../assets/channels/agentDemoGif';
+import { useNavigate } from 'react-router-dom';
 
 export function AgentBuilder() {
+  const navigate = useNavigate();
   function createAgent() {
-    
-
+    console.log('agente sendo criado, pipipipopopo...');
+    navigate('/channels')
   }
   return (
     <Page>
