@@ -20,7 +20,7 @@ function App() {
   return (
       <Router>
       <Routes>
-      <Route path='/' element={<SettingUp />}></Route>
+      <Route path='/' element={<SettingUp/>}></Route>
       <Route path='/agent-builder' element={<AgentBuilder />}></Route>
       <Route path='/channels' element={<Channels />}></Route>
       <Route path='/dash' element={<Dashboard />}></Route>
