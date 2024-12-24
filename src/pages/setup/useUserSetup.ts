@@ -1,4 +1,3 @@
-// hooks/useUserSetup.ts
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../store/userSlice';
@@ -34,6 +33,7 @@ export function useUserSetup() {
           navigate('/agent-builder');
         }).catch((error) => {
           console.error('Erro na criação do projeto e usuário:', error);
+          navigate('/error')
         });
       }
     } catch (error) {
