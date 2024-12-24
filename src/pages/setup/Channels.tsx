@@ -20,13 +20,17 @@ import { useState } from 'react';
 
 export function Channels() {
   const navigate = useNavigate();
-  const [setup, setSetup] = useState(false); // Estado reativo para "setup"
+  const [setup, setSetup] = useState(false);
 
   function navigateToDash() {
-    setSetup(true); // Atualiza o estado para exibir "SettingUp"
+   navigate('/dash')
+  }
+  function setWhatsAppUser(){
+    console.log('setando o zap...')
+    setSetup(true);
 
     setTimeout(() => {
-      navigate('/dash'); // Redireciona após 5 segundos
+      navigate('/dash');
     }, 5000);
   }
 
@@ -44,7 +48,7 @@ export function Channels() {
               <IconButton variant="tertiary" label="Actions" onClick={navigateToDash}>
                 <IconArrowLeft />
               </IconButton>
-              <IconButton variant="tertiary" label="Actions" onClick={navigateToDash}>
+              <IconButton variant="tertiary" label="Actions" onClick={setWhatsAppUser}>
                 <IconArrowRight />
               </IconButton>
 
