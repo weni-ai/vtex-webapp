@@ -2,22 +2,26 @@ import { Bleed, Button, ContextualHelp, Divider, Field, Flex, Input, Label, Page
 import iconManageSearch from '../assets/icons/manage_search.svg';
 import iconNeurology from '../assets/icons/neurology.svg';
 import iconVolunteerActivism from '../assets/icons/volunteer_activism.svg';
-import { startFacebookLogin } from '../utils/facebook/login';
+import AgentDemoGif from '../assets/channels/agentDemoGif';
+import { useNavigate } from 'react-router-dom';
 
 export function AgentBuilder() {
-  function integrateWhatsapp(){
-    startFacebookLogin()
+  const navigate = useNavigate();
+  function createAgent() {
+    console.log('agente sendo criado, pipipipopopo...');
+    navigate('/channels')
   }
   return (
     <Page>
       <PageHeader>
         <PageHeaderRow style={{
-          justifyContent: 'start',
+          justifyContent: 'space-between',
           gap: 'var(--sl-space-3)'
         }}>
           <PageHeading>
             Setup your agent
           </PageHeading>
+          <Button variant="primary" onClick={createAgent}>Continue</Button>
         </PageHeaderRow>
       </PageHeader>
 
@@ -69,7 +73,7 @@ export function AgentBuilder() {
                 Comprehend complex demands
               </Text>
             </Flex>
-            
+
             <Flex align="center" gap="$space-2">
               <Bleed top="$space-05" start="$space-05" bottom="$space-05" end="$space-05">
                 <img src={iconVolunteerActivism} alt="volunteer activism icon" />
@@ -81,47 +85,51 @@ export function AgentBuilder() {
             </Flex>
           </Flex>
         </Flex>
+        <Flex direction='row' style={{
+          justifyContent: 'space-between',
+          gap: 'var(--sl-space-3)'
+        }}>
+          <form style={{width: '70%'}}>
+            <Flex direction="column">
+              <Field>
+                <Label>Agent Name</Label>
+                <Input />
+              </Field>
 
-        <form>
-          <Flex direction="column">
-            <Field>
-              <Label>Agent Name</Label>
-              <Input />
-            </Field>
+              <Field>
+                <Label>Occupation (optional)</Label>
+                <Input />
+              </Field>
 
-            <Field>
-              <Label>Occupation (optional)</Label>
-              <Input />
-            </Field>
+              <Field>
+                <Label>Objective (optional)</Label>
+                <Input />
+              </Field>
 
-            <Field>
-              <Label>Objective (optional)</Label>
-              <Input />
-            </Field>
+              <Field>
+                <Label>Objective (optional)</Label>
+                <Textarea />
+              </Field>
 
-            <Field>
-              <Label>Objective (optional)</Label>
-              <Textarea />
-            </Field>
+              <Field>
+                <Label>
+                  <Flex align="center" gap="$space-05">
+                    Add knowledge (optional)
 
-            <Field>
-              <Label>
-                <Flex align="center" gap="$space-05">
-                  Add knowledge (optional)
-                  
-                  <ContextualHelp placement="bottom-start" label="Message" style={{
-                    display: 'flex'
-                  }}>
-                    Visits to the store which can include a series of user interactions and
-                    end after 30 minutes of inactivity.
-                  </ContextualHelp>
-                </Flex>
-              </Label>
-              <Input prefix="https://" />
-            </Field>
-            <Button variant="primary" onClick={integrateWhatsapp}>Integrate</Button>
-          </Flex>
-        </form>
+                    <ContextualHelp placement="bottom-start" label="Message" style={{
+                      display: 'flex'
+                    }}>
+                      Visits to the store which can include a series of user interactions and
+                      end after 30 minutes of inactivity.
+                    </ContextualHelp>
+                  </Flex>
+                </Label>
+                <Input prefix="https://" />
+              </Field>
+            </Flex>
+          </form>
+          <AgentDemoGif />
+        </Flex>
       </PageContent>
     </Page>
   )

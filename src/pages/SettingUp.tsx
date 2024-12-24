@@ -1,18 +1,7 @@
-import {
-  Center,
-  Divider,
-  Heading,
-  Page,
-  PageContent,
-  PageHeader,
-  PageHeaderRow,
-  PageHeading,
-  Spinner,
-  Text,
-} from '@vtex/shoreline';
-import WeniLogo from '../assets/weni-logo.svg';
 import { useCallback, useEffect, useRef } from 'react';
 import { useUserSetup } from './setup/useUserSetup';
+import { LoadingPage } from '../components/LoadingPage';
+
 
 export function SettingUp() {
   const { initializeUser } = useUserSetup();
@@ -30,46 +19,7 @@ export function SettingUp() {
   }, [memoizedInitializeUser]);
 
   return (
-    <Page>
-      <PageHeader>
-        <PageHeaderRow style={{ justifyContent: 'start', gap: 'var(--sl-space-3)' }}>
-          <img src={WeniLogo} alt="Weni Logo" className="d-inline" />
-          <PageHeading>Weni agentic IA</PageHeading>
-        </PageHeaderRow>
-      </PageHeader>
-
-      <Divider />
-
-      <PageContent>
-        <Center
-          style={{
-            textAlign: 'center',
-            maxWidth: '26rem',
-            margin: '0 auto',
-          }}
-        >
-          <Spinner
-            description="loading"
-            style={{
-              marginBottom: 'var(--sl-space-3)',
-            }}
-          />
-
-          <Heading
-            variant="display1"
-            style={{
-              marginBottom: 'var(--sl-space-3)',
-            }}
-          >
-            Setting up your App
-          </Heading>
-
-          <Text variant="display4">
-            Getting everything ready for you! We're finalizing the initial setup to ensure a smooth
-            experience.
-          </Text>
-        </Center>
-      </PageContent>
-    </Page>
+    <LoadingPage title="Setting up your App" description="Getting everything ready for you! We're finalizing the initial setup to ensure a smooth
+    experience." color='#157BF4'/>
   );
 }
