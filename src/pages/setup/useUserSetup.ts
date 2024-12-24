@@ -31,7 +31,7 @@ export function useUserSetup() {
         }).then((response) => {
           userData.project_uuid = response.data.project_uuid;
           dispatch(setUser(userData));
-          navigate('/dash?useLocalVTEXFetch=true');
+          navigate('/agent-builder');
         }).catch((error) => {
           console.error('Erro na criação do projeto e usuário:', error);
         });
