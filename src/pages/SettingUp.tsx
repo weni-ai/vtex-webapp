@@ -1,6 +1,7 @@
 import {
   Center,
   Divider,
+  Flex,
   Heading,
   Page,
   PageContent,
@@ -14,7 +15,13 @@ import WeniLogo from '../assets/weni-logo.svg';
 import { useCallback, useEffect, useRef } from 'react';
 import { useUserSetup } from './setup/useUserSetup';
 
-export function SettingUp() {
+interface SettingUpProps {
+  title: string;
+  description: string;
+  color: string;
+}
+
+export function SettingUp({ title, description, color }: SettingUpProps) {
   const { initializeUser } = useUserSetup();
   const isInitialized = useRef(false);
 
@@ -40,7 +47,7 @@ export function SettingUp() {
 
       <Divider />
 
-      <PageContent>
+      <PageContent style={{ marginTop: 'var(--sl-space-24)' }}>
         <Center
           style={{
             textAlign: 'center',
@@ -52,6 +59,7 @@ export function SettingUp() {
             description="loading"
             style={{
               marginBottom: 'var(--sl-space-3)',
+              color: `${color}`
             }}
           />
 
@@ -61,13 +69,10 @@ export function SettingUp() {
               marginBottom: 'var(--sl-space-3)',
             }}
           >
-            Setting up your App
+            {title}
           </Heading>
 
-          <Text variant="display4">
-            Getting everything ready for you! We're finalizing the initial setup to ensure a smooth
-            experience.
-          </Text>
+          <Text variant="display4">{description}</Text>
         </Center>
       </PageContent>
     </Page>
