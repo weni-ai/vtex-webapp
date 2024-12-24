@@ -15,17 +15,17 @@ import {
 } from '@vtex/shoreline';
 import { Channel } from './Channel';
 import { useNavigate } from 'react-router-dom';
-import { SettingUp } from '../SettingUp';
 import { useState } from 'react';
+import { LoadingPage } from '../../components/LoadingPage';
 
 export function Channels() {
   const navigate = useNavigate();
   const [setup, setSetup] = useState(false);
 
   function navigateToDash() {
-   navigate('/dash')
+    navigate('/dash')
   }
-  function setWhatsAppUser(){
+  function setWhatsAppUser() {
     console.log('setando o zap...')
     setSetup(true);
 
@@ -87,7 +87,7 @@ export function Channels() {
           </PageContent>
         </>
       ) : (
-        <SettingUp
+        <LoadingPage
           title="Setup Complete!"
           description="Congratulations! Your agent is fully configured and ready to assist your customers."
           color="#019213"

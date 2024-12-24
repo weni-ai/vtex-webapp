@@ -20,8 +20,7 @@ function App() {
   return (
       <Router>
       <Routes>
-      <Route path='/' element={<SettingUp title="Setting up your App" description="Getting everything ready for you! We're finalizing the initial setup to ensure a smooth
-            experience." color='#157BF4'/>}></Route>
+      <Route path='/' element={<SettingUp/>}></Route>
       <Route path='/agent-builder' element={<AgentBuilder />}></Route>
       <Route path='/channels' element={<Channels />}></Route>
       <Route path='/dash' element={<Dashboard />}></Route>
