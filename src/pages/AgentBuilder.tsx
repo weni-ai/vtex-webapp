@@ -1,15 +1,28 @@
-import { Bleed, Button, ContextualHelp, Divider, Field, Flex, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, Textarea } from '@vtex/shoreline';
+import { Bleed, Button, ContextualHelp, Divider, Field, FieldError, Flex, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, Textarea } from '@vtex/shoreline';
 import iconManageSearch from '../assets/icons/manage_search.svg';
 import iconNeurology from '../assets/icons/neurology.svg';
 import iconVolunteerActivism from '../assets/icons/volunteer_activism.svg';
 import AgentDemoGif from '../assets/channels/agentDemoGif';
-import { useNavigate } from 'react-router-dom';
+import { useAgentBuilderSetup } from './setup/useAgentBuilderSetup';
+import { useState } from 'react';
 
 export function AgentBuilder() {
-  const navigate = useNavigate();
+  const [name, setName] = useState('')
+  const [error, setError] = useState(false)
+  const [occupation, setOccupation] = useState('')
+  const [objective, setObjective] = useState('')
+  const [knowledge, setKnowledge] = useState('')
+
+  const {buildAgent} = useAgentBuilderSetup()
+
   function createAgent() {
-    console.log('agente sendo criado, pipipipopopo...');
-    navigate('/channels')
+    setError(!name)
+    const items = {name, occupation, objective, knowledge}
+    const payload = Object.fromEntries(
+      Object.entries(items).filter(([_, value]) => value !== "")
+  );
+    console.log('agente sendo criado, pipipipopopo...', payload);
+    buildAgent(payload, '')
   }
   return (
     <Page>
@@ -89,26 +102,22 @@ export function AgentBuilder() {
           justifyContent: 'space-between',
           gap: 'var(--sl-space-3)'
         }}>
-          <form style={{width: '70%'}}>
+          <form style={{ width: '70%' }}>
             <Flex direction="column">
-              <Field>
+              <Field error={error}>
                 <Label>Agent Name</Label>
-                <Input />
+                <Input name="name" value={name} onChange={setName} />
+                <FieldError>You must write something</FieldError>
               </Field>
 
               <Field>
                 <Label>Occupation (optional)</Label>
-                <Input />
+                <Input name="occupation" value={occupation} onChange={setOccupation} />
               </Field>
 
               <Field>
                 <Label>Objective (optional)</Label>
-                <Input />
-              </Field>
-
-              <Field>
-                <Label>Objective (optional)</Label>
-                <Textarea />
+                <Textarea name="objective" value={objective} onChange={setObjective} />
               </Field>
 
               <Field>
@@ -124,7 +133,7 @@ export function AgentBuilder() {
                     </ContextualHelp>
                   </Flex>
                 </Label>
-                <Input prefix="https://" />
+                <Input prefix="https://" name='knowledge' value={knowledge} onChange={setKnowledge} />
               </Field>
             </Flex>
           </form>
