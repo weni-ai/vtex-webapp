@@ -156,7 +156,7 @@ export function Dashboard() {
             title="Abandoned cart"
             type="active"
             description="Recover sales by reminding customers of items forgotten in the cart."
-            isIntegrated={true}
+            isIntegrated={false}
           />
           {/* 
           <FeatureBox
