@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNavigate } from "react-router-dom";
 import { VTEXFetch } from "../utils/VTEXFetch";
 
 export async function setAgentBuilder(payload: any, project_uuid: string) {
