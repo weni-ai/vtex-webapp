@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
@@ -12,5 +13,10 @@ const userSlice = createSlice({
   },
 });
 
+
+
 export const { setUser } = userSlice.actions;
+
+export const selectUser = (state: any) => state.user.user
+
 export default userSlice.reducer;
