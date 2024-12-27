@@ -5,7 +5,7 @@ const projectSlice = createSlice({
     name: 'project',
     initialState: {
         project: {
-            project_uuid: 'aaa'
+            project_uuid: '1234'
         }
     },
     reducers: {
