@@ -29,7 +29,7 @@ export function useUserSetup() {
           },
           body: JSON.stringify(payload),
         }).then((response) => {
-          console.log('Projeto criado com sucesso')
+          console.log('Projeto criado com sucesso', response)
           dispatch(setProjectUuid(response.data.project_uuid));
           navigate('/agent-builder');
         }).catch((error) => {
