@@ -21,10 +21,6 @@ window.addEventListener('message', (event: MessageEvent) => {
 });
 
 export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
-  // const searchParams = new URLSearchParams(window.location.search);
-  // const useLocalVTEXFetch = searchParams.get('useLocalVTEXFetch')?.toLowerCase() === 'true';
-
-  // if (useLocalVTEXFetch) {
     const responseId = generateId(10);
 
     return new Promise<T>((resolve, reject) => {
@@ -54,7 +50,6 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
         );
       }, 0);
     });
-  // }
 }
 
 

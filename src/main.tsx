@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import '@vtex/shoreline/css'
 import App from './App.tsx'
 import { Provider } from 'react-redux'
-import store from './store/user.store.ts'
+import store from './store/provider.store.ts'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
