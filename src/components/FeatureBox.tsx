@@ -1,11 +1,16 @@
 import { Button, Flex, IconButton, IconCheckCircle, IconDotsThreeVertical, IconGearSix, IconInfo, IconMinus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
+import { AgentPreferences } from "./AgentPreferences";
 
 export function FeatureBox({ title, type, isIntegrated, description }: { title: string, type: 'active' | 'passive', description: string, isIntegrated: boolean }) {
-  const [open, setOpen] = useState(false)
+  const [openAbout, setOpenAbout] = useState(false)
+  const [openPreferences, setPreferences] = useState(false)
   const openModal = () => {
-    setOpen((o) => !o)
+    setOpenAbout((o) => !o)
+  }
+  const openDrawer = () => {
+    setPreferences((o) => !o)
   }
   return (
     <>
@@ -39,8 +44,8 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
                 <IconInfo />
                 Details
               </MenuItem>
-              <MenuItem>
-                <IconGearSix/>
+              <MenuItem onClick={openDrawer}>
+                <IconGearSix />
                 Preferences
               </MenuItem>
               <MenuSeparator />
@@ -87,7 +92,9 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
             <Button variant="secondary">Integrate</Button>
         }
       </Flex>
-      <AboutAgent open={open} type={"dsf"} title={"dfsdfdf"} category={"dfdsfds"} description={"fdsfdsf"} disclaimer={"fdfdsf"} teste={openModal} />
+      <AboutAgent open={openAbout} type={"Active Notification"} title={"Abandoned Cart agent"} category={"Active Notification"} description={"Recover sales by reminding customers of items left in the cart."} disclaimer={"With this agent, you increase your chances of conversion, keeping your customer close and encouraging order completion."} toggleModal={openModal} />
+    
+    <AgentPreferences open={openPreferences} toggleOpen={openDrawer} />
     </>
   );
 }

@@ -7,12 +7,12 @@ export interface AboutAgentProps {
     category: string;
     description: string;
     disclaimer: string;
-    teste: () => void;
+    toggleModal: () => void;
 }
 
-export function AboutAgent({ open, title, category, description, disclaimer, teste }: AboutAgentProps) {
+export function AboutAgent({ open, title, category, description, disclaimer, toggleModal }: AboutAgentProps) {
     return (
-        <Modal open={open} onClose={teste}>
+        <Modal open={open} onClose={toggleModal}>
             <ModalHeader>
                 <Flex>
                     <ModalHeading>{title}</ModalHeading>
