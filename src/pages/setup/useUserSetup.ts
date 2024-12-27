@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../store/userSlice';
 import { fetchUserData } from '../../services/user.service';
 import { VTEXFetch } from '../../utils/VTEXFetch';
+import { setProjectUuid } from '../../store/projectSlice';
 
 export function useUserSetup() {
   const dispatch = useDispatch();
@@ -28,8 +29,8 @@ export function useUserSetup() {
           },
           body: JSON.stringify(payload),
         }).then((response) => {
-          userData.project_uuid = response.data.project_uuid;
-          dispatch(setUser(userData));
+          console.log('Projeto criado com sucesso')
+          dispatch(setProjectUuid(response.data.project_uuid));
           navigate('/agent-builder');
         }).catch((error) => {
           console.error('Erro na criação do projeto e usuário:', error);
