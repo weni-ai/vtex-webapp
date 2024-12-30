@@ -1,12 +1,11 @@
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../store/userSlice';
 import { fetchUserData } from '../../services/user.service';
 import { VTEXFetch } from '../../utils/VTEXFetch';
 import { setProjectUuid } from '../../store/projectSlice';
+import store from '../../store/provider.store';
 
 export function useUserSetup() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const initializeUser = async () => {
@@ -14,7 +13,7 @@ export function useUserSetup() {
       const userData = await fetchUserData();
       console.log('userData: ', userData)
       if (userData) {
-        dispatch(setUser(userData));
+        store.dispatch(setUser(userData));
         const payload = {
           user_email: userData.user,
           organization_name: userData.account,
@@ -30,7 +29,7 @@ export function useUserSetup() {
           body: JSON.stringify(payload),
         }).then((response) => {
           console.log('Projeto criado com sucesso', response)
-          dispatch(setProjectUuid(response.data.project_uuid));
+          store.dispatch(setProjectUuid(response.project_uuid));
           navigate('/agent-builder');
         }).catch((error) => {
           console.error('Erro na criação do projeto e usuário:', error);
