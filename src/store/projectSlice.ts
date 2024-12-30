@@ -4,13 +4,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const projectSlice = createSlice({
     name: 'project',
     initialState: {
-        project: {
-            project_uuid: '1234'
-        }
+      project_uuid: '1234'
     },
     reducers: {
       setProjectUuid: (state, action) => {
-        state.project.project_uuid = action.payload
+        state.project_uuid = action.payload
       }
     }
   })
