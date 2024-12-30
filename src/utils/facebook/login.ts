@@ -37,7 +37,7 @@ export function startFacebook() {
     initFacebookSDK({
         appId,
         whenFacebookIsAvailable() {
-            console.log('is active', appId)
+            console.log('is active', appId, ' - ', configId)
 
             FB.login(
                 (response: { authResponse: { code: string } }) => {
