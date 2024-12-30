@@ -14,5 +14,5 @@ const projectSlice = createSlice({
   })
 
   export const {setProjectUuid} = projectSlice.actions
-  export const selectProject = (state: any) => state.project_uuid
+  export const selectProject = (state: any) => state.project.project_uuid
   export default projectSlice.reducer;
