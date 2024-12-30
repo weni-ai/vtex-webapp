@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Bleed, Button, ContextualHelp, Divider, Field, FieldError, Flex, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, Textarea } from '@vtex/shoreline';
 import iconManageSearch from '../assets/icons/manage_search.svg';
 import iconNeurology from '../assets/icons/neurology.svg';
 import iconVolunteerActivism from '../assets/icons/volunteer_activism.svg';
 import AgentDemoGif from '../assets/channels/agentDemoGif';
-// import { useAgentBuilderSetup } from './setup/useAgentBuilderSetup';
+import { useAgentBuilderSetup } from './setup/useAgentBuilderSetup';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectProject } from '../store/projectSlice';
@@ -15,7 +16,7 @@ export function AgentBuilder() {
   const [objective, setObjective] = useState('')
   const [knowledge, setKnowledge] = useState('')
 
-  // const {buildAgent} = useAgentBuilderSetup()
+  const {buildAgent} = useAgentBuilderSetup()
   const project = useSelector(selectProject)
 
   function createAgent() {
@@ -27,7 +28,7 @@ export function AgentBuilder() {
         Object.entries(items).filter(([_, value]) => value !== "")
     );
       console.log('agente sendo criado, pipipipopopo...', payload, project);
-      // buildAgent(payload, user)
+      buildAgent(payload, project)
     }
   }
   return (
