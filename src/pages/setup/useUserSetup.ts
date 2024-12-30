@@ -9,6 +9,7 @@ export function useUserSetup() {
   const navigate = useNavigate();
 
   const initializeUser = async () => {
+    let errorMessage= false;
     try {
       const userData = await fetchUserData();
       console.log('userData: ', userData)
@@ -21,6 +22,7 @@ export function useUserSetup() {
           vtex_account: userData.account
         }
 
+
         await VTEXFetch('/_v/create-user-and-project', {
           method: 'POST',
           headers: {
@@ -30,15 +32,18 @@ export function useUserSetup() {
         }).then((response) => {
           console.log('Projeto criado com sucesso', response)
           store.dispatch(setProjectUuid(response.project_uuid));
-          navigate('/agent-builder');
         }).catch((error) => {
           console.error('Erro na criação do projeto e usuário:', error);
-          navigate('/error')
+          errorMessage = error
         });
         navigate('/dash?useLocalVTEXFetch=true');
       }
     } catch (error) {
       console.error('Error:', error);
+    }
+
+    if(!errorMessage){
+      navigate('/agent-builder')
     }
   };
 

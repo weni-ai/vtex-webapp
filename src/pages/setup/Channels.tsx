@@ -14,23 +14,25 @@ import {
   Text,
 } from '@vtex/shoreline';
 import { Channel } from './Channel';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { LoadingPage } from '../../components/LoadingPage';
 
 export function Channels() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [setup, setSetup] = useState(false);
 
   function navigateToDash() {
-    navigate('/dash')
+    // navigate('/dash')
+    console.log('navigate to /dash')
   }
   function setWhatsAppUser() {
     console.log('setando o zap...')
     setSetup(true);
 
     setTimeout(() => {
-      navigate('/dash');
+      // navigate('/dash');
+      console.log('navigate to /dash')
     }, 5000);
   }
 
