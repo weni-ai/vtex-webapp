@@ -32,8 +32,8 @@ function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: string, wh
 }
 
 export function startFacebook() {
-    const appId = getEnv('FACEBOOK_APP_ID') || ''
-    const configId = getEnv('WHATSAPP_FACEBOOK_APP_CONFIG_ID') || ''
+    const appId = getEnv('VITE_APP_FACEBOOK_APP_ID') || ''
+    const configId = getEnv('VITE_APP_WHATSAPP_FACEBOOK_APP_CONFIG_ID') || ''
     initFacebookSDK({
         appId,
         whenFacebookIsAvailable() {
