@@ -1,69 +1,8 @@
 import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
 import iconWhatsapp from '../../assets/channels/whatsapp.svg';
-import getEnv from "../../utils/env";
-
-export function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: string, whenFacebookIsAvailable: () => void }) {
-  window.fbAsyncInit = function () {
-    FB.init({
-      appId,
-      xfbml: true,
-      version: 'v18.0',
-    });
-
-    whenFacebookIsAvailable();
-  };
-
-  (function (id) {
-    const script = document.getElementById(id);
-    if (script) script.remove();
-
-    if (typeof FB !== 'undefined') {
-      FB = null;
-    }
-  })('facebook-jssdk');
-
-  (function (id) {
-    if (document.getElementById(id)) return;
-
-    const js = document.createElement('script');
-    js.setAttribute('id', id);
-    js.setAttribute('src', 'https://connect.facebook.net/en_US/sdk.js');
-
-    document.head.appendChild(js);
-  })('facebook-jssdk');
-}
+import { startFacebook } from "../../utils/facebook/login";
 
 export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
-  function startFacebook() {
-    initFacebookSDK({
-      appId: getEnv('FACEBOOK_APP_ID') || '',
-
-      whenFacebookIsAvailable() {
-        console.log('is active', this.appId)
-
-        FB.login(
-          (response: { authResponse: { code: string } }) => {
-            console.log('test', response);
-            if (response.authResponse) {
-              const code = response.authResponse.code;
-              console.log('code', code)
-            }
-          },
-          {
-            config_id: getEnv('WHATSAPP_FACEBOOK_APP_CONFIG_ID'),
-            response_type: 'code',
-            override_default_response_type: true,
-            extras: {
-              setup: {},
-              featureType: '',
-              sessionInfoVersion: '3',
-            },
-          },
-        );
-      },
-    })
-  }
-  
   return (
     <Flex
       direction="column"
