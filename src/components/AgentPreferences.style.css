@@ -1,3 +1,4 @@
 .custom-time-input {
-    width: 164px !important;
-  }
+  min-width: 0;
+  width: 100%;
+}

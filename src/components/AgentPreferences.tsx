@@ -1,5 +1,5 @@
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading, Checkbox, DrawerFooter, Button } from "@vtex/shoreline"
-import './AgentPreferences.style.css'
+import  './AgentPreferences.style.css'
 import { useState } from "react"
 
 export interface AgentPreferencesProps {
@@ -31,11 +31,13 @@ export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
                             <Grid columns="repeat(2, 1fr)">
                                 <GridCell>
                                     <Text variant="body" color="$fg-base-soft">From</Text>
-                                    {/* <TimeInput className='custom-time-input' /> */}
+                                    <Flex>
+                                        <TimeInput className='custom-time-input'/>
+                                    </Flex>
                                 </GridCell>
                                 <GridCell>
                                     <Text variant="body" color="$fg-base-soft">To</Text>
-                                    {/* <TimeInput /> */}
+                                    <TimeInput className='custom-time-input'/>
                                 </GridCell>
                             </Grid>
                         </Flex>
@@ -45,21 +47,21 @@ export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
                             <Grid columns="repeat(2, 1fr)">
                                 <GridCell>
                                     <Text variant="body" color="$fg-base-soft">From</Text>
-                                    {/* <TimeInput /> */}
+                                    <TimeInput className='custom-time-input'/>
                                 </GridCell>
                                 <GridCell>
                                     <Text variant="body" color="$fg-base-soft">To</Text>
-                                    {/* <TimeInput /> */}
+                                    <TimeInput className='custom-time-input'/>
                                 </GridCell>
                             </Grid>
                         </Flex>
                     </Flex>
                 </DrawerContent>
-                <DrawerFooter style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Button onClick={() => null} size="large" style={{width: '50%'}}>
+                <DrawerFooter style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button onClick={() => null} size="large" style={{ width: '50%' }}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={() => null} size="large" style={{width: '50%'}}>
+                    <Button variant="primary" onClick={() => null} size="large" style={{ width: '50%' }}>
                         Save
                     </Button>
                 </DrawerFooter>
