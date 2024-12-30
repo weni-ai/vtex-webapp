@@ -1,6 +1,6 @@
-import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, Checkbox, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading } from "@vtex/shoreline"
+import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading } from "@vtex/shoreline"
 import './AgentPreferences.style.css'
-import { useState } from "react"
+// import { useState } from "react"
 
 export interface AgentPreferencesProps {
     open: boolean,
@@ -8,7 +8,7 @@ export interface AgentPreferencesProps {
 }
 
 export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
-    const [restriction, setRestriction] = useState('')
+    // const [restriction, setRestriction] = useState('')
     return (
         <DrawerProvider open={open} onClose={toggleOpen}>
             <DrawerPopover>
@@ -18,8 +18,8 @@ export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
                 </DrawerHeader>
                 <DrawerContent  >
                     <Flex direction="column">
-                        {restriction}
-                        <Checkbox value={restriction}>Message time restriction</Checkbox>
+                        {/* {restriction} */}
+                        {/* <Checkbox value={restriction}>Message time restriction</Checkbox> */}
                         <p>Restrict message sends to configured hours.</p>
                     </Flex>
                     <Flex direction="column" style={{ marginTop: 'var(--sl-space-4)' }}>
