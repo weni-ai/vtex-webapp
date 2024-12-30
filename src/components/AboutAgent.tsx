@@ -1,5 +1,6 @@
-import { Center, Flex, Grid, GridCell, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Tag } from "@vtex/shoreline";
+import { Center, Container, Flex, Grid, GridCell, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Tag, Text } from "@vtex/shoreline";
 import abandonedCart from '../assets/icons/abandoned_cart.svg'
+import lightBulb from '../assets/icons/lightbulb.svg'
 export interface AboutAgentProps {
     open: boolean,
     type: string;
@@ -12,18 +13,28 @@ export interface AboutAgentProps {
 
 export function AboutAgent({ open, title, category, description, disclaimer, toggleModal }: AboutAgentProps) {
     return (
-        <Modal open={open} onClose={toggleModal}>
+        <Modal open={open} onClose={toggleModal} >
             <ModalHeader>
                 <Flex>
                     <ModalHeading>{title}</ModalHeading>
-                    <Tag>{category}</Tag>
+                    <Tag color="blue">{category}</Tag>
                 </Flex>
                 <ModalDismiss />
             </ModalHeader>
             <ModalContent>
                 <Grid columns="2fr 1fr">
                     <GridCell>
-                        <div>{description}</div>
+                        <Flex direction="column" style={{ gap: '77px' }}>
+                            <Text variant="display4" color="$fg-base-soft">
+                                {description}
+                            </Text>
+                            <Container style={{ display: 'flex', border: 'solid 1px #F2F4F5', padding: '8px', gap: '8px', borderRadius: '8px' }}>
+                                <img src={lightBulb} alt="" style={{display: 'flex', alignSelf: 'start', padding: '8px'}}/>
+                                <Text variant="emphasis" color="$fg-base-soft">
+                                    {disclaimer}
+                                </Text>
+                            </Container>
+                        </Flex>
                     </GridCell>
                     <GridCell>
                         <Center>
@@ -31,7 +42,6 @@ export function AboutAgent({ open, title, category, description, disclaimer, tog
                         </Center>
                     </GridCell>
                 </Grid>
-                {disclaimer}
             </ModalContent>
         </Modal>
     )
