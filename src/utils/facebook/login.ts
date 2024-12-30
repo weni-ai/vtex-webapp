@@ -38,8 +38,8 @@ export function initFacebookSdk(appId: string, loginCallback: () => void): void 
 }
 
 export function startFacebookLogin(): void {
-    const fbAppId = getEnv('VITE_APP_WHATSAPP_FACEBOOK_APP_ID');
-    const configId = getEnv('VITE_APP_WHATSAPP_FACEBOOK_APP_CONFIG_ID');
+    const fbAppId = getEnv('FACEBOOK_APP_ID');
+    const configId = getEnv('WHATSAPP_FACEBOOK_APP_CONFIG_ID');
     console.log(fbAppId)
 
     if (!fbAppId) {
