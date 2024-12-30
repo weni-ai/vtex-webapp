@@ -1,6 +1,6 @@
-import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading } from "@vtex/shoreline"
-import './AgentPreferences.style.css'
-// import { useState } from "react"
+import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading, Checkbox, DrawerFooter, Button } from "@vtex/shoreline"
+import  './AgentPreferences.style.css'
+import { useState } from "react"
 
 export interface AgentPreferencesProps {
     open: boolean,
@@ -8,7 +8,7 @@ export interface AgentPreferencesProps {
 }
 
 export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
-    // const [restriction, setRestriction] = useState('')
+    const [restriction] = useState('')
     return (
         <DrawerProvider open={open} onClose={toggleOpen}>
             <DrawerPopover>
@@ -17,41 +17,53 @@ export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
                     <DrawerDismiss />
                 </DrawerHeader>
                 <DrawerContent  >
-                    <Flex direction="column">
-                        {/* {restriction} */}
-                        {/* <Checkbox value={restriction}>Message time restriction</Checkbox> */}
-                        <p>Restrict message sends to configured hours.</p>
+                    <Flex style={{ marginBottom: '1rem' }}>
+                        <Checkbox value={restriction} />
+                        <Flex direction="column" style={{ gap: '0px' }}>
+                            <Text variant="body">Message Restriction</Text>
+                            <Text variant="caption2" color="$fg-base-soft">Restrict message sends to configured hours.</Text>
+                        </Flex>
                     </Flex>
-                    <Flex direction="column" style={{ marginTop: 'var(--sl-space-4)' }}>
+                    <Flex direction="column">
                         <Flex direction="column" >
-                            <Text>Monday until friday</Text>
+                            <Text variant="emphasis">Monday until friday</Text>
                             <Grid columns="repeat(2, 1fr)">
                                 <GridCell>
-                                <Text>From</Text>
-                                    <TimeInput className='custom-time-input' />
+                                    <Text variant="body" color="$fg-base-soft">From</Text>
+                                    <Flex>
+                                        <TimeInput className='custom-time-input'/>
+                                    </Flex>
                                 </GridCell>
                                 <GridCell>
-                                <Text>To</Text>
-                                    <TimeInput />
+                                    <Text variant="body" color="$fg-base-soft">To</Text>
+                                    <TimeInput className='custom-time-input'/>
                                 </GridCell>
                             </Grid>
                         </Flex>
                         <Divider style={{ margin: 'var(--sl-space-4) 0' }} />
                         <Flex direction="column">
-                            <Text>Saturday</Text>
+                            <Text variant="emphasis">Saturday</Text>
                             <Grid columns="repeat(2, 1fr)">
                                 <GridCell>
-                                    <Text>From</Text>
-                                    <TimeInput/>
+                                    <Text variant="body" color="$fg-base-soft">From</Text>
+                                    <TimeInput className='custom-time-input'/>
                                 </GridCell>
                                 <GridCell>
-                                    <Text>To</Text>
-                                    <TimeInput />
+                                    <Text variant="body" color="$fg-base-soft">To</Text>
+                                    <TimeInput className='custom-time-input'/>
                                 </GridCell>
                             </Grid>
                         </Flex>
                     </Flex>
                 </DrawerContent>
+                <DrawerFooter style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button onClick={() => null} size="large" style={{ width: '50%' }}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={() => null} size="large" style={{ width: '50%' }}>
+                        Save
+                    </Button>
+                </DrawerFooter>
             </DrawerPopover>
         </DrawerProvider >
     )
