@@ -1,118 +1,63 @@
-import getEnv from '../env';
+import getEnv from "../env";
 
-declare global {
-    interface Window {
-        fbq?: (action: string, event: string, params: Record<string, unknown>) => void;
-        fbAsyncInit?: () => void;
-        configs?: Record<string, string>;
-    }
-}
-
-export function initFacebookSdk(appId: string, loginCallback: () => void): void {
-    window.fbAsyncInit = function (): void {
+function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: string, whenFacebookIsAvailable: () => void }) {
+    window.fbAsyncInit = function () {
         FB.init({
             appId,
             xfbml: true,
             version: 'v18.0',
         });
 
-        loginCallback();
+        whenFacebookIsAvailable();
     };
 
-    (function (d, _s, id): void {
-        const existingScript = d.getElementById(id);
-        if (existingScript) existingScript.remove();
-        if (typeof FB !== 'undefined') {
-            FB = null!;
-        }
-    })(document, 'script', 'facebook-jssdk');
+    (function (id) {
+        const script = document.getElementById(id);
+        if (script) script.remove();
 
-    (function (d, s, id): void {
-        const js: HTMLScriptElement = d.createElement(s) as HTMLScriptElement;;
-        const fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js.id = id;
-        js.src = 'https://connect.facebook.net/en_US/sdk.js';
-        fjs.parentNode?.insertBefore(js, fjs);
-    })(document, 'script', 'facebook-jssdk');
+        if (typeof FB !== 'undefined') {
+            FB = null;
+        }
+    })('facebook-jssdk');
+
+    (function (id) {
+        if (document.getElementById(id)) return;
+
+        const js = document.createElement('script');
+        js.setAttribute('id', id);
+        js.setAttribute('src', 'https://connect.facebook.net/en_US/sdk.js');
+
+        document.head.appendChild(js);
+    })('facebook-jssdk');
 }
 
-export function startFacebookLogin(): void {
-    const fbAppId = getEnv('FACEBOOK_APP_ID');
-    const configId = getEnv('WHATSAPP_FACEBOOK_APP_CONFIG_ID');
-    console.log(fbAppId)
+export function startFacebook() {
+    const appId = getEnv('FACEBOOK_APP_ID') || ''
+    const configId = getEnv('WHATSAPP_FACEBOOK_APP_CONFIG_ID') || ''
+    initFacebookSDK({
+        appId,
+        whenFacebookIsAvailable() {
+            console.log('is active', appId)
 
-    if (!fbAppId) {
-        return;
-    }
-
-    const loginCallback = (): void => {
-
-        const sessionInfoListener = (event: MessageEvent): void => {
-            if (!event.origin) {
-                console.log("Session info listener: Data doesn't have an origin", event.origin);
-                return;
-            }
-
-            // Ensure the data is coming from facebook.com
-            if (!event.origin.endsWith('facebook.com')) {
-                console.log('Session info listener: Data is not coming from facebook.com', event.origin);
-                return;
-            }
-
-            try {
-                const data = JSON.parse(event.data);
-                if (data.type === 'WA_EMBEDDED_SIGNUP') {
-                    if (data.event === 'FINISH') {
-                        const { phone_number_id, waba_id } = data.data;
-                        console.log('PHONE ID: ', phone_number_id, 'WABA ID: ', waba_id)
-                    } else if (data.event === 'ERROR') {
-                        const { error_message } = data.data;
-                        console.log(
-                            'Session info listener: Error during the Embedded Signup flow.',
-                            error_message
-                        );
-                    } else {
-                        const { current_step } = data.data;
-                        console.log(
-                            'Session info listener: User cancelled login or did not fully authorize.',
-                            current_step
-                        );
+            FB.login(
+                (response: { authResponse: { code: string } }) => {
+                    console.log('test', response);
+                    if (response.authResponse) {
+                        const code = response.authResponse.code;
+                        console.log('code', code)
                     }
-                }
-            } catch {
-                console.log('Non JSON Response', event.data);
-            }
-        };
-
-        window.addEventListener('message', sessionInfoListener);
-
-        if (typeof window.fbq !== 'undefined') {
-            window.fbq('trackCustom', 'WhatsAppOnboardingStart', {
-                appId: fbAppId,
-                feature: 'whatsapp_embedded_signup',
-            });
-        }
-
-        FB.login(
-            (response: any): void => {
-                if (response.authResponse) {
-                    const code = response.authResponse.code;
-                    console.log("Code: ", code)
-                } else {
-                    console.log('Login Callback: User cancelled login or did not fully authorize');
-                }
-            },
-            {
-                config_id: configId ?? '',
-                response_type: 'code',
-                override_default_response_type: true,
-                extras: {
-                    sessionInfoVersion: 2,
                 },
-            }
-        );
-    };
-
-    initFacebookSdk(fbAppId, loginCallback);
+                {
+                    config_id: configId,
+                    response_type: 'code',
+                    override_default_response_type: true,
+                    extras: {
+                        setup: {},
+                        featureType: '',
+                        sessionInfoVersion: '3',
+                    },
+                },
+            );
+        },
+    })
 }
