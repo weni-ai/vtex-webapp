@@ -26,7 +26,7 @@ export function AgentBuilder() {
       const payload = Object.fromEntries(
         Object.entries(items).filter(([_, value]) => value !== "")
     );
-      console.log('agente sendo criado, pipipipopopo...', payload, project.project_uuid);
+      console.log('agente sendo criado, pipipipopopo...', payload, project);
       // buildAgent(payload, user)
     }
   }
