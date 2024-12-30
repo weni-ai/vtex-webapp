@@ -18,7 +18,6 @@ export function AgentPreferences({ open, toggleOpen }: AgentPreferencesProps) {
                 </DrawerHeader>
                 <DrawerContent  >
                     <Flex style={{ marginBottom: '1rem' }}>
-                        {restriction}
                         <Checkbox value={restriction} />
                         <Flex direction="column" style={{ gap: '0px' }}>
                             <Text variant="body">Message Restriction</Text>
