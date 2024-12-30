@@ -1,5 +1,6 @@
 import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
 import iconWhatsapp from '../../assets/channels/whatsapp.svg';
+import getEnv from "../../utils/env";
 
 export function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: string, whenFacebookIsAvailable: () => void }) {
   window.fbAsyncInit = function () {
@@ -35,10 +36,10 @@ export function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: str
 export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
   function startFacebook() {
     initFacebookSDK({
-      appId: '1643506673262170',
+      appId: getEnv('FACEBOOK_APP_ID') || '',
 
       whenFacebookIsAvailable() {
-        console.log('is active')
+        console.log('is active', this.appId)
 
         FB.login(
           (response: { authResponse: { code: string } }) => {
@@ -49,7 +50,7 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
             }
           },
           {
-            config_id: '547030034965228',
+            config_id: getEnv('WHATSAPP_FACEBOOK_APP_CONFIG_ID'),
             response_type: 'code',
             override_default_response_type: true,
             extras: {
