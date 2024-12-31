@@ -30,6 +30,6 @@ RUN mv /usr/share/nginx/html/vtex-webapp/index.html /usr/share/nginx/html/vtex-w
 
 EXPOSE 8080
 
-ENTRYPOINT ["bash", "/docker-entrypoint.sh"]
+ENTRYPOINT ["dash", "/docker-entrypoint.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]
