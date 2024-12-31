@@ -32,7 +32,7 @@ function initFacebookSDK({ appId, whenFacebookIsAvailable }: { appId: string, wh
 }
 
 export function startFacebook() {
-    console.log(process.env)
+    console.log('óia os env:',process.env)
     const appId = getEnv('VITE_APP_FACEBOOK_APP_ID') || ''
     const configId = getEnv('VITE_APP_WHATSAPP_FACEBOOK_APP_CONFIG_ID') || ''
     initFacebookSDK({
