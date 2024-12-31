@@ -6,7 +6,7 @@ declare global {
   
   function getEnv(name: string): string | undefined {
     return (
-      process.env?.[name] || window?.configs?.[name] || import.meta.env[name]
+      process.env?.[name] ?? window?.configs?.[name] ?? import.meta.env[name]
     );
   }
   
