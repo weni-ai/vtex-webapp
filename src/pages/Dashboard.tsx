@@ -10,7 +10,7 @@ export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
 
   function navigateToAgent() {
-    window.open('https://www.dash.weni.ai', '_blank');
+    window.open('https://dash.weni.ai/', '_blank');
   }
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function Dashboard() {
             }}
           >
             <Text variant="body" color="$fg-base">
-              Unlock the full potential of your intelligent agent by connecting to the Weni platform. Access advanced features and customizable options to enhance performance and provide a better customer experience.
+            Unlock the full potential of your intelligent agents by connecting them to the Weni platform. Access advanced features and customizable options to enhance their performance and deliver a better customer experience.
             </Text>
 
             <Button variant="primary" style={{ flex: 'none', }} onClick={navigateToAgent}>
@@ -144,14 +144,14 @@ export function Dashboard() {
             marginBlock: 'var(--sl-space-6)'
           }}
         >
-          Integrate commerce skills
+          Agent gallery
         </Heading>
 
         <Grid
           columns="repeat(auto-fill, minmax(15rem, 1fr))"
         >
           <FeatureBox
-            title="Abandoned cart"
+            title="Abandoned cart agent"
             type="active"
             description="Recover sales by reminding customers of items forgotten in the cart."
             isIntegrated={false}

@@ -139,8 +139,7 @@ export function AgentBuilder() {
                         <ContextualHelp placement="bottom-start" label="Message" style={{
                           display: 'flex'
                         }}>
-                          Visits to the store which can include a series of user interactions and
-                          end after 30 minutes of inactivity.
+                          Provide the content your agent will use to answer questions.
                         </ContextualHelp>
                       </Flex>
                     </Label>
