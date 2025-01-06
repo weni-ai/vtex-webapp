@@ -16,11 +16,13 @@ function initFacebookSDK({
 
         whenFacebookIsAvailable();
     };
+
     (function (id) {
         const script = document.getElementById(id);
         if (script) script.remove();
     })('facebook-jssdk');
-    
+
+    // Adiciona o SDK do Facebook ao DOM
     (function (id) {
         if (document.getElementById(id)) return;
 
@@ -44,7 +46,7 @@ function initFacebookSDK({
 
 export function startFacebook() {
     const appId = getEnv('VITE_APP_FACEBOOK_APP_ID') || '';
-    const configId = getEnv('VITE_APP_WHATSAPP_FACEBOOK_APP_CONFIG_ID') || '';
+    const configId = getEnv('VITE_APP_WHATSAPP_FACEBOOK_APP_ID') || '';
 
     if (!appId) {
         console.error("Facebook App ID is missing.");
@@ -62,7 +64,17 @@ export function startFacebook() {
             console.log('Facebook SDK is active:', appId, '-', configId);
 
             FB.login(
-                (response: { authResponse?: { code: string } }) => {
+                (response: any) => {
+                    console.log('Login callback response:', response);
+                    const body = {
+                        project_uuid: '',
+                        waba_id: response.waba_id,
+                        phone_number_id: '',
+                        auth_code: response.authResponse.code
+                    }
+
+                    console.log('mandando pro back...', body)
+
                     if (response && response.authResponse) {
                         const code = response.authResponse.code;
                         console.log('Authorization Code:', code);
