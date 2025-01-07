@@ -2,8 +2,14 @@ import { Button, Flex, IconButton, IconCheckCircle, IconDotsThreeVertical, IconG
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { AgentPreferences } from "./AgentPreferences";
+import { integrateAvailableFeatures } from "../services/features.service";
+import { useSelector } from "react-redux";
+import { selectToken } from "../store/authSlice";
+import { selectProject } from "../store/projectSlice";
 
 export function FeatureBox({ title, type, isIntegrated, description }: { title: string, type: 'active' | 'passive', description: string, isIntegrated: boolean }) {
+  const token = useSelector(selectToken);
+  const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [openPreferences, setPreferences] = useState(false)
   const openModal = () => {
@@ -11,6 +17,9 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
   }
   const openDrawer = () => {
     setPreferences((o) => !o)
+  }
+  const integrateFeature = async () => {
+    await integrateAvailableFeatures(projectUUID, token)
   }
   return (
     <>
@@ -89,7 +98,7 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
               </Text>
             </Flex>
             :
-            <Button variant="secondary">Integrate</Button>
+            <Button variant="secondary" onClick={integrateFeature}>Integrate</Button>
         }
       </Flex>
       <AboutAgent open={openAbout} type={"Active Notification"} title={"Abandoned Cart agent"} category={"Active Notification"} description={"Recover sales by reminding customers of items left in the cart."} disclaimer={"With this agent, you increase your chances of conversion, keeping your customer close and encouraging order completion."} toggleModal={openModal} />
