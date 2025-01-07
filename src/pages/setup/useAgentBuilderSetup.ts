@@ -14,7 +14,7 @@ export function useAgentBuilderSetup() {
                     objective,
                     occupation
                 },
-                links: knowledge
+                links: [knowledge]
             }
             await setAgentBuilder(body, app_uuid);
             navigate('/channels')
