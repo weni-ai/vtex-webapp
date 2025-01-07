@@ -6,9 +6,17 @@ export function useAgentBuilderSetup() {
     const navigate = useNavigate();
     const buildAgent = async (payload: any, app_uuid: string) => {
         console.log('entrou no agent com:', payload, app_uuid)
+        const { name, occupation, objective, knowledge } = payload
         try {
-            const data = await setAgentBuilder(payload, app_uuid);
-            console.log('data', data)
+            const body = {
+                agent: {
+                    name,
+                    objective,
+                    occupation
+                },
+                links: knowledge
+            }
+            await setAgentBuilder(body, app_uuid);
             navigate('/channels')
         } catch (error) {
             console.error('Error:', error);

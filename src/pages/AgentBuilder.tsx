@@ -24,10 +24,10 @@ export function AgentBuilder() {
 
     if (name && !error) {
       const items = { name, occupation, objective, knowledge }
-      const payload = Object.fromEntries(
-        Object.entries(items).filter(([_, value]) => value !== "")
-      );
-      console.log('agente sendo criado, pipipipopopo...', payload, project);
+      const payload =
+        Object.fromEntries(
+          Object.entries(items).filter(([_, value]) => value !== "")
+        );
       buildAgent(payload, project)
     }
   }
@@ -49,7 +49,7 @@ export function AgentBuilder() {
 
           <Divider />
 
-          <PageContent  style={{maxWidth: '950px'}}>
+          <PageContent style={{ maxWidth: '950px' }}>
             <Flex style={{
               marginBottom: 'var(--sl-space-5)'
             }}>
