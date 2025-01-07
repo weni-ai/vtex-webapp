@@ -10,8 +10,9 @@ export function useUserSetup() {
   const navigate = useNavigate();
 
   const getToken = async () => {
-    const client_id = getEnv('CLIENT_ID');
-    const client_secret = getEnv('CLIENT_SECRET');
+    const auth_url = getEnv('VITE_APP_AUTH_URL');
+    const client_id = getEnv('VITE_APP_CLIENT_ID');
+    const client_secret = getEnv('VITE_APP_CLIENT_SECRET');
 
     const headersList = {
       "Accept": "*/*",
@@ -21,16 +22,17 @@ export function useUserSetup() {
 
     const bodyContent = `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`;
 
-    const response = await fetch("https://accounts.weni.ai/auth/realms/weni-staging/protocol/openid-connect/token", {
-      method: "POST",
-      body: bodyContent,
-      headers: headersList
-    });
-
-    const data = await response.text();
-    console.log(data);
-    return data
-
+    if(auth_url){
+      const response = await fetch(auth_url, {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList
+      });
+  
+      const data = await response.text();
+      console.log(data);
+      return data
+    }
   }
 
   const initializeUser = async () => {
