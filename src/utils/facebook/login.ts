@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import getEnv from "../env";
+import { VTEXFetch } from "../VTEXFetch";
 
 function initFacebookSDK(appId: string, loginCallback: () => void) {
     window.fbAsyncInit = function () {
@@ -38,7 +39,7 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
     })("facebook-jssdk");
 }
 
-export function startFacebookLogin(project_uuid: string) {
+export function startFacebookLogin(project_uuid: string, token: string) {
     const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
     const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
 
@@ -49,6 +50,8 @@ export function startFacebookLogin(project_uuid: string) {
 
     const loginCallback = () => {
         console.log("Facebook SDK is initialized.");
+        let wabaId = '';
+        let phoneId = '';
 
         const sessionInfoListener = (event: MessageEvent) => {
             if (!event.origin || !event.origin.endsWith("facebook.com")) {
@@ -61,6 +64,8 @@ export function startFacebookLogin(project_uuid: string) {
                 if (data.type === "WA_EMBEDDED_SIGNUP") {
                     if (data.event === "FINISH") {
                         const { phone_number_id, waba_id } = data.data;
+                        wabaId = waba_id;
+                        phoneId = phone_number_id;
                         console.log("Embedded Signup Finished:", { phone_number_id, waba_id });
                     } else if (data.event === "ERROR") {
                         console.error("Embedded Signup Error:", data.data.error_message);
@@ -81,7 +86,7 @@ export function startFacebookLogin(project_uuid: string) {
                     const code = response.authResponse.code;
                     console.log("Login Successful. Auth Code:", code);
 
-                    createChannel(code, project_uuid);
+                    createChannel(code, project_uuid, wabaId, phoneId, token);
                 } else {
                     console.error("Login canceled or not fully authorized.");
                 }
@@ -100,29 +105,26 @@ export function startFacebookLogin(project_uuid: string) {
     initFacebookSDK(fbAppId, loginCallback);
 }
 
-async function createChannel(code: string, project_uuid: string) {
-    const phoneNumberId = "phone_number_id_placeholder";
-    const wabaId = "waba_id_placeholder";
+async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
 
     const data = {
         waba_id: wabaId,
-        phone_number_id: phoneNumberId,
+        phone_number_id: phoneId,
         project_uuid: project_uuid,
         auth_code: code,
     };
 
     console.log("Creating channel with data:", data);
-    // const res = await fetch("/api/configure-phone-number", {
-    //     method: "POST",
-    //     body: JSON.stringify(data),
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    // });
 
-    // if (!res.ok) {
-    //     console.error("Failed to create channel:", await res.json());
-    // } else {
-    //     console.log("Channel created successfully:", await res.json());
-    // }
+    await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }).then((response) => {
+        console.log('Whatsapp registered', response)
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
 }
