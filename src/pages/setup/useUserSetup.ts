@@ -23,8 +23,7 @@ export function useUserSetup() {
 
     const bodyContent = `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`;
 
-    // if(auth_url){
-      console.log('auth url: ', auth_url)
+    if(auth_url){
       const response = await fetch(auth_url, {
         method: "POST",
         body: bodyContent,
@@ -34,13 +33,14 @@ export function useUserSetup() {
       const data = await response.text();
       console.log('token: ', data);
       return data
-    // }
+    }
   }
 
   const initializeUser = async () => {
     let errorMessage = false;
+    let token;
     try{
-      const token = await getToken();
+      token = await getToken();
       if(token){
         console.log('setando token na store...', token)
         store.dispatch(setToken(token))
@@ -60,7 +60,7 @@ export function useUserSetup() {
           vtex_account: userData.account
         }
 
-        await VTEXFetch('/_v/create-user-and-project', {
+        await VTEXFetch(`/_v/create-user-and-project?token={token}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
