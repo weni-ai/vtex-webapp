@@ -1,8 +1,14 @@
 import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
 import iconWhatsapp from '../../assets/channels/whatsapp.svg';
-import { startFacebook } from "../../utils/facebook/login";
+import { startFacebookLogin } from "../../utils/facebook/login";
+import { useSelector } from "react-redux";
+import { selectProject } from "../../store/projectSlice";
 
 export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
+  const project_uuid = useSelector(selectProject)
+  const callFacebookSDK = () => {
+    startFacebookLogin(project_uuid)
+  }
   return (
     <Flex
       direction="column"
@@ -62,7 +68,7 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
             </Text>
           </Flex>
           :
-          <Button variant="primary" onClick={startFacebook}>Integrate</Button>
+          <Button variant="primary" onClick={callFacebookSDK}>Integrate</Button>
       }
     </Flex>
   )
