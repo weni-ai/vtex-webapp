@@ -12,7 +12,6 @@ export function useUserSetup() {
     let errorMessage= false;
     try {
       const userData = await fetchUserData();
-      console.log('userData: ', userData)
       if (userData) {
         store.dispatch(setUser(userData));
         const payload = {
