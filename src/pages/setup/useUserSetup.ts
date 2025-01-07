@@ -3,9 +3,9 @@ import { setUser } from '../../store/userSlice';
 import { fetchUserData } from '../../services/user.service';
 import { VTEXFetch } from '../../utils/VTEXFetch';
 import { setProjectUuid } from '../../store/projectSlice';
+import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import getEnv from '../../utils/env';
-import { setToken } from '../../store/authSlice';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ export function useUserSetup() {
         headers: headersList
       });
   
-      const data = await response.text();
-      console.log('token: ', data);
-      return data
+      const data = await response.json();
+      console.log('token: ', data.access_token);
+      return data.access_token
     }
   }
 
@@ -60,7 +60,7 @@ export function useUserSetup() {
           vtex_account: userData.account
         }
 
-        await VTEXFetch(`/_v/create-user-and-project?token={token}`, {
+        await VTEXFetch(`/_v/create-user-and-project?token=${token}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
