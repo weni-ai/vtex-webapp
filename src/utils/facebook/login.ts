@@ -39,8 +39,8 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
 }
 
 export function startFacebookLogin(project_uuid: string) {
-    const fbAppId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
-    const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_CONFIG_ID");
+    const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
+    const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
 
     if (!fbAppId) {
         console.error("Facebook App ID is missing.");
