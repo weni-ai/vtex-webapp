@@ -5,14 +5,15 @@ import { VTEXFetch } from '../../utils/VTEXFetch';
 import { setProjectUuid } from '../../store/projectSlice';
 import store from '../../store/provider.store';
 import getEnv from '../../utils/env';
+import { setToken } from '../../store/authSlice';
 
 export function useUserSetup() {
   const navigate = useNavigate();
 
   const getToken = async () => {
-    const auth_url = getEnv('VITE_APP_AUTH_URL');
-    const client_id = getEnv('VITE_APP_CLIENT_ID');
-    const client_secret = getEnv('VITE_APP_CLIENT_SECRET');
+    const auth_url = getEnv('VITE_APP_AUTH_URL') || '';
+    const client_id = getEnv('VITE_APP_CLIENT_ID') || '';
+    const client_secret = getEnv('VITE_APP_CLIENT_SECRET') || '';
 
     const headersList = {
       "Accept": "*/*",
@@ -22,7 +23,8 @@ export function useUserSetup() {
 
     const bodyContent = `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`;
 
-    if(auth_url){
+    // if(auth_url){
+      console.log('auth url: ', auth_url)
       const response = await fetch(auth_url, {
         method: "POST",
         body: bodyContent,
@@ -30,9 +32,9 @@ export function useUserSetup() {
       });
   
       const data = await response.text();
-      console.log(data);
+      console.log('token: ', data);
       return data
-    }
+    // }
   }
 
   const initializeUser = async () => {
@@ -41,10 +43,12 @@ export function useUserSetup() {
       const token = await getToken();
       if(token){
         console.log('setando token na store...', token)
+        store.dispatch(setToken(token))
       }
     }catch(err){
       console.log(err)
     }
+    
     try {
       const userData = await fetchUserData();
       if (userData) {
