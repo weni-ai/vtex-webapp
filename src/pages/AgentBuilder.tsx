@@ -11,7 +11,10 @@ import { selectProject } from '../store/projectSlice';
 
 export function AgentBuilder() {
   const [name, setName] = useState('')
-  const [error, setError] = useState(false)
+  const [error, setError] = useState({
+    name: false,
+    knowledge: false
+  })
   const [occupation, setOccupation] = useState('')
   const [objective, setObjective] = useState('')
   const [knowledge, setKnowledge] = useState('')
@@ -20,10 +23,18 @@ export function AgentBuilder() {
   const project = useSelector(selectProject)
 
   function createAgent() {
-    setError(!name)
+    setError({
+      name: !name.trim(),
+      knowledge: !knowledge.trim()
+    })
 
-    if (name && !error) {
-      const items = { name, occupation, objective, knowledge }
+    if (name && knowledge && !error.name && !error.knowledge) {
+      const items = {
+        name: name.trim(),
+        occupation: occupation.trim(),
+        objective: objective.trim(),
+        knowledge: knowledge.trim()
+      }
       const payload =
         Object.fromEntries(
           Object.entries(items).filter(([_, value]) => value !== "")
@@ -113,7 +124,7 @@ export function AgentBuilder() {
             }}>
               <form style={{ width: '70%' }}>
                 <Flex direction="column">
-                  <Field error={error}>
+                  <Field error={error.name}>
                     <Label>Agent Name</Label>
                     <Input name="name" value={name} onChange={setName} />
                     <FieldError>You must write something</FieldError>
@@ -131,7 +142,7 @@ export function AgentBuilder() {
                     </Flex>
                   </Field>
 
-                  <Field>
+                  <Field error={error.knowledge}>
                     <Label>
                       <Flex align="center" gap="$space-05">
                         Add knowledge (optional)
@@ -144,6 +155,7 @@ export function AgentBuilder() {
                       </Flex>
                     </Label>
                     <Input prefix="https://" name='knowledge' value={knowledge} onChange={setKnowledge} />
+                    <FieldError>You must write something</FieldError>
                   </Field>
                 </Flex>
               </form>
