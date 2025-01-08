@@ -7,48 +7,48 @@ import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import getEnv from '../../utils/env';
 
+export const getToken = async () => {
+  const auth_url = getEnv('VITE_APP_AUTH_URL') || '';
+  const client_id = getEnv('VITE_APP_CLIENT_ID') || '';
+  const client_secret = getEnv('VITE_APP_CLIENT_SECRET') || '';
+
+  const headersList = {
+    "Accept": "*/*",
+    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+    "Content-Type": "application/x-www-form-urlencoded"
+  }
+
+  const bodyContent = `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`;
+
+  if (auth_url) {
+    const response = await fetch(auth_url, {
+      method: "POST",
+      body: bodyContent,
+      headers: headersList
+    });
+
+    const data = await response.json();
+    console.log('token: ', data.access_token);
+    return data.access_token
+  }
+}
+
 export function useUserSetup() {
   const navigate = useNavigate();
-
-  const getToken = async () => {
-    const auth_url = getEnv('VITE_APP_AUTH_URL') || '';
-    const client_id = getEnv('VITE_APP_CLIENT_ID') || '';
-    const client_secret = getEnv('VITE_APP_CLIENT_SECRET') || '';
-
-    const headersList = {
-      "Accept": "*/*",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
-
-    const bodyContent = `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`;
-
-    if(auth_url){
-      const response = await fetch(auth_url, {
-        method: "POST",
-        body: bodyContent,
-        headers: headersList
-      });
-  
-      const data = await response.json();
-      console.log('token: ', data.access_token);
-      return data.access_token
-    }
-  }
 
   const initializeUser = async () => {
     let errorMessage = false;
     let token;
-    try{
+    try {
       token = await getToken();
-      if(token){
+      if (token) {
         console.log('setando token na store...', token)
         store.dispatch(setToken(token))
       }
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
-    
+
     try {
       const userData = await fetchUserData();
       if (userData) {
