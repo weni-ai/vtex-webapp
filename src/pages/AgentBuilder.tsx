@@ -9,6 +9,15 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectProject } from '../store/projectSlice';
 
+function isValidURL(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function AgentBuilder() {
   const [name, setName] = useState('')
   const [error, setError] = useState({
@@ -25,7 +34,7 @@ export function AgentBuilder() {
   function createAgent() {
     setError({
       name: !name.trim(),
-      knowledge: !knowledge.trim()
+      knowledge: isValidURL(knowledge.trim())
     })
 
     if (name && knowledge && !error.name && !error.knowledge) {
