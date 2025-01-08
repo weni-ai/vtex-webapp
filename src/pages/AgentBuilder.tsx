@@ -11,8 +11,13 @@ import { selectProject } from '../store/projectSlice';
 
 function isValidURL(url: string): boolean {
   try {
-    new URL(url);
-    return true;
+    const parsedUrl = new URL(url.startsWith('http') ? url : `https://${url}`);
+
+    const hasValidTLD = parsedUrl.hostname.includes('.') &&
+      !parsedUrl.hostname.startsWith('.') &&
+      !parsedUrl.hostname.endsWith('.');
+
+    return hasValidTLD;
   } catch {
     return false;
   }
@@ -34,7 +39,7 @@ export function AgentBuilder() {
   function createAgent() {
     setError({
       name: !name.trim(),
-      knowledge: isValidURL(knowledge.trim())
+      knowledge: !isValidURL(knowledge.trim())
     })
 
     if (name && knowledge && !error.name && !error.knowledge) {
@@ -164,7 +169,7 @@ export function AgentBuilder() {
                       </Flex>
                     </Label>
                     <Input prefix="https://" name='knowledge' value={knowledge} onChange={setKnowledge} />
-                    <FieldError>You must write something</FieldError>
+                    <FieldError>Enter a valid URL</FieldError>
                   </Field>
                 </Flex>
               </form>
