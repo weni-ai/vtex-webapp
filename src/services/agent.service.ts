@@ -2,7 +2,7 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
 
 export async function setAgentBuilder(payload: any, project_uuid: string, token: string) {
-  const url = `/v/create-agent-builder?projectUUID=${project_uuid}&token=${token}`
+  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}&token=${token}`
   console.log(url, payload);
   return await VTEXFetch(url, {
     method: 'POST',
