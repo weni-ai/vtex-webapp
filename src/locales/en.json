@@ -1,0 +1,38 @@
+{
+    "common": {
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "finish_and_save": "Finish and save",
+        "confirm": "Confirm",
+        "save": "Save",
+        "back": "Back",
+        "errors": {
+            "unauthorized": "You do not have permission to perform this action",
+            "internal_server_error": "Internal server error",
+            "unexpected_error": "An unexpected error occurred"
+        }
+    },
+    "title": "Weni Agentic IA",
+    "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
+     "setup": {
+        "title": "Setting up your Weni App",
+        "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."
+    },
+    "agent": {
+        "setup": {
+            "title": "Setup your agent",
+            "description": "Enhances intelligent agents by enabling them to control conversation flows based on user intentions. Fill in the fields below, and your intelligent agent setup will be ready to go.",
+            "button": {
+                "continue": "Continue to setup"
+            },
+            "forms": {
+                "agent_name": "Agent name",
+                "occupation": "Occupation",
+                "objective": "Objective",
+                "knowledge": {
+                    "title": "Add knowledge"
+                }
+            }
+        }
+    }
+}

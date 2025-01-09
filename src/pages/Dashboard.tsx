@@ -19,11 +19,12 @@ export function Dashboard() {
         const groupOfDetails: { title: string; value: string; variation: number }[][] = [[]];
         const maxPerGroup = 3;
 
-        for (let i = 0; i < data.length; i++) {
-          if (groupOfDetails.at(-1)?.length === maxPerGroup) {
+        for (const item of data) {
+          if (groupOfDetails[groupOfDetails.length - 1]?.length === maxPerGroup) {
             groupOfDetails.push([]);
           }
-          groupOfDetails.at(-1)?.push(data[i]);
+
+          groupOfDetails[groupOfDetails.length - 1]?.push(item);
         }
 
         setData(groupOfDetails);
