@@ -18,7 +18,7 @@ export async function fetchUserData() {
 }
 
 async function checkProject(vtex_account: string, user_email: string) {
-  const apiUrl = `http://api.stg.cloud.weni.ai/v2/commerce/check-project?vtex_account=${vtex_account}&user_email=${user_email}`;
+  const apiUrl = `https://api.stg.cloud.weni.ai/v2/commerce/check-project?vtex_account=${vtex_account}&user_email=${user_email}`;
 
   try {
     const response = await fetch(apiUrl);
