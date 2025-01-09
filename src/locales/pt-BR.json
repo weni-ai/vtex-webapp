@@ -1,0 +1,17 @@
+{
+  "common": {
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "finish_and_save": "Finalizar e salvar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "back": "Voltar",
+    "errors": {
+      "unauthorized": "Você não tem permissão para executar essa ação",
+      "internal_server_error": "Erro interno do servidor",
+      "unexpected_error": "Ocorreu um erro inesperado"
+    }
+  },
+  "title": "Weni Commerce",
+  "description": "Simplifique a gestão do seu negócio, maximize suas vendas e melhore a experiência do cliente com ferramentas integradas."
+}
