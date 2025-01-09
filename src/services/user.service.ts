@@ -17,11 +17,17 @@ export async function fetchUserData() {
   }
 }
 
-async function checkProject(vtex_account: string, user_email: string) {
+async function checkProject(vtex_account: string, user_email: string, token: string) {
   const apiUrl = `https://api.stg.cloud.weni.ai/v2/commerce/check-project?vtex_account=${vtex_account}&user_email=${user_email}`;
 
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error(`Erro ao verificar projeto: ${response.statusText}`);
     }
@@ -36,7 +42,7 @@ async function checkProject(vtex_account: string, user_email: string) {
 
 export async function createUserAndProject(userData: any, token: string) {
   try {
-    const check = await checkProject(userData.account, userData.user);
+    const check = await checkProject(userData.account, userData.user, token);
     if (check.data.has_project) {
       console.log('Projeto já existe:', check);
       return check;
