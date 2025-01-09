@@ -45,6 +45,7 @@ export async function createUserAndProject(userData: any, token: string) {
     const check = await checkProject(userData.account, userData.user, token);
     if (check.data.has_project) {
       console.log('Projeto já existe:', check);
+      store.dispatch(setProjectUuid(check.data.project_uuid));
       return check;
     }
 
