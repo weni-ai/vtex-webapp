@@ -4,6 +4,7 @@ import { createUserAndProject, fetchUserData } from '../../services/user.service
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
+import { toast } from '@vtex/shoreline';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ export function useUserSetup() {
       }
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
+      toast.critical('Erro durante a inicialização do usuário. Tente novamente mais tarde.')
     }
   };
 

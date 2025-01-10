@@ -14,25 +14,63 @@
     },
     "title": "Weni Agentic IA",
     "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
+    "improve":{
+        "description":  "Unlock the full potential of your intelligent agents by connecting them to the Weni platform. Access advanced features and customizable options to enhance their performance and deliver a better customer experience.",
+        "button": "Improve your agent"
+    },
+    "agent_gallery": {
+        "title": "Agent gallery",
+        "features": {
+            "abandoned_cart": {
+                "title": "Abandoned cart agent",
+                "description": "Recover sales by reminding customers of items forgotten in the cart."
+            }
+        }
+    },
      "setup": {
         "title": "Setting up your Weni App",
         "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."
     },
     "agent": {
         "setup": {
-            "title": "Setup your agent",
-            "description": "Enhances intelligent agents by enabling them to control conversation flows based on user intentions. Fill in the fields below, and your intelligent agent setup will be ready to go.",
-            "button": {
-                "continue": "Continue to setup"
+            "title": "Setup your agent persona",
+            "description": "Enhances intelligent agents by enabling them to control conversation flows based on user intentions. It allows customization of language, tone, and behaviors, giving the agent a unique identity and improving communication quality.",
+            "skills": {
+                "title": "Agent Skills",
+                "analyze_the_context":"Analyze the context",
+                "comprehend": "Comprehend complex demands",
+                "provide": "Provide customized responses"
             },
             "forms": {
                 "agent_name": "Agent name",
                 "occupation": "Occupation",
-                "objective": "Objective",
+                "objective": "Objective (optional)",
                 "knowledge": {
-                    "title": "Add knowledge"
+                    "title": "Add knowledge",
+                    "context": "Provide the content your agent will use to answer questions."
+                },
+                "error": {
+                    "empty_input": "You must write something.",
+                    "valid_url": "Enter a valid URL."
                 }
             }
-        }
+        },
+        "error": "Unable to integrate the feature. Please try again later."
+    },
+    "integration": {
+        "title": "Integrate a support channel",
+        "description": "Choose the channel you want to use and follow the step by step to add it.",
+        "channels": {
+            "whatsapp": {
+                "title": "WhatsApp Channel",
+                "description": "If you have an enterprise WhatsApp account, you can connect it to communicate with your contacts.",
+                "error": "WhatApp unable to connect, check your credentials or try again later."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrate",
+            "integrated": "Integrated channel"
+        },
+        "error": "Unable to integrate the feature. Please try again later."
     }
 }

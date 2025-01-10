@@ -66,9 +66,9 @@ export function AgentBuilder() {
               gap: 'var(--sl-space-3)'
             }}>
               <PageHeading>
-                Setup your agent persona
+                {t('agent.setup.title')}
               </PageHeading>
-              <Button variant="primary" onClick={createAgent}>Continue</Button>
+              <Button variant="primary" onClick={createAgent}>{t('common.continue')}</Button>
             </PageHeaderRow>
           </PageHeader>
 
@@ -79,7 +79,7 @@ export function AgentBuilder() {
               marginBottom: 'var(--sl-space-5)'
             }}>
               <Text variant="emphasis" color="$fg-base-soft">
-                Enhances intelligent agents by enabling them to control conversation flows based on user intentions. It allows customization of language, tone, and behaviors, giving the agent a unique identity and improving communication quality.
+                {t('agent.setup.description')}
               </Text>
             </Flex>
 
@@ -96,7 +96,7 @@ export function AgentBuilder() {
               <Flex style={{
                 marginBottom: 'var(--sl-space-2)'
               }}>
-                <Text variant="caption1" color="$color-gray-7">Agent Skills</Text>
+                <Text variant="caption1" color="$color-gray-7">{t('agent.skills.title')}</Text>
               </Flex>
 
               <Flex justify="space-between" gap="$space-6">
@@ -106,7 +106,7 @@ export function AgentBuilder() {
                   </Bleed>
 
                   <Text variant="body" color="$color-gray-11">
-                    Analyze the context
+                  {t('agent.setup.skills.analyze_the_context')}
                   </Text>
                 </Flex>
 
@@ -117,7 +117,7 @@ export function AgentBuilder() {
                   </Bleed>
 
                   <Text variant="body" color="$color-gray-11">
-                    Comprehend complex demands
+                  {t('agent.setup.skills.comprehend')}
                   </Text>
                 </Flex>
 
@@ -127,7 +127,7 @@ export function AgentBuilder() {
                   </Bleed>
 
                   <Text variant="body" color="$color-gray-11">
-                    Provide customized responses
+                  {t('agent.setup.skills.provide')}
                   </Text>
                 </Flex>
               </Flex>
@@ -141,16 +141,16 @@ export function AgentBuilder() {
                   <Field error={error.name}>
                     <Label>Agent Name</Label>
                     <Input name="name" value={name} onChange={setName} />
-                    <FieldError>You must write something</FieldError>
+                    <FieldError>{t('agent.setup.forms.error.empty_input')}</FieldError>
                   </Field>
 
                   <Field>
-                    <Label>Occupation (optional)</Label>
+                    <Label>{t('agent.setup.forms.occupation')}</Label>
                     <Input name="occupation" value={occupation} onChange={setOccupation} />
                   </Field>
 
                   <Field>
-                    <Label>Objective (optional)</Label>
+                    <Label>{t('agent.setup.forms.objective')}</Label>
                     <Flex>
                       <Textarea name="objective" value={objective} onChange={setObjective} style={{ width: '585px' }} />
                     </Flex>
@@ -159,17 +159,17 @@ export function AgentBuilder() {
                   <Field error={error.knowledge}>
                     <Label>
                       <Flex align="center" gap="$space-05">
-                        Add knowledge (optional)
+                      {t('agent.setup.forms.knowledge.title')}
 
                         <ContextualHelp placement="bottom-start" label="Message" style={{
                           display: 'flex'
                         }}>
-                          Provide the content your agent will use to answer questions.
+                          {t('agent.setup.forms.knowledge.context')}
                         </ContextualHelp>
                       </Flex>
                     </Label>
                     <Input prefix="https://" name='knowledge' value={knowledge} onChange={setKnowledge} />
-                    <FieldError>Enter a valid URL</FieldError>
+                    <FieldError>{t('agent.setup.forms.error.valid_url')}</FieldError>
                   </Field>
                 </Flex>
               </form>

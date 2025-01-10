@@ -1,11 +1,11 @@
-import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
+import { Button, Flex, IconCheckCircle, Text} from "@vtex/shoreline";
 import iconWhatsapp from '../../assets/channels/whatsapp.svg';
 import { startFacebookLogin } from "../../utils/facebook/login";
 import { useSelector } from "react-redux";
 import { selectProject } from "../../store/projectSlice";
 import { selectToken } from "../../store/authSlice";
 
-export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
+export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
   const project_uuid = useSelector(selectProject)
   const token = useSelector(selectToken)
   const callFacebookSDK = () => {
@@ -40,10 +40,10 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
           direction="column"
           gap="$space-1"
         >
-          <Text variant="display3" color="$fg-muted">WhatsApp Channel</Text>
+          <Text variant="display3" color="$fg-muted">{t('integration.channels.whatsapp.title')}</Text>
 
           <Text variant="caption1" color="$fg-base-soft">
-            If you have an enterprise WhatsApp account, you can connect it to communicate with your contacts.
+          {t('integration.channels.whatsapp.description')}
           </Text>
         </Flex>
       </Flex>
@@ -56,7 +56,7 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
               padding: 'var(--sl-space-2)'
             }}
           >
-            <Text variant="caption1" color="$fg-success">
+            <Text variant="body" color="$fg-success">
               <IconCheckCircle
                 display="inline"
                 style={{
@@ -66,11 +66,12 @@ export function Channel({ isIntegrated }: { isIntegrated: boolean }) {
                 }}
               />
 
-              Integrated channel
+{t('integration.buttons.integrated')}
             </Text>
           </Flex>
           :
-          <Button variant="primary" onClick={callFacebookSDK}>Integrate</Button>
+          <Button variant="primary" onClick={callFacebookSDK}>{t('integration.buttons.integrate')}</Button>
+          
       }
     </Flex>
   )
