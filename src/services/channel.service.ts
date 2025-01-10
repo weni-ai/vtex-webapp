@@ -2,6 +2,7 @@
 import { useDispatch } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
+import { toast } from "@vtex/shoreline";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   const dispatch = useDispatch()
@@ -27,5 +28,6 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
       }).catch((error) => {
         dispatch(setWhatsAppError(error))
         console.error('Error:', error);
+        toast.critical(t('integrations.channel.whatsapp.error'));
       });
 }

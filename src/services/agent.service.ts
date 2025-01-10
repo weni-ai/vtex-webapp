@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from "@vtex/shoreline";
 import { VTEXFetch } from "../utils/VTEXFetch";
 
 export async function setAgentBuilder(payload: any, project_uuid: string, token: string) {
@@ -14,6 +14,7 @@ export async function setAgentBuilder(payload: any, project_uuid: string, token:
     console.log('response', response)
   }).catch((error) => {
     console.error('Erro na criação do agente:', error);
+    toast.critical(t('agent.error'));
   });
 }
 

@@ -20,10 +20,13 @@
     },
     "agent": {
         "setup": {
-            "title": "Setup your agent",
-            "description": "Enhances intelligent agents by enabling them to control conversation flows based on user intentions. Fill in the fields below, and your intelligent agent setup will be ready to go.",
-            "button": {
-                "continue": "Continue to setup"
+            "title": "Setup your agent persona",
+            "description": "Enhances intelligent agents by enabling them to control conversation flows based on user intentions. It allows customization of language, tone, and behaviors, giving the agent a unique identity and improving communication quality.",
+            "skills": {
+                "title": "Agent Skills",
+                "analyze_the_context":"Analyze the context",
+                "comprehend": "Comprehend complex demands",
+                "provide": "Provide customized responses"
             },
             "forms": {
                 "agent_name": "Agent name",
@@ -33,7 +36,8 @@
                     "title": "Add knowledge"
                 }
             }
-        }
+        },
+        "error": "Unable to integrate the feature. Please try again later."
     },
     "integration": {
         "title": "Integrate a support channel",
@@ -48,6 +52,7 @@
         "buttons": {
             "integrate": "Integrate",
             "integrated": "Integrated channel"
-        }
+        },
+        "error": "Unable to integrate the feature. Please try again later."
     }
 }
