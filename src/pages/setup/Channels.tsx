@@ -64,7 +64,7 @@ export function Channels() {
                 <IconArrowLeft />
               </IconButton>
 
-              <PageHeading>Integrate a support channel</PageHeading>
+              <PageHeading>{t('integration.title')}</PageHeading>
             </PageHeaderRow>
           </PageHeader>
 
@@ -77,7 +77,7 @@ export function Channels() {
               }}
             >
               <Text variant="action" color="$fg-base-soft">
-                Choose the channel you want to use and follow the step by step to add it.
+                {t('integration.description')}
               </Text>
             </Flex>
 
@@ -89,7 +89,7 @@ export function Channels() {
                 }}
               >
                 <Text variant="body" color="$fg-base">
-                  WhatApp unable to connect, check your credentials or try again later.
+                  {t('integration.channels.whatsapp.error')}
                 </Text>
               </Alert>
                 : null

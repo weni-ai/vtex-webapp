@@ -34,5 +34,20 @@
                 }
             }
         }
+    },
+    "integration": {
+        "title": "Integrate a support channel",
+        "description": "Choose the channel you want to use and follow the step by step to add it.",
+        "channels": {
+            "whatsapp": {
+                "title": "WhatsApp Channel",
+                "description": "If you have an enterprise WhatsApp account, you can connect it to communicate with your contacts.",
+                "error": "WhatApp unable to connect, check your credentials or try again later."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrate",
+            "integrated": "Integrated channel"
+        }
     }
 }
