@@ -1,12 +1,9 @@
 /// <reference types="vite/client" />
 
-declare module '@vtex/shoreline/css';
+import '@vtex/shoreline/css'; // Importação direta resolve problemas de resolução
 
 declare global {
-    interface GlobalThis {
-      t: (key: string, options?: Record<string, unknown>) => string;
-    }
-  }
-  
-  export {};
-  
+  const t: typeof import('./i18n').t; // Ajuste o caminho conforme necessário
+}
+
+export {};
