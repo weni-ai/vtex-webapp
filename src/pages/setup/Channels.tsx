@@ -4,7 +4,6 @@ import {
   Flex,
   Grid,
   IconArrowLeft,
-  IconArrowRight,
   IconButton,
   Page,
   PageContent,
@@ -15,28 +14,44 @@ import {
 } from '@vtex/shoreline';
 import { Channel } from './Channel';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { LoadingPage } from '../../components/LoadingPage';
+import { useDispatch, useSelector } from 'react-redux';
+import { isWhatsAppIntegrated, loadingWhatsAppIntegration, setLoadingWhatsAppIntegration, whatsAppError } from '../../store/userSlice';
+import { useEffect } from 'react';
 
 export function Channels() {
   const navigate = useNavigate();
-  const [setup, setSetup] = useState(false);
+  const dispatch = useDispatch();
+  const setup = useSelector(loadingWhatsAppIntegration)
+  const isIntegrated = useSelector(isWhatsAppIntegrated)
+  const error = useSelector(whatsAppError)
 
-  function navigateToDash() {
-    navigate('/dash')
-  }
-  function setWhatsAppUser() {
-    console.log('setando o zap...')
-    setSetup(true);
+  useEffect(() => {
+    if (setup) {
+      const timer = setTimeout(() => {
+        dispatch(setLoadingWhatsAppIntegration(false));
+        navigate('/dash');
+      }, 6000);
 
-    setTimeout(() => {
-      navigate('/dash');
-    }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [setup, dispatch, navigate]);
+
+  function navigateBack() {
+    navigate('/agent-builder')
   }
 
   return (
     <Page>
-      {!setup ? (
+      {setup ? (
+        <>
+          <LoadingPage
+            title="Setup Complete!"
+            description="Congratulations! Your agent is fully configured and ready to assist your customers."
+            color="#019213"
+          />
+        </>
+      ) : (
         <>
           <PageHeader>
             <PageHeaderRow
@@ -45,11 +60,8 @@ export function Channels() {
                 gap: 'var(--sl-space-3)',
               }}
             >
-              <IconButton variant="tertiary" label="Actions" onClick={navigateToDash}>
+              <IconButton variant="tertiary" label="Actions" onClick={navigateBack}>
                 <IconArrowLeft />
-              </IconButton>
-              <IconButton variant="tertiary" label="Actions" onClick={setWhatsAppUser}>
-                <IconArrowRight />
               </IconButton>
 
               <PageHeading>Integrate a support channel</PageHeading>
@@ -69,29 +81,25 @@ export function Channels() {
               </Text>
             </Flex>
 
-            <Alert
-              variant="critical"
-              style={{
-                marginBlock: 'var(--sl-space-6)',
-              }}
-            >
-              <Text variant="body" color="$fg-base">
-                WhatApp unable to connect, check your credentials or try again later.
-              </Text>
-            </Alert>
+            {
+              error ? <Alert
+                variant="critical"
+                style={{
+                  marginBlock: 'var(--sl-space-6)',
+                }}
+              >
+                <Text variant="body" color="$fg-base">
+                  WhatApp unable to connect, check your credentials or try again later.
+                </Text>
+              </Alert>
+                : null
+            }
 
             <Grid columns="repeat(auto-fill, minmax(20rem, 1fr))">
-              <Channel isIntegrated={false} />
-              <Channel isIntegrated={true} />
+              <Channel isIntegrated={isIntegrated} />
             </Grid>
           </PageContent>
         </>
-      ) : (
-        <LoadingPage
-          title="Setup Complete!"
-          description="Congratulations! Your agent is fully configured and ready to assist your customers."
-          color="#019213"
-        />
       )}
     </Page>
   );

@@ -1,6 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useDispatch } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
+import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
+  const dispatch = useDispatch()
     const data = {
         waba_id: wabaId,
         phone_number_id: phoneId,
@@ -18,7 +22,10 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
         body: JSON.stringify(data),
       }).then((response) => {
         console.log('Whatsapp registered', response)
+        dispatch(setWhatsAppIntegrated(true))
+        dispatch(setLoadingWhatsAppIntegration(true))
       }).catch((error) => {
+        dispatch(setWhatsAppError(error))
         console.error('Error:', error);
       });
 }
