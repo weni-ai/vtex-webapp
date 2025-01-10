@@ -14,6 +14,19 @@
     },
     "title": "Weni Agentic IA",
     "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
+    "improve":{
+        "description":  "Unlock the full potential of your intelligent agents by connecting them to the Weni platform. Access advanced features and customizable options to enhance their performance and deliver a better customer experience.",
+        "button": "Improve your agent"
+    },
+    "agent_gallery": {
+        "title": "Agent gallery",
+        "features": {
+            "abandoned_cart": {
+                "title": "Abandoned cart agent",
+                "description": "Recover sales by reminding customers of items forgotten in the cart."
+            }
+        }
+    },
      "setup": {
         "title": "Setting up your Weni App",
         "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."

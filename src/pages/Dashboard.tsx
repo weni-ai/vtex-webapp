@@ -44,7 +44,7 @@ export function Dashboard() {
           <img src={WeniLogo} className="d-inline" />
 
           <PageHeading>
-            Weni Agentic IA
+            {t('title')}
           </PageHeading>
         </PageHeaderRow>
       </PageHeader>
@@ -67,11 +67,11 @@ export function Dashboard() {
             }}
           >
             <Text variant="body" color="$fg-base">
-            Unlock the full potential of your intelligent agents by connecting them to the Weni platform. Access advanced features and customizable options to enhance their performance and deliver a better customer experience.
+             {t('improve.description')}
             </Text>
 
             <Button variant="primary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-              Improve your agent
+              {t('improve.button')}
 
               <IconArrowUpRight
                 height="1rem"
@@ -119,6 +119,7 @@ export function Dashboard() {
         >
           {data.map((line, indexOfLine) => (
             <Grid
+              key={`line-${indexOfLine}`}
               columns="1fr 1fr 1fr"
               gap="$space-0"
               style={{
@@ -127,6 +128,7 @@ export function Dashboard() {
             >
               {line.map((detail, indexOfDetail) => (
                 <DashboardItem
+                  key={`detail-${detail.value}`}
                   title={detail.title}
                   value={detail.value}
                   percentageDifference={detail.variation}
@@ -145,16 +147,16 @@ export function Dashboard() {
             marginBlock: 'var(--sl-space-6)'
           }}
         >
-          Agent gallery
+          {t('agent_gallery.title')}
         </Heading>
 
         <Grid
           columns="repeat(auto-fill, minmax(15rem, 1fr))"
         >
           <FeatureBox
-            title="Abandoned cart agent"
+            title={t('agent_gallery.features.abandoned_cart.title')}
             type="active"
-            description="Recover sales by reminding customers of items forgotten in the cart."
+            description={t('agent_gallery.features.abandoned_cart.description')}
             isIntegrated={false}
           />
           {/* 
