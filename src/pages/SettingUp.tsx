@@ -19,7 +19,6 @@ export function SettingUp() {
   }, [memoizedInitializeUser]);
 
   return (
-    <LoadingPage title="Setting up your App" description="Getting everything ready for you! We're finalizing the initial setup to ensure a smooth
-    experience." color='#157BF4'/>
+    <LoadingPage title={t('setup.title')} description={t('setup.description')} color='#157BF4'/>
   );
 }

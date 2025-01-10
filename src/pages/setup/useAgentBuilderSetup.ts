@@ -10,7 +10,6 @@ export function useAgentBuilderSetup() {
     const token = useSelector(selectToken);
 
     const buildAgent = async (payload: any, app_uuid: string) => {
-        console.log('entrou no agent com:', payload, app_uuid);
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
         );

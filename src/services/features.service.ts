@@ -1,3 +1,4 @@
+import { toast } from "@vtex/shoreline";
 import { VTEXFetch } from "../utils/VTEXFetch";
 
 export async function integrateAvailableFeatures(projectUUID: string, token: string) {
@@ -14,5 +15,6 @@ export async function integrateAvailableFeatures(projectUUID: string, token: str
         console.log('Feature integrated', response)
       }).catch((error) => {
         console.error('Error:', error);
+        toast.critical(t('integration.error'));
       });
 }
