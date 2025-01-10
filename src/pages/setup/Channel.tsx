@@ -1,4 +1,4 @@
-import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
+import { Button, Flex, IconCheckCircle, Text} from "@vtex/shoreline";
 import iconWhatsapp from '../../assets/channels/whatsapp.svg';
 import { startFacebookLogin } from "../../utils/facebook/login";
 import { useSelector } from "react-redux";
@@ -56,7 +56,7 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
               padding: 'var(--sl-space-2)'
             }}
           >
-            <Text variant="caption1" color="$fg-success">
+            <Text variant="body" color="$fg-success">
               <IconCheckCircle
                 display="inline"
                 style={{
@@ -71,6 +71,7 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
           </Flex>
           :
           <Button variant="primary" onClick={callFacebookSDK}>{t('integration.buttons.integrate')}</Button>
+          
       }
     </Flex>
   )
