@@ -31,9 +31,14 @@
             "forms": {
                 "agent_name": "Agent name",
                 "occupation": "Occupation",
-                "objective": "Objective",
+                "objective": "Objective (optional)",
                 "knowledge": {
-                    "title": "Add knowledge"
+                    "title": "Add knowledge",
+                    "context": "Provide the content your agent will use to answer questions."
+                },
+                "error": {
+                    "empty_input": "You must write something.",
+                    "valid_url": "Enter a valid URL."
                 }
             }
         },
