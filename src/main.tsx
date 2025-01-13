@@ -17,7 +17,7 @@ const params = new URLSearchParams(window.location.search);
 const baseAddress = params.get('base_address');
 const locale = params.get('locale');
 
-console.log('aaaa', baseAddress)
+console.log('aaaa', params)
 
 if (baseAddress) {
   console.log('alooo', baseAddress)
