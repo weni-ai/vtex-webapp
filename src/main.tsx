@@ -13,7 +13,8 @@ import { setBaseAddress } from './store/authSlice.ts';
   return i18n.t(key, options);
 };
 
-const params = new URLSearchParams(window.location.search);
+const query = decodeURIComponent(window.location.search);
+const params = new URLSearchParams(query);
 const baseAddress = params.get('base_address');
 const locale = params.get('locale');
 
