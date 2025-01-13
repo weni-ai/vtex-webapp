@@ -5,29 +5,42 @@ import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated 
 import { toast } from "@vtex/shoreline";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
-  const dispatch = useDispatch()
-    const data = {
-        waba_id: wabaId,
-        phone_number_id: phoneId,
-        project_uuid: project_uuid,
-        auth_code: code,
-    };
+  const dispatch = useDispatch();
+  const base_address = localStorage.getItem('base_address')
+  const data = {
+    waba_id: wabaId,
+    phone_number_id: phoneId,
+    project_uuid: project_uuid,
+    auth_code: code,
+  };
 
-    console.log("Creating channel with data:", data);
+  console.log("Creating channel with data:", data);
 
-    await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      }).then((response) => {
-        console.log('Whatsapp registered', response)
-        dispatch(setWhatsAppIntegrated(true))
-        dispatch(setLoadingWhatsAppIntegration(true))
-      }).catch((error) => {
-        dispatch(setWhatsAppError(error))
-        console.error('Error:', error);
-        toast.critical(t('integrations.channel.whatsapp.error'));
-      });
+  await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }).then(async (response) => {
+    console.log('Whatsapp registered', response)
+    dispatch(setWhatsAppIntegrated(true))
+    dispatch(setLoadingWhatsAppIntegration(true))
+    const integrateData = {
+      project_uuid: project_uuid,
+      store: base_address,
+      flows_channel_uuid: response.flow_object_uuid,
+      wpp_cloud_app_uuid: response.data.app_uuid
+    }
+    await VTEXFetch(`/_v/integrate-available-features?token=${token}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(integrateData),
+    })
+  }).catch((error) => {
+    dispatch(setWhatsAppError(error))
+    console.error('Error:', error);
+    toast.critical(t('integrations.channel.whatsapp.error'));
+  });
 }
