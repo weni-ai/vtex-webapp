@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
-import { selectBaseAddress } from "src/store/authSlice";
+import { selectBaseAddress } from "../store/authSlice";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   const dispatch = useDispatch();
