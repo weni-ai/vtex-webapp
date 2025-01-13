@@ -33,7 +33,6 @@ async function checkProject(vtex_account: string, user_email: string, token: str
       throw new Error(`Erro ao verificar projeto: ${response.statusText}`);
     }
     const result = await response.json();
-    console.log('Check project result:', result);
     return result;
   } catch (error) {
     console.error('Error checking project:', error);
@@ -45,7 +44,6 @@ export async function createUserAndProject(userData: any, token: string) {
   try {
     const check = await checkProject(userData.account, userData.user, token);
     if (check.data.has_project) {
-      console.log('Projeto já existe:', check);
       store.dispatch(setProjectUuid(check.data.project_uuid));
       return check;
     }
@@ -64,8 +62,6 @@ export async function createUserAndProject(userData: any, token: string) {
       },
       body: JSON.stringify(payload),
     });
-
-    console.log('Projeto criado com sucesso:', response);
     store.dispatch(setProjectUuid(response.project_uuid));
     return response;
   } catch (error) {

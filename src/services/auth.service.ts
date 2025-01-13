@@ -21,7 +21,6 @@ export async function getToken() {
         });
 
         const data = await response.json();
-        console.log('token: ', data.access_token);
         return data.access_token
     }
 }
