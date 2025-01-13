@@ -15,16 +15,10 @@ import { setBaseAddress } from './store/authSlice.ts';
 
 const query = decodeURIComponent(window.location.search);
 const params = new URLSearchParams(query);
-console.log('Base Address Decodificado:', params);
-
 const baseAddress = params.get('base_address');
 const locale = params.get('locale');
 
-console.log('Base Address:', baseAddress);
-console.log('Locale:', locale);  
-
 if (baseAddress) {
-  console.log('alooo', baseAddress)
   store.dispatch(setBaseAddress(baseAddress));
 }
 
