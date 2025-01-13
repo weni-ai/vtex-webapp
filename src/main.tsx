@@ -15,6 +15,7 @@ import { setBaseAddress } from './store/authSlice.ts'
 
 window.addEventListener('message', (event) => {
   const dispatch = useDispatch()
+  console.log('message: ', event)
   if (event.data.name === 'SetLocalStorage' && event.data?.base_address) {
     dispatch(setBaseAddress(event.data.data?.base_address))
   }
