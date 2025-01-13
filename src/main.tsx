@@ -12,6 +12,11 @@ import './i18n';
   return i18n.t(key, options);
 };
 
+window.addEventListener('message', (event) => {
+  if (event.data.name === 'SetLocalStorage') {
+    console.log('LocalStorage recebido:', event.data.data);
+  }
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
