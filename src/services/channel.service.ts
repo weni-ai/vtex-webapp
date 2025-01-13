@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
+import { selectBaseAddress } from "src/store/authSlice";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   const dispatch = useDispatch();
-  const base_address = localStorage.getItem('base_address')
+  const base_address = useSelector(selectBaseAddress)
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
