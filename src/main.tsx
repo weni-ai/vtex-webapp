@@ -17,6 +17,8 @@ const params = new URLSearchParams(window.location.search);
 const baseAddress = params.get('base_address');
 const locale = params.get('locale');
 
+console.log('aaaa', baseAddress)
+
 if (baseAddress) {
   console.log('alooo', baseAddress)
   store.dispatch(setBaseAddress(baseAddress));
