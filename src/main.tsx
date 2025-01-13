@@ -18,6 +18,7 @@ const baseAddress = params.get('base_address');
 const locale = params.get('locale');
 
 if (baseAddress) {
+  console.log('alooo', baseAddress)
   store.dispatch(setBaseAddress(baseAddress));
 }
 
