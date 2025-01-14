@@ -6,6 +6,7 @@ import { toast } from "@vtex/shoreline";
 import { selectBaseAddress } from "../store/authSlice";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
+  console.log('entrou no create channel...')
   const dispatch = useDispatch();
   const base_address = useSelector(selectBaseAddress)
   const data = {

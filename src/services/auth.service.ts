@@ -1,4 +1,3 @@
-import { setAuthToken } from "src/utils/VTEXFetch";
 import getEnv from "../utils/env";
 
 export async function getToken() {
@@ -22,8 +21,6 @@ export async function getToken() {
         });
 
         const data = await response.json();
-        console.log('setando o token no io...', data.access_token)
-        setAuthToken(data.access_token)
         return data.access_token
     }
 }
