@@ -84,7 +84,7 @@ export function startFacebookLogin(project_uuid: string, token: string) {
             (response: any) => {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
-                    console.log("Login Successful. Auth Code:", code);
+                    console.log("Login Successful. Auth Code:", code, project_uuid, wabaId, phoneId, token);
                     createChannel(code, project_uuid, wabaId, phoneId, token);
                 } else {
                     console.error("Login canceled or not fully authorized.");

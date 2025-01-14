@@ -48,18 +48,6 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
     });
 }
 
-export function setAuthToken(token: string){
-  const responseId = generateId(10);
-  setTimeout(() => {
-    console.log('mandando pro io o token', token)
-    window.parent.postMessage(
-      { name: 'setToken', id: responseId, token },
-      '*'
-    );
-  }, 0);
-}
-
-
 function generateId(length: number): string {
   return Array.from({ length }, () => Math.floor(Math.random() * 36).toString(36)).join('');
 }
