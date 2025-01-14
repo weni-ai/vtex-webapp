@@ -8,7 +8,9 @@ import { selectBaseAddress } from "../store/authSlice";
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...')
   const dispatch = useDispatch();
+  console.log('setou o dispatch...')
   const base_address = useSelector(selectBaseAddress)
+  console.log('base address', base_address)
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
