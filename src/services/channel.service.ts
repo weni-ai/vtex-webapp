@@ -9,6 +9,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
   console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token)
   const dispatch = useDispatch();
   const base_address = store.getState().auth.base_address
+  console.log('chegou aqui', base_address)
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
