@@ -3,14 +3,12 @@ import { useDispatch } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
-import store from "src/store/provider.store";
+import store from "../store/provider.store";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token)
   const dispatch = useDispatch();
-  console.log('setou o dispatch...')
-  const base_address = store.getState().auth.base_address;
-  console.log('base address', base_address)
+  const base_address = store.getState().auth.base_address
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
