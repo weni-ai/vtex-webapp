@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
-// import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
+import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
-import { selectBaseAddress } from "../store/authSlice";
+import store from "src/store/provider.store";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token)
-  // const dispatch = useDispatch();
-  // console.log('setou o dispatch...')
-  const base_address = useSelector(selectBaseAddress)
+  const dispatch = useDispatch();
+  console.log('setou o dispatch...')
+  const base_address = store.getState().auth.base_address;
   console.log('base address', base_address)
   const data = {
     waba_id: wabaId,
@@ -28,8 +28,8 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     body: JSON.stringify(data),
   }).then(async (response) => {
     console.log('Whatsapp registered', response)
-    // dispatch(setWhatsAppIntegrated(true))
-    // dispatch(setLoadingWhatsAppIntegration(true))
+    dispatch(setWhatsAppIntegrated(true))
+    dispatch(setLoadingWhatsAppIntegration(true))
     const integrateData = {
       project_uuid: project_uuid,
       store: base_address,
@@ -43,7 +43,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
       body: JSON.stringify(integrateData),
     })
   }).catch((error) => {
-    // dispatch(setWhatsAppError(error))
+    dispatch(setWhatsAppError(error))
     console.error('Error:', error);
     toast.critical(t('integrations.channel.whatsapp.error'));
   });
