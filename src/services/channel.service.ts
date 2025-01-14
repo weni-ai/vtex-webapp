@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
-import store from "src/store/provider.store";
+import store from "../store/provider.store";
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...')
