@@ -5,39 +5,32 @@ import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { toast } from '@vtex/shoreline';
+import { setProjectUuid } from '../../store/projectSlice';
 
 export function useUserSetup() {
   const navigate = useNavigate();
 
   const initializeProject = async () => {
     try {
-      console.log('pegando o token...')
       const token = await getToken();
-      console.log('o token', token)
       if (!token) {
         console.error("Token não encontrado");
         return;
       }
       store.dispatch(setToken(token));
 
-
-      console.log('pegando os dados do user...')
       const userData = await fetchUserData();
-      console.log('os dados do user: ', userData)
       if (!userData) {
         console.error("Dados do usuário não encontrados");
         return;
       }
       store.dispatch(setUser(userData));
 
-      console.log('checkando o projeto...')
       const result = await checkProject(userData.account, userData.user, token)
-      console.log('os dados do projeto', result)
       if (result.data.has_project) {
-        console.log('entrando na dash')
+        store.dispatch(setProjectUuid(result.data.project_uuid))
         navigate('/dash')
       } else {
-        console.log('entrando no agent')
         navigate('/agent-details')
       }
     } catch (err) {
