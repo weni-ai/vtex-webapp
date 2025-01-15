@@ -37,8 +37,7 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
             <Text variant="display3" color="$fg-base">{title}</Text>
-
-            <Tag color={{ active: 'blue', passive: 'purple' }[type]} variant='secondary' >
+            <Tag color='blue' variant='secondary' >
               <Text variant="caption1">
                 {{ active: 'Active notification', passive: 'Passive support' }[type]}
               </Text>
