@@ -7,6 +7,7 @@ import { setUser } from './store/userSlice';
 import { useEffect } from 'react';
 import { getUserFromLocalStorage } from './services/user.service';
 import { AgentDetails } from './pages/agent/Details';
+import { AgentBuilderSkeleton } from './pages/agent/AgentBuilderSkeleton';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function App() {
       <Route path='/' element={<SettingUp/>}></Route>
       <Route path='/agent-details' element={<AgentDetails />}></Route>
       <Route path='/agent-builder' element={<AgentBuilder />}></Route>
+      <Route path='/agent-builder-skeleton' element={<AgentBuilderSkeleton />}></Route>
       {/* <Route path='/channels' element={<Channels />}></Route>
       <Route path='/dash' element={<Dashboard />}></Route>
       <Route path='/error' element={<ErrorPage title={'Something went wrong'} description={'Retry or check back later if the issue persists.'} color={'#F95D47'}  />}></Route> */}
