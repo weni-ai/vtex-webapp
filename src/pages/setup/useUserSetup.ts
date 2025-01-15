@@ -35,6 +35,7 @@ export function useUserSetup() {
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
       toast.critical('Erro durante a inicialização do usuário. Tente novamente mais tarde.')
+      navigate('/setup-error');
     }
   };
 

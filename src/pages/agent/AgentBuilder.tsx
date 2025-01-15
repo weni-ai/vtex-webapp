@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Button,
   Container,
@@ -19,7 +20,7 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectProject } from '../../store/projectSlice';
+import { selectProject, setupError } from '../../store/projectSlice';
 import { isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -42,9 +43,10 @@ export function AgentBuilder() {
     objective: '',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
-  const isIntegrated = useSelector(isWhatsAppIntegrated);
-  const setupLoading = true;
   const project = useSelector(selectProject);
+  const isIntegrated = useSelector(isWhatsAppIntegrated);
+  const userSetupError = useSelector(setupError)
+  const setupLoading = true;
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
@@ -83,14 +85,14 @@ export function AgentBuilder() {
 
   return (
     <Container>
-      <Page>
+      <Page style={{ height: '100vh' }}>
         <PageHeader>
-          <PageHeaderRow style={{ justifyContent: 'space-between' }}>
-            <PageHeading>
+          <PageHeaderRow style={{ justifyContent: 'space-between', alignItems: 'center'}}>
+            <PageHeading style={{display: 'flex', alignItems: 'center'}}>
               <IconButton label='' variant="tertiary" onClick={() => navigate('/agent-details')}>
                 <IconArrowLeft />
               </IconButton>
-              New Agent
+              <Text>New Agent</Text>
             </PageHeading>
             <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isIntegrated}>
               Continue
