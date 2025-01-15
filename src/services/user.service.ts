@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { setProjectUuid } from "../store/projectSlice";
+import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 
@@ -41,6 +41,7 @@ async function checkProject(vtex_account: string, user_email: string, token: str
 }
 
 export async function createUserAndProject(userData: any, token: string) {
+  store.dispatch(setLoadingSetup(true))
   try {
     const check = await checkProject(userData.account, userData.user, token);
     if (check.data.has_project) {
@@ -63,6 +64,7 @@ export async function createUserAndProject(userData: any, token: string) {
       body: JSON.stringify(payload),
     });
     store.dispatch(setProjectUuid(response.project_uuid));
+    store.dispatch(setLoadingSetup(false))
     return response;
   } catch (error) {
     console.error('Erro na criação do projeto e usuário:', error);
