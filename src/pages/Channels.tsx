@@ -14,9 +14,9 @@ import {
 } from '@vtex/shoreline';
 import { Channel } from './Channel';
 import { useNavigate } from 'react-router-dom';
-import { LoadingPage } from '../../components/LoadingPage';
+import { LoadingPage } from '../components/LoadingPage';
 import { useDispatch, useSelector } from 'react-redux';
-import { isWhatsAppIntegrated, loadingWhatsAppIntegration, setLoadingWhatsAppIntegration, whatsAppError } from '../../store/userSlice';
+import { isWhatsAppIntegrated, loadingWhatsAppIntegration, setLoadingWhatsAppIntegration, whatsAppError } from '../store/userSlice';
 import { useEffect } from 'react';
 
 export function Channels() {
