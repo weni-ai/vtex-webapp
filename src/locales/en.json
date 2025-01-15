@@ -43,10 +43,10 @@
             },
             "forms": {
                 "agent_name": "Agent name",
-                "occupation": "Occupation",
+                "occupation": "Occupation (optional)",
                 "objective": "Objective (optional)",
                 "knowledge": {
-                    "title": "Add knowledge",
+                    "title": "Knowlege source",
                     "context": "Provide the content your agent will use to answer questions."
                 },
                 "error": {
