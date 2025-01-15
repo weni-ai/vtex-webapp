@@ -11,24 +11,33 @@ export function useUserSetup() {
 
   const initializeProject = async () => {
     try {
+      console.log('pegando o token...')
       const token = await getToken();
+      console.log('o token', token)
       if (!token) {
         console.error("Token não encontrado");
         return;
       }
       store.dispatch(setToken(token));
 
+
+      console.log('pegando os dados do user...')
       const userData = await fetchUserData();
+      console.log('os dados do user: ', userData)
       if (!userData) {
         console.error("Dados do usuário não encontrados");
         return;
       }
       store.dispatch(setUser(userData));
 
-      const result = await checkProject(userData.account, userData.user, token )
-      if(result.data.has_project){
+      console.log('checkando o projeto...')
+      const result = await checkProject(userData.account, userData.user, token)
+      console.log('os dados do projeto', result)
+      if (result.data.has_project) {
+        console.log('entrando na dash')
         navigate('/dash')
-      } else{
+      } else {
+        console.log('entrando no agent')
         navigate('/agent-details')
       }
     } catch (err) {
@@ -41,7 +50,6 @@ export function useUserSetup() {
     const token = store.getState().auth.token
     try {
       await createUserAndProject(userData, token);
-      navigate('/');
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
       toast.critical('Erro durante a inicialização do usuário. Tente novamente mais tarde.')
