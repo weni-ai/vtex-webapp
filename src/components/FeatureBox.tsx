@@ -1,4 +1,4 @@
-import { Button, Flex, IconButton, IconCheckCircle, IconDotsThreeVertical, IconGearSix, IconInfo, IconMinus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconMinus, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Tag, Text } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { AgentPreferences } from "./AgentPreferences";
@@ -27,18 +27,23 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
         direction="column"
         gap="$space-2"
         style={{
+          width: '312px',
+          height: '182px',
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-1)',
-          padding: 'var(--sl-space-4)',
+          padding: '16px 16px 24px 16px',
         }}
       >
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
             <Text variant="display3" color="$fg-base">{title}</Text>
 
-            <Text variant="caption1" color={{ active: '$color-blue-9', passive: '$color-purple-9' }[type]}>
-              {{ active: 'Active notification', passive: 'Passive support' }[type]}
-            </Text>
+            <Tag color={{ active: 'blue', passive: 'purple' }[type]} variant='secondary' >
+              <Text variant="caption1">
+                {{ active: 'Active notification', passive: 'Passive support' }[type]}
+              </Text>
+            </Tag>
+
           </Flex>
 
           <MenuProvider>
@@ -69,7 +74,7 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
         <Flex style={{ height: '4.125rem' }}>
           <Text
             variant="body"
-            color="$fg-base"
+            color="$fg-base-soft"
           >
             {description}
           </Text>
@@ -79,31 +84,27 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
         {
           isIntegrated ?
             <Flex
-              justify="center"
               style={{
-                padding: 'var(--sl-space-2)'
+                padding: 'var(--sl-space-2)',
+                alignItems: 'center',
+                gap: '8px'
               }}
             >
-              <Text variant="caption1" color="$fg-success">
-                <IconCheckCircle
-                  display="inline"
-                  style={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    marginRight: 'var(--sl-space-2)'
-                  }}
-                />
-
-                Integrated skill
+              <IconCheck color="green" />
+              <Text variant="action" color="$fg-success">
+                Agent added
               </Text>
             </Flex>
             :
-            <Button variant="secondary" onClick={integrateFeature}>Integrate</Button>
+            <Button variant="secondary" onClick={integrateFeature}>
+              <IconPlus />
+              <Text> Add agent</Text>
+            </Button>
         }
       </Flex>
       <AboutAgent open={openAbout} type={"Active Notification"} title={"Abandoned Cart agent"} category={"Active Notification"} description={"Recover sales by reminding customers of items left in the cart."} disclaimer={"With this agent, you increase your chances of conversion, keeping your customer close and encouraging order completion."} toggleModal={openModal} />
-    
-    <AgentPreferences open={openPreferences} toggleOpen={openDrawer} />
+
+      <AgentPreferences open={openPreferences} toggleOpen={openDrawer} />
     </>
   );
 }
