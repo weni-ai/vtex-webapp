@@ -20,7 +20,7 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectProject, setupError } from '../../store/projectSlice';
+import { selectProject } from '../../store/projectSlice';
 import { isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -45,7 +45,6 @@ export function AgentBuilder() {
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
   const isIntegrated = useSelector(isWhatsAppIntegrated);
-  const userSetupError = useSelector(setupError)
   const setupLoading = true;
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
