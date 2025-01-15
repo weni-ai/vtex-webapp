@@ -1,4 +1,4 @@
-import { SetupError} from './pages/agent/SettingUpError';
+import { SetupError } from './pages/agent/SettingUpError';
 import { AgentBuilder } from './pages/agent/AgentBuilder';
 import { useDispatch } from 'react-redux';
 
@@ -18,17 +18,14 @@ function App() {
     }
   }, [dispatch]);
   return (
-      <Router>
+    <Router>
       <Routes>
-      <Route path='/agent-details' element={<AgentDetails />}></Route>
-      <Route path='/agent-builder' element={<AgentBuilder />}></Route>
-      <Route path='/agent-builder-skeleton' element={<AgentBuilderSkeleton />}></Route>
-      <Route path='/setup-error' element={<SetupError />}></Route>
-      {/* <Route path='/channels' element={<Channels />}></Route>
-      <Route path='/dash' element={<Dashboard />}></Route>
-      <Route path='/error' element={<ErrorPage title={'Something went wrong'} description={'Retry or check back later if the issue persists.'} color={'#F95D47'}  />}></Route> */}
+        <Route path='/' element={<AgentDetails />}></Route>
+        <Route path='/agent-builder' element={<AgentBuilder />}></Route>
+        <Route path='/agent-builder-skeleton' element={<AgentBuilderSkeleton />}></Route>
+        <Route path='/setup-error' element={<SetupError />}></Route>
       </Routes>
-      </Router>
+    </Router>
   )
 }
 

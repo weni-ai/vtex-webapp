@@ -88,7 +88,7 @@ export function AgentBuilder() {
         <PageHeader>
           <PageHeaderRow style={{ justifyContent: 'space-between', alignItems: 'center'}}>
             <PageHeading style={{display: 'flex', alignItems: 'center'}}>
-              <IconButton label='' variant="tertiary" onClick={() => navigate('/agent-details')}>
+              <IconButton label='' variant="tertiary" onClick={() => navigate('/')}>
                 <IconArrowLeft />
               </IconButton>
               <Text>New Agent</Text>
