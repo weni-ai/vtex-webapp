@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { getUserFromLocalStorage } from './services/user.service';
 import { AgentDetails } from './pages/agent/Details';
 import { AgentBuilderSkeleton } from './pages/agent/AgentBuilderSkeleton';
+import { Setup } from './pages/Setup';
 
 function App() {
   const dispatch = useDispatch();
@@ -20,7 +21,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<AgentDetails />}></Route>
+        <Route path='/' element={<Setup />}></Route>
+        <Route path='/agent-details' element={<AgentDetails />}></Route>
         <Route path='/agent-builder' element={<AgentBuilder />}></Route>
         <Route path='/agent-builder-skeleton' element={<AgentBuilderSkeleton />}></Route>
         <Route path='/setup-error' element={<SetupError />}></Route>

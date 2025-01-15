@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../store/userSlice';
-import { createUserAndProject, fetchUserData } from '../../services/user.service';
+import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
@@ -9,7 +9,7 @@ import { toast } from '@vtex/shoreline';
 export function useUserSetup() {
   const navigate = useNavigate();
 
-  const initializeUser = async () => {
+  const initializeProject = async () => {
     try {
       const token = await getToken();
       if (!token) {
@@ -25,13 +25,23 @@ export function useUserSetup() {
       }
       store.dispatch(setUser(userData));
 
-      const response = await createUserAndProject(userData, token);
-
-      if (response?.data?.has_project) {
-        navigate('/dash');
-      } else {
-        navigate('/');
+      const result = await checkProject(userData.account, userData.user, token )
+      if(result.data.has_project){
+        navigate('/dash')
+      } else{
+        navigate('/agent-details')
       }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const initializeUser = async () => {
+    const userData = store.getState().user.userData
+    const token = store.getState().auth.token
+    try {
+      await createUserAndProject(userData, token);
+      navigate('/');
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
       toast.critical('Erro durante a inicialização do usuário. Tente novamente mais tarde.')
@@ -39,5 +49,5 @@ export function useUserSetup() {
     }
   };
 
-  return { initializeUser };
+  return { initializeProject, initializeUser };
 }
