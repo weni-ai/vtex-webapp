@@ -30,7 +30,7 @@ export function useUserSetup() {
       if (response?.data?.has_project) {
         navigate('/dash');
       } else {
-        navigate('/agent-details');
+        navigate('/');
       }
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
