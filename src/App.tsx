@@ -9,6 +9,7 @@ import { setUser } from './store/userSlice';
 import { useEffect } from 'react';
 import { getUserFromLocalStorage } from './services/user.service';
 import { ErrorPage } from './components/ErrorPage';
+import { AgentDetails } from './pages/agent/Details';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function App() {
       <Router>
       <Routes>
       <Route path='/' element={<SettingUp/>}></Route>
+      <Route path='/agent-details' element={<AgentDetails />}></Route>
       <Route path='/agent-builder' element={<AgentBuilder />}></Route>
       <Route path='/channels' element={<Channels />}></Route>
       <Route path='/dash' element={<Dashboard />}></Route>
