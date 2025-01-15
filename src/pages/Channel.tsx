@@ -1,9 +1,9 @@
-import { Button, Flex, IconCheckCircle, Text} from "@vtex/shoreline";
-import iconWhatsapp from '../../assets/channels/whatsapp.svg';
-import { startFacebookLogin } from "../../utils/facebook/login";
+import { Button, Flex, IconCheckCircle, Text } from "@vtex/shoreline";
+import iconWhatsapp from '../assets/channels/whatsapp.svg';
+import { startFacebookLogin } from "../utils/facebook/login";
 import { useSelector } from "react-redux";
-import { selectProject } from "../../store/projectSlice";
-import { selectToken } from "../../store/authSlice";
+import { selectProject } from "../store/projectSlice";
+import { selectToken } from "../store/authSlice";
 
 export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
   const project_uuid = useSelector(selectProject)
@@ -13,7 +13,6 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
   }
   return (
     <Flex
-      direction="column"
       gap="$space-4"
       style={{
         border: 'var(--sl-border-base)',
@@ -22,7 +21,7 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
       }}
     >
       <Flex
-        gap="$space-2"
+        gap={'16px'}
         align="start"
         style={{
           marginBottom: 'var(--sl-space-2)'
@@ -42,8 +41,8 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
         >
           <Text variant="display3" color="$fg-muted">{t('integration.channels.whatsapp.title')}</Text>
 
-          <Text variant="caption1" color="$fg-base-soft">
-          {t('integration.channels.whatsapp.description')}
+          <Text variant="body" color="$fg-base-soft">
+            {t('integration.channels.whatsapp.description')}
           </Text>
         </Flex>
       </Flex>
@@ -66,12 +65,11 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
                 }}
               />
 
-{t('integration.buttons.integrated')}
+              {t('integration.buttons.integrated')}
             </Text>
           </Flex>
           :
           <Button variant="primary" onClick={callFacebookSDK}>{t('integration.buttons.integrate')}</Button>
-          
       }
     </Flex>
   )

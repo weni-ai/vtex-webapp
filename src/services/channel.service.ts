@@ -6,7 +6,7 @@ import { toast } from "@vtex/shoreline";
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token);
 
-  const base_address = store.getState().auth.base_address; // Acessa diretamente o estado
+  const base_address = store.getState().auth.base_address;
   console.log('chegou aqui', base_address);
 
   const data = {
@@ -29,7 +29,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
 
     console.log('Whatsapp registered', response);
 
-    store.dispatch(setWhatsAppIntegrated(true)); // Usa a store para despachar ações
+    store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
 
     const integrateData = {
@@ -47,7 +47,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
       body: JSON.stringify(integrateData),
     });
   } catch (error) {
-    store.dispatch(setWhatsAppError(error)); // Usa a store para despachar ações
+    store.dispatch(setWhatsAppError(error));
     console.error('Error:', error);
     toast.critical('Integrations channel WhatsApp error');
   }

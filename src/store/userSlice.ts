@@ -25,8 +25,6 @@ const userSlice = createSlice({
   },
 });
 
-
-
 export const { setUser, setWhatsAppIntegrated, setWhatsAppError, setLoadingWhatsAppIntegration} = userSlice.actions;
 
 export const selectUser = (state: any) => state.user.userData

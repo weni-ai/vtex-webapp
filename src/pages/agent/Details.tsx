@@ -2,9 +2,13 @@
 import { Button, Container, Content, Flex, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import AgentDemoGif from '../../assets/channels/agentDemoGif';
 import Icon from '../../assets/icons/Icon';
+import { useNavigate } from 'react-router-dom';
 
 export function AgentDetails() {
-    
+    const navigate = useNavigate();
+    const navigateToBuilder = () => {
+        navigate('/agent-builder')
+    }
     return (
         <Container>
             <Page>
@@ -16,7 +20,7 @@ export function AgentDetails() {
                         <PageHeading>
                             {t('title')}
                         </PageHeading>
-                        <Button size='large' variant='primary'>{t('agent.setup.buttons.create_agent')}</Button>
+                        <Button size='large' variant='primary' onClick={navigateToBuilder}>{t('agent.setup.buttons.create_agent')}</Button>
                     </PageHeaderRow>
                 </PageHeader>
  
