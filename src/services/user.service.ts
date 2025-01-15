@@ -18,7 +18,7 @@ export async function fetchUserData() {
   }
 }
 
-async function checkProject(vtex_account: string, user_email: string, token: string) {
+export async function checkProject(vtex_account: string, user_email: string, token: string) {
   const apiUrl = `https://api.stg.cloud.weni.ai/v2/commerce/check-project?vtex_account=${vtex_account}&user_email=${user_email}`;
 
   try {
@@ -43,12 +43,6 @@ async function checkProject(vtex_account: string, user_email: string, token: str
 export async function createUserAndProject(userData: any, token: string) {
   store.dispatch(setLoadingSetup(true))
   try {
-    const check = await checkProject(userData.account, userData.user, token);
-    if (check.data.has_project) {
-      store.dispatch(setProjectUuid(check.data.project_uuid));
-      return check;
-    }
-
     const payload = {
       user_email: userData.user,
       organization_name: userData.account,
