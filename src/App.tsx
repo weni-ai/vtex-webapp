@@ -9,6 +9,7 @@ import { getUserFromLocalStorage } from './services/user.service';
 import { AgentDetails } from './pages/agent/Details';
 import { AgentBuilderSkeleton } from './pages/agent/AgentBuilderSkeleton';
 import { Setup } from './pages/Setup';
+import { Dashboard } from './pages/Dashboard';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function App() {
         <Route path='/agent-builder' element={<AgentBuilder />}></Route>
         <Route path='/agent-builder-skeleton' element={<AgentBuilderSkeleton />}></Route>
         <Route path='/setup-error' element={<SetupError />}></Route>
+        <Route path='/dash' element={<Dashboard />}></Route>
       </Routes>
     </Router>
   )
