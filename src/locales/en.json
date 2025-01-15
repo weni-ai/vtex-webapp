@@ -53,6 +53,9 @@
                     "empty_input": "You must write something.",
                     "valid_url": "Enter a valid URL."
                 }
+            },
+            "buttons": {
+                "create_agent": "Create agent"
             }
         },
         "error": "Unable to integrate the feature. Please try again later."
