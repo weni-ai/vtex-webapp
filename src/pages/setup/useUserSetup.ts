@@ -30,8 +30,8 @@ export function useUserSetup() {
       const result = await checkProject(userData.account, userData.user, token)
       if (result.data.has_project) {
         store.dispatch(setProjectUuid(result.data.project_uuid))
-        const hasWppIntegrated = await checkWppIntegration(result.data.project_uuid, token)
-        console.log('tem zap?', hasWppIntegrated);
+        // const hasWppIntegrated = await checkWppIntegration(result.data.project_uuid, token)
+        // console.log('tem zap?', hasWppIntegrated);
         navigate('/dash')
       } else {
         navigate('/agent-details')
