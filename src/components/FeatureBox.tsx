@@ -55,16 +55,16 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
             <MenuPopover>
               <MenuItem onClick={openModal}>
                 <IconInfo />
-                Details
+                {t('common.details')}
               </MenuItem>
               <MenuItem onClick={openDrawer}>
                 <IconGearSix />
-                Preferences
+                {t('common.preferences')}
               </MenuItem>
               <MenuSeparator />
               <MenuItem>
                 <IconMinus />
-                Disable
+                {t('common.disable')}
               </MenuItem>
             </MenuPopover>
           </MenuProvider>
@@ -97,11 +97,11 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
             :
             <Button variant="secondary" onClick={integrateFeature}>
               <IconPlus />
-              <Text> Add agent</Text>
+              <Text> {t('agent_gallery.button.add')}</Text>
             </Button>
         }
       </Flex>
-      <AboutAgent open={openAbout} type={"Active Notification"} title={"Abandoned Cart agent"} category={"Active Notification"} description={"Recover sales by reminding customers of items left in the cart."} disclaimer={"With this agent, you increase your chances of conversion, keeping your customer close and encouraging order completion."} toggleModal={openModal} />
+      <AboutAgent open={openAbout} type={t('agent_gallery.types.active')}title={t('agent_gallery.features.abandoned_cart.title')}  category={t('agent_gallery.types.active')} description={t('agent_gallery.features.abandoned_cart.description')} disclaimer={t('agent_gallery.features.abandoned_cart.disclaimer')}  toggleModal={openModal} />
 
       <AgentPreferences open={openPreferences} toggleOpen={openDrawer} />
     </>

@@ -4,7 +4,6 @@ import { checkProject, createUserAndProject, fetchUserData } from '../../service
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { toast } from '@vtex/shoreline';
 import { setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 
@@ -12,11 +11,11 @@ export function useUserSetup() {
   const navigate = useNavigate();
 
   const initializeProject = async () => {
-    console.log('aqui')
     try {
       const token = await getToken();
       if (!token) {
         console.error("Token não encontrado");
+        navigate('/setup-error')
         return;
       }
       store.dispatch(setToken(token));
@@ -24,6 +23,7 @@ export function useUserSetup() {
       const userData = await fetchUserData();
       if (!userData) {
         console.error("Dados do usuário não encontrados");
+        navigate('/setup-error')
         return;
       }
       store.dispatch(setUser(userData));
@@ -53,7 +53,6 @@ export function useUserSetup() {
       await createUserAndProject(userData, token);
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
-      toast.critical('Erro durante a inicialização do usuário. Tente novamente mais tarde.')
       navigate('/setup-error');
     }
   };
