@@ -2,6 +2,30 @@ import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
+import getEnv from "../utils/env";
+
+export async function checkWppIntegration(project_uuid: string, token: string) {
+  const integrationsAPI = getEnv('VITE_APP_INTEGRATIONS_URL');
+  const apiUrl = `${integrationsAPI}/api/v1/commerce/check-whatsapp-integration?project_uuid=${project_uuid}`
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Erro ao verificar integração: ${response.statusText}`);
+    }
+    const result = await response.json();
+    console.log('ta integrado? ', result)
+    return result;
+  } catch (error) {
+    console.error('Error checking integration:', error);
+    throw error;
+  }
+}
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token);
