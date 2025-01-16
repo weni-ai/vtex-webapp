@@ -3,15 +3,12 @@ import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
-import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
-  const navigate = useNavigate();
 
   function navigateToAgent() {
-    // window.open('https://dash.weni.ai/', '_blank');
-    navigate('/channels')
+    window.open('https://dash.weni.ai/', '_blank');
   }
 
   useEffect(() => {
