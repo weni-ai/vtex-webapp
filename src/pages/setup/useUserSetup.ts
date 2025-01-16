@@ -6,6 +6,7 @@ import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { toast } from '@vtex/shoreline';
 import { setProjectUuid } from '../../store/projectSlice';
+import { checkWppIntegration } from '../../services/channel.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export function useUserSetup() {
       const result = await checkProject(userData.account, userData.user, token)
       if (result.data.has_project) {
         store.dispatch(setProjectUuid(result.data.project_uuid))
+        const hasWppIntegrated = await checkWppIntegration(result.data.project_uuid, token)
+        console.log('tem zap?', hasWppIntegrated);
         navigate('/dash')
       } else {
         navigate('/agent-details')
