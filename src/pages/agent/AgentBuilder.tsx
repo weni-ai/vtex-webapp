@@ -27,6 +27,7 @@ import { useUserSetup } from '../setup/useUserSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
 import { Channel } from '../Channel';
 import { useNavigate } from 'react-router-dom';
+import question from '../../assets/icons/question.svg'
 
 interface FormState {
   name: string;
@@ -45,7 +46,7 @@ export function AgentBuilder() {
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
   const isIntegrated = useSelector(isWhatsAppIntegrated);
-  const setupLoading = true;
+  const setupLoading = false;
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
@@ -86,15 +87,15 @@ export function AgentBuilder() {
     <Container>
       <Page style={{ height: '100vh' }}>
         <PageHeader>
-          <PageHeaderRow style={{ justifyContent: 'space-between', alignItems: 'center'}}>
-            <PageHeading style={{display: 'flex', alignItems: 'center'}}>
+          <PageHeaderRow style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+            <PageHeading style={{ display: 'flex', alignItems: 'center' }}>
               <IconButton label='' variant="tertiary" onClick={() => navigate('/')}>
-                <IconArrowLeft onClick={() => navigate('/agent-details')}/>
+                <IconArrowLeft onClick={() => navigate('/agent-details')} />
               </IconButton>
-              <Text>New Agent</Text>
+              <Text>{t('common.new_agent')}</Text>
             </PageHeading>
             <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isIntegrated}>
-              Continue
+              {t('common.create')}
             </Button>
           </PageHeaderRow>
         </PageHeader>
@@ -107,7 +108,7 @@ export function AgentBuilder() {
               <Text variant="display3">Set your agent’s persona</Text>
               <Flex direction="column" gap="20px">
                 <Field error={!!errors.name}>
-                  <Label>Name</Label>
+                  <Label>{t('agent.setup.forms.name')}</Label>
                   <Input
                     name="name"
                     value={form.name}
@@ -116,10 +117,12 @@ export function AgentBuilder() {
                   <FieldError>{errors.name}</FieldError>
                 </Field>
                 <Field error={!!errors.knowledge}>
-                  <Label>
-                    Knowledge Base URL
-                    <Tooltip label="Provide a valid URL for the knowledge base.">
-                      <span>?</span>
+                  <Label style={{display: 'flex', alignItems: 'center'}}>
+                    {t('agent.setup.forms.knowledge.title')}
+                    <Tooltip label={t('agent.setup.forms.knowledge.context')}>
+                      <span>
+                        <img src={question} alt="" />
+                      </span>
                     </Tooltip>
                   </Label>
                   <Input
@@ -130,7 +133,7 @@ export function AgentBuilder() {
                   <FieldError>{errors.knowledge}</FieldError>
                 </Field>
                 <Field>
-                  <Label>Occupation</Label>
+                  <Label>{t('agent.setup.forms.occupation')}</Label>
                   <Input
                     name="occupation"
                     value={form.occupation}
@@ -143,6 +146,7 @@ export function AgentBuilder() {
                     name="objective"
                     value={form.objective}
                     onChange={(e) => handleInputChange('objective', e.target.value)}
+                    style={{minWidth: '720px'}}
                   />
                 </Field>
               </Flex>
