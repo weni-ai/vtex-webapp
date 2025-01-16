@@ -9,6 +9,8 @@ export JSON_STRING='window.configs = { \
   "VITE_APP_CLIENT_ID":"'${VITE_APP_CLIENT_ID}'", \
   "VITE_APP_CLIENT_SECRET":"'${VITE_APP_CLIENT_SECRET}'", \
   "VITE_APP_AUTH_URL":"'${VITE_APP_AUTH_URL}'", \
+  "VITE_APP_INTEGRATIONS_URL":"'${VITE_APP_INTEGRATIONS_URL}'", \
+
 }'
 sed "s|\/\/ CONFIGURATIONS_PLACEHOLDER|${JSON_STRING}|" /usr/share/nginx/html/vtex-webapp/index.html.tmpl > /tmp/index.html
 
