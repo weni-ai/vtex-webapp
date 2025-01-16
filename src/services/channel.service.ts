@@ -5,7 +5,8 @@ import { toast } from "@vtex/shoreline";
 import getEnv from "../utils/env";
 
 export async function checkWppIntegration(project_uuid: string, token: string) {
-  const integrationsAPI = getEnv('VITE_APP_INTEGRATIONS_URL');
+  console.log('checando o zap', )
+  const integrationsAPI = getEnv('VITE_APP_INTEGRATIONS_URL') || '';
   const apiUrl = `${integrationsAPI}/api/v1/commerce/check-whatsapp-integration?project_uuid=${project_uuid}`
   try {
     const response = await fetch(apiUrl, {
