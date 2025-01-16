@@ -5,7 +5,7 @@ const AgentDemoGif = () => {
   return (
     <Center>
       <img src={mockedGif} alt="Mocked GIF"  style={{ height:'500px' }} />
-      <Text variant="body" color="$color-gray-5">Return and exchange agent Demo</Text>
+      <Text variant="body" color="$color-gray-5">{t('agent.details.example.description')}</Text>
     </Center>
   );
 };

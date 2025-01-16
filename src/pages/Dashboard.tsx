@@ -37,7 +37,7 @@ export function Dashboard() {
       <PageHeader>
         <PageHeaderRow style={{ height: '44px' }}>
           <PageHeading >
-            Weni Agentic IA
+            {t('title')}
           </PageHeading>
         </PageHeaderRow>
       </PageHeader>
@@ -58,11 +58,11 @@ export function Dashboard() {
               }}
             >
               <Text variant="emphasis" color="$fg-base">
-                Connect agents to the Weni platform to access advanced features and customizable options.
+                {t('improve.description')}
               </Text>
 
               <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-                <Text variant='action'> Connect to Weni</Text>
+                <Text variant='action'> {t('improve.button')}</Text>
                 <IconArrowUpRight
                   height="1rem"
                   width="1rem"

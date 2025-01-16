@@ -36,8 +36,6 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
 }
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
-  console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token);
-
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
@@ -48,21 +46,19 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
   console.log("Creating channel with data:", data);
 
   try {
-    const response = await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
+    await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
-
-    console.log('Whatsapp registered', response);
+    toast.success(t('integration.channels.whatsapp.success'))
 
     store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
   } catch (error) {
     store.dispatch(setWhatsAppError(error));
-    console.error('Error:', error);
-    toast.critical('Integrations channel WhatsApp error');
+    toast.critical(t('integration.channels.whatsapp.error'));
   }
 }
