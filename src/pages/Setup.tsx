@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useUserSetup } from "./setup/useUserSetup";
+import { Page } from "@vtex/shoreline";
 
 export function Setup() {
     const { initializeProject } = useUserSetup();
@@ -9,5 +10,9 @@ export function Setup() {
         initializeProject();
     }, [initializeProject]);
 
-    return(<></>)
+    return(
+        <Page>
+            jkssqwjksdiqhwdsjwhq
+        </Page>
+    )
 }
