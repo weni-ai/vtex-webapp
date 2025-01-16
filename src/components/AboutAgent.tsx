@@ -1,6 +1,5 @@
-import { Center, Container, Flex, Grid, GridCell, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Tag, Text } from "@vtex/shoreline";
-import abandonedCart from '../assets/icons/abandoned_cart.svg'
-import lightBulb from '../assets/icons/lightbulb.svg'
+import { Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Tag, Text } from "@vtex/shoreline";
+import balao from '../assets/icons/Balao.png'
 export interface AboutAgentProps {
     open: boolean,
     type: string;
@@ -17,32 +16,22 @@ export function AboutAgent({ open, title, category, description, disclaimer, tog
             <ModalHeader>
                 <Flex>
                     <ModalHeading>{title}</ModalHeading>
-                    <Tag color="blue">{category}</Tag>
+                    <Tag color="blue" variant="secondary">{category}</Tag>
                 </Flex>
                 <ModalDismiss />
             </ModalHeader>
             <ModalContent>
-                <Grid columns="2fr 1fr">
-                    <GridCell>
-                        <Flex direction="column" style={{ gap: '77px' }}>
-                            <Text variant="display4" color="$fg-base-soft">
-                                {description}
-                            </Text>
-                            <Container style={{ display: 'flex', border: 'solid 1px #F2F4F5', padding: '8px', gap: '8px', borderRadius: '8px' }}>
-                                <img src={lightBulb} alt="" style={{display: 'flex', alignSelf: 'start', padding: '8px'}}/>
-                                <Text variant="emphasis" color="$fg-base-soft">
-                                    {disclaimer}
-                                </Text>
-                            </Container>
-                        </Flex>
-                    </GridCell>
-                    <GridCell>
-                        <Center>
-                            <img src={abandonedCart} alt="" />
-                        </Center>
-                    </GridCell>
-                </Grid>
+                <Flex style={{
+                    width: '100%', padding: '32px', justifyContent: 'center', backgroundColor: '#d9e7fb', borderRadius: 'var(--radius-2, 8px)',
+                    border: '1px solid var(--border-base, #E0E0E0)'
+                }}>
+                    <img src={balao} alt="" />
+                </Flex>
+                <Flex direction="column" style={{width: '100%', marginTop: '20px', gap: '4px'}}>
+                    <Text variant="emphasis">{description}</Text>
+                    <Text variant="body" color="$fg-base-soft">{disclaimer}</Text>
+                </Flex>
             </ModalContent>
-        </Modal>
+        </Modal >
     )
 }
