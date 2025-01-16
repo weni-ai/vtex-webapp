@@ -14,13 +14,14 @@ import {
   PageHeader,
   PageHeaderRow,
   PageHeading,
+  Spinner,
   Text,
   Textarea,
   Tooltip,
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { loadingSetup, selectProject } from '../../store/projectSlice';
+import { agentLoading, loadingSetup, selectProject } from '../../store/projectSlice';
 import { isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -47,6 +48,7 @@ export function AgentBuilder() {
   const project = useSelector(selectProject);
   const isIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
+  const isAgentLoading = useSelector(agentLoading)
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
@@ -95,7 +97,7 @@ export function AgentBuilder() {
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
             <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isIntegrated}>
-              {t('common.create')}
+              {isAgentLoading ? <Spinner description="loading" /> : <span>{ t('common.create') }</span>}
             </Button>
           </PageHeaderRow>
         </PageHeader>
@@ -117,7 +119,7 @@ export function AgentBuilder() {
                   <FieldError>{errors.name}</FieldError>
                 </Field>
                 <Field error={!!errors.knowledge}>
-                  <Label style={{display: 'flex', alignItems: 'center'}}>
+                  <Label style={{ display: 'flex', alignItems: 'center' }}>
                     {t('agent.setup.forms.knowledge.title')}
                     <Tooltip label={t('agent.setup.forms.knowledge.context')}>
                       <span>
@@ -146,7 +148,7 @@ export function AgentBuilder() {
                     name="objective"
                     value={form.objective}
                     onChange={(e) => handleInputChange('objective', e?.target?.value)}
-                    style={{minWidth: '720px'}}
+                    style={{ minWidth: '720px' }}
                   />
                 </Field>
               </Flex>
