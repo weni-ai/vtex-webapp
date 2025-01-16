@@ -84,7 +84,8 @@
                 "create_agent": "Create agent"
             }
         },
-        "error": "Unable to integrate the feature. Please try again later."
+        "error": "Unable to set the agent. Please try again later.",
+        "success": "Agent successfully registered"
     },
     "integration": {
         "title": "Integrate a support channel",
@@ -93,13 +94,15 @@
             "whatsapp": {
                 "title": "WhatsApp Channel",
                 "description": "If you have an enterprise WhatsApp account, you can connect it to communicate with your contacts.",
-                "error": "WhatApp unable to connect, check your credentials or try again later."
+                "error": "WhatApp unable to connect, check your credentials or try again later.",
+                "success": "WhatApp was sucessfully integrated."
             }
         },
         "buttons": {
             "integrate": "Integrate",
             "integrated": "Integrated channel"
         },
+        "success": "Integration completed successfully!",
         "error": "Unable to integrate the feature. Please try again later."
     }
 }

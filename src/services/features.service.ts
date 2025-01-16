@@ -20,6 +20,7 @@ export async function integrateAvailableFeatures(project_uuid: string, token: st
         },
         body: JSON.stringify(data),
       }).then((response) => {
+        toast.success(t('integration.success'))
         console.log('Feature integrated', response)
       }).catch((error) => {
         console.error('Error:', error);
