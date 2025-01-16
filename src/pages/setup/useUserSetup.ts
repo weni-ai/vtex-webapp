@@ -32,7 +32,7 @@ export function useUserSetup() {
         store.dispatch(setProjectUuid(result.data.project_uuid));
         console.log('checando o zapzap...')
         const hasWpp = await checkWppIntegration(result.data.project_uuid, token)
-        console.log('resultado: ',hasWpp.data)
+        console.log('resultado: ',hasWpp)
         navigate('/dash')
       } else {
         navigate('/agent-details')
