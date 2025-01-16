@@ -32,24 +32,24 @@ export function AgentDetails() {
                                     width: '394px',
                                     gap: '8px'
                                 }}>
-                                    <Text variant='display3'>Intelligent agents</Text>
-                                    <Text variant='body' >Enhance intelligent agents by enabling control over conversation flows based on user intentions. Customize language, tone, and behavior to give the agent a unique identity and improve communication quality. See the demonstration of the exchange and return agent interaction on the side.</Text>
+                                    <Text variant='display3'>{t('agent.details.title')}</Text>
+                                    <Text variant='body' >{t('agent.details.description')}</Text>
 
                                 </Flex>
                                 <Flex direction='column'>
-                                    <Text variant='display3'>Agent Skills</Text>
+                                    <Text variant='display3'>{t('agent.details.skills.title')}</Text>
                                     <Flex direction='column' style={{ gap: '8px' }}>
                                         <Flex style={{ gap: '8px', alignItems: 'center' }}>
                                             <Icon icon='manage_search' />
-                                            <Text variant='body'>Analyze the context</Text>
+                                            <Text variant='body'>{t('agent.details.skills.analyze')}</Text>
                                         </Flex>
                                         <Flex style={{ gap: '8px', alignItems: 'center' }}>
                                             <Icon icon='neurology' />
-                                            <Text variant='body'>Comprehend complex demands</Text>
+                                            <Text variant='body'>{t('agent.details.skills.comprehend')}</Text>
                                         </Flex>
                                         <Flex style={{ gap: '8px', alignItems: 'center' }}>
                                             <Icon icon='volunteer_activism' />
-                                            <Text variant='body'>Provide customized responses</Text>
+                                            <Text variant='body'>{t('agent.details.skills.provide')}</Text>
                                         </Flex>
                                     </Flex>
                                 </Flex>

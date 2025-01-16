@@ -6,43 +6,69 @@
         "confirm": "Confirm",
         "save": "Save",
         "back": "Back",
+        "create": "Create",
+        "details": "Details",
+        "preferences": "Preferences",
+        "disable": "Disable",
         "errors": {
             "unauthorized": "You do not have permission to perform this action",
             "internal_server_error": "Internal server error",
             "unexpected_error": "An unexpected error occurred"
-        }
+        },
+        "new_agent": "New Agent"
     },
     "title": "Weni Agentic IA",
     "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
-    "improve":{
-        "description":  "Unlock the full potential of your intelligent agents by connecting them to the Weni platform. Access advanced features and customizable options to enhance their performance and deliver a better customer experience.",
-        "button": "Improve your agent"
+    "improve": {
+        "description": " Connect agents to the Weni platform to access advanced features and customizable options.",
+        "button": "Connect to Weni"
     },
     "agent_gallery": {
         "title": "Agent gallery",
         "features": {
             "abandoned_cart": {
                 "title": "Abandoned cart agent",
-                "description": "Recover sales by reminding customers of items forgotten in the cart."
+                "description": "Recover sales by reminding customers of items forgotten in the cart.",
+                "disclaimer": "With this agent, you increase your chances of conversion, keeping your customer close and encouraging order completion.",
+                "preferences": {
+                    "restriction": "Message Restriction",
+                    "restriction_details": "Restrict messages to configured hours",
+                    "monday_until_friday": "Monday until friday",
+                    "saturday": "Saturday",
+                    "from": "From",
+                    "to": "To"
+                }
             }
+        },
+        "types": {
+            "active": "Active Notification"
+        },
+        "button": {
+            "add": "Add agent"
         }
     },
-     "setup": {
+    "setup": {
         "title": "Setting up your Weni App",
         "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."
     },
     "agent": {
-        "setup": {
-            "title": "Setup your agent persona",
-            "description": "Enhances intelligent agents by enabling them to control conversation flows based on user intentions. It allows customization of language, tone, and behaviors, giving the agent a unique identity and improving communication quality.",
+        "details": {
+            "title": "Intelligent agents",
+            "description": "Enhance intelligent agents by enabling control over conversation flows based on user intentions. Customize language, tone, and behavior to give the agent a unique identity and improve communication quality. See the demonstration of the exchange and return agent interaction on the side.",
             "skills": {
                 "title": "Agent Skills",
-                "analyze_the_context":"Analyze the context",
+                "analyze": "Analyze the context",
                 "comprehend": "Comprehend complex demands",
                 "provide": "Provide customized responses"
             },
+            "example": {
+                "description": "Return and exchange agent Demo"
+            }
+        },
+        "setup": {
+            "title": "Setup your agent persona",
             "forms": {
-                "agent_name": "Agent name",
+                "name": "Name",
                 "occupation": "Occupation (optional)",
                 "objective": "Objective (optional)",
                 "knowledge": {
