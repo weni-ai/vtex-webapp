@@ -76,7 +76,7 @@
                     "context": "Provide the content your agent will use to answer questions."
                 },
                 "error": {
-                    "empty_input": "You must write something.",
+                    "empty_input": "Fill this information",
                     "valid_url": "Enter a valid URL."
                 }
             },

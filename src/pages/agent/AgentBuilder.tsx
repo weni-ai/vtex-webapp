@@ -20,7 +20,7 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectProject } from '../../store/projectSlice';
+import { loadingSetup, selectProject } from '../../store/projectSlice';
 import { isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -46,7 +46,7 @@ export function AgentBuilder() {
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
   const isIntegrated = useSelector(isWhatsAppIntegrated);
-  const setupLoading = false;
+  const isSetupLoading = useSelector(loadingSetup);
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
@@ -60,11 +60,11 @@ export function AgentBuilder() {
 
   const validateForm = () => {
     const newErrors: { [key in keyof FormState]?: string } = {
-      name: !form.name.trim() ? 'Fill this information' : '',
+      name: !form.name.trim() ? t('setup.error.empty_input') : '',
       knowledge: !form.knowledge.trim()
-        ? 'Fill this information'
+        ? t('setup.error.empty_input')
         : !isValidURL(form.knowledge.trim())
-          ? 'Enter a valid URL'
+          ? t('setup.error.valid_url')
           : '',
     };
     setErrors(newErrors);
@@ -101,7 +101,7 @@ export function AgentBuilder() {
         </PageHeader>
 
         <PageContent style={{ maxWidth: '720px', padding: 0 }}>
-          {setupLoading ? (
+          {isSetupLoading ? (
             <AgentBuilderSkeleton />
           ) : (
             <Flex direction="column" gap="24px">
@@ -112,7 +112,7 @@ export function AgentBuilder() {
                   <Input
                     name="name"
                     value={form.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    onChange={(e) => handleInputChange('name', e?.target?.value)}
                   />
                   <FieldError>{errors.name}</FieldError>
                 </Field>
@@ -128,7 +128,7 @@ export function AgentBuilder() {
                   <Input
                     name="knowledge"
                     value={form.knowledge}
-                    onChange={(e) => handleInputChange('knowledge', e.target.value)}
+                    onChange={(e) => handleInputChange('knowledge', e?.target?.value)}
                   />
                   <FieldError>{errors.knowledge}</FieldError>
                 </Field>
@@ -137,7 +137,7 @@ export function AgentBuilder() {
                   <Input
                     name="occupation"
                     value={form.occupation}
-                    onChange={(e) => handleInputChange('occupation', e.target.value)}
+                    onChange={(e) => handleInputChange('occupation', e?.target?.value)}
                   />
                 </Field>
                 <Field>
@@ -145,12 +145,12 @@ export function AgentBuilder() {
                   <Textarea
                     name="objective"
                     value={form.objective}
-                    onChange={(e) => handleInputChange('objective', e.target.value)}
+                    onChange={(e) => handleInputChange('objective', e?.target?.value)}
                     style={{minWidth: '720px'}}
                   />
                 </Field>
               </Flex>
-              <Text variant="display3">Integrate a support channel</Text>
+              <Text variant="display3">{t('integration.title')}</Text>
               <Channel isIntegrated={isIntegrated} />
             </Flex>
           )}
