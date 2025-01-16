@@ -1,7 +1,7 @@
 {
   "name": "vtex-webapp",
   "private": true,
-  "version": "0.0.1-alpha131-staging",
+  "version": "0.0.1-alpha132-staging",
   "type": "module",
   "scripts": {
     "dev": "vite",
