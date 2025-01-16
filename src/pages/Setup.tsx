@@ -5,6 +5,7 @@ export function Setup() {
     const { initializeProject } = useUserSetup();
 
     useEffect(() => {
+        console.log('inicializando...')
         initializeProject();
     }, [initializeProject]);
 
