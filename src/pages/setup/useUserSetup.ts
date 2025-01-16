@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { setUser } from '../../store/userSlice';
+import { setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { toast } from '@vtex/shoreline';
-import { setProjectUuid } from '../../store/projectSlice';
+import { setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 
 export function useUserSetup() {
@@ -30,9 +30,13 @@ export function useUserSetup() {
       const result = await checkProject(userData.account, userData.user, token)
       if (result.data.has_project) {
         store.dispatch(setProjectUuid(result.data.project_uuid));
-        console.log('checando o zapzap...')
-        const hasWpp = await checkWppIntegration(result.data.project_uuid, token)
-        console.log('resultado: ',hasWpp)
+        const response = await checkWppIntegration(result.data.project_uuid, token)
+        if(response.data.has_whatsapp){
+          const {flows_channel_uuid, wpp_cloud_app_uuid} = response.data
+          store.dispatch(setWhatsAppIntegrated(true))
+          store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid))
+          store.dispatch(setFlowsChannelUuid(flows_channel_uuid))
+        }
         navigate('/dash')
       } else {
         navigate('/agent-details')
