@@ -30,7 +30,7 @@ const projectSlice = createSlice({
     }
   })
 
-  export const {setProjectUuid, setLoadingSetup, setSetupError} = projectSlice.actions
+  export const {setProjectUuid, setLoadingSetup, setSetupError, setWppCloudAppUuid, setFlowsChannelUuid} = projectSlice.actions
   export const selectProject = (state: any) => state.project.project_uuid
   export const wppCloudAppUuid = (state: any) => state.project.wpp_cloud_app_uuid
   export const flowsChannelUuid = (state: any) => state.project.flow_object_uuid
