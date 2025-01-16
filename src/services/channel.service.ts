@@ -5,11 +5,18 @@ import { toast } from "@vtex/shoreline";
 import getEnv from "../utils/env";
 
 export async function checkWppIntegration(project_uuid: string, token: string) {
-  console.log('checando o zap',  )
+  console.log('Iniciando checkWppIntegration');
   const integrationsAPI = getEnv('VITE_APP_INTEGRATIONS_URL') || '';
-  const apiUrl = `${integrationsAPI}/api/v1/commerce/check-whatsapp-integration?project_uuid=${project_uuid}`
-  console.log('dados', integrationsAPI, apiUrl)
+  const apiUrl = `${integrationsAPI}/api/v1/commerce/check-whatsapp-integration?project_uuid=${project_uuid}`;
+  console.log('URL da integração:', apiUrl);
+
+  if (!integrationsAPI) {
+    console.error('VITE_APP_INTEGRATIONS_URL não está configurado');
+    return;
+  }
+
   try {
+    console.log('Fazendo fetch com token:', token);
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -17,14 +24,19 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
         'Content-Type': 'application/json',
       },
     });
+
+    console.log('Fetch executado, verificando status:', response.status);
+
     if (!response.ok) {
+      console.error('Erro no fetch:', response.statusText);
       throw new Error(`Erro ao verificar integração: ${response.statusText}`);
     }
+
     const result = await response.json();
-    console.log('ta integrado? ', result)
+    console.log('Resultado da integração:', result);
     return result;
   } catch (error) {
-    console.error('Error checking integration:', error);
+    console.error('Erro durante a verificação da integração:', error);
     throw error;
   }
 }
