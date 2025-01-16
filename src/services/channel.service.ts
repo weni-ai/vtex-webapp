@@ -6,9 +6,6 @@ import { toast } from "@vtex/shoreline";
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
   console.log('entrou no create channel...', code, project_uuid, wabaId, phoneId, token);
 
-  const base_address = store.getState().auth.base_address;
-  console.log('chegou aqui', base_address);
-
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
@@ -31,21 +28,6 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
 
     store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
-
-    const integrateData = {
-      project_uuid: project_uuid,
-      store: base_address,
-      flows_channel_uuid: response.flow_object_uuid,
-      wpp_cloud_app_uuid: response.data.app_uuid,
-    };
-
-    await VTEXFetch(`/_v/integrate-available-features?token=${token}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(integrateData),
-    });
   } catch (error) {
     store.dispatch(setWhatsAppError(error));
     console.error('Error:', error);
