@@ -6,7 +6,7 @@ import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { toast } from '@vtex/shoreline';
 import { setProjectUuid } from '../../store/projectSlice';
-import { checkWppIntegration } from '../../services/channel.service';
+// import { checkWppIntegration } from '../../services/channel.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
