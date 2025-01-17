@@ -6,7 +6,7 @@ import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
-import { checkAgentIntegration } from 'src/services/agent.service';
+import { checkAgentIntegration } from '../../services/agent.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
