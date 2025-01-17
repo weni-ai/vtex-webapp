@@ -57,10 +57,12 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
                 <IconInfo />
                 {t('common.details')}
               </MenuItem>
+              {/* visually removed temporarily due to waiting for functionality to actually work
               <MenuItem onClick={openDrawer}>
                 <IconGearSix />
                 {t('common.preferences')}
               </MenuItem>
+              */}
               <MenuSeparator />
               <MenuItem>
                 <IconMinus />
