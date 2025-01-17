@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "@vtex/shoreline";
 import { VTEXFetch } from "../utils/VTEXFetch";
-import getEnv from "src/utils/env";
+import getEnv from "../utils/env";
 
 export async function checkAgentIntegration(project_uuid: string, token: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
