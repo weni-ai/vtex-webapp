@@ -21,8 +21,8 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentLoading, loadingSetup, selectProject } from '../../store/projectSlice';
-import { isWhatsAppIntegrated } from '../../store/userSlice';
+import { agentLoading, getAgent, loadingSetup, selectProject } from '../../store/projectSlice';
+import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
@@ -39,16 +39,17 @@ interface FormState {
 
 export function AgentBuilder() {
   const [form, setForm] = useState<FormState>({
-    name: '',
-    knowledge: '',
-    occupation: '',
-    objective: '',
+    name: useSelector(getAgent).name || '',
+    knowledge: useSelector(getAgent).links[0] || '',
+    occupation: useSelector(getAgent).occupation || '',
+    objective: useSelector(getAgent).objective || '',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
   const isIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
   const isAgentLoading = useSelector(agentLoading)
+  const agentIntegrated = useSelector(isAgentIntegrated)
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
@@ -115,6 +116,7 @@ export function AgentBuilder() {
                     name="name"
                     value={form.name}
                     onChange={(e) => handleInputChange('name', e?.target?.value)}
+                    disabled={agentIntegrated}
                   />
                   <FieldError>{errors.name}</FieldError>
                 </Field>
@@ -131,6 +133,7 @@ export function AgentBuilder() {
                     name="knowledge"
                     value={form.knowledge}
                     onChange={(e) => handleInputChange('knowledge', e?.target?.value)}
+                    disabled={agentIntegrated}
                   />
                   <FieldError>{errors.knowledge}</FieldError>
                 </Field>
@@ -140,6 +143,7 @@ export function AgentBuilder() {
                     name="occupation"
                     value={form.occupation}
                     onChange={(e) => handleInputChange('occupation', e?.target?.value)}
+                    disabled={agentIntegrated}
                   />
                 </Field>
                 <Field>
@@ -149,6 +153,7 @@ export function AgentBuilder() {
                     value={form.objective}
                     onChange={(e) => handleInputChange('objective', e?.target?.value)}
                     style={{ minWidth: '720px' }}
+                    disabled={agentIntegrated}
                   />
                 </Field>
               </Flex>
