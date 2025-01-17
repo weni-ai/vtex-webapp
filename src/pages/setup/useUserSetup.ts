@@ -6,6 +6,7 @@ import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
+import { checkAgentIntegration } from 'src/services/agent.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -26,23 +27,36 @@ export function useUserSetup() {
         navigate('/setup-error')
         return;
       }
+
       store.dispatch(setUser(userData));
+
       const result = await checkProject(userData.account, userData.user, token)
-      if (result.data.has_project) {
-        store.dispatch(setProjectUuid(result.data.project_uuid));
-        const response = await checkWppIntegration(result.data.project_uuid, token)
-        if(response.data.has_whatsapp){
-          const {flows_channel_uuid, wpp_cloud_app_uuid} = response.data
+      const {has_project, project_uuid} = result.data
+
+      if (has_project) {
+        store.dispatch(setProjectUuid(project_uuid));
+
+        const response = await checkWppIntegration(project_uuid, token)
+        const {has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid} = response.data
+
+        const agentIntegration  = await checkAgentIntegration(project_uuid, token)
+        console.log('has agent integrated? ', agentIntegration)
+
+        if (has_whatsapp) {
           store.dispatch(setWhatsAppIntegrated(true))
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid))
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid))
+
+          navigate('/dash')
+        } else {
+          navigate('/agent-builder')
         }
-        navigate('/dash')
       } else {
         navigate('/agent-details')
       }
     } catch (err) {
       console.log(err)
+      navigate('/setup-error');
     }
   }
 
