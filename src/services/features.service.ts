@@ -3,7 +3,7 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 
 export async function getFeatureList(project_uuid: string, token: string) {
-  await VTEXFetch(`/_v/get-feature-list?projectUUID=${project_uuid}&token=${token}`, {
+  return await VTEXFetch(`/_v/get-feature-list?projectUUID=${project_uuid}&token=${token}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -12,7 +12,7 @@ export async function getFeatureList(project_uuid: string, token: string) {
     if (response.error) {
       console.log(' erro')
     } else {
-      console.log('Features: ', response)
+      return response
     }
   }).catch((error) => {
     console.error('Error:', error);
