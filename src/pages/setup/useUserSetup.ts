@@ -8,16 +8,17 @@ import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } fro
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { getFeatureList } from '../../services/features.service';
+import { useCallback } from 'react';
 
 export function useUserSetup() {
   const navigate = useNavigate();
 
-  const initializeProject = async () => {
+  const initializeProject = useCallback(async () => {
     try {
       const token = await getToken();
       if (!token) {
         console.error("Token não encontrado");
-        navigate('/setup-error')
+        navigate('/setup-error');
         return;
       }
       store.dispatch(setToken(token));
@@ -25,66 +26,68 @@ export function useUserSetup() {
       const userData = await fetchUserData();
       if (!userData) {
         console.error("Dados do usuário não encontrados");
-        navigate('/setup-error')
+        navigate('/setup-error');
         return;
       }
 
       store.dispatch(setUser(userData));
 
-      const result = await checkProject(userData.account, userData.user, token)
-      const {has_project, project_uuid} = result.data
+      const result = await checkProject(userData.account, userData.user, token);
+      const { has_project, project_uuid } = result.data;
 
       if (has_project) {
         store.dispatch(setProjectUuid(project_uuid));
 
-        const response = await checkWppIntegration(project_uuid, token)
-        const {has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid} = response.data
+        const response = await checkWppIntegration(project_uuid, token);
+        const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid } = response.data;
 
-        const featureList = await getFeatureList(project_uuid, token)
-        if(featureList.features.lenght === 0){
-          store.dispatch(setFeatureIntegrated(true))
+        const featureList = await getFeatureList(project_uuid, token);
+        if (featureList.features.length === 0) {
+          store.dispatch(setFeatureIntegrated(true));
         }
 
-        const agentIntegration  = await checkAgentIntegration(project_uuid, token)
-        const {name, links, objective, occupation} = agentIntegration.data
+        const agentIntegration = await checkAgentIntegration(project_uuid, token);
+        const { name, links, objective, occupation } = agentIntegration.data;
 
-        if(name){
-          store.dispatch(setAgent({
-            name,
-            links,
-            objective,
-            occupation
-          }))
+        if (name) {
+          store.dispatch(
+            setAgent({
+              name,
+              links,
+              objective,
+              occupation,
+            })
+          );
         }
 
         if (has_whatsapp && name) {
-          store.dispatch(setWhatsAppIntegrated(true))
-          store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid))
-          store.dispatch(setFlowsChannelUuid(flows_channel_uuid))
+          store.dispatch(setWhatsAppIntegrated(true));
+          store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
+          store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
 
-          navigate('/dash')
+          navigate('/dash');
         } else {
-          navigate('/agent-builder')
+          navigate('/agent-builder');
         }
       } else {
-        navigate('/agent-details')
+        navigate('/agent-details');
       }
     } catch (err) {
-      console.log(err)
+      console.error(err);
       navigate('/setup-error');
     }
-  }
+  }, [navigate]);
 
-  const initializeUser = async () => {
-    const userData = store.getState().user.userData
-    const token = store.getState().auth.token
+  const initializeUser = useCallback(async () => {
+    const userData = store.getState().user.userData;
+    const token = store.getState().auth.token;
     try {
       await createUserAndProject(userData, token);
     } catch (error) {
       console.error("Erro durante a inicialização do usuário:", error);
       navigate('/setup-error');
     }
-  };
+  }, [navigate]);
 
   return { initializeProject, initializeUser };
 }
