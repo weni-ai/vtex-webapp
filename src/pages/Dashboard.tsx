@@ -3,9 +3,12 @@ import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
+import { useSelector } from 'react-redux';
+import { isFeatureIntegrated } from '../store/userSlice';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
+  const featureIntegrated = useSelector(isFeatureIntegrated);
 
   function navigateToAgent() {
     window.open('https://dash.weni.ai/', '_blank');
@@ -118,7 +121,7 @@ export function Dashboard() {
               title={t('agent_gallery.features.abandoned_cart.title')}
               type="active"
               description={t('agent_gallery.features.abandoned_cart.description')}
-              isIntegrated={false}
+              isIntegrated={featureIntegrated}
             />
           </Grid>
         </Flex>
