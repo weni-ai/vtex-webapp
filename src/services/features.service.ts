@@ -10,7 +10,7 @@ export async function getFeatureList(project_uuid: string, token: string) {
     }
   }).then((response) => {
     if (response.error) {
-      console.log(' erro')
+      console.log('erro')
     } else {
       return response
     }

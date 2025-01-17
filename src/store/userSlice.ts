@@ -38,7 +38,7 @@ export const { setUser, setWhatsAppIntegrated, setAgentIntegrated, setFeatureInt
 export const selectUser = (state: any) => state.user.userData
 export const isWhatsAppIntegrated = (state: any) => state.user.isWhatsAppIntegrated
 export const isAgentIntegrated = (state: any) => state.user.isAgentIntegrated
-export const isFeatureIntegrated = (state: any) => state.use.isFeatureIntegrated
+export const isFeatureIntegrated = (state: any) => state.user.isFeatureIntegrated
 export const whatsAppError = (state: any) => state.user.whatsAppError
 export const loadingWhatsAppIntegration = (state: any) => state.user.loadingWhatsAppIntegration
 
