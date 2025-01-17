@@ -3,7 +3,7 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 
 export async function getFeatureList(project_uuid: string, token: string) {
-  await VTEXFetch(`/_v/integrate-available-features?projectUUID=${project_uuid}&token=${token}`, {
+  await VTEXFetch(`/_v/get-feature-list?projectUUID=${project_uuid}&token=${token}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
