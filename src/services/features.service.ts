@@ -2,6 +2,23 @@ import { toast } from "@vtex/shoreline";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 
+export async function getFeatureList(project_uuid: string, token: string) {
+  await VTEXFetch(`/_v/integrate-available-features?projectUUID=${project_uuid}&token=${token}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  }).then((response) => {
+    if (response.error) {
+      console.log(' erro')
+    } else {
+      console.log('Features: ', response)
+    }
+  }).catch((error) => {
+    console.error('Error:', error);
+  });
+}
+
 export async function integrateAvailableFeatures(project_uuid: string, token: string) {
   const store = storeProvider.getState().auth.base_address;
   const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;

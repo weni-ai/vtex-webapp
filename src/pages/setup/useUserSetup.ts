@@ -7,6 +7,7 @@ import { getToken } from '../../services/auth.service';
 import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
+import { getFeatureList } from '../../services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -39,8 +40,12 @@ export function useUserSetup() {
         const response = await checkWppIntegration(project_uuid, token)
         const {has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid} = response.data
 
+        const features = await getFeatureList(project_uuid, token)
+        console.log('Features: ', features)
+
         const agentIntegration  = await checkAgentIntegration(project_uuid, token)
         const {name, links, objective, occupation} = agentIntegration.data
+
         if(name){
           store.dispatch(setAgent({
             name,
