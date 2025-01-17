@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setFeatureIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
@@ -40,8 +40,10 @@ export function useUserSetup() {
         const response = await checkWppIntegration(project_uuid, token)
         const {has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid} = response.data
 
-        const features = await getFeatureList(project_uuid, token)
-        console.log('Features: ', features)
+        const featureList = await getFeatureList(project_uuid, token)
+        if(featureList.features.lenght === 0){
+          store.dispatch(setFeatureIntegrated(true))
+        }
 
         const agentIntegration  = await checkAgentIntegration(project_uuid, token)
         const {name, links, objective, occupation} = agentIntegration.data
