@@ -46,7 +46,7 @@ export function AgentBuilder() {
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
-  const isIntegrated = useSelector(isWhatsAppIntegrated);
+  const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
   const isAgentLoading = useSelector(agentLoading)
   const agentIntegrated = useSelector(isAgentIntegrated)
@@ -80,7 +80,7 @@ export function AgentBuilder() {
     setForm((prev) => ({ ...prev, [field]: value }));
 
   const handleSubmit = () => {
-    if (validateForm() && isIntegrated) {
+    if (validateForm() && isWppIntegrated) {
       const payload = Object.fromEntries(
         Object.entries(form).filter(([_, value]) => value.trim())
       );
@@ -100,7 +100,7 @@ export function AgentBuilder() {
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
-            <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isIntegrated}>
+            <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isWppIntegrated}>
               {isAgentLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
@@ -161,7 +161,7 @@ export function AgentBuilder() {
                 </Field>
               </Flex>
               <Text variant="display3">{t('integration.title')}</Text>
-              <Channel isIntegrated={isIntegrated} />
+              <Channel isIntegrated={isWppIntegrated} />
             </Flex>
           )}
         </PageContent>
