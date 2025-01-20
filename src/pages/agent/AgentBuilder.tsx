@@ -111,7 +111,6 @@ export function AgentBuilder() {
             <AgentBuilderSkeleton />
           ) : (
             <Flex direction="column" gap="24px">
-              <Text variant="display3">Set your agent’s persona</Text>
               <Flex direction="column" gap="20px">
                 <Field error={!!errors.name}>
                   <Label>{t('agent.setup.forms.name')}</Label>
@@ -124,12 +123,12 @@ export function AgentBuilder() {
                   <FieldError>{errors.name}</FieldError>
                 </Field>
                 <Field error={!!errors.knowledge}>
-                  <Label style={{ display: 'flex', alignItems: 'center' }}>
+                  <Label style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-05, 2px)' }}>
                     {t('agent.setup.forms.knowledge.title')}
                     <Tooltip label={t('agent.setup.forms.knowledge.context')}>
-                      <span>
+                      <Flex style={{ width: '24px', justifyContent: 'center' }}>
                         <img src={question} alt="" />
-                      </span>
+                      </Flex>
                     </Tooltip>
                   </Label>
                   <Input

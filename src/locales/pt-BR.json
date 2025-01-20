@@ -1,105 +1,108 @@
 {
-  "common": {
-      "cancel": "Cancelar",
-      "continue": "Continuar",
-      "finish_and_save": "Finalizar e salvar",
-      "confirm": "Confirmar",
-      "save": "Salvar",
-      "back": "Voltar",
-      "create": "Criar",
-      "details": "Detalhes",
-      "preferences": "Preferências",
-      "disable": "Desativar",
-      "errors": {
-          "unauthorized": "Você não tem permissão para realizar esta ação",
-          "internal_server_error": "Erro interno do servidor",
-          "unexpected_error": "Ocorreu um erro inesperado"
-      },
-      "new_agent": "Novo Agente"
-  },
-  "title": "Weni Agentic IA",
-  "description": "Uma SOLUÇÃO CX baseada em IA para marcas e varejistas.",
-  "improve": {
-      "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizáveis.",
-      "button": "Conectar à Weni"
-  },
-  "agent_gallery": {
-      "title": "Galeria de agentes",
-      "features": {
-          "abandoned_cart": {
-              "title": "Agente de carrinho abandonado",
-              "description": "Recupere vendas lembrando os clientes dos itens esquecidos no carrinho.",
-              "disclaimer": "Com este agente, você aumenta suas chances de conversão, mantendo o cliente próximo e incentivando a conclusão do pedido.",
-              "preferences": {
-                  "restriction": "Restrição de Mensagens",
-                  "restriction_details": "Restringir mensagens para horários configurados",
-                  "monday_until_friday": "Segunda a sexta-feira",
-                  "saturday": "Sábado",
-                  "from": "De",
-                  "to": "Até"
-              }
-          }
-      },
-      "types": {
-          "active": "Notificação Ativa"
-      },
-      "button": {
-          "add": "Adicionar agente"
-      }
-  },
-  "setup": {
-      "title": "Configurando seu Weni App",
-      "description": "Preparando tudo para você! Estamos finalizando a configuração inicial para garantir uma experiência tranquila."
-  },
-  "agent": {
-      "details": {
-          "title": "Agentes inteligentes",
-          "description": "Melhore agentes inteligentes habilitando o controle sobre os fluxos de conversa com base nas intenções do usuário. Personalize a linguagem, o tom e o comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja a demonstração da interação do agente de troca e devolução ao lado.",
-          "skills": {
-              "title": "Habilidades do agente",
-              "analyze": "Analisar o contexto",
-              "comprehend": "Compreender demandas complexas",
-              "provide": "Fornecer respostas personalizadas"
-          },
-          "example": {
-              "description": "Demonstração do agente de Troca e Devolução"
-          }
-      },
-      "setup": {
-          "title": "Configurar a persona do agente",
-          "forms": {
-              "name": "Nome",
-              "occupation": "Ocupação (opcional)",
-              "objective": "Objetivo (opcional)",
-              "knowledge": {
-                  "title": "Fonte de conhecimento",
-                  "context": "Forneça o conteúdo que seu agente usará para responder às perguntas."
-              },
-              "error": {
-                  "empty_input": "Você deve escrever algo.",
-                  "valid_url": "Insira uma URL válida."
-              }
-          },
-          "buttons": {
-              "create_agent": "Criar agente"
-          }
-      },
-      "error": "Não foi possível integrar o recurso. Tente novamente mais tarde."
-  },
-  "integration": {
-      "title": "Integrar um canal de suporte",
-      "description": "Escolha o canal que deseja usar e siga o passo a passo para adicioná-lo.",
-      "channels": {
-          "whatsapp": {
-              "title": "Canal WhatsApp",
-              "description": "Se você possui uma conta empresarial do WhatsApp, pode conectá-la para se comunicar com seus contatos.",
-              "error": "Não foi possível conectar ao WhatsApp, verifique suas credenciais ou tente novamente mais tarde."
-          }
-      },
-      "buttons": {
-          "integrate": "Integrar",
-          "integrated": "Canal integrado"
-      },
-      "error": "Não foi possível integrar o recurso. Tente novamente mais tarde."
-  }
+    "common": {
+        "cancel": "Cancelar",
+        "continue": "Continuar",
+        "finish_and_save": "Finalizar e salvar",
+        "confirm": "Confirmar",
+        "save": "Salvar",
+        "back": "Voltar",
+        "create": "Criar",
+        "details": "Detalhes",
+        "preferences": "Preferências",
+        "disable": "Desativar",
+        "errors": {
+            "unauthorized": "Você não tem permissão para realizar esta ação",
+            "internal_server_error": "Erro interno do servidor",
+            "unexpected_error": "Ocorreu um erro inesperado"
+        },
+        "new_agent": "Novo Agente"
+    },
+    "title": "Weni Agentic IA",
+    "description": "Uma SOLUÇÃO de CX baseada em IA para marcas e varejistas.",
+    "improve": {
+        "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizáveis.",
+        "button": "Conectar ao Weni"
+    },
+    "agent_gallery": {
+        "title": "Galeria de Agentes",
+        "features": {
+            "abandoned_cart": {
+                "title": "Agente de carrinho abandonado",
+                "description": "Recupere vendas lembrando os clientes dos itens esquecidos no carrinho.",
+                "disclaimer": "Com este agente, você aumenta suas chances de conversão, mantendo seu cliente próximo e incentivando a conclusão do pedido.",
+                "preferences": {
+                    "restriction": "Restrição de Mensagens",
+                    "restriction_details": "Restringir mensagens para horários configurados",
+                    "monday_until_friday": "Segunda a sexta-feira",
+                    "saturday": "Sábado",
+                    "from": "De",
+                    "to": "Até"
+                }
+            }
+        },
+        "types": {
+            "active": "Notificação Ativa"
+        },
+        "button": {
+            "add": "Adicionar agente"
+        }
+    },
+    "setup": {
+        "title": "Configurando seu App Weni",
+        "description": "Preparando tudo para você! Estamos finalizando a configuração inicial para garantir uma experiência tranquila."
+    },
+    "agent": {
+        "details": {
+            "title": "Agentes inteligentes",
+            "description": "Melhore agentes inteligentes permitindo o controle sobre fluxos de conversa com base nas intenções do usuário. Personalize a linguagem, tom e comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja a demonstração da interação do agente de troca e devolução ao lado.",
+            "skills": {
+                "title": "Habilidades do Agente",
+                "analyze": "Analisar o contexto",
+                "comprehend": "Compreender demandas complexas",
+                "provide": "Fornecer respostas personalizadas"
+            },
+            "example": {
+                "description": "Demonstração do Agente de Troca e Devolução"
+            }
+        },
+        "setup": {
+            "title": "Configure a persona do seu agente",
+            "forms": {
+                "name": "Nome",
+                "occupation": "Ocupação (opcional)",
+                "objective": "Objetivo (opcional)",
+                "knowledge": {
+                    "title": "Fonte de Conhecimento",
+                    "context": "Forneça o conteúdo que seu agente usará para responder perguntas."
+                },
+                "error": {
+                    "empty_input": "Preencha esta informação",
+                    "valid_url": "Insira uma URL válida."
+                }
+            },
+            "buttons": {
+                "create_agent": "Criar agente"
+            }
+        },
+        "error": "Não foi possível configurar o agente. Por favor, tente novamente mais tarde.",
+        "success": "Agente registrado com sucesso"
+    },
+    "integration": {
+        "title": "Integre um canal de suporte",
+        "description": "Escolha o canal que deseja usar e siga o passo a passo para adicioná-lo.",
+        "channels": {
+            "whatsapp": {
+                "title": "Canal WhatsApp",
+                "description": "Utilize uma conta empresarial do WhatsApp para melhorar a comunicação com contatos.",
+                "error": "Não foi possível conectar ao WhatsApp, verifique suas credenciais ou tente novamente mais tarde.",
+                "success": "WhatsApp integrado com sucesso."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrar",
+            "integrated": "Integrado"
+        },
+        "success": "Integração concluída com sucesso!",
+        "error": "Não foi possível integrar o recurso. Por favor, tente novamente mais tarde."
+    }
 }
