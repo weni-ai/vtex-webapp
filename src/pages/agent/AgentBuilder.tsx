@@ -58,16 +58,18 @@ export function AgentBuilder() {
     initializeUser();
   }, [initializeUser]);
 
-  const isValidURL = (url: string) =>
-    /^https?:\/\/[^\s$.?#].[^\s]*$/.test(url) || url.startsWith('http');
+  const isValidURL = (url: string) => {
+    const urlPattern = /^[^\s]+\.com([/?#].*)?$/i;
+    return urlPattern.test(url);
+  };
 
   const validateForm = () => {
     const newErrors: { [key in keyof FormState]?: string } = {
-      name: !form.name.trim() ? t('setup.error.empty_input') : '',
+      name: !form.name.trim() ? t('agent.setup.forms.error.empty_input') : '',
       knowledge: !form.knowledge.trim()
-        ? t('setup.error.empty_input')
+        ? t('agent.setup.forms.error.empty_input')
         : !isValidURL(form.knowledge.trim())
-          ? t('setup.error.valid_url')
+          ? t('agent.setup.forms.error.valid_url')
           : '',
     };
     setErrors(newErrors);
@@ -82,6 +84,7 @@ export function AgentBuilder() {
       const payload = Object.fromEntries(
         Object.entries(form).filter(([_, value]) => value.trim())
       );
+      console.log('funfou')
       buildAgent(payload, project);
     }
   };
@@ -98,7 +101,7 @@ export function AgentBuilder() {
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
             <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isIntegrated}>
-              {isAgentLoading ? <Spinner description="loading" /> : <span>{ t('common.create') }</span>}
+              {isAgentLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
         </PageHeader>
@@ -115,7 +118,7 @@ export function AgentBuilder() {
                   <Input
                     name="name"
                     value={form.name}
-                    onChange={(e) => handleInputChange('name', e?.target?.value)}
+                    onChange={(e) => handleInputChange('name', e)}
                     disabled={agentIntegrated}
                   />
                   <FieldError>{errors.name}</FieldError>
@@ -132,8 +135,9 @@ export function AgentBuilder() {
                   <Input
                     name="knowledge"
                     value={form.knowledge}
-                    onChange={(e) => handleInputChange('knowledge', e?.target?.value)}
+                    onChange={(e) => handleInputChange('knowledge', e)}
                     disabled={agentIntegrated}
+                    prefix={'https://'}
                   />
                   <FieldError>{errors.knowledge}</FieldError>
                 </Field>
@@ -142,7 +146,7 @@ export function AgentBuilder() {
                   <Input
                     name="occupation"
                     value={form.occupation}
-                    onChange={(e) => handleInputChange('occupation', e?.target?.value)}
+                    onChange={(e) => handleInputChange('occupation', e)}
                     disabled={agentIntegrated}
                   />
                 </Field>
@@ -151,7 +155,7 @@ export function AgentBuilder() {
                   <Textarea
                     name="objective"
                     value={form.objective}
-                    onChange={(e) => handleInputChange('objective', e?.target?.value)}
+                    onChange={(e) => handleInputChange('objective', e)}
                     style={{ minWidth: '720px' }}
                     disabled={agentIntegrated}
                   />
