@@ -46,13 +46,17 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
   console.log("Creating channel with data:", data);
 
   try {
-    await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
+    const response = await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
+
+    if(response.error){
+      throw new Error(t('integration.channels.whatsapp.error'))
+    }
     toast.success(t('integration.channels.whatsapp.success'))
 
     store.dispatch(setWhatsAppIntegrated(true));
