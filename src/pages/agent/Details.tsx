@@ -23,7 +23,7 @@ export function AgentDetails() {
                         <Button size='large' variant='primary' onClick={navigateToBuilder}>{t('agent.setup.buttons.create_agent')}</Button>
                     </PageHeaderRow>
                 </PageHeader>
- 
+
                 <PageContent style={{ maxWidth: '950px' }}>
                     <Content narrow>
                         <Flex style={{ width: '720px', justifyContent: 'space-between', gap: '64px' }}>
@@ -40,15 +40,21 @@ export function AgentDetails() {
                                     <Text variant='display3'>{t('agent.details.skills.title')}</Text>
                                     <Flex direction='column' style={{ gap: '8px' }}>
                                         <Flex style={{ gap: '8px', alignItems: 'center' }}>
-                                            <Icon icon='manage_search' />
+                                            <Flex style={{width: '24px'}}>
+                                                <Icon icon='manage_search' />
+                                            </Flex>
                                             <Text variant='body'>{t('agent.details.skills.analyze')}</Text>
                                         </Flex>
                                         <Flex style={{ gap: '8px', alignItems: 'center' }}>
-                                            <Icon icon='neurology' />
+                                        <Flex style={{width: '24px', justifyContent: 'center'}}>
+                                                <Icon icon='neurology' />
+                                            </Flex>
                                             <Text variant='body'>{t('agent.details.skills.comprehend')}</Text>
                                         </Flex>
                                         <Flex style={{ gap: '8px', alignItems: 'center' }}>
-                                            <Icon icon='volunteer_activism' />
+                                        <Flex style={{width: '24px'}}>
+                                                <Icon icon='volunteer_activism' />
+                                            </Flex>
                                             <Text variant='body'>{t('agent.details.skills.provide')}</Text>
                                         </Flex>
                                     </Flex>
