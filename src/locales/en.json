@@ -93,14 +93,14 @@
         "channels": {
             "whatsapp": {
                 "title": "WhatsApp Channel",
-                "description": "If you have an enterprise WhatsApp account, you can connect it to communicate with your contacts.",
+                "description": "Utilize an enterprise WhatsApp account to enhance communication with contacts.",
                 "error": "WhatApp unable to connect, check your credentials or try again later.",
                 "success": "WhatApp was sucessfully integrated."
             }
         },
         "buttons": {
             "integrate": "Integrate",
-            "integrated": "Integrated channel"
+            "integrated": "Integrated"
         },
         "success": "Integration completed successfully!",
         "error": "Unable to integrate the feature. Please try again later."
