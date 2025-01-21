@@ -4,9 +4,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const projectSlice = createSlice({
     name: 'project',
     initialState: {
-      project_uuid: '1234',
-      wpp_cloud_app_uuid: '1234',
-      flows_channel_uuid: '1234',
+      project_uuid: null,
+      wpp_cloud_app_uuid: null,
+      flows_channel_uuid: null,
       loadingSetup: false,
       setupError: false,
       agentLoading: false,
