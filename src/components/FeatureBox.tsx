@@ -6,14 +6,20 @@ import { integrateAvailableFeatures } from "../services/features.service";
 import { useSelector } from "react-redux";
 import { selectToken } from "../store/authSlice";
 import { selectProject } from "../store/projectSlice";
+import { DisableAgent } from "./DisableAgent";
 
 export function FeatureBox({ title, type, isIntegrated, description }: { title: string, type: 'active' | 'passive', description: string, isIntegrated: boolean }) {
   const token = useSelector(selectToken);
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [openPreferences, setPreferences] = useState(false)
-  const openModal = () => {
+  const [openDisable, setOpenDisable] = useState(false)
+  const openDetailsModal = () => {
     setOpenAbout((o) => !o)
+  }
+  const openDisableModal = () => {
+    console.log('...abrindo')
+    setOpenDisable((o) => !o)
   }
   const openDrawer = () => {
     setPreferences((o) => !o)
@@ -53,7 +59,7 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
             </MenuTrigger>
 
             <MenuPopover>
-              <MenuItem onClick={openModal}>
+              <MenuItem onClick={openDetailsModal}>
                 <IconInfo />
                 {t('common.details')}
               </MenuItem>
@@ -62,7 +68,7 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
                 {t('common.preferences')}
               </MenuItem>
               <MenuSeparator />
-              <MenuItem>
+              <MenuItem onClick={openDisableModal}>
                 <IconMinus />
                 {t('common.disable')}
               </MenuItem>
@@ -91,7 +97,7 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
             >
               <IconCheck color="green" />
               <Text variant="action" color="$fg-success">
-                Agent added
+                {t('agent_gallery.added')}
               </Text>
             </Flex>
             :
@@ -101,9 +107,9 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
             </Button>
         }
       </Flex>
-      <AboutAgent open={openAbout} type={t('agent_gallery.types.active')}title={t('agent_gallery.features.abandoned_cart.title')}  category={t('agent_gallery.types.active')} description={t('agent_gallery.features.abandoned_cart.description')} disclaimer={t('agent_gallery.features.abandoned_cart.disclaimer')}  toggleModal={openModal} />
-
+      <AboutAgent open={openAbout} type={t('agent_gallery.types.active')} title={t('agent_gallery.features.abandoned_cart.title')} category={t('agent_gallery.types.active')} description={t('agent_gallery.features.abandoned_cart.description')} disclaimer={t('agent_gallery.features.abandoned_cart.disclaimer')} toggleModal={openDetailsModal} />
       <AgentPreferences open={openPreferences} toggleOpen={openDrawer} />
+      <DisableAgent open={openDisable} toggleModal={openDisableModal} agent={t('agent_gallery.features.disable.agents.abandoned_cart')} />
     </>
   );
 }
