@@ -38,9 +38,9 @@ export function SetupError() {
         }}>
           <Flex direction='column' style={{ alignItems: 'center' }}>
             <IconWarningCircle color='red' width={'52px'} height={'52px'} />
-            <Text variant='display2'>Something went wrong</Text>
-            <Text variant='body' color='$fg-base-soft'>Retry or check back later if the issue persists.</Text>
-            <Button onClick={navigateToAgent}>Try again</Button>
+            <Text variant='display2'>{t('error.title')}</Text>
+            <Text variant='body' color='$fg-base-soft'>{t('error.description')}</Text>
+            <Button onClick={navigateToAgent}>{t('error.button')}</Button>
           </Flex>
         </PageContent>
       </Page>

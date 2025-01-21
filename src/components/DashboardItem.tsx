@@ -1,4 +1,4 @@
-import { ContextualHelp, Flex, Text } from "@vtex/shoreline";
+import { Flex, Text } from "@vtex/shoreline";
 import { ArrowDrop } from "./ArrowDrop";
 
 export function DashboardItem({ title, value, percentageDifference, style }: { title: string, value: string, percentageDifference: number, style?: React.CSSProperties | undefined }) {
@@ -17,13 +17,6 @@ export function DashboardItem({ title, value, percentageDifference, style }: { t
         <Text variant="display4" color="$fg-base-soft">
           {title}
         </Text>
-
-        <ContextualHelp placement="bottom-start" label="Message" style={{
-          display: 'flex'
-        }}>
-          Visits to the store which can include a series of user interactions and
-          end after 30 minutes of inactivity.
-        </ContextualHelp>
       </Flex>
 
       <Flex align="center" gap="$space-2">
