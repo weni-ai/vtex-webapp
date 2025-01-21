@@ -95,7 +95,7 @@ export function AgentBuilder() {
         <PageHeader>
           <PageHeaderRow style={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <PageHeading style={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton label='' variant="tertiary" onClick={() => navigate('/')}>
+              <IconButton label='' variant="tertiary">
                 <IconArrowLeft onClick={() => navigate('/agent-details')} />
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
@@ -150,7 +150,7 @@ export function AgentBuilder() {
                   />
                 </Field>
                 <Field>
-                  <Label>Objective</Label>
+                  <Label>{t('agent.setup.forms.objective')}</Label>
                   <Textarea
                     name="objective"
                     value={form.objective}
