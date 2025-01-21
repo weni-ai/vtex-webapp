@@ -21,9 +21,9 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentLoading, getAgent, loadingSetup, selectProject } from '../../store/projectSlice';
+import { getAgent } from '../../store/projectSlice';
 import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
-import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
+// import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
 import { Channel } from '../Channel';
@@ -45,12 +45,13 @@ export function AgentBuilder() {
     objective: useSelector(getAgent).objective || '',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
-  const project = useSelector(selectProject);
-  const isWppIntegrated = useSelector(isWhatsAppIntegrated);
-  const isSetupLoading = useSelector(loadingSetup);
-  const isAgentLoading = useSelector(agentLoading)
+  // const project = useSelector(selectProject);
+  // const [isWppIntegrated, setWppIntegrated] = useState(false);
+  const isWppIntegrated = useSelector(isWhatsAppIntegrated)
+  const isSetupLoading = false;
+  const [isAgentLoading, setIsAgentLoading] = useState(false)
   const agentIntegrated = useSelector(isAgentIntegrated)
-  const { buildAgent } = useAgentBuilderSetup();
+  // const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
 
@@ -81,11 +82,11 @@ export function AgentBuilder() {
 
   const handleSubmit = () => {
     if (validateForm() && isWppIntegrated) {
-      const payload = Object.fromEntries(
-        Object.entries(form).filter(([_, value]) => value.trim())
-      );
-      console.log('funfou')
-      buildAgent(payload, project);
+      setIsAgentLoading(true);
+      setTimeout(() => {
+        setIsAgentLoading(false);
+        navigate('/dash');
+      }, 3000);
     }
   };
 

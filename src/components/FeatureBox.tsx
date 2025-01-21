@@ -1,19 +1,18 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconMinus, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Tag, Text } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconInfo, IconMinus, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Tag, Text } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
-import { AgentPreferences } from "./AgentPreferences";
-import { integrateAvailableFeatures } from "../services/features.service";
-import { useSelector } from "react-redux";
-import { selectToken } from "../store/authSlice";
-import { selectProject } from "../store/projectSlice";
+// import { useSelector } from "react-redux";
+// import { selectToken } from "../store/authSlice";
+// import { selectProject } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 
-export function FeatureBox({ title, type, isIntegrated, description }: { title: string, type: 'active' | 'passive', description: string, isIntegrated: boolean }) {
-  const token = useSelector(selectToken);
-  const projectUUID = useSelector(selectProject)
+export function FeatureBox({ title, type, description }: { title: string, type: 'active' | 'passive', description: string, isIntegrated: boolean }) {
+  // const token = useSelector(selectToken);
+  // const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
-  const [openPreferences, setPreferences] = useState(false)
+  // const [openPreferences, setPreferences] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
+  const [isIntegrated, setIntegrated] = useState(false)
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -21,11 +20,12 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
     console.log('...abrindo')
     setOpenDisable((o) => !o)
   }
-  const openDrawer = () => {
-    setPreferences((o) => !o)
-  }
+  // const openDrawer = () => {
+  //   setPreferences((o) => !o)
+  // }
   const integrateFeature = async () => {
-    await integrateAvailableFeatures(projectUUID, token)
+    setIntegrated(true)
+    // await integrateAvailableFeatures(projectUUID, token)
   }
   return (
     <>
@@ -33,8 +33,8 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
         direction="column"
         gap="$space-2"
         style={{
-          width: '312px',
-          height: '182px',
+          width: '344px',
+          height: '222px',
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-1)',
           padding: '16px 16px 24px 16px',
@@ -63,10 +63,10 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
                 <IconInfo />
                 {t('common.details')}
               </MenuItem>
-              <MenuItem onClick={openDrawer}>
+              {/* <MenuItem onClick={openDrawer}>
                 <IconGearSix />
                 {t('common.preferences')}
-              </MenuItem>
+              </MenuItem> */}
               <MenuSeparator />
               <MenuItem onClick={openDisableModal}>
                 <IconMinus />
@@ -101,14 +101,14 @@ export function FeatureBox({ title, type, isIntegrated, description }: { title: 
               </Text>
             </Flex>
             :
-            <Button variant="secondary" onClick={integrateFeature}>
+            <Button variant="secondary" onClick={integrateFeature} size="large">
               <IconPlus />
               <Text> {t('agent_gallery.button.add')}</Text>
             </Button>
         }
       </Flex>
       <AboutAgent open={openAbout} type={t('agent_gallery.types.active')} title={t('agent_gallery.features.abandoned_cart.title')} category={t('agent_gallery.types.active')} description={t('agent_gallery.features.abandoned_cart.description')} disclaimer={t('agent_gallery.features.abandoned_cart.disclaimer')} toggleModal={openDetailsModal} />
-      <AgentPreferences open={openPreferences} toggleOpen={openDrawer} />
+      {/* <AgentPreferences open={openPreferences} toggleOpen={openDrawer} /> */}
       <DisableAgent open={openDisable} toggleModal={openDisableModal} agent={t('agent_gallery.features.disable.agents.abandoned_cart')} />
     </>
   );
