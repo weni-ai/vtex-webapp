@@ -25,11 +25,12 @@
     },
     "agent_gallery": {
         "title": "Agent gallery",
+        "added": "Agent added",
         "features": {
             "abandoned_cart": {
                 "title": "Abandoned cart agent",
-                "description": "Recover sales by reminding customers of items forgotten in the cart.",
-                "disclaimer": "With this agent, you increase your chances of conversion, keeping your customer close and encouraging order completion.",
+                "description": "Recover sales by reminding customers of items left in the cart.",
+                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
                 "preferences": {
                     "restriction": "Message Restriction",
                     "restriction_details": "Restrict messages to configured hours",
@@ -37,6 +38,13 @@
                     "saturday": "Saturday",
                     "from": "From",
                     "to": "To"
+                }
+            },
+            "disable": {
+                "title": "Disable agent",
+                "description":  "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
+                "agents": {
+                    "abandoned_cart": "Abandoned Cart"
                 }
             }
         },
@@ -104,5 +112,10 @@
         },
         "success": "Integration completed successfully!",
         "error": "Unable to integrate the feature. Please try again later."
+    },
+    "error": {
+        "title": "Something went wrong",
+        "description": "Retry or check back later if the issue persists.",
+        "button": "Try again"
     }
 }
