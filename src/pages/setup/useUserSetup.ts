@@ -81,11 +81,14 @@ export function useUserSetup() {
   const initializeUser = useCallback(async () => {
     const userData = store.getState().user.userData;
     const token = store.getState().auth.token;
-    try {
-      await createUserAndProject(userData, token);
-    } catch (error) {
-      console.error("Erro durante a inicialização do usuário:", error);
-      navigate('/setup-error');
+    const project_uuid = store.getState().project.project_uuid
+    if (!project_uuid) {
+      try {
+        await createUserAndProject(userData, token);
+      } catch (error) {
+        console.error("Erro durante a inicialização do usuário:", error);
+        navigate('/setup-error');
+      }
     }
   }, [navigate]);
 
