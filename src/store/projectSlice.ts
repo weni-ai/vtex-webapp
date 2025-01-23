@@ -45,7 +45,7 @@ const projectSlice = createSlice({
   export const {setProjectUuid, setLoadingSetup, setSetupError, setWppCloudAppUuid, setFlowsChannelUuid, setAgentLoading, setAgent} = projectSlice.actions
   export const selectProject = (state: any) => state.project.project_uuid
   export const wppCloudAppUuid = (state: any) => state.project.wpp_cloud_app_uuid
-  export const flowsChannelUuid = (state: any) => state.project.flow_object_uuid
+  export const flowsChannelUuid = (state: any) => state.project.flows_channel_uuid
   export const loadingSetup = (state: any) => state.project.loadingSetup
   export const setupError = (state: any) => state.project.setupError
   export const agentLoading = (state: any) => state.project.agentLoading
