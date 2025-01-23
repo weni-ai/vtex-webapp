@@ -42,7 +42,7 @@ export function useUserSetup() {
         const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid } = response.data;
 
         const featureList = await getFeatureList(project_uuid, token);
-        if (featureList?.features) {
+        if (!featureList?.features) {
           store.dispatch(setFeatureIntegrated(true));
         }
 
