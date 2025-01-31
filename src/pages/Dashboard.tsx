@@ -115,12 +115,28 @@ export function Dashboard() {
           </Heading>
 
           <Grid
-            columns="repeat(auto-fill, minmax(15rem, 1fr))"
+            columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
             <FeatureBox
-              title={t('agent_gallery.features.abandoned_cart.title')}
+              code="abandoned_cart"
               type="active"
-              description={t('agent_gallery.features.abandoned_cart.description')}
+              isIntegrated={featureIntegrated}
+            />
+
+
+{/* "agents": {
+        "order_status": {
+            "title": "Agente de status do pedido",
+            "description": "Informe seus clientes sobre o andamento de seus pedidos em tempo real.",
+            "details": {
+                "title": "Habilite o rastreamento de entrega de pedidos para os clientes.",
+                "description": "Esse agente reduz as verificações manuais e aumenta a transparência, garantindo que os clientes permaneçam informados e no controle."
+            }
+        }
+    }, */}
+            <FeatureBox
+              code="order_status"
+              type="active"
               isIntegrated={featureIntegrated}
             />
           </Grid>

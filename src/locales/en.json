@@ -23,6 +23,29 @@
         "description": " Connect agents to the Weni platform to access advanced features and customizable options.",
         "button": "Connect to Weni"
     },
+    "agents": {
+        "categories": {
+            "active": {
+                "title": "Active notification",
+                "order_status": {
+                    "title": "Order status agent",
+                    "description": "Keep customers updated on their order status in real time.",
+                    "details": {
+                        "title": "Enable order delivery tracking for customers.",
+                        "description": "This agent reduces manual checks and increase transparency, ensuring customers stay informed and in control."
+                    }
+                },
+                "abandoned_cart": {
+                    "title": "Abandoned cart agent",
+                    "description": "Recover sales by reminding customers of items left in the cart.",
+                    "details": {
+                        "title": "Recover sales by reminding customers of items left in the cart.",
+                        "description": "This agent increases conversion, retains customers and encourages order completion."
+                    }
+                }
+            }
+        }
+    },
     "agent_gallery": {
         "title": "Agent gallery",
         "added": "Agent added",
@@ -49,7 +72,8 @@
             }
         },
         "types": {
-            "active": "Active Notification"
+            "active": "Active notification",
+            "passive": "Passive support"
         },
         "button": {
             "add": "Add agent"
