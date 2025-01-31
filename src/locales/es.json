@@ -23,6 +23,29 @@
         "description": "Conecta agentes a la plataforma Weni para acceder a funciones avanzadas y opciones personalizables.",
         "button": "Conectar a Weni"
     },
+    "agents": {
+        "categories": {
+            "active": {
+                "title": "Notificación activa",
+                "order_status": {
+                    "title": "Agente de estado de pedidos",
+                    "description": "Mantenga a los clientes informados del estado de sus pedidos en tiempo real.",
+                    "details": {
+                        "title": "Habilite el seguimiento de la entrega de pedidos para los clientes.",
+                        "description": "Este agente reduce las comprobaciones manuales y aumenta la transparencia, garantizando que los clientes permanezcan informados y en control."
+                    }
+                },
+                "abandoned_cart": {
+                    "title": "Agente de carrito abandonado",
+                    "description": "Recupera ventas recordando a los clientes los artículos olvidados en el carrito.",
+                    "details": {
+                        "title": "Recupera ventas recordando a los clientes los artículos olvidados en el carrito.",
+                        "description": "Con este agente, aumentas tus posibilidades de conversión, manteniendo a tu cliente cerca e incentivando la finalización del pedido."
+                    }
+                }
+            }
+        }
+    },
     "agent_gallery": {
         "title": "Galería de Agentes",
         "features": {
