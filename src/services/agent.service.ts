@@ -8,7 +8,7 @@ export async function checkAgentIntegration(project_uuid: string, token: string)
 
   if (!integrationsAPI) {
     console.error('VITE_APP_NEXUS_URL não está configurado');
-    return;
+    return { success: false, error: 'Configuração ausente' };
   }
 
   try {
@@ -20,37 +20,32 @@ export async function checkAgentIntegration(project_uuid: string, token: string)
       },
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      console.error('Erro no fetch:', response.statusText);
-      throw new Error(`Erro ao verificar integração: ${response.statusText}`);
+      return { success: false, error: result.message || `Erro ${response.status}` };
     }
 
-    const result = await response.json();
-    return result;
+    return { success: true, data: result };
   } catch (error) {
-    console.error('Erro durante a verificação da integração:', error);
-    throw error;
+    console.error('Erro na verificação da integração:', error);
+    return { success: false, error: error || 'Erro desconhecido' };
   }
 }
 
 export async function setAgentBuilder(payload: any, project_uuid: string, token: string) {
-  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}&token=${token}`
-  return await VTEXFetch(url, {
+  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}&token=${token}`;
+
+  const response = await VTEXFetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
-  }).then((response) => {
-    if(response.error){
-      throw new Error(response.message)
-    }
-    return response
-  }).catch((error) => {
-    console.error('Erro na criação do agente:', error);
-    return {
-      error: error
-    }
   });
-}
 
+  if (!response || response.error) {
+    return { success: false, error: response?.message || 'Erro ao criar agente' };
+  }
+  return { success: true, data: response };
+}
