@@ -32,13 +32,13 @@ export function useAgentBuilderSetup() {
         };
 
         const response = await setAgentBuilder(body, app_uuid, token);
-        if(response.error){
+        
+        if (response.error) {
             toast.critical(t('agent.error'));
-            return
+        } else {
+            toast.success(t('agent.success'))
+            navigate('/dash');
         }
-
-        toast.success(t('agent.success'))
-        navigate('/dash');
 
         store.dispatch(setAgentLoading(false))
     };
