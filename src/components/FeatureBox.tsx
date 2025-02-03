@@ -1,4 +1,4 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconInfo, IconMinus, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Tag, Text } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Tag, Text } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 // import { useSelector } from "react-redux";
@@ -69,7 +69,7 @@ export function FeatureBox({ title, type, description }: { title: string, type: 
               </MenuItem> */}
               <MenuSeparator />
               <MenuItem onClick={openDisableModal}>
-                <IconMinus />
+                <IconPauseCircle />
                 {t('common.disable')}
               </MenuItem>
             </MenuPopover>

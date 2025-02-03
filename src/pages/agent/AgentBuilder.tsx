@@ -41,8 +41,8 @@ export function AgentBuilder() {
   const [form, setForm] = useState<FormState>({
     name: useSelector(getAgent).name || '',
     knowledge: useSelector(getAgent).links[0] || '',
-    occupation: useSelector(getAgent).occupation || '',
-    objective: useSelector(getAgent).objective || '',
+    occupation: useSelector(getAgent).occupation || t('agent.setup.forms.occupation.default'),
+    objective: useSelector(getAgent).objective || t('agent.setup.forms.objective.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   // const project = useSelector(selectProject);
@@ -142,7 +142,7 @@ export function AgentBuilder() {
                   <FieldError>{errors.knowledge}</FieldError>
                 </Field>
                 <Field>
-                  <Label>{t('agent.setup.forms.occupation')}</Label>
+                  <Label>{t('agent.setup.forms.occupation.title')}</Label>
                   <Input
                     name="occupation"
                     value={form.occupation}
@@ -151,7 +151,7 @@ export function AgentBuilder() {
                   />
                 </Field>
                 <Field>
-                  <Label>{t('agent.setup.forms.objective')}</Label>
+                  <Label>{t('agent.setup.forms.objective.title')}</Label>
                   <Textarea
                     name="objective"
                     value={form.objective}
