@@ -35,6 +35,7 @@ export function useAgentBuilderSetup() {
         
         if (response.error) {
             toast.critical(t('agent.error'));
+            navigate('/dash');
         } else {
             toast.success(t('agent.success'))
             navigate('/dash');
