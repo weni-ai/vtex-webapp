@@ -20,6 +20,7 @@ export async function getFeatureList(project_uuid: string, token: string) {
 }
 
 export async function integrateAvailableFeatures(project_uuid: string, token: string) {
+  console.log(token)
   const store = storeProvider.getState().auth.base_address;
   const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
   const wpp_cloud_app_uuid = storeProvider.getState().project.wpp_cloud_app_uuid
@@ -30,7 +31,7 @@ export async function integrateAvailableFeatures(project_uuid: string, token: st
     flows_channel_uuid,
     wpp_cloud_app_uuid
   };
-  await VTEXFetch(`/_v/integrate-available-features?token=${token}`, {
+  await VTEXFetch(`/_v/integrate-available-features?`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
