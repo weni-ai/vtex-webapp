@@ -37,6 +37,7 @@ export function useAgentBuilderSetup() {
             navigate('/dash');
         } catch (error) {
             toast.critical(t('agent.error'))
+            navigate('/dash');
         }
         store.dispatch(setAgentLoading(false))
     };
