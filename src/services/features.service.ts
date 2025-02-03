@@ -39,7 +39,7 @@ export async function integrateAvailableFeatures(project_uuid: string, token: st
     body: JSON.stringify(data),
   }).then((response) => {
     if (response.error) {
-      toast.critical(t('integration.error'));
+      throw new Error(response.message)
     } else {
       toast.success(t('integration.success'))
       console.log('Feature integrated', response)
