@@ -21,7 +21,7 @@ import {
 } from '@vtex/shoreline';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentLoading, getAgent,selectProject } from '../../store/projectSlice';
+import { agentLoading, getAgent, selectProject } from '../../store/projectSlice';
 import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
