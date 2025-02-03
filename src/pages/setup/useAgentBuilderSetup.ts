@@ -21,24 +21,25 @@ export function useAgentBuilderSetup() {
         const { name, occupation, objective, knowledge } = cleanedPayload;
         const links = knowledge ? [`https://${knowledge}`] : [];
 
-        try {
-            const body = {
-                agent: {
-                    name,
-                    objective,
-                    occupation,
-                },
-                links,
-            };
 
-            await setAgentBuilder(body, app_uuid, token);
+        const body = {
+            agent: {
+                name,
+                objective,
+                occupation,
+            },
+            links,
+        };
 
-            toast.success(t('agent.success'))
-            navigate('/dash');
-        } catch (error) {
-            toast.critical(t('agent.error'))
-            navigate('/dash');
+        const response = await setAgentBuilder(body, app_uuid, token);
+        if(response.error){
+            toast.critical(t('agent.error'));
+            return
         }
+
+        toast.success(t('agent.success'))
+        navigate('/dash');
+
         store.dispatch(setAgentLoading(false))
     };
 
