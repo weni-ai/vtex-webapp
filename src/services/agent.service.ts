@@ -43,6 +43,9 @@ export async function setAgentBuilder(payload: any, project_uuid: string, token:
     },
     body: JSON.stringify(payload),
   }).then((response) => {
+    if(response.error){
+      throw new Error(response.message)
+    }
     console.log('response', response)
   }).catch((error) => {
     console.error('Erro na criação do agente:', error);
