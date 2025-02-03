@@ -11,6 +11,9 @@ export function getUserFromLocalStorage() {
 export async function fetchUserData() {
   try {
     const data = await VTEXFetch('/api/vtexid/pub/authenticated/user');
+    if(data.error){
+      throw new Error(data.message)
+    }
     return data;
   } catch (error) {
     console.error('Error fetching user data:', error);
@@ -36,7 +39,7 @@ export async function checkProject(vtex_account: string, user_email: string, tok
     return result;
   } catch (error) {
     console.error('Error checking project:', error);
-    throw error;
+    throw new Error(JSON.stringify(error))
   }
 }
 
@@ -59,6 +62,9 @@ export async function createUserAndProject(userData: any, token: string) {
     });
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false))
+    if(response.error){
+      throw new Error(response.message)
+    }
     return response;
   } catch (error) {
     console.error('Erro na criação do projeto e usuário:', error);
