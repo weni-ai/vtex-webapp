@@ -8,6 +8,7 @@
         "back": "Back",
         "create": "Create",
         "details": "Details",
+        "manage_settings": "Manage settings",
         "preferences": "Preferences",
         "disable": "Disable",
         "errors": {
@@ -33,6 +34,23 @@
                     "details": {
                         "title": "Enable order delivery tracking for customers.",
                         "description": "This agent reduces manual checks and increase transparency, ensuring customers stay informed and in control."
+                    },
+                    "settings": {
+                        "is_test_contact_number": {
+                            "title": "Restrict to test contact number",
+                            "description": "Agent will message only the test contact"
+                        },
+                        "test_contact_number": {
+                            "label": "Phone number"
+                        },
+                        "is_selected_sellers": {
+                            "title": "Restricted for selected sellers",
+                            "description": "Agent will message only selected sellers"
+                        },
+                        "selected_sellers": {
+                            "label": "Select the sellers",
+                            "placeholder": "Select…"
+                        }
                     }
                 },
                 "abandoned_cart": {

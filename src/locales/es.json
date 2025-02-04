@@ -8,6 +8,7 @@
         "back": "Volver",
         "create": "Crear",
         "details": "Detalles",
+        "manage_settings": "Gestionar la configuración",
         "preferences": "Preferencias",
         "disable": "Desactivar",
         "errors": {
@@ -33,6 +34,23 @@
                     "details": {
                         "title": "Habilite el seguimiento de la entrega de pedidos para los clientes.",
                         "description": "Este agente reduce las comprobaciones manuales y aumenta la transparencia, garantizando que los clientes permanezcan informados y en control."
+                    },
+                    "settings": {
+                        "is_test_contact_number": {
+                            "title": "Restringir al número de contacto de prueba",
+                            "description": "El agente sólo enviará mensajes al contacto de prueba"
+                        },
+                        "test_contact_number": {
+                            "label": "Número de teléfono"
+                        },
+                        "is_selected_sellers": {
+                            "title": "Restringido para vendedores seleccionados",
+                            "description": "El agente sólo enviará mensajes a los vendedores seleccionados"
+                        },
+                        "selected_sellers": {
+                            "label": "Seleccione los vendedores",
+                            "placeholder": "Seleccione…"
+                        }
                     }
                 },
                 "abandoned_cart": {
