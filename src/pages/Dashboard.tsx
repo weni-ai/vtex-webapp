@@ -123,17 +123,6 @@ export function Dashboard() {
               isIntegrated={featureIntegrated}
             />
 
-
-{/* "agents": {
-        "order_status": {
-            "title": "Agente de status do pedido",
-            "description": "Informe seus clientes sobre o andamento de seus pedidos em tempo real.",
-            "details": {
-                "title": "Habilite o rastreamento de entrega de pedidos para os clientes.",
-                "description": "Esse agente reduz as verificações manuais e aumenta a transparência, garantindo que os clientes permaneçam informados e no controle."
-            }
-        }
-    }, */}
             <FeatureBox
               code="order_status"
               type="active"
