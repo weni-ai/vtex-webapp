@@ -15,9 +15,8 @@ export function useUserSetup() {
 
   const initializeProject = useCallback(async () => {
     try {
-      const token = await getToken();
-      const teste = store.getState().auth.errorTest
-      if (!token && teste) {
+      const {token, error} = await getToken();
+      if (error) {
         console.error("Token não encontrado");
         store.dispatch(setErrorTest(false))
         navigate('/setup-error');
@@ -41,7 +40,10 @@ export function useUserSetup() {
         store.dispatch(setProjectUuid(project_uuid));
 
         const response = await checkWppIntegration(project_uuid, token);
-        const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid } = response.data;
+        const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid} = response.data;
+        if(response?.error){
+          throw new Error(response.error)
+        }
 
         const featureList = await getFeatureList(project_uuid, token);
         if (!featureList?.features) {
