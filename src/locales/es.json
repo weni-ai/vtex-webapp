@@ -11,29 +11,29 @@
         "preferences": "Preferencias",
         "disable": "Desactivar",
         "errors": {
-            "unauthorized": "No tienes permiso para realizar esta acción",
-            "internal_server_error": "Error interno del servidor",
-            "unexpected_error": "Ocurrió un error inesperado"
+            "unauthorized": "No tienes permiso para realizar esta acción.",
+            "internal_server_error": "Error interno del servidor.",
+            "unexpected_error": "Ha ocurrido un error inesperado."
         },
-        "new_agent": "Nuevo Agente"
+        "new_agent": "Nuevo agente"
     },
     "title": "Weni Agentic IA",
-    "description": "Una SOLUCIÓN de CX basada en IA para marcas y minoristas.",
+    "description": "Una solución de CX basada en IA para marcas y minoristas.",
     "improve": {
-        "description": "Conecta agentes a la plataforma Weni para acceder a funciones avanzadas y opciones personalizables.",
-        "button": "Conectar a Weni"
+        "description": "Conecta agentes a la plataforma Weni para acceder a funciones avanzadas y opciones personalizadas.",
+        "button": "Conectar con Weni"
     },
     "agent_gallery": {
-        "title": "Galería de Agentes",
+        "title": "Galería de agentes",
         "added": "Agente agregado",
         "features": {
             "abandoned_cart": {
-                "title": "Agente de carrito abandonado",
-                "description": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
-                "disclaimer": "Este agente aumenta la conversión, retiene clientes y fomenta la finalización de los pedidos.",
+                "title": "Agente de recuperación de carrito",
+                "description": "Aumenta tus ventas recordando a los clientes los artículos que dejaron en el carrito.",
+                "disclaimer": "Este agente mejora la tasa de conversión, retiene clientes e impulsa la finalización de compras.",
                 "preferences": {
-                    "restriction": "Restricción de Mensajes",
-                    "restriction_details": "Restringir mensajes a horarios configurados",
+                    "restriction": "Restricciones de mensajes",
+                    "restriction_details": "Define horarios específicos para el envío de mensajes.",
                     "monday_until_friday": "Lunes a viernes",
                     "saturday": "Sábado",
                     "from": "De",
@@ -42,14 +42,14 @@
             },
             "disable": {
                 "title": "Desactivar agente",
-                "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, este agente ya no estará activo en tu proyecto.",
+                "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, ya no estará activo en tu proyecto.",
                 "agents": {
-                    "abandoned_cart": "Carrito Abandonado"
+                    "abandoned_cart": "Recuperación de carrito"
                 }
             }
         },
         "types": {
-            "active": "Notificación Activa"
+            "active": "Notificación activa"
         },
         "button": {
             "add": "Agregar agente"
@@ -57,18 +57,29 @@
     },
     "setup": {
         "title": "Configurando tu Weni App",
-        "description": "¡Preparando todo para ti! Estamos finalizando la configuración inicial para garantizar una experiencia fluida."
+        "description": "Estamos finalizando la configuración para garantizar una experiencia fluida."
     },
     "integration": {
         "title": "Integra un canal de soporte",
         "description": "Elige el canal que deseas utilizar y sigue los pasos para agregarlo.",
         "channels": {
             "whatsapp": {
-                "title": "Canal WhatsApp",
-                "description": "Utiliza una cuenta empresarial de WhatsApp para mejorar la comunicación con tus contactos.",
-                "error": "No se pudo conectar con WhatsApp, verifica tus credenciales o inténtalo de nuevo más tarde.",
-                "success": "WhatsApp se integró con éxito."
+                "title": "Canal de WhatsApp",
+                "description": "Conecta una cuenta empresarial de WhatsApp para mejorar la comunicación con tus clientes.",
+                "error": "No se pudo conectar con WhatsApp. Verifica tus credenciales e inténtalo nuevamente.",
+                "success": "WhatsApp se ha integrado con éxito."
             }
-        }
+        },
+        "buttons": {
+            "integrate": "Integrar",
+            "integrated": "Integrado"
+        },
+        "success": "¡Integración completada con éxito!",
+        "error": "No se pudo completar la integración. Inténtalo nuevamente más tarde."
+    },
+    "error": {
+        "title": "Algo salió mal",
+        "description": "Inténtalo de nuevo o vuelve más tarde si el problema persiste.",
+        "button": "Intentar de nuevo"
     }
 }
