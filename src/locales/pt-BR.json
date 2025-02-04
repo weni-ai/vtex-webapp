@@ -11,30 +11,30 @@
         "preferences": "Preferências",
         "disable": "Desativar",
         "errors": {
-            "unauthorized": "Você não tem permissão para realizar esta ação",
-            "internal_server_error": "Erro interno do servidor",
-            "unexpected_error": "Ocorreu um erro inesperado"
+            "unauthorized": "Você não tem permissão para realizar esta ação.",
+            "internal_server_error": "Erro interno do servidor.",
+            "unexpected_error": "Ocorreu um erro inesperado."
         },
-        "new_agent": "Novo Agente"
+        "new_agent": "Novo agente"
     },
     "title": "Weni Agentic IA",
-    "description": "Uma SOLUÇÃO de CX baseada em IA para marcas e varejistas.",
+    "description": "Uma solução de CX baseada em IA para marcas e varejistas.",
     "improve": {
-        "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizáveis.",
-        "button": "Conectar ao Weni"
+        "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizadas.",
+        "button": "Conectar a Weni"
     },
     "agent_gallery": {
-        "title": "Galeria de Agentes",
+        "title": "Galeria de agentes",
         "added": "Agente adicionado",
         "features": {
             "abandoned_cart": {
-                "title": "Agente de carrinho abandonado",
-                "description": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
-                "disclaimer": "Este agente aumenta a conversão, retém clientes e incentiva a finalização dos pedidos.",
+                "title": "Agente de recuperação de carrinho",
+                "description": "Aumente suas vendas lembrando os clientes dos itens deixados no carrinho.",
+                "disclaimer": "Este agente melhora a taxa de conversão, retém clientes e incentiva a finalização de compras.",
                 "preferences": {
-                    "restriction": "Restrição de Mensagens",
-                    "restriction_details": "Restringir mensagens para horários configurados",
-                    "monday_until_friday": "Segunda a sexta",
+                    "restriction": "Restrições de mensagens",
+                    "restriction_details": "Defina horários específicos para envio de mensagens.",
+                    "monday_until_friday": "Segunda a sexta-feira",
                     "saturday": "Sábado",
                     "from": "Das",
                     "to": "Até"
@@ -42,14 +42,14 @@
             },
             "disable": {
                 "title": "Desativar agente",
-                "description": "Deseja desativar o agente '{{agent}}'? Depois de desativado, este agente não estará mais ativo em seu projeto.",
+                "description": "Deseja desativar o agente '{{agent}}'? Após a desativação, ele não estará mais ativo no seu projeto.",
                 "agents": {
-                    "abandoned_cart": "Carrinho Abandonado"
+                    "abandoned_cart": "Recuperação de carrinho"
                 }
             }
         },
         "types": {
-            "active": "Notificação Ativa"
+            "active": "Notificação ativa"
         },
         "button": {
             "add": "Adicionar agente"
@@ -57,20 +57,20 @@
     },
     "setup": {
         "title": "Configurando seu Weni App",
-        "description": "Preparando tudo para você! Estamos finalizando a configuração inicial para garantir uma experiência fluida."
+        "description": "Estamos finalizando a configuração para garantir uma experiência fluida."
     },
     "agent": {
         "details": {
-            "title": "Agentes Inteligentes",
-            "description": "Aprimore agentes inteligentes permitindo o controle sobre fluxos de conversa com base nas intenções do usuário. Personalize idioma, tom e comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja a demonstração da interação do agente de troca e devolução ao lado.",
+            "title": "Agentes inteligentes",
+            "description": "Aprimore seus agentes permitindo o controle sobre fluxos de conversa com base nas intenções do usuário. Personalize o idioma, tom e comportamento para criar uma identidade única e melhorar a comunicação. Confira a demonstração do agente de trocas e devoluções ao lado.",
             "skills": {
-                "title": "Habilidades do Agente",
-                "analyze": "Analisar o contexto",
+                "title": "Habilidades do agente",
+                "analyze": "Analisar contexto",
                 "comprehend": "Compreender demandas complexas",
                 "provide": "Fornecer respostas personalizadas"
             },
             "example": {
-                "description": "Demonstração do agente de troca e devolução"
+                "description": "Demonstração do agente de trocas e devoluções"
             }
         },
         "setup": {
@@ -83,14 +83,14 @@
                 },
                 "objective": {
                     "title": "Objetivo (opcional)",
-                    "default": "Seu objetivo é responder perguntas dos clientes, informar o status dos pedidos, fornecer informações sobre produtos e vender. Suas principais funcionalidades são: compras no WhatsApp e perguntas frequentes."
+                    "default": "Responder perguntas dos clientes, informar status de pedidos, fornecer detalhes sobre produtos e auxiliar nas compras via WhatsApp. Principais funcionalidades: atendimento ao cliente e FAQs."
                 },
                 "knowledge": {
                     "title": "Fonte de conhecimento",
-                    "context": "Forneça o conteúdo que seu agente usará para responder perguntas."
+                    "context": "Insira o conteúdo que seu agente usará para responder perguntas."
                 },
                 "error": {
-                    "empty_input": "Preencha esta informação",
+                    "empty_input": "Preencha este campo.",
                     "valid_url": "Insira uma URL válida."
                 }
             },
@@ -99,17 +99,17 @@
             }
         },
         "error": "Não foi possível configurar o agente. Tente novamente mais tarde.",
-        "success": "Agente registrado com sucesso"
+        "success": "Agente criado com sucesso!"
     },
     "integration": {
         "title": "Integre um canal de suporte",
-        "description": "Escolha o canal que deseja usar e siga o passo a passo para adicioná-lo.",
+        "description": "Escolha o canal desejado e siga o passo a passo para adicioná-lo.",
         "channels": {
             "whatsapp": {
                 "title": "Canal WhatsApp",
-                "description": "Utilize uma conta empresarial do WhatsApp para melhorar a comunicação com seus contatos.",
-                "error": "Não foi possível conectar ao WhatsApp, verifique suas credenciais ou tente novamente mais tarde.",
-                "success": "WhatsApp integrado com sucesso."
+                "description": "Conecte uma conta empresarial do WhatsApp para melhorar sua comunicação.",
+                "error": "Não foi possível conectar ao WhatsApp. Verifique suas credenciais e tente novamente.",
+                "success": "WhatsApp integrado com sucesso!"
             }
         },
         "buttons": {
@@ -117,7 +117,7 @@
             "integrated": "Integrado"
         },
         "success": "Integração concluída com sucesso!",
-        "error": "Não foi possível integrar o recurso. Tente novamente mais tarde."
+        "error": "Não foi possível concluir a integração. Tente novamente mais tarde."
     },
     "error": {
         "title": "Algo deu errado",
