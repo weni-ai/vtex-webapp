@@ -119,8 +119,14 @@
             "title": "Setup your agent persona",
             "forms": {
                 "name": "Name",
-                "occupation": "Occupation (optional)",
-                "objective": "Objective (optional)",
+                "occupation": {
+                    "title":"Occupation (optional)",
+                    "default": "Intelligent assistant"
+                },
+                "objective": {
+                    "title": "Objective (optional)",
+                    "default": "Your goal is to answer customer questions, inform the order status, provide product information, and sell. Your main features are: Shopping on WhatsApp and FAQ."
+                },
                 "knowledge": {
                     "title": "Knowlege source",
                     "context": "Provide the content your agent will use to answer questions."

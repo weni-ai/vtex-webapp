@@ -31,8 +31,7 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Erro durante a verificação da integração:', error);
-    throw error;
+    throw new Error(JSON.stringify(error))
   }
 }
 
@@ -56,7 +55,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     });
 
     if (response.error) {
-      throw new Error(t('integration.channels.whatsapp.error'))
+      throw new Error(response.message)
     }
     toast.success(t('integration.channels.whatsapp.success'))
 
