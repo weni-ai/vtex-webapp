@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setFeatureIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
@@ -10,8 +11,8 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
   const apiUrl = `${integrationsAPI}/api/v1/commerce/check-whatsapp-integration?project_uuid=${project_uuid}`;
 
   if (!integrationsAPI) {
-    console.error('VITE_APP_INTEGRATIONS_URL não está configurado');
-    return;
+    console.error('Erro: VITE_APP_INTEGRATIONS_URL não está configurado.');
+    return { success: false, error: 'Configuração ausente.' };
   }
 
   try {
@@ -23,19 +24,20 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
       },
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      console.error('Erro no fetch:', response.statusText);
-      throw new Error(`Erro ao verificar integração: ${response.statusText}`);
+      return { success: false, error: result.message || `Erro ${response.status}` };
     }
 
-    const result = await response.json();
-    return result;
+    return { success: true, data: result };
   } catch (error) {
-    throw new Error(JSON.stringify(error))
+    console.error('Erro ao verificar integração do WhatsApp:', error);
+    return { success: false, error: error || 'Erro desconhecido' };
   }
 }
 
-export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string) {
+export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string): Promise<any> {
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
@@ -54,23 +56,25 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
       body: JSON.stringify(data),
     });
 
-    if (response.error) {
-      throw new Error(response.message)
+    if (!response || response.error) {
+      throw new Error(response?.error || '')
     }
-    toast.success(t('integration.channels.whatsapp.success'))
 
     store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
+    store.dispatch(setFeatureIntegrated(true));
 
-    store.dispatch(setFeatureIntegrated(true))
+    const checkResponse = await checkWppIntegration(project_uuid, token);
 
-    const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid } = await checkWppIntegration(project_uuid, token)
-    if (has_whatsapp) {
-      store.dispatch(setFlowsChannelUuid(flows_channel_uuid))
-      store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid))
+    if (checkResponse.success && checkResponse.data.has_whatsapp) {
+      store.dispatch(setFlowsChannelUuid(checkResponse.data.flows_channel_uuid));
+      store.dispatch(setWppCloudAppUuid(checkResponse.data.wpp_cloud_app_uuid));
     }
+    return { success: true, data: response.data };
   } catch (error) {
-    store.dispatch(setWhatsAppError(error));
+    console.error('Erro ao criar canal:', error);
+    store.dispatch(setWhatsAppError(error|| 'Erro desconhecido.'));
     toast.critical(t('integration.channels.whatsapp.error'));
+    return { success: false, error: error  };
   }
 }

@@ -39,7 +39,10 @@ export function useUserSetup() {
         store.dispatch(setProjectUuid(project_uuid));
 
         const response = await checkWppIntegration(project_uuid, token);
-        const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid } = response.data;
+        const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid} = response.data;
+        if(response?.error){
+          throw new Error(response.error)
+        }
 
         const featureList = await getFeatureList(project_uuid, token);
         if (!featureList?.features) {
