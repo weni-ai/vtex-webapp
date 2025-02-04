@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from "@vtex/shoreline";
 import { createChannel } from "../../services/channel.service";
 import getEnv from "../env";
 
@@ -81,11 +82,14 @@ export function startFacebookLogin(project_uuid: string, token: string) {
         window.addEventListener("message", sessionInfoListener);
 
         FB.login(
-            (response: any) => {
+            async (response: any) => {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
                     console.log("Login Successful. Auth Code:", code, project_uuid, wabaId, phoneId, token);
-                    createChannel(code, project_uuid, wabaId, phoneId, token);
+                    const result = await createChannel(code, project_uuid, wabaId, phoneId, token);
+                    if(result?.error){
+                        toast.critical(t('integration.channels.whatsapp.error'));
+                    }
                 } else {
                     console.error("Login canceled or not fully authorized.");
                 }
