@@ -25,8 +25,8 @@ export function useUserSetup() {
       }
       store.dispatch(setToken(token));
 
-      const userData = await fetchUserData();
-      if (!userData) {
+      const { data: userData, error: errorData } = await fetchUserData();
+      if (!userData || errorData) {
         console.error("Dados do usuário não encontrados");
         navigate('/setup-error');
         return;
@@ -35,6 +35,9 @@ export function useUserSetup() {
       store.dispatch(setUser(userData));
 
       const result = await checkProject(userData.account, userData.user, token);
+      if(result?.error){
+        throw new Error(JSON.stringify(result.error))
+      }
       const { has_project, project_uuid } = result.data;
 
       if (has_project) {
@@ -96,10 +99,9 @@ export function useUserSetup() {
     const token = store.getState().auth.token;
     const project_uuid = store.getState().project.project_uuid
     if (!project_uuid) {
-      try {
-        await createUserAndProject(userData, token);
-      } catch (error) {
-        console.error("Erro durante a inicialização do usuário:", error);
+        const response = await createUserAndProject(userData, token);
+      if(response.error){
+        console.error("Erro durante a inicialização do usuário:", response.error);
         navigate('/setup-error');
       }
     }
