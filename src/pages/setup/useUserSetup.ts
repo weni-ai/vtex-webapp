@@ -9,6 +9,7 @@ import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { getFeatureList } from '../../services/features.service';
 import { useCallback } from 'react';
+import { toast } from '@vtex/shoreline';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -46,7 +47,10 @@ export function useUserSetup() {
         }
 
         const featureList = await getFeatureList(project_uuid, token);
-        if (!featureList?.features) {
+        if(featureList?.error){
+          throw new Error(JSON.stringify(featureList.error))
+        }
+        if (!featureList?.data.features) {
           store.dispatch(setFeatureIntegrated(true));
         }
 
@@ -82,6 +86,7 @@ export function useUserSetup() {
       }
     } catch (err) {
       console.error(err);
+      toast.critical(t('integration.error'));
       navigate('/setup-error');
     }
   }, [navigate]);
