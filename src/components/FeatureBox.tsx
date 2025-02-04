@@ -1,4 +1,4 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateAvailableFeatures } from "../services/features.service";
@@ -7,6 +7,7 @@ import { selectToken } from "../store/authSlice";
 import { selectProject } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
+import { AgentPreferences } from "./AgentPreferences";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -14,6 +15,7 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
   const token = useSelector(selectToken);
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -22,6 +24,11 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
     console.log('...abrindo')
     setOpenDisable((o) => !o)
   }
+  
+  const toggleIsPreferencesOpen = () => {
+    setIsPreferencesOpen((o) => !o)
+  }
+
   const integrateFeature = async () => {
     await integrateAvailableFeatures(projectUUID, token)
   }
@@ -58,7 +65,14 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
                 <IconInfo />
                 {t('common.details')}
               </MenuItem>
+
+              <MenuItem onClick={toggleIsPreferencesOpen}>
+                <IconGearSix />
+                {t('common.manage_settings')}
+              </MenuItem>
+              
               <MenuSeparator />
+
               <MenuItem onClick={openDisableModal}>
                 <IconPauseCircle />
                 {t('common.disable')}
@@ -99,25 +113,17 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
         }
       </Flex>
 
-      {/*
-      <AboutAgent
-        open={openAbout}
-        type={t('agent_gallery.types.active')}
-        title={t('agent_gallery.features.abandoned_cart.title')}
-        category={t('agent_gallery.types.active')}
-        description={t('agent_gallery.features.abandoned_cart.description')}
-        disclaimer={t('agent_gallery.features.abandoned_cart.disclaimer')}
-        toggleModal={openDetailsModal}
-      /> */}
-
       <AboutAgent
         open={openAbout}
         code={code}
-        title={t('agents.order_status.title')}
         category={type}
-        description={t('agents.order_status.details.title')}
-        disclaimer={t('agents.order_status.details.description')}
         toggleModal={openDetailsModal}
+      />
+
+      <AgentPreferences
+        open={isPreferencesOpen}
+        code={code}
+        toggleOpen={toggleIsPreferencesOpen}
       />
 
       <DisableAgent open={openDisable} toggleModal={openDisableModal} agent={t('agent_gallery.features.disable.agents.abandoned_cart')} />
