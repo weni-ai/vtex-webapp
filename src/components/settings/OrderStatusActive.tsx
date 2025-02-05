@@ -6,7 +6,11 @@ export function PreferencesOrderStatusActive() {
   const [testContactNumber, setTestContactNumber] = useState('');
 
   const [hasSelectedSellers, setHasSelectedSellers] = useState(false);
-  const [selectedSellers, setSelectedSellers] = useState([]);
+  const [selectedSellers, setSelectedSellers] = useState<string[]>([]);
+
+  function updateSelectedSellers(items: string[]) {
+    setSelectedSellers(items);
+  }
 
   return (
     <DrawerContent>
@@ -71,7 +75,7 @@ export function PreferencesOrderStatusActive() {
 
           <Select
             value={selectedSellers}
-            setValue={setSelectedSellers}
+            setValue={updateSelectedSellers}
             messages={
               {
                 placeholder: t('agents.categories.active.order_status.settings.selected_sellers.placeholder')
