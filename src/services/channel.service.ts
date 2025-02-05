@@ -63,6 +63,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
     store.dispatch(setFeatureIntegrated(true));
+    toast.success(t('integration.channels.whatsapp.success'))
 
     const checkResponse = await checkWppIntegration(project_uuid, token);
 
