@@ -38,7 +38,7 @@
                     "settings": {
                         "is_test_contact_number": {
                             "title": "Restringir al número de contacto de prueba",
-                            "description": "El agente sólo enviará mensajes al contacto de prueba"
+                            "description": "El agente sólo enviará mensajes al número de teléfono de prueba"
                         },
                         "test_contact_number": {
                             "label": "Número de teléfono"
