@@ -12,6 +12,57 @@ export function PreferencesOrderStatusActive() {
     setSelectedSellers(items);
   }
 
+  function beforeSetTestContactNumber(phoneNumber: string) {
+    const eventLocal = event as unknown as { target: { selectionStart: number; selectionEnd: number; } };
+
+    const selectionStart = eventLocal.target.selectionStart;
+
+    const initialPicture = phoneNumber.slice(0, selectionStart || 0) + '|' + phoneNumber.slice(selectionStart || 0);
+    let rest = phoneNumber.replace(/[^\d]/g, '');
+    let final = '';
+
+    if (rest.slice(0, 2) === '55' || rest.slice(0, 3) === '055') {
+      if (rest.slice(0, 2) === '55') {
+        final += `+${rest.slice(0, 2)}`;
+        rest = rest.slice(2);
+      } else if (rest.slice(0, 3) === '055') {
+        final += `+${rest.slice(1, 3)}`;
+        rest = rest.slice(3);
+      }
+
+      if (rest.length) {
+        final += ' ';
+      }
+
+      final += rest.slice(0, 2);
+      rest = rest.slice(2);
+
+      if (rest.length) {
+        final += ' ';
+      }
+
+      final += rest.slice(0, 5);
+      rest = rest.slice(5);
+
+      if (rest.length) {
+        final += '-';
+      }
+
+      final += rest.slice(0, 4);
+      rest = rest.slice(4);
+    } else {
+      final += rest;
+    }
+    
+    setTestContactNumber(final);
+
+    setTimeout(() => {
+      const countNumbers = initialPicture.replace(/[^\d|]/g, '').indexOf('|') + final.split(/\d/).splice(0, initialPicture.replace(/[^\d|]/g, '').indexOf('|')).join('').length;
+
+      eventLocal.target.selectionStart = eventLocal.target.selectionEnd = countNumbers
+    }, 0);
+  }
+
   return (
     <DrawerContent>
       <Field style={{ display: 'flex', }}>
@@ -39,7 +90,7 @@ export function PreferencesOrderStatusActive() {
           <Input
             name="contact-number"
             value={testContactNumber}
-            onChange={setTestContactNumber}
+            onChange={beforeSetTestContactNumber}
           />
         </Field>
       }
