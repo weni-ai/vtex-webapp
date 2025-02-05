@@ -115,12 +115,17 @@ export function Dashboard() {
           </Heading>
 
           <Grid
-            columns="repeat(auto-fill, minmax(15rem, 1fr))"
+            columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
             <FeatureBox
-              title={t('agent_gallery.features.abandoned_cart.title')}
+              code="abandoned_cart"
               type="active"
-              description={t('agent_gallery.features.abandoned_cart.description')}
+              isIntegrated={featureIntegrated}
+            />
+
+            <FeatureBox
+              code="order_status"
+              type="active"
               isIntegrated={featureIntegrated}
             />
           </Grid>

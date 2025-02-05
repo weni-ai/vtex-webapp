@@ -1,7 +1,7 @@
 {
   "name": "vtex-webapp",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1-alpha168-staging",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@types/node": "^22.10.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",

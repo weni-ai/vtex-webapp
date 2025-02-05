@@ -18,6 +18,7 @@ const query = decodeURIComponent(window.location.search);
 const params = new URLSearchParams(query);
 const baseAddress = params.get('base_address');
 const locale = params.get('locale');
+console.log('entrou no app')
 
 if (baseAddress) {
   store.dispatch(setBaseAddress(baseAddress));
