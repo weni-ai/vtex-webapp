@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 export function SetupError() {
   const navigate = useNavigate()
   const navigateToAgent = () => {
-    navigate('/agent-details')
+    navigate('/')
   }
   return (
     <Container>
