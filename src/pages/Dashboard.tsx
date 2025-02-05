@@ -5,13 +5,15 @@ import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
 import { isFeatureIntegrated } from '../store/userSlice';
+import { selectProject } from '../store/projectSlice';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const featureIntegrated = useSelector(isFeatureIntegrated);
+  const project_uuid = useSelector(selectProject)
 
   function navigateToAgent() {
-    window.open('https://dash.weni.ai/', '_blank');
+    window.open(`https://dash.weni.ai/projects/${project_uuid}`, '_blank');
   }
 
   useEffect(() => {
