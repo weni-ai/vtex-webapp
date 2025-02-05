@@ -103,7 +103,7 @@
     "agent": {
         "details": {
             "title": "Agentes inteligentes",
-            "description": "Aprimore seus agentes permitindo o controle sobre fluxos de conversa com base nas intenções do usuário. Personalize o idioma, tom e comportamento para criar uma identidade única e melhorar a comunicação. Confira a demonstração do agente de trocas e devoluções ao lado.",
+            "description": "Aprimore agentes inteligentes permitindo o controle sobre fluxos de conversa com base nas intenções do usuário. Com o Plano Starter, personalize o idioma, tom e comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja a demonstração da interação do agente de trocas e devoluções ao lado.",
             "skills": {
                 "title": "Habilidades do agente",
                 "analyze": "Analisar contexto",
