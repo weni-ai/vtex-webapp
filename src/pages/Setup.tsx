@@ -8,5 +8,7 @@ export function Setup() {
         initializeProject();
     }, [initializeProject]);
 
-    return(<></>)
+    return (
+        <></>
+    )
 }
