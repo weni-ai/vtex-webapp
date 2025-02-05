@@ -21,7 +21,7 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentLoading, getAgent, selectProject } from '../../store/projectSlice';
+import { agentLoading, getAgent, loadingSetup, selectProject } from '../../store/projectSlice';
 import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -47,7 +47,7 @@ export function AgentBuilder() {
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
-  const isSetupLoading = false;
+  const isSetupLoading = useSelector(loadingSetup);
   const isAgentLoading = useSelector(agentLoading)
   const agentIntegrated = useSelector(isAgentIntegrated)
   const { buildAgent } = useAgentBuilderSetup();
@@ -59,9 +59,9 @@ export function AgentBuilder() {
   }, [initializeUser]);
 
   const isValidURL = (url: string) => {
-    const urlPattern = /^[^\s]+\.com([/?#].*)?$/i;
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}([/?#].*)?$/i;
     return urlPattern.test(url);
-  };
+};
 
   const validateForm = () => {
     const newErrors: { [key in keyof FormState]?: string } = {
@@ -84,7 +84,6 @@ export function AgentBuilder() {
       const payload = Object.fromEntries(
         Object.entries(form).filter(([_, value]) => value.trim())
       );
-      console.log('funfou')
       buildAgent(payload, project);
     }
   };
