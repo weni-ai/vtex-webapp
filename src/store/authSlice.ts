@@ -5,8 +5,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: {
         token: '',
-        base_address: '',
-        errorTest: true
+        base_address: ''
     },
     reducers: {
         setToken: (state, action) => {
@@ -14,16 +13,13 @@ const authSlice = createSlice({
         },
         setBaseAddress: (state, action) => {
             state.base_address = action.payload
-        },
-        setErrorTest: (state, action) => {
-            state.errorTest = action.payload
-        },
+        }
     },
 });
 
 
 
-export const { setToken, setBaseAddress, setErrorTest } = authSlice.actions;
+export const { setToken, setBaseAddress } = authSlice.actions;
 
 export const selectToken = (state: any) => state.auth.token
 export const selectBaseAddress = (state: any) => state.auth.selectBaseAddress

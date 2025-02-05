@@ -19,11 +19,12 @@ import {
   Textarea,
   Tooltip,
 } from '@vtex/shoreline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { agentLoading, getAgent, selectProject } from '../../store/projectSlice';
 import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
+import { useUserSetup } from '../setup/useUserSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
 import { Channel } from '../Channel';
 import { useNavigate } from 'react-router-dom';
@@ -50,12 +51,12 @@ export function AgentBuilder() {
   const isAgentLoading = useSelector(agentLoading)
   const agentIntegrated = useSelector(isAgentIntegrated)
   const { buildAgent } = useAgentBuilderSetup();
-  // const { initializeUser } = useUserSetup();
+  const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   initializeUser();
-  // }, [initializeUser]);
+  useEffect(() => {
+    initializeUser();
+  }, [initializeUser]);
 
   const isValidURL = (url: string) => {
     const urlPattern = /^[^\s]+\.com([/?#].*)?$/i;
@@ -83,6 +84,7 @@ export function AgentBuilder() {
       const payload = Object.fromEntries(
         Object.entries(form).filter(([_, value]) => value.trim())
       );
+      console.log('funfou')
       buildAgent(payload, project);
     }
   };

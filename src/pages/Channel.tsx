@@ -1,19 +1,15 @@
-import { Button, Flex, IconCheck, Text, toast } from "@vtex/shoreline";
+import { Button, Flex, IconCheck, Text } from "@vtex/shoreline";
 import iconWhatsapp from '../assets/channels/whatsapp.svg';
-import store from "../store/provider.store";
-import { setWhatsAppIntegrated } from "../store/userSlice";
-// import { startFacebookLogin } from "../utils/facebook/login";
-// import { useSelector } from "react-redux";
-// import { selectProject } from "../store/projectSlice";
-// import { selectToken } from "../store/authSlice";
+import { startFacebookLogin } from "../utils/facebook/login";
+import { useSelector } from "react-redux";
+import { selectProject } from "../store/projectSlice";
+import { selectToken } from "../store/authSlice";
 
 export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
-  // const project_uuid = useSelector(selectProject)
-  // const token = useSelector(selectToken)
+  const project_uuid = useSelector(selectProject)
+  const token = useSelector(selectToken)
   const callFacebookSDK = () => {
-    toast.critical(t('integration.channels.whatsapp.error'));
-    store.dispatch(setWhatsAppIntegrated(true))
-    // startFacebookLogin(project_uuid, token)
+    startFacebookLogin(project_uuid, token)
   }
   return (
     <Flex

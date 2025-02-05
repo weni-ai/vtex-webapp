@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { setFeatureIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
-import { setErrorTest, setToken } from '../../store/authSlice';
+import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
@@ -19,7 +19,6 @@ export function useUserSetup() {
       const {token, error} = await getToken();
       if (error) {
         console.error("Token não encontrado");
-        store.dispatch(setErrorTest(false))
         navigate('/setup-error');
         return;
       }
