@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import { DashboardItem } from '../components/DashboardItem';
@@ -5,13 +6,16 @@ import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
 import { isFeatureIntegrated } from '../store/userSlice';
+import { featureList, selectProject } from '../store/projectSlice';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
+  const features = useSelector(featureList)
   const featureIntegrated = useSelector(isFeatureIntegrated);
+  const project_uuid = useSelector(selectProject)
 
   function navigateToAgent() {
-    window.open('https://dash.weni.ai/', '_blank');
+    window.open(`https://dash.weni.ai/projects/${project_uuid}`, '_blank');
   }
 
   useEffect(() => {
@@ -45,8 +49,8 @@ export function Dashboard() {
         </PageHeaderRow>
       </PageHeader>
 
-      <PageContent style={{ margin: '0', maxWidth: '100vw'}}>
-        <Flex direction='column' style={{width:'100%'}}>
+      <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
+        <Flex direction='column' style={{ width: '100%' }}>
           <Alert
             variant="informational"
             style={{
@@ -115,14 +119,27 @@ export function Dashboard() {
           </Heading>
 
           <Grid
-            columns="repeat(auto-fill, minmax(15rem, 1fr))"
+            columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
-            <FeatureBox
-              title={t('agent_gallery.features.abandoned_cart.title')}
+            {features.map((item: any) => (
+              <FeatureBox
+                key={item.feature_uuid}
+                code={item.code}
+                type="active"
+                isIntegrated={featureIntegrated}
+              />
+            ))}
+            {/* <FeatureBox
+              code="abandoned_cart"
               type="active"
-              description={t('agent_gallery.features.abandoned_cart.description')}
               isIntegrated={featureIntegrated}
             />
+
+            <FeatureBox
+              code="order_status"
+              type="active"
+              isIntegrated={featureIntegrated}
+            /> */}
           </Grid>
         </Flex>
       </PageContent>
