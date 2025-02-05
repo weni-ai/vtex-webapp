@@ -21,7 +21,7 @@ import {
 } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentLoading, getAgent, loadingSetup, selectProject } from '../../store/projectSlice';
+import { agentLoading, getAgent, selectProject } from '../../store/projectSlice';
 import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -41,13 +41,13 @@ export function AgentBuilder() {
   const [form, setForm] = useState<FormState>({
     name: useSelector(getAgent).name || '',
     knowledge: useSelector(getAgent).links[0] || '',
-    occupation: useSelector(getAgent).occupation || '',
-    objective: useSelector(getAgent).objective || '',
+    occupation: useSelector(getAgent).occupation || t('agent.setup.forms.occupation.default'),
+    objective: useSelector(getAgent).objective || t('agent.setup.forms.objective.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const project = useSelector(selectProject);
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
-  const isSetupLoading = useSelector(loadingSetup);
+  const isSetupLoading = false;
   const isAgentLoading = useSelector(agentLoading)
   const agentIntegrated = useSelector(isAgentIntegrated)
   const { buildAgent } = useAgentBuilderSetup();
@@ -141,7 +141,7 @@ export function AgentBuilder() {
                   <FieldError>{errors.knowledge}</FieldError>
                 </Field>
                 <Field>
-                  <Label>{t('agent.setup.forms.occupation')}</Label>
+                  <Label>{t('agent.setup.forms.occupation.title')}</Label>
                   <Input
                     name="occupation"
                     value={form.occupation}
@@ -150,7 +150,7 @@ export function AgentBuilder() {
                   />
                 </Field>
                 <Field>
-                  <Label>{t('agent.setup.forms.objective')}</Label>
+                  <Label>{t('agent.setup.forms.objective.title')}</Label>
                   <Textarea
                     name="objective"
                     value={form.objective}
