@@ -104,7 +104,7 @@
     "agent": {
         "details": {
             "title": "Intelligent agents",
-            "description": "Enhance intelligent agents by enabling control over conversation flows based on user intentions. Customize language, tone, and behavior to give the agent a unique identity and improve communication quality. See the demonstration of the exchange and return agent interaction on the side.",
+            "description": "Enhance intelligent agents by enabling control over conversation flows based on user intentions. With the Starter Plan, customize language, tone, and behavior to give the agent a unique identity and improve communication quality. See the demonstration of the exchange and return agent interaction on the side.",
             "skills": {
                 "title": "Agent Skills",
                 "analyze": "Analyze the context",
