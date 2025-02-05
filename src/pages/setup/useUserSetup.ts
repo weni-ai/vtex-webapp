@@ -37,7 +37,7 @@ export function useUserSetup() {
       if(result?.error){
         throw new Error(JSON.stringify(result.error))
       }
-      const { has_project, project_uuid } = result.data;
+      const { has_project, project_uuid } = result.data.data;
 
       if (has_project) {
         store.dispatch(setProjectUuid(project_uuid));
