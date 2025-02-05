@@ -1,4 +1,4 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateAvailableFeatures } from "../services/features.service";
@@ -30,7 +30,12 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
   }
 
   const integrateFeature = async () => {
-    await integrateAvailableFeatures(projectUUID, token)
+    const result = await integrateAvailableFeatures(projectUUID, token);
+    if (result.error) {
+      toast.critical(t('integration.error'));
+    }else{
+      toast.success(t('integration.success'));
+    }
   }
   return (
     <>

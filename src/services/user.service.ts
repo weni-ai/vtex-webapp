@@ -10,11 +10,16 @@ export function getUserFromLocalStorage() {
 
 export async function fetchUserData() {
   try {
-    const data = await VTEXFetch('/api/vtexid/pub/authenticated/user');
-    return data;
+    const response = await VTEXFetch('/api/vtexid/pub/authenticated/user');
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'Erro ao buscar dados do usuário.');
+    }
+
+    return { success: true, data: response };
   } catch (error) {
-    console.error('Error fetching user data:', error);
-    throw error;
+    console.error('Erro ao buscar dados do usuário:', error);
+    return { success: false, error: error || 'Erro desconhecido' };
   }
 }
 
@@ -29,19 +34,23 @@ export async function checkProject(vtex_account: string, user_email: string, tok
         'Content-Type': 'application/json',
       },
     });
-    if (!response.ok) {
-      throw new Error(`Erro ao verificar projeto: ${response.statusText}`);
-    }
+
     const result = await response.json();
-    return result;
+
+    if (!response.ok) {
+      throw new Error()
+    }
+
+    return { success: true, data: result };
   } catch (error) {
-    console.error('Error checking project:', error);
-    throw error;
+    console.error('Erro ao verificar projeto:', error);
+    return { success: false, error: error || 'Erro desconhecido' };
   }
 }
 
 export async function createUserAndProject(userData: any, token: string) {
-  store.dispatch(setLoadingSetup(true))
+  store.dispatch(setLoadingSetup(true));
+
   try {
     const payload = {
       user_email: userData.user,
@@ -57,11 +66,17 @@ export async function createUserAndProject(userData: any, token: string) {
       },
       body: JSON.stringify(payload),
     });
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'Erro ao criar usuário e projeto.');
+    }
+
     store.dispatch(setProjectUuid(response.project_uuid));
-    store.dispatch(setLoadingSetup(false))
-    return response;
+    store.dispatch(setLoadingSetup(false));
+    return { success: true, data: response };
   } catch (error) {
     console.error('Erro na criação do projeto e usuário:', error);
-    throw error;
+    store.dispatch(setLoadingSetup(false));
+    return { success: false, error: error || 'Erro desconhecido' };
   }
 }

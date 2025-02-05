@@ -9,22 +9,23 @@ import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { getFeatureList } from '../../services/features.service';
 import { useCallback } from 'react';
+import { toast } from '@vtex/shoreline';
 
 export function useUserSetup() {
   const navigate = useNavigate();
 
   const initializeProject = useCallback(async () => {
     try {
-      const token = await getToken();
-      if (!token) {
+      const {token, error} = await getToken();
+      if (error) {
         console.error("Token não encontrado");
         navigate('/setup-error');
         return;
       }
       store.dispatch(setToken(token));
 
-      const userData = await fetchUserData();
-      if (!userData) {
+      const { data: userData, error: errorData } = await fetchUserData();
+      if (!userData || errorData) {
         console.error("Dados do usuário não encontrados");
         navigate('/setup-error');
         return;
@@ -33,20 +34,33 @@ export function useUserSetup() {
       store.dispatch(setUser(userData));
 
       const result = await checkProject(userData.account, userData.user, token);
-      const { has_project, project_uuid } = result.data;
+      if(result?.error){
+        throw new Error(JSON.stringify(result.error))
+      }
+      const { has_project, project_uuid } = result.data.data;
 
       if (has_project) {
         store.dispatch(setProjectUuid(project_uuid));
 
         const response = await checkWppIntegration(project_uuid, token);
-        const { has_whatsapp, flows_channel_uuid, wpp_cloud_app_uuid } = response.data;
+        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data || {};
+        if(response?.error){
+          throw new Error(response.error)
+        }
 
         const featureList = await getFeatureList(project_uuid, token);
-        if (!featureList?.features) {
+        if(featureList?.error){
+          throw new Error(JSON.stringify(featureList.error))
+        }
+        if (!featureList?.data.features) {
           store.dispatch(setFeatureIntegrated(true));
         }
 
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
+        if(agentIntegration.error){
+          throw new Error(agentIntegration.error)
+        }
+        
         const { name, links, objective, occupation } = agentIntegration.data;
 
         if (name) {
@@ -74,6 +88,7 @@ export function useUserSetup() {
       }
     } catch (err) {
       console.error(err);
+      toast.critical(t('integration.error'));
       navigate('/setup-error');
     }
   }, [navigate]);
@@ -83,10 +98,9 @@ export function useUserSetup() {
     const token = store.getState().auth.token;
     const project_uuid = store.getState().project.project_uuid
     if (!project_uuid) {
-      try {
-        await createUserAndProject(userData, token);
-      } catch (error) {
-        console.error("Erro durante a inicialização do usuário:", error);
+        const response = await createUserAndProject(userData, token);
+      if(response.error){
+        console.error("Erro durante a inicialização do usuário:", response.error);
         navigate('/setup-error');
       }
     }
