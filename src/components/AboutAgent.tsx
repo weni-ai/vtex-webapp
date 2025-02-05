@@ -1,5 +1,4 @@
 import { Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Text } from "@vtex/shoreline";
-import balao from '../assets/icons/Balao.png'
 import activeAbandonedCartPreview from '../assets/agents_preview/active_abandoned_cart.png';
 import activeOrderStatusPreview from '../assets/agents_preview/active_order_status.svg';
 import { TagType } from "./TagType";
