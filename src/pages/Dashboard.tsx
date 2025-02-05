@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import { DashboardItem } from '../components/DashboardItem';
@@ -5,10 +6,11 @@ import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
 import { isFeatureIntegrated } from '../store/userSlice';
-import { selectProject } from '../store/projectSlice';
+import { featureList, selectProject } from '../store/projectSlice';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
+  const features = useSelector(featureList)
   const featureIntegrated = useSelector(isFeatureIntegrated);
   const project_uuid = useSelector(selectProject)
 
@@ -47,8 +49,8 @@ export function Dashboard() {
         </PageHeaderRow>
       </PageHeader>
 
-      <PageContent style={{ margin: '0', maxWidth: '100vw'}}>
-        <Flex direction='column' style={{width:'100%'}}>
+      <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
+        <Flex direction='column' style={{ width: '100%' }}>
           <Alert
             variant="informational"
             style={{
@@ -119,7 +121,15 @@ export function Dashboard() {
           <Grid
             columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
-            <FeatureBox
+            {features.map((item: any) => (
+              <FeatureBox
+                key={item.feature_uuid}
+                code={item.code}
+                type="active"
+                isIntegrated={featureIntegrated}
+              />
+            ))}
+            {/* <FeatureBox
               code="abandoned_cart"
               type="active"
               isIntegrated={featureIntegrated}
@@ -129,7 +139,7 @@ export function Dashboard() {
               code="order_status"
               type="active"
               isIntegrated={featureIntegrated}
-            />
+            /> */}
           </Grid>
         </Flex>
       </PageContent>
