@@ -1,5 +1,7 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
+import { setFeatureList } from "../store/projectSlice";
+import store from "../store/provider.store";
 
 export async function getFeatureList(project_uuid: string, token: string) {
   try {
@@ -13,6 +15,8 @@ export async function getFeatureList(project_uuid: string, token: string) {
     if (!response || response.error) {
       throw new Error(response?.message || 'Erro ao obter lista de funcionalidades.');
     }
+
+    store.dispatch(setFeatureList(response.features))
 
     return { success: true, data: response };
   } catch (error) {
@@ -48,11 +52,8 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
       throw new Error(response?.message || 'Erro ao integrar funcionalidades.');
     }
 
-    console.log('Funcionalidades integradas com sucesso:', response);
-
     return { success: true, data: response };
   } catch (error) {
-    console.error('Erro ao integrar funcionalidades:', error);
     return { success: false, error: error|| 'Erro desconhecido' };
   }
 }
@@ -81,8 +82,6 @@ export async function integrateAvailableFeatures(project_uuid: string, token: st
     if (!response || response.error) {
       throw new Error(response?.message || 'Erro ao integrar funcionalidades.');
     }
-
-    console.log('Funcionalidades integradas com sucesso:', response);
 
     return { success: true, data: response };
   } catch (error) {

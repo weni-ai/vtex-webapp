@@ -21,7 +21,6 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
     setOpenAbout((o) => !o)
   }
   const openDisableModal = () => {
-    console.log('...abrindo')
     setOpenDisable((o) => !o)
   }
   

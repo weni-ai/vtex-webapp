@@ -77,11 +77,11 @@ export function startFacebookLogin(project_uuid: string, token: string) {
                         const { phone_number_id, waba_id } = data.data;
                         wabaId = waba_id;
                         phoneId = phone_number_id;
-                        console.log("Embedded Signup Finished:", { phone_number_id, waba_id });
+                        console.log("Embedded Signup Finished");
                     } else if (data.event === "ERROR") {
-                        console.error("Embedded Signup Error:", data.data.error_message);
+                        console.error("Embedded Signup Error");
                     } else {
-                        console.warn("Embedded Signup Canceled:", data.data.current_step);
+                        console.warn("Embedded Signup Canceled");
                     }
                 }
             } catch (error) {
@@ -95,7 +95,7 @@ export function startFacebookLogin(project_uuid: string, token: string) {
             (response: any) => {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
-                    console.log("Login Successful. Auth Code:", code, project_uuid, wabaId, phoneId, token);
+                    console.log("Login Successful.");
                     createChannel(code, project_uuid, wabaId, phoneId, token);
                 } else {
                     console.error("Login canceled or not fully authorized.");
