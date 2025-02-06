@@ -22,6 +22,7 @@ export async function getFeatureList(project_uuid: string, token: string) {
 }
 
 export async function integrateFeature(feature_uuid: string, project_uuid: string, token: string) {
+  console.log('entrou no integrate feature com ', feature_uuid, project_uuid, token)
   const store = storeProvider.getState().auth.base_address;
   const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
   const wpp_cloud_app_uuid = storeProvider.getState().project.wpp_cloud_app_uuid;
