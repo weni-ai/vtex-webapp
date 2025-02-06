@@ -1,7 +1,5 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
-import { setFeatureList } from "../store/projectSlice";
-import store from "../store/provider.store";
 
 export async function getFeatureList(project_uuid: string, token: string) {
   try {
