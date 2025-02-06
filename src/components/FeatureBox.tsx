@@ -7,7 +7,7 @@ import { selectToken } from "../store/authSlice";
 import { selectProject } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
-import { AgentPreferences } from "./AgentPreferences";
+import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -124,7 +124,7 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
         toggleModal={openDetailsModal}
       />
 
-      <AgentPreferences
+      <SettingsContainer
         open={isPreferencesOpen}
         code={code}
         toggleOpen={toggleIsPreferencesOpen}
