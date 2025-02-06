@@ -1,13 +1,14 @@
-import { Button, Flex, IconCheck, Text } from "@vtex/shoreline";
+import { Button, Flex, IconCheck, Spinner, Text } from "@vtex/shoreline";
 import iconWhatsapp from '../assets/channels/whatsapp.svg';
 import { startFacebookLogin } from "../utils/facebook/login";
 import { useSelector } from "react-redux";
-import { selectProject } from "../store/projectSlice";
+import { selectProject, wppLoading } from "../store/projectSlice";
 import { selectToken } from "../store/authSlice";
 
 export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
   const project_uuid = useSelector(selectProject)
   const token = useSelector(selectToken)
+  const isWppLoading = useSelector(wppLoading)
   const callFacebookSDK = () => {
     startFacebookLogin(project_uuid, token)
   }
@@ -64,7 +65,7 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
             </Text>
           </Flex>
           :
-          <Button variant="primary" onClick={callFacebookSDK}>{t('integration.buttons.integrate')}</Button>
+          <Button variant="primary" onClick={callFacebookSDK}> {isWppLoading ? <Spinner description="loading" /> : <span>{t('integration.buttons.integrate')}</span>}</Button>
       }
     </Flex>
   )

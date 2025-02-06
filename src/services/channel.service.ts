@@ -4,7 +4,7 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import { setFeatureIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
 import getEnv from "../utils/env";
-import { setFlowsChannelUuid, setWppCloudAppUuid } from "../store/projectSlice";
+import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
 
 export async function checkWppIntegration(project_uuid: string, token: string) {
   const integrationsAPI = getEnv('VITE_APP_INTEGRATIONS_URL') || '';
@@ -38,6 +38,7 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
 }
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string, token: string): Promise<any> {
+  store.dispatch(setWppLoading(true))
   const data = {
     waba_id: wabaId,
     phone_number_id: phoneId,
@@ -62,6 +63,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     store.dispatch(setLoadingWhatsAppIntegration(true));
     store.dispatch(setFeatureIntegrated(true));
     toast.success(t('integration.channels.whatsapp.success'))
+    store.dispatch(setWppLoading(false))
 
     const checkResponse = await checkWppIntegration(project_uuid, token);
 
@@ -72,8 +74,9 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     return { success: true, data: response.data };
   } catch (error) {
     console.error('Erro ao criar canal:', error);
-    store.dispatch(setWhatsAppError(error|| 'Erro desconhecido.'));
+    store.dispatch(setWhatsAppError(error || 'Erro desconhecido.'));
     toast.critical(t('integration.channels.whatsapp.error'));
-    return { success: false, error: error  };
+    store.dispatch(setWppLoading(false))
+    return { success: false, error: error };
   }
 }
