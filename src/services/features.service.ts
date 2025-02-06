@@ -16,8 +16,6 @@ export async function getFeatureList(project_uuid: string, token: string) {
       throw new Error(response?.message || 'Erro ao obter lista de funcionalidades.');
     }
 
-    store.dispatch(setFeatureList(response.features))
-
     return { success: true, data: response };
   } catch (error) {
     console.error('Erro ao obter lista de funcionalidades:', error);
