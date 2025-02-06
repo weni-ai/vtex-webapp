@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading, Checkbox, DrawerFooter, Button } from "@vtex/shoreline"
-import './AgentPreferences.style.css'
+import './SettingsContainer.style.css'
 import { useState } from "react"
-import { PreferencesOrderStatusActive } from "./settings/OrderStatusActive";
+import { PreferencesOrderStatusActive } from "../OrderStatusActive";
 
 type codes = 'abandoned_cart' | 'order_status';
 
-export interface AgentPreferencesProps {
+export interface SettingsContainerProps {
     open: boolean;
     code: codes;
     toggleOpen: () => void;
 }
 
-export function AgentPreferences({ open, toggleOpen, code }: AgentPreferencesProps) {
+export function SettingsContainer({ open, toggleOpen, code }: SettingsContainerProps) {
     const [restriction, setRestriction] = useState(false)
     const setRestrictionValue = (a: any) => {
         setRestriction(a.target.value)
