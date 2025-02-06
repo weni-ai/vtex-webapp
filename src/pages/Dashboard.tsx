@@ -8,6 +8,11 @@ import { useSelector } from 'react-redux';
 import { isFeatureIntegrated } from '../store/userSlice';
 import { featureList, selectProject } from '../store/projectSlice';
 
+const APICodes = {
+  'order-status': 'order_status' as const,
+  'abandoned-cart': 'abandoned_cart' as const,
+};
+
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const features = useSelector(featureList)
@@ -124,7 +129,8 @@ export function Dashboard() {
             {features.map((item: any) => (
               <FeatureBox
                 key={item.feature_uuid}
-                code={item.code}
+                uuid={item.feature_uuid}
+                code={APICodes[item.code as 'order-status' | 'abandoned-cart']}
                 type="active"
                 isIntegrated={featureIntegrated}
               />
