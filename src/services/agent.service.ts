@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { setAgentLoading } from "../store/projectSlice";
+import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
 
@@ -34,6 +36,7 @@ export async function checkAgentIntegration(project_uuid: string, token: string)
 }
 
 export async function setAgentBuilder(payload: any, project_uuid: string, token: string) {
+  store.dispatch(setAgentLoading(true))
   const url = `/_v/create-agent-builder?projectUUID=${project_uuid}&token=${token}`;
 
   const response = await VTEXFetch(url, {
@@ -44,7 +47,9 @@ export async function setAgentBuilder(payload: any, project_uuid: string, token:
     body: JSON.stringify(payload),
   });
 
-  if (!response || response.error) {
+  store.dispatch(setAgentLoading(false))
+
+  if (response.error) {
     return { success: false, error: response?.message || 'Erro ao criar agente' };
   }
   return { success: true, data: response };
