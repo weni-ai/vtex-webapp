@@ -6,11 +6,13 @@ import { useSelector } from 'react-redux';
 import { selectToken } from '../../store/authSlice';
 import { toast } from '@vtex/shoreline';
 import store from '../../store/provider.store';
-import { setAgentLoading } from '../../store/projectSlice';
+import { selectProject, setAgentLoading } from '../../store/projectSlice';
+import { integrateFeature } from '../../services/features.service';
 
 export function useAgentBuilderSetup() {
     const navigate = useNavigate();
     const token = useSelector(selectToken);
+    const project = useSelector(selectProject)
 
     const buildAgent = async (payload: any, app_uuid: string) => {
         store.dispatch(setAgentLoading(true))
@@ -32,11 +34,18 @@ export function useAgentBuilderSetup() {
         };
 
         const response = await setAgentBuilder(body, app_uuid, token);
-        
+
         if (response.error) {
             toast.critical(t('agent.error'));
         } else {
             toast.success(t('agent.success'))
+            const abandonedCart = store.getState().project.featureList.find(item => item.code === 'abandoned-cart')?.feature_uuid
+            if (abandonedCart) {
+                const integrateResponse = await integrateFeature(abandonedCart, project, token)
+                if(integrateResponse?.error){
+                    toast.critical(t('integration.error'));
+                }
+            }
             navigate('/dash');
         }
 

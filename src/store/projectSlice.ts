@@ -16,7 +16,7 @@ const projectSlice = createSlice({
         occupation: '',
         objective: ''
       },
-      featureList: []
+      featureList: [] as any[]
     },
     reducers: {
       setProjectUuid: (state, action) => {

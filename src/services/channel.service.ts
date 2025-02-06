@@ -4,7 +4,7 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import { setFeatureIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
 import getEnv from "../utils/env";
-import { setFeatureList, setFlowsChannelUuid, setWppCloudAppUuid } from "../store/projectSlice";
+import { setFlowsChannelUuid, setWppCloudAppUuid } from "../store/projectSlice";
 
 export async function checkWppIntegration(project_uuid: string, token: string) {
   const integrationsAPI = getEnv('VITE_APP_INTEGRATIONS_URL') || '';
@@ -61,7 +61,6 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
     store.dispatch(setFeatureIntegrated(true));
-    store.dispatch(setFeatureList(response.features))
     toast.success(t('integration.channels.whatsapp.success'))
 
     const checkResponse = await checkWppIntegration(project_uuid, token);
