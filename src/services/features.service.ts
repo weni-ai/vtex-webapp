@@ -1,7 +1,5 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
-import { setFeatureList } from "../store/projectSlice";
-import store from "../store/provider.store";
 
 export async function getFeatureList(project_uuid: string, token: string) {
   try {
@@ -15,8 +13,6 @@ export async function getFeatureList(project_uuid: string, token: string) {
     if (!response || response.error) {
       throw new Error(response?.message || 'Erro ao obter lista de funcionalidades.');
     }
-
-    store.dispatch(setFeatureList(response.features))
 
     return { success: true, data: response };
   } catch (error) {

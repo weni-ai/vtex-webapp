@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { setFeatureIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgent, setFeatureList, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { getFeatureList } from '../../services/features.service';
@@ -16,7 +16,7 @@ export function useUserSetup() {
 
   const initializeProject = useCallback(async () => {
     try {
-      const {token, error} = await getToken();
+      const { token, error } = await getToken();
       if (error) {
         console.error("Token não encontrado");
         navigate('/setup-error');
@@ -34,7 +34,7 @@ export function useUserSetup() {
       store.dispatch(setUser(userData));
 
       const result = await checkProject(userData.account, userData.user, token);
-      if(result?.error){
+      if (result?.error) {
         throw new Error(JSON.stringify(result.error))
       }
       const { has_project, project_uuid } = result.data.data;
@@ -44,24 +44,22 @@ export function useUserSetup() {
 
         const response = await checkWppIntegration(project_uuid, token);
         const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
-        if(response?.error){
+        if (response?.error) {
           throw new Error(response.error)
         }
 
         const featureList = await getFeatureList(project_uuid, token);
-        if(featureList?.error){
+        if (featureList?.error) {
           throw new Error(JSON.stringify(featureList.error))
         }
-        if (!featureList?.data.features) {
-          store.dispatch(setFeatureIntegrated(true));
-        }
+        store.dispatch(setFeatureList(featureList.data.features))
 
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
-        if(agentIntegration.error){
+        if (agentIntegration.error) {
           throw new Error(agentIntegration.error)
         }
-        
-        const { name, links, objective, occupation } = agentIntegration.data;
+
+        const { name = '', links = '', objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
 
         if (name) {
           store.dispatch(
@@ -74,12 +72,14 @@ export function useUserSetup() {
           );
         }
 
-        if (has_whatsapp && name) {
+        if (has_agent && has_whatsapp) {
           store.dispatch(setWhatsAppIntegrated(true));
+          store.dispatch(setAgentIntegrated(true))
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
 
           navigate('/dash');
+
         } else {
           navigate('/agent-builder');
         }
@@ -98,8 +98,8 @@ export function useUserSetup() {
     const token = store.getState().auth.token;
     const project_uuid = store.getState().project.project_uuid
     if (!project_uuid) {
-        const response = await createUserAndProject(userData, token);
-      if(response.error){
+      const response = await createUserAndProject(userData, token);
+      if (response.error) {
         console.error("Erro durante a inicialização do usuário:", response.error);
         navigate('/setup-error');
       }
