@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { setAgentIntegrated, setFeatureIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
