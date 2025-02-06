@@ -38,7 +38,6 @@ export function AboutAgent({ code, open, category, toggleModal }: AboutAgentProp
                     width: '100%', padding: '32px', justifyContent: 'center', backgroundColor: '#d9e7fb', borderRadius: 'var(--radius-2, 8px)',
                     border: '1px solid var(--border-base, #E0E0E0)'
                 }}>
-                    {/* <img src={balao} alt="" /> */}
                     <img
                         src={previews[category]?.[code]}
                         alt={t(`agents.categories.${category}.${code}.title`)}
