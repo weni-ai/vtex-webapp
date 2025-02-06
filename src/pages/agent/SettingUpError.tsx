@@ -23,7 +23,7 @@ export function SetupError() {
         <PageHeader>
           <PageHeaderRow style={{ height: '44px', paddingLeft: '36px' }}>
             <PageHeading >
-              New Agent
+              { t('common.new_agent') }
             </PageHeading>
           </PageHeaderRow>
         </PageHeader>
