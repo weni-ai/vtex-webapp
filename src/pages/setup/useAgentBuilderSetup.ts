@@ -39,7 +39,7 @@ export function useAgentBuilderSetup() {
             toast.critical(t('agent.error'));
         } else {
             toast.success(t('agent.success'))
-            const abandonedCart = store.getState().project.featureList.find(item => item.code === 'abandoned-cart')?.feature_uuid
+            const abandonedCart = store.getState().project.featureList.find(item => item.code === 'order-status')?.feature_uuid
             if (abandonedCart) {
                 const integrateResponse = await integrateFeature(abandonedCart, project, token)
                 if(integrateResponse?.error){
