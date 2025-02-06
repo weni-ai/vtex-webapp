@@ -34,8 +34,8 @@ export function useAgentBuilderSetup() {
         };
 
         const response = await setAgentBuilder(body, app_uuid, token);
-        console.log('aquiiii')
         //quebrando aqui
+        console.log('aquiiii')
         if (response?.error) {
             console.log('deu erro aqui')
             toast.critical(t('agent.error'));

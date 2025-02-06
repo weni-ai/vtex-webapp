@@ -44,6 +44,8 @@ export function useUserSetup() {
 
         const response = await checkWppIntegration(project_uuid, token);
         const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
+        console.log('response', response.data.data)
+        console.log('tem zap? ', has_whatsapp)
         if (response?.error) {
           throw new Error(response.error)
         }
