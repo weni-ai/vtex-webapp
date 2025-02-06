@@ -129,17 +129,6 @@ export function Dashboard() {
                 isIntegrated={featureIntegrated}
               />
             ))}
-            {/* <FeatureBox
-              code="abandoned_cart"
-              type="active"
-              isIntegrated={featureIntegrated}
-            />
-
-            <FeatureBox
-              code="order_status"
-              type="active"
-              isIntegrated={featureIntegrated}
-            /> */}
           </Grid>
         </Flex>
       </PageContent>
