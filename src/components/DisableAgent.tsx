@@ -1,7 +1,8 @@
 import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Text } from "@vtex/shoreline";
 import { VTEXFetch } from "../utils/VTEXFetch";
-import { selectProject } from "../store/projectSlice";
 import { useSelector } from "react-redux";
+import { selectToken } from "../store/authSlice";
+import { selectProject } from "../store/projectSlice";
 export interface AboutAgentProps {
     open: boolean,
     agentUuid: string,
@@ -10,6 +11,7 @@ export interface AboutAgentProps {
 }
 
 export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<AboutAgentProps>) {
+    const token = useSelector(selectToken);
     const projectUuid = useSelector(selectProject);
 
     function disable() {
@@ -17,7 +19,7 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
             data: {
                 message: string;
             },
-        }>('/_v/disable-feature', {
+        }>(`/_v/disable-feature?token=${token}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +41,6 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
             <ModalHeader>
                 <Flex>
                     <ModalHeading>{t('agent_gallery.features.disable.title')}</ModalHeading>
-                    {agentUuid}
                 </Flex>
                 <ModalDismiss />
             </ModalHeader>
