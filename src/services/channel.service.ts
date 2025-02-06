@@ -45,8 +45,6 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     auth_code: code,
   };
 
-  console.log("Creating channel with data:", data);
-
   try {
     const response = await VTEXFetch(`/_v/whatsapp-integration?token=${token}`, {
       method: 'POST',
