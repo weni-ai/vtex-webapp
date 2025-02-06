@@ -13,10 +13,9 @@ export function useAgentBuilderSetup() {
     const navigate = useNavigate();
     const token = useSelector(selectToken);
     const project = useSelector(selectProject)
-    store.dispatch(setAgentLoading(true))
-
+    
     const buildAgent = async (payload: any, app_uuid: string) => {
-        
+        store.dispatch(setAgentLoading(true))
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
         );
