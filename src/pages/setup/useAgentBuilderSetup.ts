@@ -35,7 +35,7 @@ export function useAgentBuilderSetup() {
 
         const response = await setAgentBuilder(body, app_uuid, token);
 
-        if (response.error) {
+        if (response?.error) {
             toast.critical(t('agent.error'));
         } else {
             toast.success(t('agent.success'))
@@ -49,6 +49,7 @@ export function useAgentBuilderSetup() {
             navigate('/dash');
         }
 
+        console.log('setando o botao como false pro loading...')
         store.dispatch(setAgentLoading(false))
     };
 

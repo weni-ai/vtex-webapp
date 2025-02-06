@@ -10,6 +10,7 @@ const projectSlice = createSlice({
       loadingSetup: false,
       setupError: false,
       agentLoading: false,
+      wppLoading: false,
       agent: {
         name: '',
         links: [],
@@ -37,6 +38,9 @@ const projectSlice = createSlice({
       setAgentLoading: (state, action) => {
         state.agentLoading = action.payload
       },
+      setWppLoading: (state, action) => {
+        state.wppLoading = action.payload
+      },
       setAgent: (state, action) => {
         state.agent = action.payload
       },
@@ -46,7 +50,7 @@ const projectSlice = createSlice({
     }
   })
 
-  export const {setProjectUuid, setLoadingSetup, setSetupError, setWppCloudAppUuid, setFlowsChannelUuid, setAgentLoading, setAgent, setFeatureList} = projectSlice.actions
+  export const {setProjectUuid, setLoadingSetup, setSetupError, setWppCloudAppUuid, setFlowsChannelUuid, setAgentLoading, setAgent, setFeatureList, setWppLoading} = projectSlice.actions
   export const selectProject = (state: any) => state.project.project_uuid
   export const wppCloudAppUuid = (state: any) => state.project.wpp_cloud_app_uuid
   export const flowsChannelUuid = (state: any) => state.project.flows_channel_uuid
@@ -55,4 +59,5 @@ const projectSlice = createSlice({
   export const agentLoading = (state: any) => state.project.agentLoading
   export const getAgent = (state: any) => state.project.agent
   export const featureList = (state: any) => state.project.featureList
+  export const wppLoading = (state: any) => state.project.wppLoading
   export default projectSlice.reducer;
