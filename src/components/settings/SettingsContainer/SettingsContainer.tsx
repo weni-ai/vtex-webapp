@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading, Checkbox, DrawerFooter, Button } from "@vtex/shoreline"
 import './SettingsContainer.style.css'
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
 
 type codes = 'abandoned_cart' | 'order_status';
@@ -14,8 +14,8 @@ export interface SettingsContainerProps {
 
 export function SettingsContainer({ open, toggleOpen, code }: SettingsContainerProps) {
     const [restriction, setRestriction] = useState(false)
-    const setRestrictionValue = (a: any) => {
-        setRestriction(a.target.value)
+    const setRestrictionValue = (event: ChangeEvent<HTMLInputElement>) => {
+        setRestriction(Boolean(event.target.value))
     }
     return (
         <DrawerProvider open={open} onClose={toggleOpen}>
