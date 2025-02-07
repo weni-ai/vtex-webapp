@@ -34,23 +34,21 @@ export function useAgentBuilderSetup() {
         };
 
         const response = await setAgentBuilder(body, app_uuid, token);
-        //quebrando aqui
-        console.log('aquiiii')
+
         if (response?.error) {
-            console.log('deu erro aqui')
             toast.critical(t('agent.error'));
         } else {
-            console.log('funfou')
             toast.success(t('agent.success'))
             const orderStatus = store.getState().project.featureList.find(item => item.code === 'order-status')?.feature_uuid
             console.log('order status uuid: ', orderStatus)
+
             if (orderStatus) {
                 const integrateResponse = await integrateFeature(orderStatus, project, token)
                 if(integrateResponse?.error){
                     toast.critical(t('integration.error'));
                 }
             }
-            console.log('setando o loading pra false')
+
             store.dispatch(setAgentLoading(false))
             navigate('/dash');
         }
