@@ -1,0 +1,168 @@
+{
+    "common": {
+        "cancel": "Cancelar",
+        "continue": "Continuar",
+        "finish_and_save": "Finalizar y guardar",
+        "confirm": "Confirmar",
+        "save": "Guardar",
+        "back": "Volver",
+        "create": "Crear",
+        "details": "Ver detalles",
+        "manage_settings": "Gestionar la configuración",
+        "preferences": "Preferencias",
+        "disable": "Desactivar",
+        "errors": {
+            "unauthorized": "No tienes permiso para realizar esta acción.",
+            "internal_server_error": "Error interno del servidor.",
+            "unexpected_error": "Ha ocurrido un error inesperado."
+        },
+        "new_agent": "Nuevo agente"
+    },
+    "title": "Weni Agentic IA",
+    "description": "Una solución de CX basada en IA para marcas y minoristas.",
+    "improve": {
+        "description": "Conecta agentes a la plataforma Weni para acceder a funciones avanzadas y opciones personalizadas.",
+        "button": "Conectar con Weni"
+    },
+    "agents": {
+        "categories": {
+            "active": {
+                "title": "Notificación activa",
+                "order_status": {
+                    "title": "Agente de estado de pedidos",
+                    "description": "Mantenga a los clientes informados del estado de sus pedidos en tiempo real.",
+                    "details": {
+                        "title": "Habilite el seguimiento de la entrega de pedidos para los clientes.",
+                        "description": "Este agente reduce las comprobaciones manuales y aumenta la transparencia, garantizando que los clientes permanezcan informados y en control."
+                    },
+                    "settings": {
+                        "is_test_contact_number": {
+                            "title": "Restringir al número de contacto de prueba",
+                            "description": "El agente sólo enviará mensajes al número de teléfono de prueba"
+                        },
+                        "test_contact_number": {
+                            "label": "Número de teléfono"
+                        },
+                        "is_selected_sellers": {
+                            "title": "Restringido para vendedores seleccionados",
+                            "description": "El agente sólo enviará mensajes a los vendedores seleccionados"
+                        },
+                        "selected_sellers": {
+                            "label": "Seleccione los vendedores",
+                            "placeholder": "Seleccione…"
+                        }
+                    }
+                },
+                "abandoned_cart": {
+                    "title": "Agente de carrito abandonado",
+                    "description": "Recupera ventas recordando a los clientes los artículos olvidados en el carrito.",
+                    "details": {
+                        "title": "Recupera ventas recordando a los clientes los artículos olvidados en el carrito.",
+                        "description": "Con este agente, aumentas tus posibilidades de conversión, manteniendo a tu cliente cerca e incentivando la finalización del pedido."
+                    }
+                }
+            }
+        }
+    },
+    "agent_gallery": {
+        "title": "Galería de agentes",
+        "added": "Agente agregado con éxito.",
+        "features": {
+            "abandoned_cart": {
+                "title": "Agente de recuperación de carrito",
+                "description": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
+                "disclaimer": "Este agente mejora la tasa de conversión, retiene clientes e impulsa la finalización de compras.",
+                "preferences": {
+                    "restriction": "Restricciones de mensajes",
+                    "restriction_details": "Define horarios específicos para el envío de mensajes.",
+                    "monday_until_friday": "Lunes a viernes",
+                    "saturday": "Sábado",
+                    "from": "De",
+                    "to": "Hasta"
+                }
+            },
+            "disable": {
+                "title": "Desactivar agente",
+                "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, ya no estará activo en tu proyecto.",
+                "agents": {
+                    "abandoned_cart": "Recuperación de carrito"
+                }
+            }
+        },
+        "types": {
+            "active": "Notificación activa"
+        },
+        "button": {
+            "add": "Agregar agente"
+        }
+    },
+    "setup": {
+        "title": "Configurando tu Weni App",
+        "description": "Estamos finalizando la configuración para garantizar una experiencia fluida."
+    },
+    "agent": {
+        "details": {
+            "title": "Agentes inteligentes",
+            "description": "Mejora los agentes inteligentes permitiendo el control de los flujos de conversación según las intenciones del usuario. Con el Plan Starter, personaliza el idioma, el tono y el comportamiento para darle al agente una identidad única y mejorar la calidad de la comunicación. Observa la demostración de la interacción del agente de cambios y devoluciones al lado.",
+            "skills": {
+                "title": "Habilidades del agente",
+                "analyze": "Analizar el contexto",
+                "comprehend": "Comprender demandas complejas",
+                "provide": "Ofrecer respuestas personalizadas"
+            },
+            "example": {
+                "description": "Demostración del agente de cambios y devoluciones"
+            }
+        },
+        "setup": {
+            "title": "Configura la personalidad de tu agente",
+            "forms": {
+                "name": "Nombre",
+                "occupation": {
+                    "title": "Ocupación (opcional)",
+                    "default": "Asistente inteligente"
+                },
+                "objective": {
+                    "title": "Objetivo (opcional)",
+                    "default": "Tu objetivo es responder preguntas de los clientes, informar el estado de los pedidos, proporcionar información sobre productos y facilitar compras. Tus principales funciones son: compras por WhatsApp y preguntas frecuentes."
+                },
+                "knowledge": {
+                    "title": "Fuente de conocimiento",
+                    "context": "Proporciona el contenido que tu agente utilizará para responder preguntas."
+                },
+                "error": {
+                    "empty_input": "Completa esta información.",
+                    "valid_url": "Ingresa una URL válida."
+                }
+            },
+            "buttons": {
+                "create_agent": "Crear agente"
+            }
+        },
+        "error": "No se pudo configurar el agente. Inténtalo nuevamente más tarde.",
+        "success": "Agente registrado con éxito."
+    },
+    "integration": {
+        "title": "Integra un canal de soporte",
+        "description": "Elige el canal que deseas utilizar y sigue los pasos para agregarlo.",
+        "channels": {
+            "whatsapp": {
+                "title": "Canal de WhatsApp",
+                "description": "Conecta una cuenta empresarial de WhatsApp para mejorar la comunicación con tus clientes.",
+                "error": "No se pudo conectar con WhatsApp. Verifica tus credenciales e inténtalo nuevamente.",
+                "success": "WhatsApp se ha integrado con éxito."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrar",
+            "integrated": "Integrado"
+        },
+        "success": "¡Integración completada con éxito!",
+        "error": "No se pudo completar la integración. Inténtalo nuevamente más tarde."
+    },
+    "error": {
+        "title": "Algo salió mal",
+        "description": "Inténtalo de nuevo o vuelve más tarde si el problema persiste.",
+        "button": "Intentar de nuevo"
+    }
+}

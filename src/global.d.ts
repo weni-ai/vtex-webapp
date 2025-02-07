@@ -1,3 +1,9 @@
 /// <reference types="vite/client" />
 
-declare module '@vtex/shoreline/css';
+import '@vtex/shoreline/css';
+
+declare global {
+  const t: typeof import('./i18n').t;
+}
+
+export {};

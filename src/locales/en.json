@@ -1,0 +1,169 @@
+{
+    "common": {
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "finish_and_save": "Finish and save",
+        "confirm": "Confirm",
+        "save": "Save",
+        "back": "Back",
+        "create": "Create",
+        "details": "View details",
+        "manage_settings": "Manage settings",
+        "preferences": "Preferences",
+        "disable": "Disable",
+        "errors": {
+            "unauthorized": "You do not have permission to perform this action",
+            "internal_server_error": "Internal server error",
+            "unexpected_error": "An unexpected error occurred"
+        },
+        "new_agent": "New Agent"
+    },
+    "title": "Weni Agentic IA",
+    "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
+    "improve": {
+        "description": " Connect agents to the Weni platform to access advanced features and customizable options.",
+        "button": "Connect to Weni"
+    },
+    "agents": {
+        "categories": {
+            "active": {
+                "title": "Active notification",
+                "order_status": {
+                    "title": "Order status agent",
+                    "description": "Keep customers updated on their order status in real time.",
+                    "details": {
+                        "title": "Enable order delivery tracking for customers.",
+                        "description": "This agent reduces manual checks and increase transparency, ensuring customers stay informed and in control."
+                    },
+                    "settings": {
+                        "is_test_contact_number": {
+                            "title": "Restrict to test contact number",
+                            "description": "Agent will message only the test phone number"
+                        },
+                        "test_contact_number": {
+                            "label": "Phone number"
+                        },
+                        "is_selected_sellers": {
+                            "title": "Restricted for selected sellers",
+                            "description": "Agent will message only selected sellers"
+                        },
+                        "selected_sellers": {
+                            "label": "Select the sellers",
+                            "placeholder": "Select…"
+                        }
+                    }
+                },
+                "abandoned_cart": {
+                    "title": "Abandoned cart agent",
+                    "description": "Recover sales by reminding customers of items left in the cart.",
+                    "details": {
+                        "title": "Recover sales by reminding customers of items left in the cart.",
+                        "description": "This agent increases conversion, retains customers and encourages order completion."
+                    }
+                }
+            }
+        }
+    },
+    "agent_gallery": {
+        "title": "Agent gallery",
+        "added": "Agent added",
+        "features": {
+            "abandoned_cart": {
+                "title": "Abandoned cart agent",
+                "description": "Recover sales by reminding customers of items left in the cart.",
+                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
+                "preferences": {
+                    "restriction": "Message Restriction",
+                    "restriction_details": "Restrict messages to configured hours",
+                    "monday_until_friday": "Monday until friday",
+                    "saturday": "Saturday",
+                    "from": "From",
+                    "to": "To"
+                }
+            },
+            "disable": {
+                "title": "Disable agent",
+                "description":  "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
+                "agents": {
+                    "abandoned_cart": "Abandoned Cart"
+                }
+            }
+        },
+        "types": {
+            "active": "Active notification",
+            "passive": "Passive support"
+        },
+        "button": {
+            "add": "Add agent"
+        }
+    },
+    "setup": {
+        "title": "Setting up your Weni App",
+        "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."
+    },
+    "agent": {
+        "details": {
+            "title": "Intelligent agents",
+            "description": "Enhance intelligent agents by enabling control over conversation flows based on user intentions. With the Starter Plan, customize language, tone, and behavior to give the agent a unique identity and improve communication quality. See the demonstration of the exchange and return agent interaction on the side.",
+            "skills": {
+                "title": "Agent Skills",
+                "analyze": "Analyze the context",
+                "comprehend": "Comprehend complex demands",
+                "provide": "Provide customized responses"
+            },
+            "example": {
+                "description": "Return and exchange agent Demo"
+            }
+        },
+        "setup": {
+            "title": "Setup your agent persona",
+            "forms": {
+                "name": "Name",
+                "occupation": {
+                    "title":"Occupation (optional)",
+                    "default": "Intelligent assistant"
+                },
+                "objective": {
+                    "title": "Objective (optional)",
+                    "default": "Your goal is to answer customer questions, inform the order status, provide product information, and sell. Your main features are: Shopping on WhatsApp and FAQ."
+                },
+                "knowledge": {
+                    "title": "Knowlege source",
+                    "context": "Provide the content your agent will use to answer questions."
+                },
+                "error": {
+                    "empty_input": "Fill this information",
+                    "valid_url": "Enter a valid URL."
+                }
+            },
+            "buttons": {
+                "create_agent": "Create agent"
+            }
+        },
+        "error": "Unable to set the agent. Please try again later.",
+        "success": "Agent successfully registered"
+    },
+    "integration": {
+        "title": "Integrate a support channel",
+        "description": "Choose the channel you want to use and follow the step by step to add it.",
+        "channels": {
+            "whatsapp": {
+                "title": "WhatsApp Channel",
+                "description": "Utilize an enterprise WhatsApp account to enhance communication with contacts.",
+                "error": "WhatApp unable to connect, check your credentials or try again later.",
+                "success": "WhatApp was sucessfully integrated."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrate",
+            "integrated": "Integrated"
+        },
+        "success": "Integration completed successfully!",
+        "error": "Unable to integrate the feature. Please try again later."
+    },
+    "error": {
+        "title": "Something went wrong",
+        "description": "Retry or check back later if the issue persists.",
+        "button": "Try again"
+    }
+}
