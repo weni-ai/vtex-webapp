@@ -16,9 +16,7 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
 
     function disable() {
         VTEXFetch<{
-            data: {
-                message: string;
-            },
+            message: string;
         }>(`/_v/disable-feature?token=${token}`, {
             method: 'DELETE',
             headers: {
@@ -28,8 +26,8 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
                 "feature_uuid": agentUuid,
                 "project_uuid": projectUuid,
             }),
-        }).then(({ data }) => {
-            console.log('message', data.message);
+        }).then(({ message }) => {
+            console.log('message', message);
         })
         .catch((error) => {
             console.error('VTEXFetch failed:', error);
