@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
+import { setFeatureList, setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
+import { getFeatureList } from "./features.service";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -73,6 +74,12 @@ export async function createUserAndProject(userData: any, token: string) {
 
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false));
+
+    const featureList = await getFeatureList(response.project_uuid, token);
+    if (featureList?.error) {
+      throw new Error(JSON.stringify(featureList.error))
+    }
+    store.dispatch(setFeatureList(featureList.data.features))
     return { success: true, data: response };
   } catch (error) {
     console.error('error in project and user creation:', error);
