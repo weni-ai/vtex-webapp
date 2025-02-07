@@ -11,13 +11,13 @@ export async function getFeatureList(project_uuid: string, token: string) {
     });
 
     if (!response || response.error) {
-      throw new Error(response?.message || 'Erro ao obter lista de funcionalidades.');
+      throw new Error(response?.message || 'error retrieving list of agents.');
     }
 
     return { success: true, data: response };
   } catch (error) {
-    console.error('Erro ao obter lista de funcionalidades:', error);
-    return { success: false, error: error|| 'Erro desconhecido' };
+    console.error('error retrieving list of agents:', error);
+    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -37,7 +37,7 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
   
 
   try {
-    const response = await VTEXFetch(`/_v/integrate-feature?${token}`, {
+    const response = await VTEXFetch(`/_v/integrate-feature?token=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,12 +46,12 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     });
 
     if (!response || response.error) {
-      throw new Error(response?.message || 'Erro ao integrar funcionalidades.');
+      throw new Error(response?.message || 'error integrating agents.');
     }
 
     return { success: true, data: response };
   } catch (error) {
-    return { success: false, error: error|| 'Erro desconhecido' };
+    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -77,12 +77,12 @@ export async function integrateAvailableFeatures(project_uuid: string, token: st
     });
 
     if (!response || response.error) {
-      throw new Error(response?.message || 'Erro ao integrar funcionalidades.');
+      throw new Error(response?.message || 'error integrating agents.');
     }
 
     return { success: true, data: response };
   } catch (error) {
-    console.error('Erro ao integrar funcionalidades:', error);
-    return { success: false, error: error|| 'Erro desconhecido' };
+    console.error('error integrating features:', error);
+    return { success: false, error: error || 'unknown error' };
   }
 }

@@ -11,8 +11,8 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
   const apiUrl = `${integrationsAPI}/api/v1/commerce/check-whatsapp-integration?project_uuid=${project_uuid}`;
 
   if (!integrationsAPI) {
-    console.error('Erro: VITE_APP_INTEGRATIONS_URL não está configurado.');
-    return { success: false, error: 'Configuração ausente.' };
+    console.error('error: VITE_APP_INTEGRATIONS_URL is not configured.');
+    return { success: false, error: 'configuration missing' };
   }
 
   try {
@@ -27,13 +27,13 @@ export async function checkWppIntegration(project_uuid: string, token: string) {
     const result = await response.json();
 
     if (!response.ok) {
-      return { success: false, error: result.message || `Erro ${response.status}` };
+      return { success: false, error: result.message || `error ${response.status}` };
     }
 
     return { success: true, data: result };
   } catch (error) {
-    console.error('Erro ao verificar integração do WhatsApp:', error);
-    return { success: false, error: error || 'Erro desconhecido' };
+    console.error('error verifying WhatsApp integration:', error);
+    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -73,8 +73,8 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     }
     return { success: true, data: response.data };
   } catch (error) {
-    console.error('Erro ao criar canal:', error);
-    store.dispatch(setWhatsAppError(error || 'Erro desconhecido.'));
+    console.error('error creating channel:', error);
+    store.dispatch(setWhatsAppError(error || 'unknown error'));
     toast.critical(t('integration.channels.whatsapp.error'));
     store.dispatch(setWppLoading(false))
     return { success: false, error: error };

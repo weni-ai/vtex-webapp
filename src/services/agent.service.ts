@@ -9,8 +9,8 @@ export async function checkAgentIntegration(project_uuid: string, token: string)
   const apiUrl = `${integrationsAPI}/api/commerce/check-exists-agent-builder?project_uuid=${project_uuid}`;
 
   if (!integrationsAPI) {
-    console.error('VITE_APP_NEXUS_URL não está configurado');
-    return { success: false, error: 'Configuração ausente' };
+    console.error('VITE_APP_NEXUS_URL is not configured');
+    return { success: false, error: 'missing configuration' };
   }
 
   try {
@@ -30,8 +30,8 @@ export async function checkAgentIntegration(project_uuid: string, token: string)
 
     return { success: true, data: result };
   } catch (error) {
-    console.error('Erro na verificação da integração:', error);
-    return { success: false, error: error || 'Erro desconhecido' };
+    console.error('error in the integration check:', error);
+    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -51,7 +51,7 @@ export async function setAgentBuilder(payload: any, project_uuid: string, token:
   console.log(response)
 
   if (response?.text !== 'OK') {
-    return { success: false, error: response?.message || 'Erro ao criar agente' };
+    return { success: false, error: response?.message || 'Error creating agent' };
   }
   return { success: true, data: response };
 }
