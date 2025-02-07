@@ -133,7 +133,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
       <DisableAgent
         open={openDisable}
         toggleModal={openDisableModal}
-        agent={t('agent_gallery.features.disable.agents.abandoned_cart')}
+        agent={t(`agents.categories.${type}.${code}.title`)}
         agentUuid={uuid}
       />
     </>

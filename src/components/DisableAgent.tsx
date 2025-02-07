@@ -1,4 +1,5 @@
-import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Text } from "@vtex/shoreline";
+import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Spinner, Text, toast } from "@vtex/shoreline";
+import { useEffect, useState } from "react";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { useSelector } from "react-redux";
 import { selectToken } from "../store/authSlice";
@@ -11,10 +12,17 @@ export interface AboutAgentProps {
 }
 
 export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<AboutAgentProps>) {
+    const [isDisabling, setIsDisabling] = useState(false);
     const token = useSelector(selectToken);
     const projectUuid = useSelector(selectProject);
 
+    useEffect(() => {
+        setIsDisabling(false);
+    }, [open]);
+
     function disable() {
+        setIsDisabling(true);
+
         VTEXFetch<{
             message: string;
         }>(`/_v/disable-feature?token=${token}`, {
@@ -26,11 +34,14 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
                 "feature_uuid": agentUuid,
                 "project_uuid": projectUuid,
             }),
-        }).then(({ message }) => {
-            console.log('message', message);
+        }).then(() => {
+            toast.success(t('agents.common.disable.success'));
         })
-        .catch((error) => {
-            console.error('VTEXFetch failed:', error);
+        .catch(() => {
+            toast.critical(t('agents.common.disable.error'));
+        }).finally(() => {
+            setIsDisabling(false);
+            toggleModal();
         });
     }
     
@@ -48,7 +59,20 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
                 </Flex>
                 <Flex style={{ width: '100%', justifyContent: 'center' }}>
                     <Button size="large" style={{ width: '100%' }} onClick={toggleModal}>{t('common.cancel')}</Button>
-                    <Button size="large" style={{ width: '100%' }} variant="critical" onClick={disable}>{t('common.disable')}</Button>
+
+                    <Button
+                        size="large"
+                        style={{ width: '100%' }}
+                        variant="critical"
+                        onClick={disable}
+                        disabled={isDisabling}
+                    >
+                        {
+                            isDisabling ?
+                            <Spinner description="loading" /> :
+                            t('common.disable')
+                        }
+                    </Button>
                 </Flex>
             </ModalContent>
         </Modal >
