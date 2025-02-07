@@ -1,75 +1,139 @@
-import { Button, Flex, IconButton, IconCheckCircle, IconDotsThreeVertical, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, toast } from "@vtex/shoreline";
+import { AboutAgent } from "./AboutAgent";
+import { useState } from "react";
+import { integrateFeature } from "../services/features.service";
+import { useSelector } from "react-redux";
+import { selectToken } from "../store/authSlice";
+import { featureList, selectProject } from "../store/projectSlice";
+import { DisableAgent } from "./DisableAgent";
+import { TagType } from "./TagType";
+import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 
-export function FeatureBox({ title, type, isIntegrated, description }: { title: string, type: 'active' | 'passive', description: string, isIntegrated: boolean }) {
+type codes = 'abandoned_cart' | 'order_status';
+
+export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'active' | 'passive', isIntegrated: boolean }) {
+  const token = useSelector(selectToken);
+  const projectUUID = useSelector(selectProject)
+  const [openAbout, setOpenAbout] = useState(false)
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
+  const [openDisable, setOpenDisable] = useState(false)
+  const features = useSelector(featureList)
+  console.log('a lista: ', featureList)
+  const featureUuid = features.find((item: { code: string }) => item.code === code)?.feature_uuid;
+  const openDetailsModal = () => {
+    setOpenAbout((o) => !o)
+  }
+  const openDisableModal = () => {
+    setOpenDisable((o) => !o)
+  }
+  
+  const toggleIsPreferencesOpen = () => {
+    setIsPreferencesOpen((o) => !o)
+  }
+
+  const integrateCurrentFeature = async () => {
+    const result = await integrateFeature(featureUuid, projectUUID, token);
+    if (result.error) {
+      toast.critical(t('integration.error'));
+    }else{
+      toast.success(t('integration.success'));
+    }
+  }
   return (
-    <Flex
-      direction="column"
-      gap="$space-2"
-      style={{
-        border: 'var(--sl-border-base)',
-        borderRadius: 'var(--sl-radius-1)',
-        padding: 'var(--sl-space-4)',
-      }}
-    >
-      <Flex gap="$space-1" justify="space-between">
-        <Flex direction="column" gap="$space-1">
-          <Text variant="display3" color="$fg-base">{title}</Text>
+    <>
+      <Flex
+        direction="column"
+        gap="$space-2"
+        style={{
+          height: '222px',
+          border: 'var(--sl-border-base)',
+          borderRadius: 'var(--sl-radius-1)',
+          padding: '16px 16px 24px 16px',
+        }}
+      >
+        <Flex gap="$space-1" justify="space-between">
+          <Flex direction="column" gap="$space-1">
+            <Text variant="display3" color="$fg-base">
+              {t(`agents.categories.${type}.${code}.title`)}
+            </Text>
 
-          <Text variant="caption1" color={{ active: '$color-blue-9', passive: '$color-purple-9' }[type]}>
-            {{ active: 'Active notification', passive: 'Passive support' }[type]}
+            <TagType type={type} />
+          </Flex>
+
+          <MenuProvider>
+            <MenuTrigger asChild>
+              <IconButton variant="tertiary" label="Actions">
+                <IconDotsThreeVertical />
+              </IconButton>
+            </MenuTrigger>
+
+            <MenuPopover>
+              <MenuItem onClick={openDetailsModal}>
+                <IconInfo />
+                {t('common.details')}
+              </MenuItem>
+
+              <MenuItem onClick={toggleIsPreferencesOpen}>
+                <IconGearSix />
+                {t('common.manage_settings')}
+              </MenuItem>
+              
+              <MenuSeparator />
+
+              <MenuItem onClick={openDisableModal}>
+                <IconPauseCircle />
+                {t('common.disable')}
+              </MenuItem>
+            </MenuPopover>
+          </MenuProvider>
+        </Flex>
+
+        <Flex style={{ height: '4.125rem' }}>
+          <Text
+            variant="body"
+            color="$fg-base-soft"
+          >
+            {t(`agents.categories.${type}.${code}.description`)}
           </Text>
         </Flex>
 
-        <MenuProvider>
-          <MenuTrigger asChild>
-            <IconButton variant="tertiary" label="Actions">
-              <IconDotsThreeVertical />
-            </IconButton>
-          </MenuTrigger>
 
-          <MenuPopover>
-            <MenuItem>New Tab</MenuItem>
-            <MenuItem>New Item</MenuItem>
-            <MenuSeparator />
-            <MenuItem>Downloads</MenuItem>
-          </MenuPopover>
-        </MenuProvider>
+        {
+          isIntegrated ?
+            <Flex
+              style={{
+                padding: 'var(--sl-space-2)',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              <IconCheck color="green" />
+              <Text variant="action" color="$fg-success">
+                {t('agent_gallery.added')}
+              </Text>
+            </Flex>
+            :
+            <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
+              <IconPlus />
+              <Text> {t('agent_gallery.button.add')}</Text>
+            </Button>
+        }
       </Flex>
 
-      <Flex style={{ height: '4.125rem' }}>
-        <Text
-          variant="body"
-          color="$fg-base"
-        >
-          {description}
-        </Text>
-      </Flex>
-      
+      <AboutAgent
+        open={openAbout}
+        code={code}
+        category={type}
+        toggleModal={openDetailsModal}
+      />
 
-      {
-        isIntegrated ?
-          <Flex
-            justify="center"
-            style={{
-              padding: 'var(--sl-space-2)'
-            }}
-          >
-            <Text variant="caption1" color="$fg-success">
-              <IconCheckCircle
-                display="inline"
-                style={{
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  marginRight: 'var(--sl-space-2)'
-                }}
-              />
+      <SettingsContainer
+        open={isPreferencesOpen}
+        code={code}
+        toggleOpen={toggleIsPreferencesOpen}
+      />
 
-              Integrated skill
-            </Text>
-          </Flex>
-          :
-          <Button variant="secondary">Integrate</Button>
-      }
-    </Flex>
+      <DisableAgent open={openDisable} toggleModal={openDisableModal} agent={t('agent_gallery.features.disable.agents.abandoned_cart')} />
+    </>
   );
 }
