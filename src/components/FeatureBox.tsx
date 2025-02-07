@@ -1,10 +1,10 @@
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
-import { integrateAvailableFeatures } from "../services/features.service";
+import { integrateFeature } from "../services/features.service";
 import { useSelector } from "react-redux";
 import { selectToken } from "../store/authSlice";
-import { selectProject } from "../store/projectSlice";
+import { featureList, selectProject } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { AgentPreferences } from "./AgentPreferences";
@@ -17,6 +17,8 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
+  const features = useSelector(featureList)
+  const featureUuid = features.find((item: { code: string; }) => item.code === code).uuid
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -28,8 +30,8 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
     setIsPreferencesOpen((o) => !o)
   }
 
-  const integrateFeature = async () => {
-    const result = await integrateAvailableFeatures(projectUUID, token);
+  const integrateCurrentFeature = async () => {
+    const result = await integrateFeature(featureUuid, projectUUID, token);
     if (result.error) {
       toast.critical(t('integration.error'));
     }else{
@@ -110,7 +112,7 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
               </Text>
             </Flex>
             :
-            <Button variant="secondary" onClick={integrateFeature} size="large">
+            <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               <IconPlus />
               <Text> {t('agent_gallery.button.add')}</Text>
             </Button>
