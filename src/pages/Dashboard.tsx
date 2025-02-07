@@ -9,8 +9,8 @@ import { isFeatureIntegrated } from '../store/userSlice';
 import { featureList, selectProject } from '../store/projectSlice';
 
 const APICodes = {
-  'order-status': 'order_status' as const,
-  'abandoned-cart': 'abandoned_cart' as const,
+  'order-status': 'order-status' as const,
+  'abandoned-cart': 'abandoned-cart' as const,
 };
 
 export function Dashboard() {
