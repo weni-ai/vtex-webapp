@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
+import { setFeatureList, setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
+import { getFeatureList } from "./features.service";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -13,13 +14,13 @@ export async function fetchUserData() {
     const response = await VTEXFetch('/api/vtexid/pub/authenticated/user');
 
     if (!response || response.error) {
-      throw new Error(response?.message || 'Erro ao buscar dados do usuário.');
+      throw new Error(response?.message || 'error fetching user data.');
     }
 
     return { success: true, data: response };
   } catch (error) {
-    console.error('Erro ao buscar dados do usuário:', error);
-    return { success: false, error: error || 'Erro desconhecido' };
+    console.error('error fetching user data:', error);
+    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -43,8 +44,8 @@ export async function checkProject(vtex_account: string, user_email: string, tok
 
     return { success: true, data: result };
   } catch (error) {
-    console.error('Erro ao verificar projeto:', error);
-    return { success: false, error: error || 'Erro desconhecido' };
+    console.error('error when checking project:', error);
+    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -68,15 +69,21 @@ export async function createUserAndProject(userData: any, token: string) {
     });
 
     if (!response || response.error) {
-      throw new Error(response?.message || 'Erro ao criar usuário e projeto.');
+      throw new Error(response?.message || 'error creating user and project.');
     }
 
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false));
+
+    const featureList = await getFeatureList(response.project_uuid, token);
+    if (featureList?.error) {
+      throw new Error(JSON.stringify(featureList.error))
+    }
+    store.dispatch(setFeatureList(featureList.data.features))
     return { success: true, data: response };
   } catch (error) {
-    console.error('Erro na criação do projeto e usuário:', error);
+    console.error('error in project and user creation:', error);
     store.dispatch(setLoadingSetup(false));
-    return { success: false, error: error || 'Erro desconhecido' };
+    return { success: false, error: error || 'unknown error' };
   }
 }
