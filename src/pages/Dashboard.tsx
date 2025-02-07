@@ -20,7 +20,7 @@ export function Dashboard() {
   const project_uuid = useSelector(selectProject)
 
   function navigateToAgent() {
-    window.open(`https://dash.weni.ai/projects/${project_uuid}`, '_blank');
+    window.open(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`, '_blank');
   }
 
   useEffect(() => {
