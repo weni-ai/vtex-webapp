@@ -37,7 +37,7 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
   
 
   try {
-    const response = await VTEXFetch(`/_v/integrate-feature?${token}`, {
+    const response = await VTEXFetch(`/_v/integrate-feature?token=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
