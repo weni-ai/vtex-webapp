@@ -4,7 +4,7 @@ import './SettingsContainer.style.css'
 import { ChangeEvent, useState } from "react"
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
 
-type codes = 'abandoned_cart' | 'order_status';
+type codes = 'abandoned-cart' | 'order-status';
 
 export interface SettingsContainerProps {
     open: boolean;
@@ -25,7 +25,7 @@ export function SettingsContainer({ open, toggleOpen, code }: SettingsContainerP
                     <DrawerDismiss />
                 </DrawerHeader>
 
-                {code === 'abandoned_cart' && (
+                {code === 'abandoned-cart' && (
                     <DrawerContent>
                         <Flex style={{ marginBottom: '1rem' }}>
                             <Checkbox onChange={setRestrictionValue} aria-label={t('agent_gallery.features.abandoned_cart.preferences.restriction_details')}>
@@ -72,7 +72,7 @@ export function SettingsContainer({ open, toggleOpen, code }: SettingsContainerP
                 )}
 
                 {
-                    code === 'order_status'
+                    code === 'order-status'
                     && <PreferencesOrderStatusActive />
                 }
 

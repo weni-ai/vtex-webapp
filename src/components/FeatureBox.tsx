@@ -9,7 +9,7 @@ import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 
-type codes = 'abandoned_cart' | 'order_status';
+type codes = 'abandoned-cart' | 'order-status';
 
 export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean }) {
   const token = useSelector(selectToken);
