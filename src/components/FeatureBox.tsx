@@ -11,7 +11,7 @@ import { SettingsContainer } from "./settings/SettingsContainer/SettingsContaine
 
 type codes = 'abandoned_cart' | 'order_status';
 
-export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'active' | 'passive', isIntegrated: boolean }) {
+export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean }) {
   const token = useSelector(selectToken);
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
@@ -133,7 +133,12 @@ export function FeatureBox({ code, type, isIntegrated }: { code: codes, type: 'a
         toggleOpen={toggleIsPreferencesOpen}
       />
 
-      <DisableAgent open={openDisable} toggleModal={openDisableModal} agent={t('agent_gallery.features.disable.agents.abandoned_cart')} />
+      <DisableAgent
+        open={openDisable}
+        toggleModal={openDisableModal}
+        agent={t(`agents.categories.${type}.${code}.title`)}
+        agentUuid={uuid}
+      />
     </>
   );
 }
