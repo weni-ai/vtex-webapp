@@ -74,11 +74,14 @@ export function useUserSetup() {
           );
         }
 
-        if (has_agent && has_whatsapp) {
+        if (has_whatsapp) {
           store.dispatch(setWhatsAppIntegrated(true));
-          store.dispatch(setAgentIntegrated(true))
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
+        }
+
+        if (has_agent && has_whatsapp) {
+          store.dispatch(setAgentIntegrated(true))
 
           navigate('/dash');
 
