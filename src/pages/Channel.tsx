@@ -56,7 +56,7 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
               padding: 'var(--sl-space-2)'
             }}
           >
-            <Text variant="body" color="$fg-success" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2, 8px)' }}>
+            <Text variant="body" color="$fg-success" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2, 8px)', fontWeight: 'bold'}}>
               <Flex style={{width: ' 20px', height: '20px'}}>
                 <IconCheck />
               </Flex>
