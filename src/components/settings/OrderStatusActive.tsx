@@ -15,52 +15,64 @@ export function PreferencesOrderStatusActive() {
   function beforeSetTestContactNumber(phoneNumber: string) {
     const eventLocal = event as unknown as { target: { selectionStart: number; selectionEnd: number; } };
 
-    const selectionStart = eventLocal.target.selectionStart;
+    const pointerPosition = eventLocal.target.selectionStart || 0;
 
-    const initialPicture = phoneNumber.slice(0, selectionStart || 0) + '|' + phoneNumber.slice(selectionStart || 0);
-    let rest = phoneNumber.replace(/[^\d]/g, '');
-    let final = '';
+    const valueWithPointer =
+      phoneNumber.slice(0, pointerPosition)
+      + '|'
+      + phoneNumber.slice(pointerPosition);
 
-    if (rest.slice(0, 2) === '55' || rest.slice(0, 3) === '055') {
-      if (rest.slice(0, 2) === '55') {
-        final += `+${rest.slice(0, 2)}`;
-        rest = rest.slice(2);
-      } else if (rest.slice(0, 3) === '055') {
-        final += `+${rest.slice(1, 3)}`;
-        rest = rest.slice(3);
-      }
+    let restValue = phoneNumber.replace(/[^\d]/g, '');
+    let finalValue = '';
 
-      if (rest.length) {
-        final += ' ';
-      }
+    const BrazilCountryCode = '55';
 
-      final += rest.slice(0, 2);
-      rest = rest.slice(2);
+    if (restValue.startsWith(BrazilCountryCode)) {
+      finalValue += `+${BrazilCountryCode}`;
+      restValue = restValue.slice(BrazilCountryCode.length);
 
-      if (rest.length) {
-        final += ' ';
-      }
+      const quantityOfNumbersAndEscapePattern = [' ', 2, ' ', 5, '-', 4];
 
-      final += rest.slice(0, 5);
-      rest = rest.slice(5);
+      quantityOfNumbersAndEscapePattern.forEach((element) => {
+        if (!restValue.length) {
+          return;
+        }
+        
+        if (restValue.length && typeof element === 'string') {
+          finalValue += element;
+        }
 
-      if (rest.length) {
-        final += '-';
-      }
-
-      final += rest.slice(0, 4);
-      rest = rest.slice(4);
+        if (typeof element === 'number') {
+          finalValue += restValue.slice(0, element);
+          restValue = restValue.slice(element);
+        }
+      });
     } else {
-      final += rest;
+      finalValue += restValue;
     }
     
-    setTestContactNumber(final);
+    setTestContactNumber(finalValue);
 
-    setTimeout(() => {
-      const countNumbers = initialPicture.replace(/[^\d|]/g, '').indexOf('|') + final.split(/\d/).splice(0, initialPicture.replace(/[^\d|]/g, '').indexOf('|')).join('').length;
+    setTimeout(movePointerToOriginalPosition, 0);
 
-      eventLocal.target.selectionStart = eventLocal.target.selectionEnd = countNumbers
-    }, 0);
+    function movePointerToOriginalPosition() {
+      const pointerPositionBefore = valueWithPointer.replace(/[^\d|]/g, '').indexOf('|');
+
+      const nonNumbersCharactersBeforeThePointer =
+        finalValue
+          .split(/\d/)
+          .splice(
+            0,
+            valueWithPointer.replace(/[^\d|]/g, '').indexOf('|')
+          )
+          .join('').length;
+      
+      const pointerCalculated =
+        pointerPositionBefore
+        + nonNumbersCharactersBeforeThePointer;
+
+      eventLocal.target.selectionStart = eventLocal.target.selectionEnd = pointerCalculated
+    }
   }
 
   return (
