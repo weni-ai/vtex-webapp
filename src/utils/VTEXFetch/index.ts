@@ -14,7 +14,7 @@ window.addEventListener('message', (event: MessageEvent) => {
     requestsAwaitingResponses[id].reject(reason);
     delete requestsAwaitingResponses[id];
   } else {
-    console.warn('Mensagem não corresponde a nenhuma requisição aguardando:', event.data);
+    console.warn('message does not correspond to any request waiting:', event.data);
   }
 });
 

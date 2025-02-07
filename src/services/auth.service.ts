@@ -7,8 +7,8 @@ export async function getToken() : Promise<any> {
     const client_secret = getEnv('VITE_APP_CLIENT_SECRET') || '';
 
     if (!auth_url || !client_id || !client_secret) {
-        console.error('Erro: Configurações de autenticação ausentes.');
-        return { success: false, error: 'Configuração de autenticação ausente.' };
+        console.error('error: missing authentication settings.');
+        return { success: false, error: 'authentication configuration missing' };
     }
 
     const headersList = {
@@ -34,7 +34,7 @@ export async function getToken() : Promise<any> {
 
         return { success: true, token: data.access_token };
     } catch (error) {
-        console.error('Erro ao obter token:', error);
-        return { success: false, error: error || 'Erro desconhecido' };
+        console.error('error obtaining token:', error);
+        return { success: false, error: error || 'unknown error' };
     }
 }

@@ -18,7 +18,7 @@ export function useUserSetup() {
     try {
       const { token, error } = await getToken();
       if (error) {
-        console.error("Token não encontrado");
+        console.error("token not found");
         navigate('/setup-error');
         return;
       }
@@ -26,7 +26,7 @@ export function useUserSetup() {
 
       const { data: userData, error: errorData } = await fetchUserData();
       if (!userData || errorData) {
-        console.error("Dados do usuário não encontrados");
+        console.error("user data not found");
         navigate('/setup-error');
         return;
       }
@@ -44,8 +44,7 @@ export function useUserSetup() {
 
         const response = await checkWppIntegration(project_uuid, token);
         const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
-        console.log('response', response.data.data)
-        console.log('tem zap? ', has_whatsapp)
+
         if (response?.error) {
           throw new Error(response.error)
         }
@@ -105,7 +104,7 @@ export function useUserSetup() {
     if (!project_uuid) {
       const response = await createUserAndProject(userData, token);
       if (response.error) {
-        console.error("Erro durante a inicialização do usuário:", response.error);
+        console.error("error during user initialization:", response.error);
         navigate('/setup-error');
       }
     }

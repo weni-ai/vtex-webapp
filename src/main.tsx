@@ -18,14 +18,13 @@ const query = decodeURIComponent(window.location.search);
 const params = new URLSearchParams(query);
 const baseAddress = params.get('base_address');
 const locale = params.get('locale');
-console.log('entrou no app')
 
 if (baseAddress) {
   store.dispatch(setBaseAddress(baseAddress));
 }
 
 if (locale) {
-  i18n.changeLanguage(locale).catch(err => console.error('Erro ao mudar o idioma:', err));
+  i18n.changeLanguage(locale).catch(err => console.error('language change error:', err));
 }
 
 createRoot(document.getElementById('root')!).render(
