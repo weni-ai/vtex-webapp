@@ -51,7 +51,7 @@ export async function setAgentBuilder(payload: any, project_uuid: string, token:
   console.log(response)
 
   if (response.text !== 'OK') {
-    return { success: false, error: response?.message || 'Erro ao criar agente' };
+    return { success: false, error: response?.message || 'Error creating agent' };
   }
   return { success: true, data: response };
 }
