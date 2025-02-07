@@ -62,6 +62,12 @@
                     }
                 }
             }
+        },
+        "common": {
+            "disable": {
+                "success": "Agente desactivado con éxito.",
+                "error": "No se ha podido desactivar el agente. Vuelva a intentarlo más tarde."
+            }
         }
     },
     "agent_gallery": {
