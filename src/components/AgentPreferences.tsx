@@ -4,7 +4,7 @@ import './AgentPreferences.style.css'
 import { useState } from "react"
 import { PreferencesOrderStatusActive } from "./settings/OrderStatusActive";
 
-type codes = 'abandoned_cart' | 'order_status';
+type codes = 'abandoned-cart' | 'order-status';
 
 export interface AgentPreferencesProps {
     open: boolean;
@@ -25,7 +25,7 @@ export function AgentPreferences({ open, toggleOpen, code }: AgentPreferencesPro
                     <DrawerDismiss />
                 </DrawerHeader>
 
-                {code === 'abandoned_cart' && (
+                {code === 'abandoned-cart' && (
                     <DrawerContent>
                         <Flex style={{ marginBottom: '1rem' }}>
                             <Checkbox onChange={setRestrictionValue} aria-label={t('agent_gallery.features.abandoned_cart.preferences.restriction_details')}>
@@ -72,7 +72,7 @@ export function AgentPreferences({ open, toggleOpen, code }: AgentPreferencesPro
                 )}
 
                 {
-                    code === 'order_status'
+                    code === 'order-status'
                     && <PreferencesOrderStatusActive />
                 }
 

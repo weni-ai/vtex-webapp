@@ -4,12 +4,12 @@ import activeOrderStatusPreview from '../assets/agents_preview/active_order_stat
 import { TagType } from "./TagType";
 
 type categories = 'active' | 'passive';
-type codes = 'abandoned_cart' | 'order_status';
+type codes = 'abandoned-cart' | 'order-status';
 
 const previews: {[K in categories]?: {[L in codes]?: string}} = {
     active: {
-        abandoned_cart: activeAbandonedCartPreview,
-        order_status: activeOrderStatusPreview,
+        'abandoned-cart': activeAbandonedCartPreview,
+        'order-status': activeOrderStatusPreview,
     },
 };
 
