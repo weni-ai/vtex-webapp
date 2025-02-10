@@ -60,22 +60,14 @@
                     "details": {
                         "title": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
                         "description": "Este agente mejora la conversión, retiene clientes e impulsa la finalización de compras."
-                    },
-                    "preferences": {
-                        "restriction": "Restricción de mensajes",
-                        "restriction_details": "Restringir mensajes a horarios configurados.",
-                        "monday_until_friday": "Lunes a viernes",
-                        "saturday": "Sábado",
-                        "from": "De",
-                        "to": "Hasta"
                     }
                 }
             }
         },
         "common": {
             "configure": {
-                "success": "Configuración guardada correctamente.",
-                "error": "No se ha podido guardar. Vuelva a intentarlo más tarde."
+                "success": "Configuración guardada con éxito.",
+                "error": "No se pudo guardar. Inténtalo nuevamente más tarde."
             },
             "disable": {
                 "title": "Desactivar agente",

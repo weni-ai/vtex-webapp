@@ -78,12 +78,12 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                     </DrawerHeader>
 
                     {
-                        code === 'abandoned_cart'
+                        code === 'abandoned-cart'
                         && <PreferencesAbandonedCartActive />
                     }
 
                     {
-                        code === 'order_status'
+                        code === 'order-status'
                         && <PreferencesOrderStatusActive />
                     }
 

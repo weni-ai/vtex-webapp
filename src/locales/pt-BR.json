@@ -22,7 +22,7 @@
     "description": "Uma solução de CX baseada em IA para marcas e varejistas.",
     "improve": {
         "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizadas.",
-        "button": "Conectar a Weni"
+        "button": "Conectar á Weni"
     },
     "agents": {
         "title": "Galeria de agentes",
@@ -31,10 +31,10 @@
                 "title": "Notificação ativa",
                 "order-status": {
                     "title": "Agente de status de pedidos",
-                    "description": "Mantenha os clientes informados em tempo real sobre o status de seus pedidos.",
+                    "description": "Mantenha os clientes informados sobre o status dos pedidos em tempo real.",
                     "details": {
                         "title": "Habilite o rastreamento de entrega para os clientes.",
-                        "description": "Este agente reduz consultas manuais e aumenta a transparência, garantindo que os clientes fiquem informados e no controle."
+                        "description": "Este agente reduz verificações manuais e aumenta a transparência, garantindo que os clientes fiquem informados e no controle."
                     },
                     "settings": {
                         "is_test_contact_number": {
@@ -45,8 +45,8 @@
                             "label": "Número de telefone"
                         },
                         "is_selected_sellers": {
-                            "title": "Restringir para vendedores selecionados",
-                            "description": "O agente enviará mensagens apenas para vendedores selecionados."
+                            "title": "Restringido para vendedores selecionados",
+                            "description": "O agente enviará mensagens apenas para os vendedores selecionados."
                         },
                         "selected_sellers": {
                             "label": "Selecione os vendedores",
@@ -60,14 +60,6 @@
                     "details": {
                         "title": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
                         "description": "Este agente melhora a conversão, retém clientes e incentiva a finalização das compras."
-                    },
-                    "preferences": {
-                        "restriction": "Restrição de mensagens",
-                        "restriction_details": "Restringir mensagens para horários configurados.",
-                        "monday_until_friday": "Segunda a sexta-feira",
-                        "saturday": "Sábado",
-                        "from": "Das",
-                        "to": "Até"
                     }
                 }
             }
