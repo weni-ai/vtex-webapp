@@ -67,6 +67,10 @@
             "configure": {
                 "success": "Configuration saved successfully.",
                 "error": "It could not be saved. Please try again later."
+            },
+            "disable": {
+                "success": "Agent disabled successfully.",
+                "error": "The agent could not be disabled. Please try again later."
             }
         }
     },
