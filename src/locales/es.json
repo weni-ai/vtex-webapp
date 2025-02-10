@@ -73,6 +73,10 @@
             }
         },
         "common": {
+            "configure": {
+                "success": "Configuración guardada correctamente.",
+                "error": "No se ha podido guardar. Vuelva a intentarlo más tarde."
+            },
             "disable": {
                 "title": "Desactivar agente",
                 "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, ya no estará activo en tu proyecto.",
