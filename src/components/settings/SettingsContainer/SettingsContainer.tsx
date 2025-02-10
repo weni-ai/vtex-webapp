@@ -5,10 +5,10 @@ import { PreferencesOrderStatusActive } from "../OrderStatusActive";
 import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
-import { VTEXFetch } from "../../../utils/VTEXFetch";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../../store/authSlice";
-import { selectProject } from "../../../store/projectSlice";
+import { featureLoading, selectProject } from "../../../store/projectSlice";
+import { updateAgentSettings } from "../../../services/features.service";
 
 type codes = 'abandoned-cart' | 'order-status';
 
@@ -24,10 +24,9 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
     const projectUuid = useSelector(selectProject);
     
     const [formData, setFormData] = useState<SettingsFormData>();
-    const [isUpdating, setIsUpdating] = useState(false);
+    const isUpdating = useSelector(featureLoading)
 
-    function updateAgentSettings() {
-        setIsUpdating(true);
+    async function updateAgent() {
 
         const body = {
             "feature_uuid": agentUuid,
@@ -49,23 +48,13 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
             }
         };
 
-        VTEXFetch<{
-            message: string;
-        }>(`/_v/update-feature-settings?token=${token}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        }).then(() => {
-            toast.success(t('agents.common.configure.success'));
-        })
-        .catch(() => {
+        const response = await updateAgentSettings(body, token)
+
+        if(response?.error){
             toast.critical(t('agents.common.configure.error'));
-        }).finally(() => {
-            setIsUpdating(false);
-            toggleOpen();
-        });
+            return
+        }
+        toast.success(t('agents.common.configure.success'));
     }
 
     return (
@@ -94,7 +83,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
 
                         <Button
                             variant="primary"
-                            onClick={updateAgentSettings}
+                            onClick={updateAgent}
                             size="large"
                             style={{ width: '50%' }}
                             disabled={isUpdating}

@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
+import { setFeatureLoading } from "../store/projectSlice";
 
 export async function getFeatureList(project_uuid: string, token: string) {
   try {
@@ -34,7 +36,6 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     flows_channel_uuid,
     wpp_cloud_app_uuid,
   };
-  
 
   try {
     const response = await VTEXFetch(`/_v/integrate-feature?token=${token}`, {
@@ -84,5 +85,33 @@ export async function integrateAvailableFeatures(project_uuid: string, token: st
   } catch (error) {
     console.error('error integrating features:', error);
     return { success: false, error: error || 'unknown error' };
+  }
+}
+
+export async function updateAgentSettings(body: any, token: string) {
+  storeProvider.dispatch(setFeatureLoading(true))
+
+  try {
+    const response = await VTEXFetch<{
+      message: string;
+      error: string;
+    }>(`/_v/update-feature-settings?token=${token}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'error updating agent.');
+    }
+
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('error updating agent:', error);
+    return { success: false, error: error || 'unknown error' };
+  } finally {
+    storeProvider.dispatch(setFeatureLoading(false))
   }
 }
