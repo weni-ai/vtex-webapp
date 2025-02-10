@@ -131,6 +131,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
       <SettingsContainer
         open={isPreferencesOpen}
         code={code}
+        agentUuid={uuid}
         toggleOpen={toggleIsPreferencesOpen}
       />
 
