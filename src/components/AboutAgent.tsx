@@ -26,7 +26,7 @@ export function AboutAgent({ code, open, category, toggleModal }: AboutAgentProp
             <ModalHeader>
                 <Flex>
                     <ModalHeading>
-                        {t(`agents.categories.${category}.${code}.title`)}
+                        {t(`agent_gallery.features.${code}.title`)}
                     </ModalHeading>
 
                     <TagType type={category} />
@@ -45,7 +45,7 @@ export function AboutAgent({ code, open, category, toggleModal }: AboutAgentProp
                 </Flex>
                 <Flex direction="column" style={{width: '100%', marginTop: '20px', gap: '4px'}}>
                     <Text variant="emphasis">
-                        {t(`agents.categories.${category}.${code}.details.title`)}
+                        {t(`agent_gallery.features.${code}.details.title`)}
                     </Text>
                     <Text variant="body" color="$fg-base-soft">
                         {t(`agents.categories.${category}.${code}.details.description`)}

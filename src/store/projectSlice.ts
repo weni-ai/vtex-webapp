@@ -17,7 +17,17 @@ const projectSlice = createSlice({
         occupation: '',
         objective: ''
       },
-      featureList: [] as any[]
+      featureList: [{
+        feature_uuid: '82738123',
+        code: 'order-status',
+        restrict_test: true
+      },
+      {
+        feature_uuid: '827381ede23',
+        code: 'abandoned-cart'
+
+      }],
+      integratedFeatures: [] as any[]
     },
     reducers: {
       setProjectUuid: (state, action) => {
@@ -46,11 +56,14 @@ const projectSlice = createSlice({
       },
       setFeatureList: (state, action) => {
         state.featureList = action.payload
+      },
+      setIntegratedFeatures: (state, action) => {
+        state.integratedFeatures = action.payload
       }
     }
   })
 
-  export const {setProjectUuid, setLoadingSetup, setSetupError, setWppCloudAppUuid, setFlowsChannelUuid, setAgentLoading, setAgent, setFeatureList, setWppLoading} = projectSlice.actions
+  export const {setProjectUuid, setLoadingSetup, setSetupError, setWppCloudAppUuid, setFlowsChannelUuid, setAgentLoading, setAgent, setFeatureList, setWppLoading, setIntegratedFeatures} = projectSlice.actions
   export const selectProject = (state: any) => state.project.project_uuid
   export const wppCloudAppUuid = (state: any) => state.project.wpp_cloud_app_uuid
   export const flowsChannelUuid = (state: any) => state.project.flows_channel_uuid

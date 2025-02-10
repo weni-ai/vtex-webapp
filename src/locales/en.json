@@ -72,11 +72,24 @@
     },
     "agent_gallery": {
         "title": "Agent gallery",
-        "added": "Agent added",
+        "added": "Agent active",
         "features": {
-            "abandoned_cart": {
+            "abandoned-cart": {
                 "title": "Abandoned cart agent",
                 "description": "Recover sales by reminding customers of items left in the cart.",
+                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
+                "preferences": {
+                    "restriction": "Message Restriction",
+                    "restriction_details": "Restrict messages to configured hours",
+                    "monday_until_friday": "Monday until friday",
+                    "saturday": "Saturday",
+                    "from": "From",
+                    "to": "To"
+                }
+            },
+            "order-status": {
+                "title": "Order status agent",
+                "description": "Inform your customers about the progress of their orders in real time.",
                 "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
                 "preferences": {
                     "restriction": "Message Restriction",
@@ -100,7 +113,8 @@
             "passive": "Passive support"
         },
         "button": {
-            "add": "Add agent"
+            "add": "Add agent",
+            "test": "Agent in test"
         }
     },
     "setup": {
