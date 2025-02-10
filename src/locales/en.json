@@ -70,34 +70,8 @@
                 "error": "It could not be saved. Please try again later."
             },
             "disable": {
-                "success": "Agent disabled successfully.",
-                "error": "The agent could not be disabled. Please try again later."
-            }
-        }
-    },
-    "agent_gallery": {
-        "title": "Agent gallery",
-        "added": "Agent added",
-        "features": {
-            "abandoned_cart": {
-                "title": "Abandoned cart agent",
-                "description": "Recover sales by reminding customers of items left in the cart.",
-                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
-                "preferences": {
-                    "restriction": "Message Restriction",
-                    "restriction_details": "Restrict messages to configured hours",
-                    "monday_until_friday": "Monday until friday",
-                    "saturday": "Saturday",
-                    "from": "From",
-                    "to": "To"
-                    }
-                }
-            }
-        },
-        "common": {
-            "disable": {
                 "title": "Disable agent",
-                "description":  "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
+                "description": "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
                 "success": "Agent disabled successfully.",
                 "error": "The agent could not be disabled. Please try again later."
             },
@@ -129,7 +103,7 @@
             "forms": {
                 "name": "Name",
                 "occupation": {
-                    "title":"Occupation (optional)",
+                    "title": "Occupation (optional)",
                     "default": "Intelligent assistant"
                 },
                 "objective": {
