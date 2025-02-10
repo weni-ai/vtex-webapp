@@ -148,6 +148,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
       <SettingsContainer
         open={isPreferencesOpen}
         code={code}
+        agentUuid={uuid}
         toggleOpen={toggleIsPreferencesOpen}
       />
 

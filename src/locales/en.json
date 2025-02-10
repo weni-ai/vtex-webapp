@@ -60,8 +60,30 @@
                     "details": {
                         "title": "Recover sales by reminding customers of items left in the cart.",
                         "description": "This agent increases conversion, retains customers and encourages order completion."
-                    },
-                    "preferences": {
+                    }
+                }
+            }
+        },
+        "common": {
+            "configure": {
+                "success": "Configuration saved successfully.",
+                "error": "It could not be saved. Please try again later."
+            },
+            "disable": {
+                "success": "Agent disabled successfully.",
+                "error": "The agent could not be disabled. Please try again later."
+            }
+        }
+    },
+    "agent_gallery": {
+        "title": "Agent gallery",
+        "added": "Agent added",
+        "features": {
+            "abandoned_cart": {
+                "title": "Abandoned cart agent",
+                "description": "Recover sales by reminding customers of items left in the cart.",
+                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
+                "preferences": {
                     "restriction": "Message Restriction",
                     "restriction_details": "Restrict messages to configured hours",
                     "monday_until_friday": "Monday until friday",

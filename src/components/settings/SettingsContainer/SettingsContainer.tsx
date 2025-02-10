@@ -1,89 +1,112 @@
  
-import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, DrawerHeading, Checkbox, DrawerFooter, Button } from "@vtex/shoreline"
-import './SettingsContainer.style.css'
-import { ChangeEvent, useState } from "react"
+import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerHeading, DrawerFooter, Button, Spinner, toast } from "@vtex/shoreline";
+import './SettingsContainer.style.css';
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
+import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
+import { useState } from "react";
+import { SettingsContext, SettingsFormData } from "./SettingsContext";
+import { VTEXFetch } from "../../../utils/VTEXFetch";
+import { useSelector } from "react-redux";
+import { selectToken } from "../../../store/authSlice";
+import { selectProject } from "../../../store/projectSlice";
 
 type codes = 'abandoned-cart' | 'order-status';
 
 export interface SettingsContainerProps {
     open: boolean;
     code: codes;
+    agentUuid: string;
     toggleOpen: () => void;
 }
 
-export function SettingsContainer({ open, toggleOpen, code }: SettingsContainerProps) {
-    const [restriction, setRestriction] = useState(false)
-    const setRestrictionValue = (event: ChangeEvent<HTMLInputElement>) => {
-        setRestriction(Boolean(event.target.value))
+export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {
+    const token = useSelector(selectToken);
+    const projectUuid = useSelector(selectProject);
+    
+    const [formData, setFormData] = useState<SettingsFormData>();
+    const [isUpdating, setIsUpdating] = useState(false);
+
+    function updateAgentSettings() {
+        setIsUpdating(true);
+
+        const body = {
+            "feature_uuid": agentUuid,
+            "project_uuid": projectUuid,
+            "integration_settings": {
+                "message_time_restriction": {
+                    "is_active": formData?.messageTimeRestriction.isActive,
+                    "periods": {
+                        "weekdays": {
+                            "from": formData?.messageTimeRestriction.periods.weekdays.from,
+                            "to": formData?.messageTimeRestriction.periods.weekdays.to
+                        },
+                        "saturdays": {
+                            "from": formData?.messageTimeRestriction.periods.saturdays.from,
+                            "to": formData?.messageTimeRestriction.periods.saturdays.to
+                        }
+                    }
+                }
+            }
+        };
+
+        VTEXFetch<{
+            message: string;
+        }>(`/_v/update-feature-settings?token=${token}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }).then(() => {
+            toast.success(t('agents.common.configure.success'));
+        })
+        .catch(() => {
+            toast.critical(t('agents.common.configure.error'));
+        }).finally(() => {
+            setIsUpdating(false);
+            toggleOpen();
+        });
     }
+
     return (
         <DrawerProvider open={open} onClose={toggleOpen}>
             <DrawerPopover>
-                <DrawerHeader>
-                    <DrawerHeading>{t('common.manage_settings')}</DrawerHeading>
-                    <DrawerDismiss />
-                </DrawerHeader>
+                <SettingsContext.Provider value={{ setFormData }}>
+                    <DrawerHeader>
+                        <DrawerHeading>{t('common.manage_settings')}</DrawerHeading>
+                        <DrawerDismiss />
+                    </DrawerHeader>
 
-                {code === 'abandoned-cart' && (
-                    <DrawerContent>
-                        <Flex style={{ marginBottom: '1rem' }}>
-                            <Checkbox onChange={setRestrictionValue} aria-label={t('agents.features.active.abandoned_cart.preferences.restriction_details')}>
-                                <Flex direction="column" style={{ gap: '0px' }}>
-                                    <Text variant="body">{t('agents.features.active.abandoned_cart.preferences.restriction')}</Text>
-                                    <Text variant="caption2" color="$fg-base-soft">{t('agents.features.active.abandoned_cart.preferences.restriction_details')}</Text>
-                                </Flex>
-                            </Checkbox>
-                        </Flex>
-                        {restriction ? <>
-                            <Flex direction="column" style={{paddingTop: '24px'}}>
-                                <Flex direction="column" >
-                                    <Text variant="emphasis">{t('agents.features.active.abandoned_cart.preferences.monday_until_friday')}</Text>
-                                    <Grid columns="repeat(2, 1fr)">
-                                        <GridCell>
-                                            <Text variant="body" color="$fg-base-soft">{t('agents.features.active.abandoned_cart.preferences.from')}</Text>
-                                            <Flex>
-                                                <TimeInput className='custom-time-input' />
-                                            </Flex>
-                                        </GridCell>
-                                        <GridCell>
-                                            <Text variant="body" color="$fg-base-soft">{t('agents.features.active.abandoned_cart.preferences.to')}</Text>
-                                            <TimeInput className='custom-time-input' />
-                                        </GridCell>
-                                    </Grid>
-                                </Flex>
-                                <Divider style={{ margin: 'var(--sl-space-4) 0' }} />
-                                <Flex direction="column">
-                                    <Text variant="emphasis">{t('aagents.features.active.abandoned_cart.preferences.saturday')}</Text>
-                                    <Grid columns="repeat(2, 1fr)">
-                                        <GridCell>
-                                            <Text variant="body" color="$fg-base-soft">{t('agents.features.active.abandoned_cart.preferences.from')}</Text>
-                                            <TimeInput className='custom-time-input' />
-                                        </GridCell>
-                                        <GridCell>
-                                            <Text variant="body" color="$fg-base-soft">{t('agents.features.active.abandoned_cart.preferences.to')}</Text>
-                                            <TimeInput className='custom-time-input' />
-                                        </GridCell>
-                                    </Grid>
-                                </Flex>
-                            </Flex>
-                        </> : null}
-                    </DrawerContent>
-                )}
+                    {
+                        code === 'abandoned_cart'
+                        && <PreferencesAbandonedCartActive />
+                    }
 
-                {
-                    code === 'order-status'
-                    && <PreferencesOrderStatusActive />
-                }
+                    {
+                        code === 'order_status'
+                        && <PreferencesOrderStatusActive />
+                    }
 
-                <DrawerFooter style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button onClick={toggleOpen} size="large" style={{ width: '50%' }}>
-                        {t('common.cancel')}
-                    </Button>
-                    <Button variant="primary" onClick={() => null} size="large" style={{ width: '50%' }}>
-                        {t('common.save')}
-                    </Button>
-                </DrawerFooter>
+                    <DrawerFooter style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Button onClick={toggleOpen} size="large" style={{ width: '50%' }}>
+                            {t('common.cancel')}
+                        </Button>
+
+                        <Button
+                            variant="primary"
+                            onClick={updateAgentSettings}
+                            size="large"
+                            style={{ width: '50%' }}
+                            disabled={isUpdating}
+                        >
+                            {
+                                isUpdating ?
+                                <Spinner description="loading" /> :
+                                t('common.save')
+                            }
+                        </Button>
+                    </DrawerFooter>
+                </SettingsContext.Provider>
             </DrawerPopover>
         </DrawerProvider >
     )
