@@ -62,6 +62,12 @@
                     }
                 }
             }
+        },
+        "common": {
+            "configure": {
+                "success": "Configuration saved successfully.",
+                "error": "It could not be saved. Please try again later."
+            }
         }
     },
     "agent_gallery": {

@@ -124,6 +124,7 @@ export function Dashboard() {
             {features.map((item: any) => (
               <FeatureBox
                 key={item.feature_uuid}
+                uuid={item.feature_uuid}
                 code={item.code}
                 type="active"
                 isIntegrated={featureIntegrated}
