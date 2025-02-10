@@ -62,6 +62,12 @@
                     }
                 }
             }
+        },
+        "common": {
+            "disable": {
+                "success": "Agent disabled successfully.",
+                "error": "The agent could not be disabled. Please try again later."
+            }
         }
     },
     "agent_gallery": {
