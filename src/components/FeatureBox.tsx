@@ -56,7 +56,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
             <Text variant="display3" color="$fg-base">
-              {t(`agent_gallery.features.${code}.title`)}
+              {t(`agents.categories.${type}.${code}.title`)}
             </Text>
 
             <TagType type={type} />
@@ -95,7 +95,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
             variant="body"
             color="$fg-base-soft"
           >
-            {t(`agent_gallery.features.${code}.description`)}
+            {t(`agents.categories.${type}.${code}.description`)}
           </Text>
         </Flex>
 
@@ -112,7 +112,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
               >
                 <IconCheck color="green" />
                 <Text variant="action" color="$fg-success">
-                  {t('agent_gallery.added')}
+                  {t('agents.common.added')}
                 </Text>
               </Flex>
             );
@@ -122,7 +122,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
             return (
               <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
                 <img src={wrench} alt="" />
-                <Text color="$fg-warning"> {t('agent_gallery.button.test')}</Text>
+                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
               </Button>
             );
           }
@@ -130,7 +130,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
           return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               <IconPlus />
-              <Text> {t('agent_gallery.button.add')}</Text>
+              <Text> {t('agents.common.add')}</Text>
             </Button>
           );
         })()}

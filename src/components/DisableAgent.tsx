@@ -49,13 +49,13 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
         <Modal open={open} onClose={toggleModal} style={{ width: '368px' }}>
             <ModalHeader>
                 <Flex>
-                    <ModalHeading>{t('agent_gallery.features.disable.title')}</ModalHeading>
+                    <ModalHeading>{t('agents.common.disable.title')}</ModalHeading>
                 </Flex>
                 <ModalDismiss />
             </ModalHeader>
             <ModalContent>
                 <Flex style={{ padding: 'var(--space-2, 8px) 0 var(--space-6, 24px) 0' }}>
-                    <Text variant='body'>{t('agent_gallery.features.disable.description', {agent})}</Text>
+                    <Text variant='body'>{t('agents.common.disable.description', {agent})}</Text>
                 </Flex>
                 <Flex style={{ width: '100%', justifyContent: 'center' }}>
                     <Button size="large" style={{ width: '100%' }} onClick={toggleModal}>{t('common.cancel')}</Button>
