@@ -64,6 +64,10 @@
             }
         },
         "common": {
+            "configure": {
+                "success": "Configuración guardada correctamente.",
+                "error": "No se ha podido guardar. Vuelva a intentarlo más tarde."
+            },
             "disable": {
                 "success": "Agente desactivado con éxito.",
                 "error": "No se ha podido desactivar el agente. Vuelva a intentarlo más tarde."
