@@ -67,6 +67,10 @@
             "configure": {
                 "success": "Configuração salva com sucesso.",
                 "error": "Não foi possível salvar. Tente novamente mais tarde."
+            },
+            "disable": {
+                "success": "Agente desativado com sucesso.",
+                "error": "Não foi possível desativar o agente. Tente novamente mais tarde."
             }
         }
     },
