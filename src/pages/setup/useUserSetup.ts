@@ -4,10 +4,10 @@ import { checkProject, createUserAndProject, fetchUserData } from '../../service
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFeatureList, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
-import { getFeatureList } from '../../services/features.service';
+// import { getFeatureList } from '../../services/features.service';
 import { useCallback } from 'react';
 import { toast } from '@vtex/shoreline';
 
@@ -49,11 +49,14 @@ export function useUserSetup() {
           throw new Error(response.error)
         }
 
-        const featureList = await getFeatureList(project_uuid, token);
-        if (featureList?.error) {
-          throw new Error(JSON.stringify(featureList.error))
-        }
-        store.dispatch(setFeatureList(featureList.data.features))
+        // TODO: get the complete list of fetaures
+        // const featureList = await getFeatureList(project_uuid, token);
+        // if (featureList?.error) {
+        //   throw new Error(JSON.stringify(featureList.error))
+        // }
+        // if (featureList.data.features.length > 0) {
+        //   store.dispatch(setFeatureList(featureList.data.features))
+        // }
 
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
         if (agentIntegration.error) {
