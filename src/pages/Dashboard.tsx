@@ -120,7 +120,7 @@ export function Dashboard() {
           <Heading
             variant="display2"
           >
-            {t('agent_gallery.title')}
+            {t('agents.title')}
           </Heading>
 
           <Grid

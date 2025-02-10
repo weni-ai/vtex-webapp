@@ -19,16 +19,17 @@
         "new_agent": "New Agent"
     },
     "title": "Weni Agentic IA",
-    "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
+    "description": "An enterprise AI-based CX SOLUTION for brands and retailers.",
     "improve": {
         "description": " Connect agents to the Weni platform to access advanced features and customizable options.",
         "button": "Connect to Weni"
     },
     "agents": {
+        "title": "Agent gallery",
         "categories": {
             "active": {
                 "title": "Active notification",
-                "order_status": {
+                "order-status": {
                     "title": "Order status agent",
                     "description": "Keep customers updated on their order status in real time.",
                     "details": {
@@ -53,67 +54,33 @@
                         }
                     }
                 },
-                "abandoned_cart": {
+                "abandoned-cart": {
                     "title": "Abandoned cart agent",
                     "description": "Recover sales by reminding customers of items left in the cart.",
                     "details": {
                         "title": "Recover sales by reminding customers of items left in the cart.",
                         "description": "This agent increases conversion, retains customers and encourages order completion."
+                    },
+                    "preferences": {
+                    "restriction": "Message Restriction",
+                    "restriction_details": "Restrict messages to configured hours",
+                    "monday_until_friday": "Monday until friday",
+                    "saturday": "Saturday",
+                    "from": "From",
+                    "to": "To"
                     }
                 }
             }
         },
         "common": {
             "disable": {
-                "success": "Agent disabled successfully.",
-                "error": "The agent could not be disabled. Please try again later."
-            }
-        }
-    },
-    "agent_gallery": {
-        "title": "Agent gallery",
-        "added": "Agent active",
-        "features": {
-            "abandoned-cart": {
-                "title": "Abandoned cart agent",
-                "description": "Recover sales by reminding customers of items left in the cart.",
-                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
-                "preferences": {
-                    "restriction": "Message Restriction",
-                    "restriction_details": "Restrict messages to configured hours",
-                    "monday_until_friday": "Monday until friday",
-                    "saturday": "Saturday",
-                    "from": "From",
-                    "to": "To"
-                }
-            },
-            "order-status": {
-                "title": "Order status agent",
-                "description": "Inform your customers about the progress of their orders in real time.",
-                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
-                "preferences": {
-                    "restriction": "Message Restriction",
-                    "restriction_details": "Restrict messages to configured hours",
-                    "monday_until_friday": "Monday until friday",
-                    "saturday": "Saturday",
-                    "from": "From",
-                    "to": "To"
-                }
-            },
-            "disable": {
                 "title": "Disable agent",
                 "description":  "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
-                "agents": {
-                    "abandoned_cart": "Abandoned Cart"
-                }
-            }
-        },
-        "types": {
-            "active": "Active notification",
-            "passive": "Passive support"
-        },
-        "button": {
+                "success": "Agent disabled successfully.",
+                "error": "The agent could not be disabled. Please try again later."
+            },
             "add": "Add agent",
+            "added": "Agent active",
             "test": "Agent in test"
         }
     },
@@ -148,7 +115,7 @@
                     "default": "Your goal is to answer customer questions, inform the order status, provide product information, and sell. Your main features are: Shopping on WhatsApp and FAQ."
                 },
                 "knowledge": {
-                    "title": "Knowlege source",
+                    "title": "Knowledge source",
                     "context": "Provide the content your agent will use to answer questions."
                 },
                 "error": {
@@ -171,7 +138,7 @@
                 "title": "WhatsApp Channel",
                 "description": "Utilize an enterprise WhatsApp account to enhance communication with contacts.",
                 "error": "WhatApp unable to connect, check your credentials or try again later.",
-                "success": "WhatApp was sucessfully integrated."
+                "success": "WhatApp was successfully integrated."
             }
         },
         "buttons": {
