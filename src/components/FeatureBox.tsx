@@ -8,10 +8,11 @@ import { featureList, selectProject } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
+import wrench from '../assets/icons/Wrench.svg'
 
 type codes = 'abandoned-cart' | 'order-status';
 
-export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean }) {
+export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean }) {
   const token = useSelector(selectToken);
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
@@ -27,7 +28,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
   const openDisableModal = () => {
     setOpenDisable((o) => !o)
   }
-  
+
   const toggleIsPreferencesOpen = () => {
     setIsPreferencesOpen((o) => !o)
   }
@@ -36,7 +37,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
     const result = await integrateFeature(featureUuid, projectUUID, token);
     if (result.error) {
       toast.critical(t('integration.error'));
-    }else{
+    } else {
       toast.success(t('integration.success'));
     }
   }
@@ -55,7 +56,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
             <Text variant="display3" color="$fg-base">
-              {t(`agents.categories.${type}.${code}.title`)}
+              {t(`agent_gallery.features.${code}.title`)}
             </Text>
 
             <TagType type={type} />
@@ -78,7 +79,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
                 <IconGearSix />
                 {t('common.manage_settings')}
               </MenuItem>
-              
+
               <MenuSeparator />
 
               <MenuItem onClick={openDisableModal}>
@@ -94,31 +95,47 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
             variant="body"
             color="$fg-base-soft"
           >
-            {t(`agents.categories.${type}.${code}.description`)}
+            {t(`agent_gallery.features.${code}.description`)}
           </Text>
         </Flex>
 
 
-        {
-          isIntegrated ?
-            <Flex
-              style={{
-                padding: 'var(--sl-space-2)',
-                alignItems: 'center',
-                gap: '8px'
-              }}
-            >
-              <IconCheck color="green" />
-              <Text variant="action" color="$fg-success">
-                {t('agent_gallery.added')}
-              </Text>
-            </Flex>
-            :
+        {(() => {
+          if (isIntegrated) {
+            return (
+              <Flex
+                style={{
+                  padding: 'var(--sl-space-2)',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <IconCheck color="green" />
+                <Text variant="action" color="$fg-success">
+                  {t('agent_gallery.added')}
+                </Text>
+              </Flex>
+            );
+          }
+
+          if (isInTest) {
+            return (
+              <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
+                <img src={wrench} alt="" />
+                <Text color="$fg-warning"> {t('agent_gallery.button.test')}</Text>
+              </Button>
+            );
+          }
+
+          return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               <IconPlus />
               <Text> {t('agent_gallery.button.add')}</Text>
             </Button>
-        }
+          );
+        })()}
+
+
       </Flex>
 
       <AboutAgent
