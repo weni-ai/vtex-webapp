@@ -27,7 +27,7 @@ export function Dashboard() {
     const VTEXAppParams = new URLSearchParams();
 
     if (userData?.user) {
-      VTEXAppParams.append('email', userData?.user);
+      VTEXAppParams.append('email', userData.user);
     }
 
     dash.searchParams.append('vtex_app', VTEXAppParams.toString());
