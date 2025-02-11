@@ -1,18 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AuthState, RootState } from '../interfaces/Store';
+
+const initialState: AuthState = {
+    token: '',
+    base_address: ''
+};
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        token: '',
-        base_address: ''
-    },
-    reducers: {
-        setToken: (state, action) => {
+    initialState,
+    reducers:  {
+        setToken: (state, action: PayloadAction<string>) => {
             state.token = action.payload;
         },
-        setBaseAddress: (state, action) => {
-            state.base_address = action.payload
+        setBaseAddress: (state, action: PayloadAction<string>) => {
+            state.base_address = action.payload;
         }
     },
 });
@@ -21,7 +23,7 @@ const authSlice = createSlice({
 
 export const { setToken, setBaseAddress } = authSlice.actions;
 
-export const selectToken = (state: any) => state.auth.token
-export const selectBaseAddress = (state: any) => state.auth.selectBaseAddress
+export const selectToken = (state: RootState) => state.auth.token
+export const selectBaseAddress = (state: RootState) => state.auth.base_address
 
 export default authSlice.reducer;

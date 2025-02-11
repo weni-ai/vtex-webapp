@@ -12,7 +12,7 @@ import { integrateFeature } from '../../services/features.service';
 export function useAgentBuilderSetup() {
     const navigate = useNavigate();
     const token = useSelector(selectToken);
-    const project = useSelector(selectProject)
+    const project = useSelector(selectProject) || ''
     
     const buildAgent = async (payload: any, app_uuid: string) => {
         store.dispatch(setAgentLoading(true))
