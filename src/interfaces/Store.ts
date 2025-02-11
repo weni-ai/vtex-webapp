@@ -32,7 +32,27 @@ export interface ProjectState {
     integratedFeatures: Feature[];
 }
 
+export interface UserData {
+    userId: string;
+    user: string;
+    userType: string;
+    tokenType: string;
+    account: string;
+    audience: string;
+    isRepresentative: boolean;
+}
+
+export interface UserState {
+    userData: UserData | null;
+    loadingWhatsAppIntegration: boolean;
+    isWhatsAppIntegrated: boolean;
+    isAgentIntegrated: boolean;
+    isFeatureIntegrated: boolean;
+    whatsAppError: string | null;
+}
+
 export interface RootState {
     auth: AuthState;
-    project: ProjectState
+    project: ProjectState,
+    user: UserState
 }
