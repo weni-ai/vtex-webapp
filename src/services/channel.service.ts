@@ -74,7 +74,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     return { success: true, data: response.data };
   } catch (error) {
     console.error('error creating channel:', error);
-    store.dispatch(setWhatsAppError(error || 'unknown error'));
+    store.dispatch(setWhatsAppError(JSON.stringify(error) || 'unknown error'));
     toast.critical(t('integration.channels.whatsapp.error'));
     store.dispatch(setWppLoading(false))
     return { success: false, error: error };
