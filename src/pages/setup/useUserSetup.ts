@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { setAccount, setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
-import { setToken } from '../../store/authSlice';
+import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { setAgent, setFlowsChannelUuid, setIntegratedFeatures, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
@@ -42,6 +42,10 @@ export function useUserSetup() {
       }
 
       store.dispatch(setAccount(accountData));
+
+      if(accountData.hosts){
+        store.dispatch(setBaseAddress(accountData.hosts[0]))
+      }
 
       const result = await checkProject(userData.account, userData.user, token);
       if (result?.error) {
