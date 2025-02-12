@@ -44,6 +44,7 @@ export interface UserData {
 }
 
 export interface AccountData {
+    hosts:  string[];
     [key: string]: any;
   }
   
