@@ -49,7 +49,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
         };
 
         const response = await updateAgentSettings(body, token)
-
+        toggleOpen()
         if(response?.error){
             toast.critical(t('agents.common.configure.error'));
             return
