@@ -24,6 +24,21 @@ export async function fetchUserData() {
   }
 }
 
+export async function fetchAccountData() {
+  try {
+    const response = await VTEXFetch('/api/license-manager/account');
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'error fetching account data.');
+    }
+
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('error fetching account data:', error);
+    return { success: false, error: error || 'unknown error' };
+  }
+}
+
 export async function checkProject(vtex_account: string, user_email: string, token: string) {
   const apiUrl = `https://api.stg.cloud.weni.ai/v2/commerce/check-project?vtex_account=${vtex_account}&user_email=${user_email}`;
 

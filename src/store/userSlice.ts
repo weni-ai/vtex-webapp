@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, UserData, UserState } from 'src/interfaces/Store';
+import { AccountData, RootState, UserData, UserState } from 'src/interfaces/Store';
 
 const initialState: UserState = {
   userData: null,
+  accountData: null,
   loadingWhatsAppIntegration: false,
   isWhatsAppIntegrated: false,
   isAgentIntegrated: false,
@@ -17,6 +18,9 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<UserData | null>) => {
       state.userData = action.payload;
+    },
+    setAccount: (state, action: PayloadAction<AccountData | null>) => {
+      state.accountData = action.payload;
     },
     setWhatsAppIntegrated: (state, action: PayloadAction<boolean>) => {
       state.isWhatsAppIntegrated = action.payload;
@@ -38,6 +42,7 @@ const userSlice = createSlice({
 
 export const { 
   setUser, 
+  setAccount,
   setWhatsAppIntegrated, 
   setAgentIntegrated, 
   setFeatureIntegrated, 
@@ -46,6 +51,7 @@ export const {
 } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.userData
+export const selectAccount = (state: RootState) => state.user.accountData
 export const isWhatsAppIntegrated = (state: RootState) => state.user.isWhatsAppIntegrated
 export const isAgentIntegrated = (state: RootState) => state.user.isAgentIntegrated
 export const isFeatureIntegrated = (state: RootState) => state.user.isFeatureIntegrated

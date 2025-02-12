@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface AuthState {
     token: string;
     base_address: string;
@@ -42,8 +43,14 @@ export interface UserData {
     isRepresentative: boolean;
 }
 
+export interface AccountData {
+    [key: string]: any;
+  }
+  
+
 export interface UserState {
     userData: UserData | null;
+    accountData: AccountData | null;
     loadingWhatsAppIntegration: boolean;
     isWhatsAppIntegrated: boolean;
     isAgentIntegrated: boolean;
