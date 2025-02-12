@@ -56,6 +56,26 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
   }
 }
 
+export async function getIntegratedFeatures(project_uuid: string, token: string) {
+  try {
+    const response = await VTEXFetch(`_v/get-integrated-features?token=${token}&projectUUID=${project_uuid}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'error retrieving list of integrated agents.');
+    }
+
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('error retrieving list of integrated agents:', error);
+    return { success: false, error: error || 'unknown error' };
+  }
+}
+
 export async function updateAgentSettings(body: any, token: string) {
   storeProvider.dispatch(setFeatureLoading(true))
 
