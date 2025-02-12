@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
-import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
+import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
@@ -33,6 +33,15 @@ export function useUserSetup() {
       }
 
       store.dispatch(setUser(userData));
+
+      const { data: accountData, error: accountError } = await fetchAccountData();
+      if (!accountData || accountError) {
+        console.error("user data not found");
+        navigate('/setup-error');
+        return;
+      }
+
+      store.dispatch(setUser(accountData));
 
       const result = await checkProject(userData.account, userData.user, token);
       if (result?.error) {
