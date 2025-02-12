@@ -29,6 +29,7 @@ import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
 import { Channel } from '../Channel';
 import { useNavigate } from 'react-router-dom';
 import question from '../../assets/icons/question.svg'
+import { TermsAndConditions } from '../../components/TermsAndConditions';
 
 interface FormState {
   name: string;
@@ -45,6 +46,7 @@ export function AgentBuilder() {
     objective: useSelector(getAgent).objective || t('agent.setup.forms.objective.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
+  const [openTerms, setOpenTerms] = useState(false)
   const project = useSelector(selectProject);
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
@@ -61,7 +63,7 @@ export function AgentBuilder() {
   const isValidURL = (url: string) => {
     const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}([/?#].*)?$/i;
     return urlPattern.test(url);
-};
+  };
 
   const validateForm = () => {
     const newErrors: { [key in keyof FormState]?: string } = {
@@ -79,13 +81,18 @@ export function AgentBuilder() {
   const handleInputChange = (field: keyof FormState, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
-  const handleSubmit = () => {
+  const handleOpenTerms = () => {
     if (validateForm() && isWppIntegrated) {
-      const payload = Object.fromEntries(
-        Object.entries(form).filter(([_, value]) => value.trim())
-      );
-      buildAgent(payload, project);
+      setOpenTerms(true)
     }
+  }
+
+  const handleSubmit = () => {
+    const payload = Object.fromEntries(
+      Object.entries(form).filter(([_, value]) => value.trim())
+    );
+    buildAgent(payload, project);
+    setOpenTerms(false)
   };
 
   return (
@@ -99,7 +106,7 @@ export function AgentBuilder() {
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
-            <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isWppIntegrated}>
+            <Button variant="primary" size="large" onClick={handleOpenTerms} disabled={!isWppIntegrated || isAgentLoading}>
               {isAgentLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
@@ -165,6 +172,7 @@ export function AgentBuilder() {
           )}
         </PageContent>
       </Page>
+      <TermsAndConditions open={openTerms} dismiss={() => setOpenTerms(false)} approve={handleSubmit} />
     </Container>
   );
 }
