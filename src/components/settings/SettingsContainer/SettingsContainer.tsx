@@ -1,4 +1,3 @@
- 
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerHeading, DrawerFooter, Button, Spinner, toast } from "@vtex/shoreline";
 import './SettingsContainer.style.css';
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
@@ -23,36 +22,52 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
     const token = useSelector(selectToken);
     const projectUuid = useSelector(selectProject);
     
-    const [formData, setFormData] = useState<SettingsFormData>();
-    const isUpdating = useSelector(featureLoading)
+    const [formData, setFormData] = useState<SettingsFormData>({});
+    const isUpdating = useSelector(featureLoading);
 
     async function updateAgent() {
+        let body;
 
-        const body = {
-            "feature_uuid": agentUuid,
-            "project_uuid": projectUuid,
-            "integration_settings": {
-                "message_time_restriction": {
-                    "is_active": formData?.messageTimeRestriction.isActive,
-                    "periods": {
-                        "weekdays": {
-                            "from": formData?.messageTimeRestriction.periods.weekdays.from,
-                            "to": formData?.messageTimeRestriction.periods.weekdays.to
-                        },
-                        "saturdays": {
-                            "from": formData?.messageTimeRestriction.periods.saturdays.from,
-                            "to": formData?.messageTimeRestriction.periods.saturdays.to
+        if (code === 'abandoned-cart') {
+            body = {
+                "feature_uuid": agentUuid,
+                "project_uuid": projectUuid,
+                "integration_settings": {
+                    "message_time_restriction": {
+                        "is_active": formData?.messageTimeRestriction?.isActive || false,
+                        "periods": {
+                            "weekdays": {
+                                "from": formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
+                                "to": formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
+                            },
+                            "saturdays": {
+                                "from": formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
+                                "to": formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
+                            }
                         }
                     }
                 }
-            }
-        };
+            };
+        } else if (code === 'order-status') {
+            body = {
+                "feature_uuid": agentUuid,
+                "project_uuid": projectUuid,
+                "integration_settings": {
+                    "order_status_restriction": {
+                        "is_active": formData?.order_status_restriction?.is_active || false,
+                        "phone_number": formData?.order_status_restriction?.phone_number || "",
+                        "sellers": formData?.order_status_restriction?.sellers || []
+                    }
+                }
+            };
+        }
 
-        const response = await updateAgentSettings(body, token)
-        toggleOpen()
-        if(response?.error){
+        const response = await updateAgentSettings(body, token);
+        toggleOpen();
+        
+        if (response?.error) {
             toast.critical(t('agents.common.configure.error'));
-            return
+            return;
         }
         toast.success(t('agents.common.configure.success'));
     }
@@ -60,20 +75,20 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
     return (
         <DrawerProvider open={open} onClose={toggleOpen}>
             <DrawerPopover>
-                <SettingsContext.Provider value={{ setFormData }}>
+                <SettingsContext.Provider value={{ formData, setFormData }}>
                     <DrawerHeader>
                         <DrawerHeading>{t('common.manage_settings')}</DrawerHeading>
                         <DrawerDismiss />
                     </DrawerHeader>
 
                     {
-                        code === 'abandoned-cart'
-                        && <PreferencesAbandonedCartActive />
+                        code === 'abandoned-cart' &&
+                        <PreferencesAbandonedCartActive />
                     }
 
                     {
-                        code === 'order-status'
-                        && <PreferencesOrderStatusActive />
+                        code === 'order-status' &&
+                        <PreferencesOrderStatusActive />
                     }
 
                     <DrawerFooter style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -88,15 +103,11 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                             style={{ width: '50%' }}
                             disabled={isUpdating}
                         >
-                            {
-                                isUpdating ?
-                                <Spinner description="loading" /> :
-                                t('common.save')
-                            }
+                            {isUpdating ? <Spinner description="loading" /> : t('common.save')}
                         </Button>
                     </DrawerFooter>
                 </SettingsContext.Provider>
             </DrawerPopover>
-        </DrawerProvider >
-    )
+        </DrawerProvider>
+    );
 }
