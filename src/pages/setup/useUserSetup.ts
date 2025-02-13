@@ -4,13 +4,12 @@ import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } f
 import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgent, setFlowsChannelUuid, setIntegratedFeatures, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
-// import { getFeatureList } from '../../services/features.service';
 import { useCallback } from 'react';
 import { toast } from '@vtex/shoreline';
-// import { getIntegratedFeatures } from '../../services/features.service';
+import { getIntegratedFeatures } from 'src/services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -72,13 +71,13 @@ export function useUserSetup() {
         //   store.dispatch(setFeatureList(featureList.data.features))
         // }
 
-        // const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
-        // if (integratedFeatures?.error) {
-        //   throw new Error(JSON.stringify(integratedFeatures.error))
-        // }
-        // if (integratedFeatures.data.features.length > 0) {
-        //   store.dispatch(setIntegratedFeatures(integratedFeatures.data.features))
-        // }
+        const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
+        if (integratedFeatures?.error) {
+          throw new Error(JSON.stringify(integratedFeatures.error))
+        }
+        if (integratedFeatures.data.features.length > 0) {
+          store.dispatch(setIntegratedFeatures(integratedFeatures.data.features))
+        }
 
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
         if (agentIntegration.error) {
