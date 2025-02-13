@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label, Select, SelectItem } from "@vtex/shoreline";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
 
 export function PreferencesOrderStatusActive() {
+  const context = useContext(SettingsContext);
   const [hasTestContactNumber, setHasTestContactNumber] = useState(false);
   const [testContactNumber, setTestContactNumber] = useState('');
 
@@ -74,6 +77,19 @@ export function PreferencesOrderStatusActive() {
       eventLocal.target.selectionStart = eventLocal.target.selectionEnd = pointerCalculated
     }
   }
+
+  useEffect(() => {
+    const updatedFormData: SettingsFormData = {
+      ...context?.formData,
+      order_status_restriction: {
+        is_active: hasTestContactNumber || hasSelectedSellers,
+        phone_number: hasTestContactNumber ? testContactNumber : "",
+        sellers: hasSelectedSellers ? selectedSellers : [],
+      },
+    };
+
+    context?.setFormData(updatedFormData);
+  }, [hasTestContactNumber, testContactNumber, hasSelectedSellers, selectedSellers]);
 
   return (
     <DrawerContent>
