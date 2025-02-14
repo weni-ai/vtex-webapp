@@ -145,7 +145,7 @@ export function Dashboard() {
                 code={APICodes[item.code as 'order-status' | 'abandoned-cart']}
                 type="active"
                 isIntegrated={featureIntegrated}
-                isInTest={item.restrict_test}
+                isInTest={item.config.integration_settings?.order_status_restriction?.phone_number.length > 0}
               />
             ))}
           </Grid>
