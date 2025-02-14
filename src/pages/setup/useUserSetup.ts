@@ -9,7 +9,7 @@ import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
 import { toast } from '@vtex/shoreline';
-import { getIntegratedFeatures } from 'src/services/features.service';
+import { getIntegratedFeatures } from '../../services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
