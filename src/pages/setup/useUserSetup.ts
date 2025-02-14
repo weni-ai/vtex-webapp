@@ -75,14 +75,18 @@ export function useUserSetup() {
         const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
         console.log('aqui de novo', integratedFeatures)
         if (integratedFeatures?.error) {
+          console.log('integrated features error', integratedFeatures)
           throw new Error(JSON.stringify(integratedFeatures.error))
         }
-        if (integratedFeatures.data.features.length > 0) {
+        console.log('alo', integratedFeatures)
+        if (integratedFeatures.data.integratedFeatures.length > 0) {
           store.dispatch(setIntegratedFeatures(integratedFeatures.data.features))
         }
 
+        console.log('chamando o agent error', integratedFeatures)
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
         if (agentIntegration.error) {
+          console.log('agent error', integratedFeatures)
           throw new Error(agentIntegration.error)
         }
 
@@ -118,7 +122,6 @@ export function useUserSetup() {
       }
     } catch (err) {
       console.error(err);
-      toast.critical(t('integration.error'));
       navigate('/setup-error');
     }
   }, [navigate]);
