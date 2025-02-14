@@ -79,7 +79,7 @@ export function useUserSetup() {
         }
         console.log('alo', integratedFeatures)
         if (integratedFeatures.data.integratedFeatures.length > 0) {
-          store.dispatch(setIntegratedFeatures(integratedFeatures.data.features))
+          store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
         }
 
         console.log('chamando o agent error', integratedFeatures)
