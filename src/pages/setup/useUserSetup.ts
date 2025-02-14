@@ -71,7 +71,9 @@ export function useUserSetup() {
         //   store.dispatch(setFeatureList(featureList.data.features))
         // }
 
+        console.log('aqui')
         const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
+        console.log('aqui de novo', integratedFeatures)
         if (integratedFeatures?.error) {
           throw new Error(JSON.stringify(integratedFeatures.error))
         }
