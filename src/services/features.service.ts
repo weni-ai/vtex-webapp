@@ -58,7 +58,7 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
 
 export async function getIntegratedFeatures(project_uuid: string, token: string) {
   try {
-    const response = await VTEXFetch(`_v/get-integrated-features?token=${token}&projectUUID=${project_uuid}`, {
+    const response = await VTEXFetch(`/_v/get-integrated-features?token=${token}&projectUUID=${project_uuid}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
