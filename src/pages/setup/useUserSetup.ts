@@ -64,7 +64,7 @@ export function useUserSetup() {
           throw new Error(JSON.stringify(integratedFeatures.error))
         }
         if (integratedFeatures.data.features.length > 0) {
-          store.dispatch(setIntegratedFeatures(integratedFeatures.data.features))
+          store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
         }
 
         const agentIntegration = await checkAgentIntegration(project_uuid, token);

@@ -7,6 +7,7 @@ import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
 import { isFeatureIntegrated } from '../store/userSlice';
 import { featureList, selectProject } from '../store/projectSlice';
+import { selectUser } from "../store/userSlice";
 
 const APICodes = {
   'order-status': 'order-status' as const,
@@ -18,9 +19,20 @@ export function Dashboard() {
   const features = useSelector(featureList)
   const featureIntegrated = useSelector(isFeatureIntegrated);
   const project_uuid = useSelector(selectProject)
+  const userData = useSelector(selectUser);
 
   function navigateToAgent() {
-    window.open(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`, '_blank');
+    const dash = new URL(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`);
+
+    const VTEXAppParams = new URLSearchParams();
+
+    if (userData?.user) {
+      VTEXAppParams.append('email', userData.user);
+    }
+
+    dash.searchParams.append('vtex_app', VTEXAppParams.toString());
+
+    window.open(dash.toString(), '_blank');
   }
 
   useEffect(() => {
@@ -133,7 +145,7 @@ export function Dashboard() {
                 code={APICodes[item.code as 'order-status' | 'abandoned-cart']}
                 type="active"
                 isIntegrated={featureIntegrated}
-                isInTest={item.restrict_test}
+                isInTest={item.config.integration_settings?.order_status_restriction?.phone_number.length > 0}
               />
             ))}
           </Grid>
