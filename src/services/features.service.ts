@@ -24,7 +24,7 @@ export async function getFeatureList(project_uuid: string) {
 }
 
 export async function updateFeatureList(project_uuid: string, token: string) {
-  const availableFeatures = await getFeatureList(project_uuid, token);
+  const availableFeatures = await getFeatureList(project_uuid);
 
   if (availableFeatures?.error) {
     return { success: false, error: JSON.stringify(availableFeatures?.error) || 'unknown error' };
