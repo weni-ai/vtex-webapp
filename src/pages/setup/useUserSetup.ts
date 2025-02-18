@@ -4,11 +4,11 @@ import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } f
 import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFlowsChannelUuid, setIntegratedFeatures, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgent, setFeatureList, setFlowsChannelUuid, setIntegratedFeatures, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
-import { getIntegratedFeatures } from '../../services/features.service';
+import { getFeatureList, getIntegratedFeatures } from '../../services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -62,13 +62,13 @@ export function useUserSetup() {
         }
 
         // TODO: get the complete list of fetaures
-        // const featureList = await getFeatureList(project_uuid, token);
-        // if (featureList?.error) {
-        //   throw new Error(JSON.stringify(featureList.error))
-        // }
-        // if (featureList.data.features.length > 0) {
-        //   store.dispatch(setFeatureList(featureList.data.features))
-        // }
+        const featureList = await getFeatureList(project_uuid, token);
+        if (featureList?.error) {
+          throw new Error(JSON.stringify(featureList.error))
+        }
+        if (featureList.data.features.length > 0) {
+          store.dispatch(setFeatureList(featureList.data.features))
+        }
 
         const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
         if (integratedFeatures?.error) {
