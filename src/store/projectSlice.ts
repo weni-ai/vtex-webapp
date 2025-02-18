@@ -11,6 +11,7 @@ const initialState: ProjectState = {
   agentLoading: false,
   wppLoading: false,
   featureLoading: false,
+  updateFeatureLoading: false,
   agent: {
     name: '',
     links: [],
@@ -130,7 +131,10 @@ const projectSlice = createSlice({
     },
     setIntegratedFeatures: (state, action: PayloadAction<Feature[]>) => {
       state.integratedFeatures = action.payload;
-    }
+    },
+    setUpdateFeatureLoading: (state, action: PayloadAction<boolean>) => {
+      state.updateFeatureLoading = action.payload;
+    },
   }
 })
 
@@ -145,7 +149,8 @@ export const {
   setFeatureList,
   setWppLoading,
   setIntegratedFeatures,
-  setFeatureLoading
+  setFeatureLoading,
+  setUpdateFeatureLoading
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
@@ -159,4 +164,5 @@ export const featureList = (state: RootState) => state.project.featureList
 export const integratedFeatures = (state: RootState) => state.project.integratedFeatures
 export const wppLoading = (state: RootState) => state.project.wppLoading
 export const featureLoading = (state: RootState) => state.project.featureLoading
+export const updateFeatureLoading = (state: RootState) => state.project.updateFeatureLoading
 export default projectSlice.reducer;

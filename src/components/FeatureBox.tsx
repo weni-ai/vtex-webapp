@@ -1,10 +1,10 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, toast } from "@vtex/shoreline";
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateFeature } from "../services/features.service";
 import { useSelector } from "react-redux";
 import { selectToken } from "../store/authSlice";
-import { featureList, selectProject } from "../store/projectSlice";
+import { featureList, selectProject, updateFeatureLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
@@ -19,6 +19,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const features = useSelector(featureList)
+  const isUpdateFeatureLoading = useSelector(updateFeatureLoading)
   const featureUuid = features.find((item: { code: string }) => item.code === code)?.feature_uuid || '';
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -127,8 +128,16 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
 
           return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
-              <IconPlus />
-              <Text> {t('agents.common.add')}</Text>
+              {
+                isUpdateFeatureLoading ?
+                  <Spinner description="loading" />
+                  :
+                  <>
+                    <IconPlus />
+                    <Text> {t('agents.common.add')}</Text>
+                  </>
+              }
+
             </Button>
           );
         })()}

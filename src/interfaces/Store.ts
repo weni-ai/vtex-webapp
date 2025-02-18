@@ -32,6 +32,7 @@ export interface ProjectState {
     agent: Agent;
     featureList: Feature[];
     integratedFeatures: Feature[];
+    updateFeatureLoading: boolean;
 }
 
 export interface UserData {
