@@ -29,7 +29,7 @@
         "categories": {
             "active": {
                 "title": "Active notification",
-                "order-status": {
+                "order_status": {
                     "title": "Order status agent",
                     "description": "Keep customers updated on their order status in real time.",
                     "details": {
@@ -54,7 +54,7 @@
                         }
                     }
                 },
-                "abandoned-cart": {
+                "abandoned_cart": {
                     "title": "Abandoned cart agent",
                     "description": "Recover sales by reminding customers of items left in the cart.",
                     "details": {

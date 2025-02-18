@@ -9,7 +9,7 @@ import { selectToken } from "../../../store/authSlice";
 import { featureLoading, selectProject } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/features.service";
 
-type codes = 'abandoned-cart' | 'order-status';
+type codes = 'abandoned_cart' | 'order_status';
 
 export interface SettingsContainerProps {
     open: boolean;
@@ -28,7 +28,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
     async function updateAgent() {
         let body;
 
-        if (code === 'abandoned-cart') {
+        if (code === 'abandoned_cart') {
             body = {
                 "feature_uuid": agentUuid,
                 "project_uuid": projectUuid,
@@ -48,7 +48,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                     }
                 }
             };
-        } else if (code === 'order-status') {
+        } else if (code === 'order_status') {
             body = {
                 "feature_uuid": agentUuid,
                 "project_uuid": projectUuid,
@@ -82,12 +82,12 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                     </DrawerHeader>
 
                     {
-                        code === 'abandoned-cart' &&
+                        code === 'abandoned_cart' &&
                         <PreferencesAbandonedCartActive />
                     }
 
                     {
-                        code === 'order-status' &&
+                        code === 'order_status' &&
                         <PreferencesOrderStatusActive />
                     }
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Agent, Feature, ProjectState, RootState } from 'src/interfaces/Store';
 
@@ -23,14 +23,14 @@ const initialState: ProjectState = {
       name: 'Order status change notification',
       description: 'Solution that notifies the customer whenever the order status changes (BR)',
       disclaimer: '',
-      code: 'order-status',
+      code: 'order_status'
     },
     {
       feature_uuid: '83fe991a-1677-45cf-9096-83fdbb086df7',
       name: 'Opinionated Abandoned Cart',
       description: 'A pre-configured solution for abandoned cart notifications, without user input.',
       disclaimer: '',
-      code: 'abandoned-cart',
+      code: 'abandoned_cart'
     }
   ],
   integratedFeatures: []
