@@ -70,19 +70,13 @@ export function useUserSetup() {
         //   store.dispatch(setFeatureList(featureList.data.features))
         // }
 
-        console.log('aqui')
         const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
-        console.log('aqui de novo', integratedFeatures)
         if (integratedFeatures?.error) {
           console.log('integrated features error', integratedFeatures)
           throw new Error(JSON.stringify(integratedFeatures.error))
         }
-        console.log('alo', integratedFeatures)
-        if (integratedFeatures.data.integratedFeatures.length > 0) {
           store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
-        }
 
-        console.log('chamando o agent error', integratedFeatures)
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
         if (agentIntegration.error) {
           console.log('agent error', integratedFeatures)
