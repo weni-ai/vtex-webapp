@@ -65,7 +65,8 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     if (!response || response.error) {
       throw new Error(response?.message || 'error integrating agents.');
     }
-
+    
+    await updateFeatureList(project_uuid, token);
     return { success: true, data: response };
   } catch (error) {
     return { success: false, error: error || 'unknown error' };
@@ -85,7 +86,6 @@ export async function getIntegratedFeatures(project_uuid: string, token: string)
       throw new Error(response?.message || 'error retrieving list of integrated agents.');
     }
 
-    await updateFeatureList(project_uuid, token);
     return { success: true, data: response };
   } catch (error) {
     console.error('error retrieving list of integrated agents:', error);
