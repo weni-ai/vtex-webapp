@@ -1,4 +1,4 @@
- 
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Agent, Feature, ProjectState, RootState } from 'src/interfaces/Store';
 
@@ -19,27 +19,85 @@ const initialState: ProjectState = {
   },
   featureList: [
     {
-      feature_uuid: 'a3d77bf9-1e06-44cb-a550-c691e6d44687',
-      name: 'Order status change notification',
-      description: 'Solution that notifies the customer whenever the order status changes (BR)',
-      disclaimer: '',
-      code: 'order_status'
-    },
-    {
       feature_uuid: '83fe991a-1677-45cf-9096-83fdbb086df7',
       name: 'Opinionated Abandoned Cart',
       description: 'A pre-configured solution for abandoned cart notifications, without user input.',
       disclaimer: '',
-      code: 'abandoned_cart'
+      documentation_url: '',
+      globals: [],
+      sectors: [],
+      initial_flow: [],
+      category: 'ACTIVE',
+      code: 'abandoned_cart',
+      config: {
+        vtex_config: {
+          default_params: {
+            globals_values: {
+              envia_pix_e_boleto_status_pedido: false,
+              sellers_liberados_status_de_pedido: true,
+              bloqueio_para_testes_status_pedidos: true
+            }
+          },
+          install_actions: [
+            'create_abandoned_cart_template',
+            'store_flows_channel'
+          ]
+        }
+      }
     }
   ],
-  integratedFeatures: []
-};
+  integratedFeatures: [
+    {
+      feature_uuid: 'a3d77bf9-1e06-44cb-a550-c691e6d44687',
+      name: 'Order status change notification',
+      description: 'Solution that notifies the customer whenever the order status changes (BR)',
+      disclaimer: '',
+      documentation_url: '',
+      globals: [
+        {
+          name: 'api_token',
+          value: ''
+        },
+        {
+          name: 'url_api_vtex',
+          value: ''
+        },
+        {
+          name: 'x_vtex_api_appkey',
+          value: ''
+        },
+        {
+          name: 'x_vtex_api_apptoken',
+          value: ''
+        },
+        {
+          name: 'envia_pix_e_boleto_status_pedido',
+          value: false
+        },
+        {
+          name: 'uuid_fluxo_template_status_pedido',
+          value: ''
+        },
+        {
+          name: 'sellers_liberados_status_de_pedido',
+          value: true
+        },
+        {
+          name: 'bloqueio_para_testes_status_pedidos',
+          value: true
+        }
+      ],
+      sectors: [],
+      config: {},
+      code: 'order_status'
+    }
+  ]
+}
 
 const projectSlice = createSlice({
   name: 'project',
   initialState,
-  reducers:{
+  reducers: {
     setProjectUuid: (state, action: PayloadAction<string>) => {
       state.project_uuid = action.payload;
     },
@@ -76,18 +134,18 @@ const projectSlice = createSlice({
   }
 })
 
-export const { 
-  setProjectUuid, 
-  setLoadingSetup, 
-  setSetupError, 
-  setWppCloudAppUuid, 
-  setFlowsChannelUuid, 
-  setAgentLoading, 
-  setAgent, 
-  setFeatureList, 
-  setWppLoading, 
-  setIntegratedFeatures, 
-  setFeatureLoading 
+export const {
+  setProjectUuid,
+  setLoadingSetup,
+  setSetupError,
+  setWppCloudAppUuid,
+  setFlowsChannelUuid,
+  setAgentLoading,
+  setAgent,
+  setFeatureList,
+  setWppLoading,
+  setIntegratedFeatures,
+  setFeatureLoading
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
@@ -98,6 +156,7 @@ export const setupError = (state: RootState) => state.project.setupError
 export const agentLoading = (state: RootState) => state.project.agentLoading
 export const getAgent = (state: RootState) => state.project.agent
 export const featureList = (state: RootState) => state.project.featureList
+export const integratedFeatures = (state: RootState) => state.project.integratedFeatures
 export const wppLoading = (state: RootState) => state.project.wppLoading
 export const featureLoading = (state: RootState) => state.project.featureLoading
 export default projectSlice.reducer;

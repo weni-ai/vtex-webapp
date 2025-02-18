@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
-import { setFeatureLoading } from "../store/projectSlice";
+import { setFeatureList, setFeatureLoading, setIntegratedFeatures } from "../store/projectSlice";
 
 export async function getFeatureList(project_uuid: string, token: string) {
   try {
@@ -21,6 +21,22 @@ export async function getFeatureList(project_uuid: string, token: string) {
     console.error('error retrieving list of agents:', error);
     return { success: false, error: error || 'unknown error' };
   }
+}
+
+export async function updateFeatureList(project_uuid: string, token: string){
+  const availableFeatures = await getFeatureList(project_uuid, token);
+
+  if(availableFeatures?.error){
+    return { success: false, error: JSON.stringify(availableFeatures?.error) || 'unknown error' };
+  }
+  storeProvider.dispatch(setFeatureList(availableFeatures.data.features))
+
+  const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
+
+  if(integratedFeatures?.error){
+    return { success: false, error: JSON.stringify(integratedFeatures?.error) || 'unknown error' };
+  }
+  storeProvider.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
 }
 
 export async function integrateFeature(feature_uuid: string, project_uuid: string, token: string) {
@@ -69,6 +85,7 @@ export async function getIntegratedFeatures(project_uuid: string, token: string)
       throw new Error(response?.message || 'error retrieving list of integrated agents.');
     }
 
+    await updateFeatureList(project_uuid, token);
     return { success: true, data: response };
   } catch (error) {
     console.error('error retrieving list of integrated agents:', error);

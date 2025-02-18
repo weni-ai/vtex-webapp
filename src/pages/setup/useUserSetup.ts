@@ -4,11 +4,11 @@ import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } f
 import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFeatureList, setFlowsChannelUuid, setIntegratedFeatures, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
-import { getFeatureList, getIntegratedFeatures } from '../../services/features.service';
+import { updateFeatureList } from '../../services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -61,25 +61,31 @@ export function useUserSetup() {
           throw new Error(response.error)
         }
 
-        // TODO: get the complete list of fetaures
-        const featureList = await getFeatureList(project_uuid, token);
-        if (featureList?.error) {
-          throw new Error(JSON.stringify(featureList.error))
-        }
-        if (featureList.data.features.length > 0) {
-          store.dispatch(setFeatureList(featureList.data.features))
-        }
 
-        const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
-        if (integratedFeatures?.error) {
-          console.log('integrated features error', integratedFeatures)
-          throw new Error(JSON.stringify(integratedFeatures.error))
+
+        // // TODO: get the complete list of fetaures
+        // const featureList = await getFeatureList(project_uuid, token);
+        // if (featureList?.error) {
+        //   throw new Error(JSON.stringify(featureList.error))
+        // }
+        // if (featureList.data.features.length > 0) {
+        //   store.dispatch(setFeatureList(featureList.data.features))
+        // }
+
+        // const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
+        // if (integratedFeatures?.error) {
+        //   console.log('integrated features error', integratedFeatures)
+        //   throw new Error(JSON.stringify(integratedFeatures.error))
+        // }
+        //   store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
+
+        const updatedFeatures = await updateFeatureList(project_uuid, token)
+        if(updatedFeatures?.error){
+          throw new Error(updatedFeatures.error)
         }
-          store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
 
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
         if (agentIntegration.error) {
-          console.log('agent error', integratedFeatures)
           throw new Error(agentIntegration.error)
         }
 

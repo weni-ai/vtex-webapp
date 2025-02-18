@@ -5,8 +5,7 @@ import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
-import { isFeatureIntegrated } from '../store/userSlice';
-import { featureList, selectProject } from '../store/projectSlice';
+import { featureList, integratedFeatures, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
 
 const APICodes = {
@@ -17,7 +16,7 @@ const APICodes = {
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const features = useSelector(featureList)
-  const featureIntegrated = useSelector(isFeatureIntegrated);
+  const integrated = useSelector(integratedFeatures)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
 
@@ -144,7 +143,17 @@ export function Dashboard() {
                 uuid={item.feature_uuid}
                 code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
                 type="active"
-                isIntegrated={featureIntegrated}
+                isIntegrated={false}
+                isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
+              />
+            ))}
+            {integrated.map((item: any) => (
+              <FeatureBox
+                key={item.feature_uuid}
+                uuid={item.feature_uuid}
+                code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
+                type="active"
+                isIntegrated={true}
                 isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
               />
             ))}
