@@ -29,7 +29,7 @@
         "categories": {
             "active": {
                 "title": "Notificación activa",
-                "order-status": {
+                "order_status": {
                     "title": "Agente de estado de pedidos",
                     "description": "Mantén a los clientes informados en tiempo real sobre el estado de sus pedidos.",
                     "details": {
@@ -54,7 +54,7 @@
                         }
                     }
                 },
-                "abandoned-cart": {
+                "abandoned_cart": {
                     "title": "Agente de recuperación de carrito",
                     "description": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
                     "details": {

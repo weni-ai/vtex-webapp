@@ -10,7 +10,7 @@ import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 import wrench from '../assets/icons/Wrench.svg'
 
-type codes = 'abandoned-cart' | 'order-status';
+type codes = 'abandoned_cart' | 'order_status';
 
 export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean }) {
   const token = useSelector(selectToken);

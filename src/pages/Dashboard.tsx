@@ -10,8 +10,8 @@ import { featureList, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
 
 const APICodes = {
-  'order-status': 'order-status' as const,
-  'abandoned-cart': 'abandoned-cart' as const,
+  'order_status': 'order_status' as const,
+  'abandoned_cart': 'abandoned_cart' as const,
 };
 
 export function Dashboard() {
@@ -142,10 +142,10 @@ export function Dashboard() {
               <FeatureBox
                 key={item.feature_uuid}
                 uuid={item.feature_uuid}
-                code={APICodes[item.code as 'order-status' | 'abandoned-cart']}
+                code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
                 type="active"
                 isIntegrated={featureIntegrated}
-                isInTest={item.config.integration_settings?.order_status_restriction?.phone_number.length > 0}
+                isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
               />
             ))}
           </Grid>

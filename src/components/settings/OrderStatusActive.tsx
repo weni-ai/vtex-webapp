@@ -97,13 +97,13 @@ export function PreferencesOrderStatusActive() {
         <Checkbox
           checked={hasTestContactNumber}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setHasTestContactNumber(e.target.value as unknown as boolean)}
-          aria-label={t('agents.categories.active.order-status.settings.is_test_contact_number.title')}
+          aria-label={t('agents.categories.active.order_status.settings.is_test_contact_number.title')}
         >
-          {t('agents.categories.active.order-status.settings.is_test_contact_number.title')}
+          {t('agents.categories.active.order_status.settings.is_test_contact_number.title')}
         </Checkbox>
 
         <FieldDescription style={{ marginLeft: 'var(--sl-space-7)' }}>
-          {t('agents.categories.active.order-status.settings.is_test_contact_number.description')}
+          {t('agents.categories.active.order_status.settings.is_test_contact_number.description')}
         </FieldDescription>
       </Field>
 
@@ -113,7 +113,7 @@ export function PreferencesOrderStatusActive() {
           display: 'flex',
           marginTop: 'var(--sl-space-6)',
         }}>
-          <Label>{t('agents.categories.active.order-status.settings.test_contact_number.label')}</Label>
+          <Label>{t('agents.categories.active.order_status.settings.test_contact_number.label')}</Label>
 
           <Input
             name="contact-number"
@@ -132,13 +132,13 @@ export function PreferencesOrderStatusActive() {
         <Checkbox
           checked={hasSelectedSellers}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setHasSelectedSellers(e.target.value as unknown as boolean)}
-          aria-label={t('agents.categories.active.order-status.settings.is_selected_sellers.title')}
+          aria-label={t('agents.categories.active.order_status.settings.is_selected_sellers.title')}
         >
-          {t('agents.categories.active.order-status.settings.is_selected_sellers.title')}
+          {t('agents.categories.active.order_status.settings.is_selected_sellers.title')}
         </Checkbox>
 
         <FieldDescription style={{ marginLeft: 'var(--sl-space-7)' }}>
-          {t('agents.categories.active.order-status.settings.is_selected_sellers.description')}
+          {t('agents.categories.active.order_status.settings.is_selected_sellers.description')}
         </FieldDescription>
       </Field>
 
@@ -150,14 +150,14 @@ export function PreferencesOrderStatusActive() {
             marginTop: 'var(--sl-space-6)',
           }}
         >
-          <Label>{t('agents.categories.active.order-status.settings.selected_sellers.label')}</Label>
+          <Label>{t('agents.categories.active.order_status.settings.selected_sellers.label')}</Label>
 
           <Select
             value={selectedSellers}
             setValue={updateSelectedSellers}
             messages={
               {
-                placeholder: t('agents.categories.active.order-status.settings.selected_sellers.placeholder')
+                placeholder: t('agents.categories.active.order_status.settings.selected_sellers.placeholder')
               }
             }
             style={{ width: '100%' }}
