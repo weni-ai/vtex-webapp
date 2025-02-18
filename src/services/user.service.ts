@@ -90,7 +90,7 @@ export async function createUserAndProject(userData: any, token: string) {
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false));
 
-    const featureList = await getFeatureList(response.project_uuid, token);
+    const featureList = await getFeatureList(response.project_uuid);
     if (featureList?.error) {
       throw new Error(JSON.stringify(featureList.error))
     }
