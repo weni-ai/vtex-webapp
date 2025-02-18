@@ -17,6 +17,7 @@ export interface Feature {
     description: string;
     disclaimer: string;
     code: string;
+    [key: string]: any;
 }
 
 export interface ProjectState {
