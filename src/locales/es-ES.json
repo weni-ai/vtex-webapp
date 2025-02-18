@@ -100,7 +100,8 @@
             }
         },
         "types": {
-            "active": "Notificación activa"
+            "active": "Notificación activa",
+            "passive": "Passive support"
         },
         "button": {
             "add": "Agregar agente"
