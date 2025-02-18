@@ -79,11 +79,6 @@ export function useUserSetup() {
         // }
         //   store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
 
-        const updatedFeatures = await updateFeatureList(project_uuid, token)
-        if(updatedFeatures?.error){
-          throw new Error(updatedFeatures.error)
-        }
-
         const agentIntegration = await checkAgentIntegration(project_uuid, token);
         if (agentIntegration.error) {
           throw new Error(agentIntegration.error)
@@ -106,15 +101,16 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-        }
-
-        if (has_agent && has_whatsapp) {
-          store.dispatch(setAgentIntegrated(true))
-
-          navigate('/dash');
-
-        } else {
-          navigate('/agent-builder');
+          if (has_agent) {
+            store.dispatch(setAgentIntegrated(true))
+            const updatedFeatures = await updateFeatureList(project_uuid, token)
+            if(updatedFeatures?.error){
+              throw new Error(updatedFeatures.error)
+            }
+            navigate('/dash');
+          } else {
+            navigate('/agent-builder');
+          }
         }
       } else {
         navigate('/agent-details');
