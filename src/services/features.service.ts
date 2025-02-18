@@ -3,9 +3,9 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 import { setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
 
-export async function getFeatureList(project_uuid: string, token: string) {
+export async function getFeatureList(project_uuid: string) {
   try {
-    const response = await VTEXFetch(`/_v/get-feature-list?projectUUID=${project_uuid}&token=${token}`, {
+    const response = await VTEXFetch(`/_v/get-feature-list?projectUUID=${project_uuid}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
