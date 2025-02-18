@@ -33,6 +33,7 @@ export interface ProjectState {
     featureList: Feature[];
     integratedFeatures: Feature[];
     updateFeatureLoading: boolean;
+    disableFeatureLoading: boolean;
 }
 
 export interface UserData {

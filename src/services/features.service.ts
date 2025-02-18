@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
-import { setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
+import { setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
 
 export async function getFeatureList(project_uuid: string, token: string) {
   try {
@@ -23,17 +23,17 @@ export async function getFeatureList(project_uuid: string, token: string) {
   }
 }
 
-export async function updateFeatureList(project_uuid: string, token: string){
+export async function updateFeatureList(project_uuid: string, token: string) {
   const availableFeatures = await getFeatureList(project_uuid, token);
 
-  if(availableFeatures?.error){
+  if (availableFeatures?.error) {
     return { success: false, error: JSON.stringify(availableFeatures?.error) || 'unknown error' };
   }
   storeProvider.dispatch(setFeatureList(availableFeatures.data.features))
 
   const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
 
-  if(integratedFeatures?.error){
+  if (integratedFeatures?.error) {
     return { success: false, error: JSON.stringify(integratedFeatures?.error) || 'unknown error' };
   }
   storeProvider.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
@@ -65,12 +65,12 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     if (!response || response.error) {
       throw new Error(response?.message || 'error integrating agents.');
     }
-    
+
     await updateFeatureList(project_uuid, token);
     return { success: true, data: response };
   } catch (error) {
     return { success: false, error: error || 'unknown error' };
-  } finally{
+  } finally {
     storeProvider.dispatch(setUpdateFeatureLoading(false))
   }
 }
@@ -120,5 +120,37 @@ export async function updateAgentSettings(body: any, token: string) {
     return { success: false, error: error || 'unknown error' };
   } finally {
     storeProvider.dispatch(setFeatureLoading(false))
+  }
+}
+
+export async function disableFeature(project_uuid: string, feature_uuid: string, token: string) {
+  storeProvider.dispatch(setDisableFeatureLoading(true))
+
+  try{
+    const response = await VTEXFetch<{
+      message: string;
+      error: string;
+    }>(`/_v/disable-feature?token=${token}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        project_uuid,
+        feature_uuid
+      }),
+    })
+
+    if(response?.error){
+      throw new Error(response?.message || 'error updating agent.');
+    }
+
+    await updateFeatureList(project_uuid, token);
+    return { success: true, data: response };
+  } catch(error){
+    console.error('error updating agent:', error);
+    return { success: false, error: error || 'unknown error' };
+  } finally{
+    storeProvider.dispatch(setDisableFeatureLoading(false))
   }
 }
