@@ -6,7 +6,6 @@ import getEnv from "../utils/env";
 
 export async function checkAgentIntegration(project_uuid: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
-  // const apiUrl = `${integrationsAPI}/api/commerce/check-exists-agent-builder?project_uuid=${project_uuid}`;
 
   if (!integrationsAPI) {
     console.error('VITE_APP_NEXUS_URL is not configured');
@@ -14,14 +13,6 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 
   try {
-    // const response = await fetch(apiUrl, {
-    //   method: 'GET',
-    //   headers: {
-    //     'Authorization': `Bearer ${token}`,
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
-
     const response = await VTEXFetch(`/_v/check-agent-builder?projectUUID=${project_uuid}`, {
       method: 'GET',
       headers: {
@@ -40,9 +31,9 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 }
 
-export async function setAgentBuilder(payload: any, project_uuid: string, token: string) {
+export async function setAgentBuilder(payload: any, project_uuid: string) {
   store.dispatch(setAgentLoading(true))
-  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}&token=${token}`;
+  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
 
   const response = await VTEXFetch(url, {
     method: 'POST',

@@ -45,7 +45,7 @@ export function useUserSetup() {
         store.dispatch(setBaseAddress(accountData.hosts[0]))
       }
 
-      const result = await checkProject(userData.account, userData.user, token);
+      const result = await checkProject(userData.account, userData.user);
       if (result?.error) {
         throw new Error(JSON.stringify(result.error))
       }
@@ -54,29 +54,13 @@ export function useUserSetup() {
       if (has_project) {
         store.dispatch(setProjectUuid(project_uuid));
 
-        const response = await checkWppIntegration(project_uuid, token);
+        const response = await checkWppIntegration(project_uuid);
         const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
 
         if (response?.error) {
-          throw new Error(response.error)
+          throw new Error(JSON.stringify(response.error))
         }
-
-        // // TODO: get the complete list of fetaures
-        // const featureList = await getFeatureList(project_uuid, token);
-        // if (featureList?.error) {
-        //   throw new Error(JSON.stringify(featureList.error))
-        // }
-        // if (featureList.data.features.length > 0) {
-        //   store.dispatch(setFeatureList(featureList.data.features))
-        // }
-
-        // const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
-        // if (integratedFeatures?.error) {
-        //   console.log('integrated features error', integratedFeatures)
-        //   throw new Error(JSON.stringify(integratedFeatures.error))
-        // }
-        //   store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
-
+        
         const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration.error) {
           throw new Error(JSON.stringify(agentIntegration.error))
@@ -101,7 +85,7 @@ export function useUserSetup() {
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
           if (has_agent) {
             store.dispatch(setAgentIntegrated(true))
-            const updatedFeatures = await updateFeatureList(project_uuid, token)
+            const updatedFeatures = await updateFeatureList(project_uuid)
             if (updatedFeatures?.error) {
               throw new Error(updatedFeatures.error)
             }
@@ -123,10 +107,9 @@ export function useUserSetup() {
 
   const initializeUser = useCallback(async () => {
     const userData = store.getState().user.userData;
-    const token = store.getState().auth.token;
     const project_uuid = store.getState().project.project_uuid
     if (!project_uuid) {
-      const response = await createUserAndProject(userData, token);
+      const response = await createUserAndProject(userData);
       if (response.error) {
         console.error("error during user initialization:", response.error);
         navigate('/setup-error');

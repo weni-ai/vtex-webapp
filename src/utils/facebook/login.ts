@@ -48,7 +48,7 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
     })("facebook-jssdk");
 }
 
-export function startFacebookLogin(project_uuid: string, token: string) {
+export function startFacebookLogin(project_uuid: string) {
     const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
     const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
 
@@ -96,7 +96,7 @@ export function startFacebookLogin(project_uuid: string, token: string) {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
                     console.log("Login Successful.");
-                    createChannel(code, project_uuid, wabaId, phoneId, token);
+                    createChannel(code, project_uuid, wabaId, phoneId);
                 } else {
                     console.error("Login canceled or not fully authorized.");
                 }
