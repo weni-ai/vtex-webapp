@@ -41,7 +41,7 @@ export function useUserSetup() {
 
       store.dispatch(setAccount(accountData));
 
-      if(accountData.hosts){
+      if (accountData.hosts) {
         store.dispatch(setBaseAddress(accountData.hosts[0]))
       }
 
@@ -60,8 +60,6 @@ export function useUserSetup() {
         if (response?.error) {
           throw new Error(response.error)
         }
-
-
 
         // // TODO: get the complete list of fetaures
         // const featureList = await getFeatureList(project_uuid, token);
@@ -104,13 +102,15 @@ export function useUserSetup() {
           if (has_agent) {
             store.dispatch(setAgentIntegrated(true))
             const updatedFeatures = await updateFeatureList(project_uuid, token)
-            if(updatedFeatures?.error){
+            if (updatedFeatures?.error) {
               throw new Error(updatedFeatures.error)
             }
             navigate('/dash');
           } else {
             navigate('/agent-builder');
           }
+        } else {
+          navigate('/agent-details');
         }
       } else {
         navigate('/agent-details');
