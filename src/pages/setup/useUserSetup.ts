@@ -77,7 +77,7 @@ export function useUserSetup() {
         // }
         //   store.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
 
-        const agentIntegration = await checkAgentIntegration(project_uuid, token);
+        const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration.error) {
           throw new Error(agentIntegration.error)
         }
