@@ -5,7 +5,6 @@ import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
-import { selectToken } from "../../../store/authSlice";
 import { featureLoading, selectProject } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/features.service";
 
@@ -19,7 +18,6 @@ export interface SettingsContainerProps {
 }
 
 export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {
-    const token = useSelector(selectToken);
     const projectUuid = useSelector(selectProject);
     
     const [formData, setFormData] = useState<SettingsFormData>({});
@@ -62,7 +60,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
             };
         }
 
-        const response = await updateAgentSettings(body, token);
+        const response = await updateAgentSettings(body);
         toggleOpen();
         
         if (response?.error) {

@@ -3,7 +3,6 @@
 import { useNavigate } from 'react-router-dom';
 import { setAgentBuilder } from '../../services/agent.service';
 import { useSelector } from 'react-redux';
-import { selectToken } from '../../store/authSlice';
 import { toast } from '@vtex/shoreline';
 import store from '../../store/provider.store';
 import { selectProject, setAgentLoading } from '../../store/projectSlice';
@@ -11,7 +10,6 @@ import { integrateFeature } from '../../services/features.service';
 
 export function useAgentBuilderSetup() {
     const navigate = useNavigate();
-    const token = useSelector(selectToken);
     const project = useSelector(selectProject) || ''
     
     const buildAgent = async (payload: any, app_uuid: string) => {
@@ -33,7 +31,7 @@ export function useAgentBuilderSetup() {
             links,
         };
 
-        const response = await setAgentBuilder(body, app_uuid, token);
+        const response = await setAgentBuilder(body, app_uuid);
 
         if (response?.error) {
             toast.critical(t('agent.error'));
@@ -41,7 +39,7 @@ export function useAgentBuilderSetup() {
             toast.success(t('agent.success'))
             const orderStatus = store.getState().project.featureList.find(item => item.code === 'order_status')?.feature_uuid
             if (orderStatus) {
-                const integrateResponse = await integrateFeature(orderStatus, project, token)
+                const integrateResponse = await integrateFeature(orderStatus, project)
                 if(integrateResponse?.error){
                     toast.critical(t('integration.error'));
                 }

@@ -3,7 +3,6 @@ import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateFeature } from "../services/features.service";
 import { useSelector } from "react-redux";
-import { selectToken } from "../store/authSlice";
 import { featureList, selectProject, updateFeatureLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
@@ -13,7 +12,6 @@ import wrench from '../assets/icons/Wrench.svg'
 type codes = 'abandoned_cart' | 'order_status';
 
 export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean }) {
-  const token = useSelector(selectToken);
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
@@ -33,7 +31,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   }
 
   const integrateCurrentFeature = async () => {
-    const result = await integrateFeature(featureUuid, projectUUID, token);
+    const result = await integrateFeature(featureUuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {

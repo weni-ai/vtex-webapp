@@ -23,7 +23,7 @@ export async function getFeatureList(project_uuid: string) {
   }
 }
 
-export async function updateFeatureList(project_uuid: string, token: string) {
+export async function updateFeatureList(project_uuid: string) {
   const availableFeatures = await getFeatureList(project_uuid);
 
   if (availableFeatures?.error) {
@@ -31,7 +31,7 @@ export async function updateFeatureList(project_uuid: string, token: string) {
   }
   storeProvider.dispatch(setFeatureList(availableFeatures.data.features))
 
-  const integratedFeatures = await getIntegratedFeatures(project_uuid, token);
+  const integratedFeatures = await getIntegratedFeatures(project_uuid);
 
   if (integratedFeatures?.error) {
     return { success: false, error: JSON.stringify(integratedFeatures?.error) || 'unknown error' };
@@ -39,7 +39,7 @@ export async function updateFeatureList(project_uuid: string, token: string) {
   storeProvider.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
 }
 
-export async function integrateFeature(feature_uuid: string, project_uuid: string, token: string) {
+export async function integrateFeature(feature_uuid: string, project_uuid: string) {
   storeProvider.dispatch(setUpdateFeatureLoading(true))
   const store = storeProvider.getState().auth.base_address;
   const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
@@ -54,7 +54,7 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
   };
 
   try {
-    const response = await VTEXFetch(`/_v/integrate-feature?token=${token}`, {
+    const response = await VTEXFetch(`/_v/integrate-feature`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
       throw new Error(response?.message || 'error integrating agents.');
     }
 
-    await updateFeatureList(project_uuid, token);
+    await updateFeatureList(project_uuid);
     return { success: true, data: response };
   } catch (error) {
     return { success: false, error: error || 'unknown error' };
@@ -75,9 +75,9 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
   }
 }
 
-export async function getIntegratedFeatures(project_uuid: string, token: string) {
+export async function getIntegratedFeatures(project_uuid: string) {
   try {
-    const response = await VTEXFetch(`/_v/get-integrated-features?token=${token}&projectUUID=${project_uuid}`, {
+    const response = await VTEXFetch(`/_v/get-integrated-features?projectUUID=${project_uuid}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -95,14 +95,14 @@ export async function getIntegratedFeatures(project_uuid: string, token: string)
   }
 }
 
-export async function updateAgentSettings(body: any, token: string) {
+export async function updateAgentSettings(body: any) {
   storeProvider.dispatch(setFeatureLoading(true))
 
   try {
     const response = await VTEXFetch<{
       message: string;
       error: string;
-    }>(`/_v/update-feature-settings?token=${token}`, {
+    }>(`/_v/update-feature-settings`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -123,14 +123,14 @@ export async function updateAgentSettings(body: any, token: string) {
   }
 }
 
-export async function disableFeature(project_uuid: string, feature_uuid: string, token: string) {
+export async function disableFeature(project_uuid: string, feature_uuid: string) {
   storeProvider.dispatch(setDisableFeatureLoading(true))
 
   try{
     const response = await VTEXFetch<{
       message: string;
       error: string;
-    }>(`/_v/disable-feature?token=${token}`, {
+    }>(`/_v/disable-feature`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export async function disableFeature(project_uuid: string, feature_uuid: string,
       throw new Error(response?.message || 'error updating agent.');
     }
 
-    await updateFeatureList(project_uuid, token);
+    await updateFeatureList(project_uuid);
     return { success: true, data: response };
   } catch(error){
     console.error('error updating agent:', error);

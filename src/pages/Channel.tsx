@@ -3,14 +3,12 @@ import iconWhatsapp from '../assets/channels/whatsapp.svg';
 import { startFacebookLogin } from "../utils/facebook/login";
 import { useSelector } from "react-redux";
 import { selectProject, wppLoading } from "../store/projectSlice";
-import { selectToken } from "../store/authSlice";
 
 export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
   const project_uuid = useSelector(selectProject)
-  const token = useSelector(selectToken)
   const isWppLoading = useSelector(wppLoading)
   const callFacebookSDK = () => {
-    startFacebookLogin(project_uuid, token)
+    startFacebookLogin(project_uuid)
   }
   return (
     <Flex
