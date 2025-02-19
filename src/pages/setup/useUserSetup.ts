@@ -79,7 +79,7 @@ export function useUserSetup() {
 
         const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration.error) {
-          throw new Error(agentIntegration.error)
+          throw new Error(JSON.stringify(agentIntegration.error))
         }
 
         const { name = '', links = '', objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
