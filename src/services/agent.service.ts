@@ -4,9 +4,9 @@ import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
 
-export async function checkAgentIntegration(project_uuid: string, token: string) {
+export async function checkAgentIntegration(project_uuid: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
-  const apiUrl = `${integrationsAPI}/api/commerce/check-exists-agent-builder?project_uuid=${project_uuid}`;
+  // const apiUrl = `${integrationsAPI}/api/commerce/check-exists-agent-builder?project_uuid=${project_uuid}`;
 
   if (!integrationsAPI) {
     console.error('VITE_APP_NEXUS_URL is not configured');
@@ -14,21 +14,26 @@ export async function checkAgentIntegration(project_uuid: string, token: string)
   }
 
   try {
-    const response = await fetch(apiUrl, {
+    // const response = await fetch(apiUrl, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Authorization': `Bearer ${token}`,
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+
+    const response = await VTEXFetch(`/_v/check-agent-builder?projectUUID=${project_uuid}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      return { success: false, error: result.message || `Erro ${response.status}` };
+    if (!response || response?.error) {
+      throw new Error(response?.message || 'error integrating agents.');
     }
 
-    return { success: true, data: result };
+    return { success: true, data: response };
   } catch (error) {
     console.error('error in the integration check:', error);
     return { success: false, error: error || 'unknown error' };
