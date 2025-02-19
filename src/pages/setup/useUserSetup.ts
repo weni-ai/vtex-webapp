@@ -94,7 +94,7 @@ export function useUserSetup() {
             navigate('/agent-builder');
           }
         } else {
-          navigate('/agent-details');
+          navigate('/agent-builder');
         }
       } else {
         navigate('/agent-details');
