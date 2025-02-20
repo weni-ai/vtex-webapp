@@ -52,14 +52,16 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     store.dispatch(setFeatureIntegrated(true));
     toast.success(t('integration.channels.whatsapp.success'))
     store.dispatch(setWppLoading(false))
+    store.dispatch(setFlowsChannelUuid(response.flows_channel_uuid));
+    store.dispatch(setWppCloudAppUuid(response.data.wpp_cloud_app_uuid));
 
-    const checkResponse = await checkWppIntegration(project_uuid);
+    // const checkResponse = await checkWppIntegration(project_uuid);
 
-    if (checkResponse.success && checkResponse.data.has_whatsapp) {
-      store.dispatch(setFlowsChannelUuid(checkResponse.data.flows_channel_uuid));
-      store.dispatch(setWppCloudAppUuid(checkResponse.data.wpp_cloud_app_uuid));
-    }
-    return { success: true, data: response.data };
+    // if (checkResponse.success && checkResponse.data.has_whatsapp) {
+    //   store.dispatch(setFlowsChannelUuid(checkResponse.data.flows_channel_uuid));
+    //   store.dispatch(setWppCloudAppUuid(checkResponse.data.wpp_cloud_app_uuid));
+    // }
+    return { success: true, data: response };
   } catch (error) {
     console.error('error creating channel:', error);
     store.dispatch(setWhatsAppError(JSON.stringify(error) || 'unknown error'));
