@@ -1,4 +1,3 @@
- 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AccountData, RootState, UserData, UserState } from 'src/interfaces/Store';
 

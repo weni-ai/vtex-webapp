@@ -20,6 +20,10 @@ export interface Feature {
     [key: string]: any;
 }
 
+export interface Loading {
+    feature_uuid: string,
+    isLoading: boolean
+}
 export interface ProjectState {
     project_uuid: string;
     wpp_cloud_app_uuid: string;
@@ -32,7 +36,7 @@ export interface ProjectState {
     agent: Agent;
     featureList: Feature[];
     integratedFeatures: Feature[];
-    updateFeatureLoading: boolean;
+    updateFeatureLoading: Loading[];
     disableFeatureLoading: boolean;
 }
 
