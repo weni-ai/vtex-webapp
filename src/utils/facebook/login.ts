@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getToken } from "../../services/auth.service";
 import { createChannel } from "../../services/channel.service";
 import getEnv from "../env";
 
@@ -48,9 +49,10 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
     })("facebook-jssdk");
 }
 
-export function startFacebookLogin(project_uuid: string) {
+export async function startFacebookLogin(project_uuid: string) {
     const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
     const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
+    const token = await getToken()
 
     console.log('tokens: ', fbAppId, configId)
 
@@ -96,7 +98,7 @@ export function startFacebookLogin(project_uuid: string) {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
                     console.log("Login Successful.");
-                    createChannel(code, project_uuid, wabaId, phoneId);
+                    createChannel(code, project_uuid, wabaId, phoneId, token);
                 } else {
                     console.error("Login canceled or not fully authorized.");
                 }
