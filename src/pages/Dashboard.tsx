@@ -7,6 +7,7 @@ import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
 import { featureList, integratedFeatures, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
+import { updateFeatureList } from '../services/features.service';
 
 const APICodes = {
   'order_status': 'order_status' as const,
@@ -53,6 +54,8 @@ export function Dashboard() {
       .catch((error) => {
         console.error('VTEXFetch failed:', error);
       });
+
+      updateFeatureList(project_uuid);
   }, []);
 
   return (
