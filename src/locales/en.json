@@ -19,12 +19,13 @@
         "new_agent": "New Agent"
     },
     "title": "Weni Agentic IA",
-    "description": "An enteprise AI-based CX SOLUTION for brands and retailers.",
+    "description": "An enterprise AI-based CX SOLUTION for brands and retailers.",
     "improve": {
         "description": " Connect agents to the Weni platform to access advanced features and customizable options.",
         "button": "Connect to Weni"
     },
     "agents": {
+        "title": "Agent gallery",
         "categories": {
             "active": {
                 "title": "Active notification",
@@ -69,42 +70,14 @@
                 "error": "It could not be saved. Please try again later."
             },
             "disable": {
+                "title": "Disable agent",
+                "description": "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
                 "success": "Agent disabled successfully.",
                 "error": "The agent could not be disabled. Please try again later."
-            }
-        }
-    },
-    "agent_gallery": {
-        "title": "Agent gallery",
-        "added": "Agent added",
-        "features": {
-            "abandoned_cart": {
-                "title": "Abandoned cart agent",
-                "description": "Recover sales by reminding customers of items left in the cart.",
-                "disclaimer": "This agent increases conversion, retains customers and encourages order completion.",
-                "preferences": {
-                    "restriction": "Message Restriction",
-                    "restriction_details": "Restrict messages to configured hours",
-                    "monday_until_friday": "Monday until friday",
-                    "saturday": "Saturday",
-                    "from": "From",
-                    "to": "To"
-                }
             },
-            "disable": {
-                "title": "Disable agent",
-                "description":  "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
-                "agents": {
-                    "abandoned_cart": "Abandoned Cart"
-                }
-            }
-        },
-        "types": {
-            "active": "Active notification",
-            "passive": "Passive support"
-        },
-        "button": {
-            "add": "Add agent"
+            "add": "Add agent",
+            "added": "Agent active",
+            "test": "Agent in test"
         }
     },
     "setup": {
@@ -130,7 +103,7 @@
             "forms": {
                 "name": "Name",
                 "occupation": {
-                    "title":"Occupation (optional)",
+                    "title": "Occupation (optional)",
                     "default": "Intelligent assistant"
                 },
                 "objective": {
@@ -138,7 +111,7 @@
                     "default": "Your goal is to answer customer questions, inform the order status, provide product information, and sell. Your main features are: Shopping on WhatsApp and FAQ."
                 },
                 "knowledge": {
-                    "title": "Knowlege source",
+                    "title": "Knowledge source",
                     "context": "Provide the content your agent will use to answer questions."
                 },
                 "error": {
@@ -161,7 +134,7 @@
                 "title": "WhatsApp Channel",
                 "description": "Utilize an enterprise WhatsApp account to enhance communication with contacts.",
                 "error": "WhatApp unable to connect, check your credentials or try again later.",
-                "success": "WhatApp was sucessfully integrated."
+                "success": "WhatApp was successfully integrated."
             }
         },
         "buttons": {
@@ -175,5 +148,18 @@
         "title": "Something went wrong",
         "description": "Retry or check back later if the issue persists.",
         "button": "Try again"
+    },
+    "terms": {
+        "title": "Terms and conditions",
+        "description": "By using this application, acceptance of the Terms and Conditions is required. These terms define access to and use of the services, detailing the selected plan's features, limitations, pricing, and renewal policies. Additionally, they outline product functionality, usage guidelines, and any applicable restrictions to ensure a secure and optimal experience.",
+        "plan_details": {
+            "title": "1. Plan Details",
+            "description": "Your selected plan includes specific features, limitations, and billing terms. Please check your subscription details to understand what is included and how renewals work."
+        },
+        "product_usage": {
+            "title": "2. Product Usage",
+            "description": "This application is designed to enhance your experience through specific features and functionalities. Any misuse, unauthorized access, or violation of the terms may result in account suspension."
+        },
+        "agree": "Agree"
     }
 }

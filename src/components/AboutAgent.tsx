@@ -8,8 +8,8 @@ type codes = 'abandoned_cart' | 'order_status';
 
 const previews: {[K in categories]?: {[L in codes]?: string}} = {
     active: {
-        abandoned_cart: activeAbandonedCartPreview,
-        order_status: activeOrderStatusPreview,
+        'abandoned_cart': activeAbandonedCartPreview,
+        'order_status': activeOrderStatusPreview,
     },
 };
 

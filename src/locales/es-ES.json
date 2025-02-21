@@ -8,7 +8,7 @@
         "back": "Volver",
         "create": "Crear",
         "details": "Ver detalles",
-        "manage_settings": "Gestionar la configuración",
+        "manage_settings": "Gestionar configuraciones",
         "preferences": "Preferencias",
         "disable": "Desactivar",
         "errors": {
@@ -25,154 +25,81 @@
         "button": "Conectar con Weni"
     },
     "agents": {
+        "title": "Galería de agentes",
         "categories": {
             "active": {
                 "title": "Notificación activa",
                 "order_status": {
                     "title": "Agente de estado de pedidos",
-                    "description": "Mantenga a los clientes informados del estado de sus pedidos en tiempo real.",
+                    "description": "Mantén a los clientes informados en tiempo real sobre el estado de sus pedidos.",
                     "details": {
-                        "title": "Habilite el seguimiento de la entrega de pedidos para los clientes.",
-                        "description": "Este agente reduce las comprobaciones manuales y aumenta la transparencia, garantizando que los clientes permanezcan informados y en control."
+                        "title": "Habilita el seguimiento de entregas para los clientes.",
+                        "description": "Este agente reduce las consultas manuales y aumenta la transparencia, asegurando que los clientes estén informados y tengan el control."
                     },
                     "settings": {
                         "is_test_contact_number": {
-                            "title": "Restringir al número de contacto de prueba",
-                            "description": "El agente sólo enviará mensajes al número de teléfono de prueba"
+                            "title": "Restringir a número de prueba",
+                            "description": "El agente solo enviará mensajes al número de prueba."
                         },
                         "test_contact_number": {
                             "label": "Número de teléfono"
                         },
                         "is_selected_sellers": {
-                            "title": "Restringido para vendedores seleccionados",
-                            "description": "El agente sólo enviará mensajes a los vendedores seleccionados"
+                            "title": "Restringido a vendedores seleccionados",
+                            "description": "El agente solo enviará mensajes a vendedores seleccionados."
                         },
                         "selected_sellers": {
-                            "label": "Seleccione los vendedores",
-                            "placeholder": "Seleccione…"
+                            "label": "Selecciona los vendedores",
+                            "placeholder": "Seleccionar…"
                         }
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de carrito abandonado",
-                    "description": "Recupera ventas recordando a los clientes los artículos olvidados en el carrito.",
+                    "title": "Agente de recuperación de carrito",
+                    "description": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
                     "details": {
-                        "title": "Recupera ventas recordando a los clientes los artículos olvidados en el carrito.",
-                        "description": "Con este agente, aumentas tus posibilidades de conversión, manteniendo a tu cliente cerca e incentivando la finalización del pedido."
+                        "title": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
+                        "description": "Este agente mejora la conversión, retiene clientes e impulsa la finalización de compras."
                     }
                 }
             }
         },
         "common": {
             "configure": {
-                "success": "Configuración guardada correctamente.",
-                "error": "No se ha podido guardar. Vuelva a intentarlo más tarde."
-            },
-            "disable": {
-                "success": "Agente desactivado con éxito.",
-                "error": "No se ha podido desactivar el agente. Vuelva a intentarlo más tarde."
-            }
-        }
-    },
-    "agent_gallery": {
-        "title": "Galería de agentes",
-        "added": "Agente agregado con éxito.",
-        "features": {
-            "abandoned_cart": {
-                "title": "Agente de recuperación de carrito",
-                "description": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
-                "disclaimer": "Este agente mejora la tasa de conversión, retiene clientes e impulsa la finalización de compras.",
-                "preferences": {
-                    "restriction": "Restricciones de mensajes",
-                    "restriction_details": "Define horarios específicos para el envío de mensajes.",
-                    "monday_until_friday": "Lunes a viernes",
-                    "saturday": "Sábado",
-                    "from": "De",
-                    "to": "Hasta"
-                }
+                "success": "Configuración guardada con éxito.",
+                "error": "No se pudo guardar. Inténtalo nuevamente más tarde."
             },
             "disable": {
                 "title": "Desactivar agente",
                 "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, ya no estará activo en tu proyecto.",
-                "agents": {
-                    "abandoned_cart": "Recuperación de carrito"
-                }
-            }
-        },
-        "types": {
-            "active": "Notificación activa"
-        },
-        "button": {
-            "add": "Agregar agente"
+                "success": "Agente desactivado con éxito.",
+                "error": "No se pudo desactivar el agente. Inténtalo nuevamente más tarde."
+            },
+            "add": "Agregar agente",
+            "added": "Agente activo",
+            "test": "Agente en prueba"
         }
     },
     "setup": {
         "title": "Configurando tu Weni App",
-        "description": "Estamos finalizando la configuración para garantizar una experiencia fluida."
-    },
-    "agent": {
-        "details": {
-            "title": "Agentes inteligentes",
-            "description": "Mejora los agentes inteligentes permitiendo el control de los flujos de conversación según las intenciones del usuario. Con el Plan Starter, personaliza el idioma, el tono y el comportamiento para darle al agente una identidad única y mejorar la calidad de la comunicación. Observa la demostración de la interacción del agente de cambios y devoluciones al lado.",
-            "skills": {
-                "title": "Habilidades del agente",
-                "analyze": "Analizar el contexto",
-                "comprehend": "Comprender demandas complejas",
-                "provide": "Ofrecer respuestas personalizadas"
-            },
-            "example": {
-                "description": "Demostración del agente de cambios y devoluciones"
-            }
-        },
-        "setup": {
-            "title": "Configura la personalidad de tu agente",
-            "forms": {
-                "name": "Nombre",
-                "occupation": {
-                    "title": "Ocupación (opcional)",
-                    "default": "Asistente inteligente"
-                },
-                "objective": {
-                    "title": "Objetivo (opcional)",
-                    "default": "Tu objetivo es responder preguntas de los clientes, informar el estado de los pedidos, proporcionar información sobre productos y facilitar compras. Tus principales funciones son: compras por WhatsApp y preguntas frecuentes."
-                },
-                "knowledge": {
-                    "title": "Fuente de conocimiento",
-                    "context": "Proporciona el contenido que tu agente utilizará para responder preguntas."
-                },
-                "error": {
-                    "empty_input": "Completa esta información.",
-                    "valid_url": "Ingresa una URL válida."
-                }
-            },
-            "buttons": {
-                "create_agent": "Crear agente"
-            }
-        },
-        "error": "No se pudo configurar el agente. Inténtalo nuevamente más tarde.",
-        "success": "Agente registrado con éxito."
-    },
-    "integration": {
-        "title": "Integra un canal de soporte",
-        "description": "Elige el canal que deseas utilizar y sigue los pasos para agregarlo.",
-        "channels": {
-            "whatsapp": {
-                "title": "Canal de WhatsApp",
-                "description": "Conecta una cuenta empresarial de WhatsApp para mejorar la comunicación con tus clientes.",
-                "error": "No se pudo conectar con WhatsApp. Verifica tus credenciales e inténtalo nuevamente.",
-                "success": "WhatsApp se ha integrado con éxito."
-            }
-        },
-        "buttons": {
-            "integrate": "Integrar",
-            "integrated": "Integrado"
-        },
-        "success": "¡Integración completada con éxito!",
-        "error": "No se pudo completar la integración. Inténtalo nuevamente más tarde."
+        "description": "Estamos finalizando la configuración inicial para garantizar una experiencia fluida."
     },
     "error": {
         "title": "Algo salió mal",
         "description": "Inténtalo de nuevo o vuelve más tarde si el problema persiste.",
         "button": "Intentar de nuevo"
+    },
+    "terms": {
+        "title": "Términos y Condiciones",
+        "description": "Al utilizar esta aplicación, es necesario aceptar los Términos y Condiciones. Estos términos definen el acceso y uso de los servicios, detallando las características del plan seleccionado, sus limitaciones, precios y políticas de renovación. Además, describen la funcionalidad del producto, las pautas de uso y cualquier restricción aplicable para garantizar una experiencia segura y optimizada.",
+        "plan_details": {
+            "title": "1. Detalles del Plan",
+            "description": "El plan seleccionado incluye características específicas, limitaciones y condiciones de pago. Revisa los detalles de tu suscripción para comprender qué está incluido y cómo funcionan las renovaciones."
+        },
+        "product_usage": {
+            "title": "2. Uso del Producto",
+            "description": "Esta aplicación ha sido diseñada para mejorar tu experiencia mediante funciones y características específicas. Cualquier uso indebido, acceso no autorizado o violación de los términos puede resultar en la suspensión de la cuenta."
+        },
+        "agree": "Aceptar"
     }
 }

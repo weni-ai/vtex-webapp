@@ -1,41 +1,41 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, toast } from "@vtex/shoreline";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateFeature } from "../services/features.service";
 import { useSelector } from "react-redux";
-import { selectToken } from "../store/authSlice";
-import { featureList, selectProject } from "../store/projectSlice";
+import { featureList, selectProject, updateFeatureLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
+import wrench from '../assets/icons/Wrench.svg'
 
 type codes = 'abandoned_cart' | 'order_status';
 
-export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean }) {
-  const token = useSelector(selectToken);
+export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean }) {
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const features = useSelector(featureList)
-  console.log('a lista: ', featureList)
-  const featureUuid = features.find((item: { code: string }) => item.code === code)?.feature_uuid;
+  const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
+  const featureUuid = features.find((item: { code: string }) => item.code === code)?.feature_uuid || '';
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
   const openDisableModal = () => {
     setOpenDisable((o) => !o)
   }
-  
+
   const toggleIsPreferencesOpen = () => {
     setIsPreferencesOpen((o) => !o)
   }
 
   const integrateCurrentFeature = async () => {
-    const result = await integrateFeature(featureUuid, projectUUID, token);
+    const result = await integrateFeature(featureUuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
-    }else{
+    } else {
       toast.success(t('integration.success'));
     }
   }
@@ -77,7 +77,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
                 <IconGearSix />
                 {t('common.manage_settings')}
               </MenuItem>
-              
+
               <MenuSeparator />
 
               <MenuItem onClick={openDisableModal}>
@@ -98,26 +98,50 @@ export function FeatureBox({ uuid, code, type, isIntegrated }: { uuid: string, c
         </Flex>
 
 
-        {
-          isIntegrated ?
-            <Flex
-              style={{
-                padding: 'var(--sl-space-2)',
-                alignItems: 'center',
-                gap: '8px'
-              }}
-            >
-              <IconCheck color="green" />
-              <Text variant="action" color="$fg-success">
-                {t('agent_gallery.added')}
-              </Text>
-            </Flex>
-            :
+        {(() => {
+          if (isIntegrated) {
+            return (
+              <Flex
+                style={{
+                  padding: 'var(--sl-space-2)',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <IconCheck color="green" />
+                <Text variant="action" color="$fg-success">
+                  {t('agents.common.added')}
+                </Text>
+              </Flex>
+            );
+          }
+
+          if (isInTest) {
+            return (
+              <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
+                <img src={wrench} alt="" />
+                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
+              </Button>
+            );
+          }
+
+          return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
-              <IconPlus />
-              <Text> {t('agent_gallery.button.add')}</Text>
+              {
+                isUpdateFeatureLoading ?
+                  <Spinner description="loading" />
+                  :
+                  <>
+                    <IconPlus />
+                    <Text> {t('agents.common.add')}</Text>
+                  </>
+              }
+
             </Button>
-        }
+          );
+        })()}
+
+
       </Flex>
 
       <AboutAgent

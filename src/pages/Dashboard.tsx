@@ -5,19 +5,19 @@ import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
-import { isFeatureIntegrated } from '../store/userSlice';
-import { featureList, selectProject } from '../store/projectSlice';
+import { featureList, integratedFeatures, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
+import { updateFeatureList } from '../services/features.service';
 
 const APICodes = {
-  'order-status': 'order_status' as const,
-  'abandoned-cart': 'abandoned_cart' as const,
+  'order_status': 'order_status' as const,
+  'abandoned_cart': 'abandoned_cart' as const,
 };
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const features = useSelector(featureList)
-  const featureIntegrated = useSelector(isFeatureIntegrated);
+  const integrated = useSelector(integratedFeatures)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
 
@@ -54,6 +54,8 @@ export function Dashboard() {
       .catch((error) => {
         console.error('VTEXFetch failed:', error);
       });
+
+      updateFeatureList(project_uuid);
   }, []);
 
   return (
@@ -132,7 +134,7 @@ export function Dashboard() {
           <Heading
             variant="display2"
           >
-            {t('agent_gallery.title')}
+            {t('agents.title')}
           </Heading>
 
           <Grid
@@ -142,9 +144,20 @@ export function Dashboard() {
               <FeatureBox
                 key={item.feature_uuid}
                 uuid={item.feature_uuid}
-                code={APICodes[item.code as 'order-status' | 'abandoned-cart']}
+                code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
                 type="active"
-                isIntegrated={featureIntegrated}
+                isIntegrated={false}
+                isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
+              />
+            ))}
+            {integrated.map((item: any) => (
+              <FeatureBox
+                key={item.feature_uuid}
+                uuid={item.feature_uuid}
+                code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
+                type="active"
+                isIntegrated={true}
+                isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
               />
             ))}
           </Grid>

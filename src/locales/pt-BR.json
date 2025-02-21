@@ -22,43 +22,44 @@
     "description": "Uma solução de CX baseada em IA para marcas e varejistas.",
     "improve": {
         "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizadas.",
-        "button": "Conectar a Weni"
+        "button": "Conectar à Weni"
     },
     "agents": {
+        "title": "Galeria de agentes",
         "categories": {
             "active": {
                 "title": "Notificação ativa",
                 "order_status": {
-                    "title": "Agente de status do pedido",
-                    "description": "Mantenha os clientes atualizados sobre o status de seus pedidos em tempo real.",
+                    "title": "Agente de status de pedidos",
+                    "description": "Mantenha os clientes informados sobre o status dos pedidos em tempo real.",
                     "details": {
-                        "title": "Habilite o rastreamento de entrega de pedidos para os clientes.",
-                        "description": "Esse agente reduz as verificações manuais e aumenta a transparência, garantindo que os clientes permaneçam informados e no controle."
+                        "title": "Habilite o rastreamento de entrega para os clientes.",
+                        "description": "Este agente reduz verificações manuais e aumenta a transparência, garantindo que os clientes fiquem informados e no controle."
                     },
                     "settings": {
                         "is_test_contact_number": {
-                            "title": "Restringir para testar o número de contato",
-                            "description": "O agente enviará mensagens apenas para o número de telefone de teste"
+                            "title": "Restringir para número de teste",
+                            "description": "O agente enviará mensagens apenas para o número de teste."
                         },
                         "test_contact_number": {
                             "label": "Número de telefone"
                         },
                         "is_selected_sellers": {
-                            "title": "Restrito a vendedores selecionados",
-                            "description": "O agente enviará mensagens apenas para os vendedores selecionados"
+                            "title": "Restringido para vendedores selecionados",
+                            "description": "O agente enviará mensagens apenas para os vendedores selecionados."
                         },
                         "selected_sellers": {
                             "label": "Selecione os vendedores",
-                            "placeholder": "Selecione…"
+                            "placeholder": "Selecionar…"
                         }
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de carrinho abandonado",
-                    "description": "Recupere vendas lembrando os clientes dos itens esquecidos no carrinho.",
+                    "title": "Agente de recuperação de carrinho",
+                    "description": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
                     "details": {
-                        "title": "Recupere vendas lembrando os clientes dos itens esquecidos no carrinho.",
-                        "description": "Com este agente, você aumenta suas chances de conversão, mantendo seu cliente próximo e incentivando a conclusão do pedido."
+                        "title": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
+                        "description": "Este agente melhora a conversão, retém clientes e incentiva a finalização das compras."
                     }
                 }
             }
@@ -69,110 +70,36 @@
                 "error": "Não foi possível salvar. Tente novamente mais tarde."
             },
             "disable": {
+                "title": "Desativar agente",
+                "description": "Deseja desativar o agente '{{agent}}'? Depois de desativado, ele não estará mais ativo no seu projeto.",
                 "success": "Agente desativado com sucesso.",
                 "error": "Não foi possível desativar o agente. Tente novamente mais tarde."
-            }
-        }
-    },
-    "agent_gallery": {
-        "title": "Galeria de agentes",
-        "added": "Agente adicionado",
-        "features": {
-            "abandoned_cart": {
-                "title": "Agente de recuperação de carrinho",
-                "description": "Aumente suas vendas lembrando os clientes dos itens deixados no carrinho.",
-                "disclaimer": "Este agente melhora a taxa de conversão, retém clientes e incentiva a finalização de compras.",
-                "preferences": {
-                    "restriction": "Restrições de mensagens",
-                    "restriction_details": "Defina horários específicos para envio de mensagens.",
-                    "monday_until_friday": "Segunda a sexta-feira",
-                    "saturday": "Sábado",
-                    "from": "Das",
-                    "to": "Até"
-                }
             },
-            "disable": {
-                "title": "Desativar agente",
-                "description": "Deseja desativar o agente '{{agent}}'? Após a desativação, ele não estará mais ativo no seu projeto.",
-                "agents": {
-                    "abandoned_cart": "Recuperação de carrinho"
-                }
-            }
-        },
-        "types": {
-            "active": "Notificação ativa"
-        },
-        "button": {
-            "add": "Adicionar agente"
+            "add": "Adicionar agente",
+            "added": "Agente ativo",
+            "test": "Agente em teste"
         }
     },
     "setup": {
         "title": "Configurando seu Weni App",
-        "description": "Estamos finalizando a configuração para garantir uma experiência fluida."
-    },
-    "agent": {
-        "details": {
-            "title": "Agentes inteligentes",
-            "description": "Aprimore agentes inteligentes permitindo o controle sobre fluxos de conversa com base nas intenções do usuário. Com o Plano Starter, personalize o idioma, tom e comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja a demonstração da interação do agente de trocas e devoluções ao lado.",
-            "skills": {
-                "title": "Habilidades do agente",
-                "analyze": "Analisar contexto",
-                "comprehend": "Compreender demandas complexas",
-                "provide": "Fornecer respostas personalizadas"
-            },
-            "example": {
-                "description": "Demonstração do agente de trocas e devoluções"
-            }
-        },
-        "setup": {
-            "title": "Configure a personalidade do seu agente",
-            "forms": {
-                "name": "Nome",
-                "occupation": {
-                    "title": "Ocupação (opcional)",
-                    "default": "Assistente inteligente"
-                },
-                "objective": {
-                    "title": "Objetivo (opcional)",
-                    "default": "Responder perguntas dos clientes, informar status de pedidos, fornecer detalhes sobre produtos e auxiliar nas compras via WhatsApp. Principais funcionalidades: atendimento ao cliente e FAQs."
-                },
-                "knowledge": {
-                    "title": "Fonte de conhecimento",
-                    "context": "Insira o conteúdo que seu agente usará para responder perguntas."
-                },
-                "error": {
-                    "empty_input": "Preencha este campo.",
-                    "valid_url": "Insira uma URL válida."
-                }
-            },
-            "buttons": {
-                "create_agent": "Criar agente"
-            }
-        },
-        "error": "Não foi possível configurar o agente. Tente novamente mais tarde.",
-        "success": "Agente criado com sucesso!"
-    },
-    "integration": {
-        "title": "Integre um canal de suporte",
-        "description": "Escolha o canal desejado e siga o passo a passo para adicioná-lo.",
-        "channels": {
-            "whatsapp": {
-                "title": "Canal WhatsApp",
-                "description": "Conecte uma conta empresarial do WhatsApp para melhorar sua comunicação.",
-                "error": "Não foi possível conectar ao WhatsApp. Verifique suas credenciais e tente novamente.",
-                "success": "WhatsApp integrado com sucesso!"
-            }
-        },
-        "buttons": {
-            "integrate": "Integrar",
-            "integrated": "Integrado"
-        },
-        "success": "Integração concluída com sucesso!",
-        "error": "Não foi possível concluir a integração. Tente novamente mais tarde."
+        "description": "Estamos finalizando a configuração inicial para garantir uma experiência fluida."
     },
     "error": {
         "title": "Algo deu errado",
         "description": "Tente novamente ou volte mais tarde se o problema persistir.",
         "button": "Tentar novamente"
+    },
+    "terms": {
+        "title": "Termos e Condições",
+        "description": "Ao utilizar este aplicativo, é necessário aceitar os Termos e Condições. Esses termos definem o acesso e o uso dos serviços, detalhando os recursos do plano selecionado, suas limitações, preços e políticas de renovação. Além disso, eles descrevem a funcionalidade do produto, as diretrizes de uso e quaisquer restrições aplicáveis para garantir uma experiência segura e otimizada.",
+        "plan_details": {
+            "title": "1. Detalhes do Plano",
+            "description": "O plano selecionado inclui recursos específicos, limitações e condições de pagamento. Verifique os detalhes da sua assinatura para entender o que está incluído e como funcionam as renovações."
+        },
+        "product_usage": {
+            "title": "2. Uso do Produto",
+            "description": "Este aplicativo foi desenvolvido para aprimorar sua experiência por meio de recursos e funcionalidades específicas. Qualquer uso indevido, acesso não autorizado ou violação dos termos pode resultar na suspensão da conta."
+        },
+        "agree": "Concordo"
     }
 }

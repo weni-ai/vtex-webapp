@@ -24,32 +24,43 @@ export async function fetchUserData() {
   }
 }
 
-export async function checkProject(vtex_account: string, user_email: string, token: string) {
-  const apiUrl = `https://api.stg.cloud.weni.ai/v2/commerce/check-project?vtex_account=${vtex_account}&user_email=${user_email}`;
+export async function fetchAccountData() {
+  try {
+    const response = await VTEXFetch('/api/license-manager/account');
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'error fetching account data.');
+    }
+
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('error fetching account data:', error);
+    return { success: false, error: error || 'unknown error' };
+  }
+}
+
+export async function checkProject(vtex_account: string, user_email: string) {
 
   try {
-    const response = await fetch(apiUrl, {
+  const response = await VTEXFetch(`/_v/check-project-by-user?vtex_account=${vtex_account}&user_email=${user_email}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error()
+    if (!response || response.error) {
+      throw new Error(response?.message || 'error creating user and project.');
     }
 
-    return { success: true, data: result };
+    return { success: true, data: response };
   } catch (error) {
     console.error('error when checking project:', error);
     return { success: false, error: error || 'unknown error' };
   }
 }
 
-export async function createUserAndProject(userData: any, token: string) {
+export async function createUserAndProject(userData: any) {
   store.dispatch(setLoadingSetup(true));
 
   try {
@@ -60,7 +71,7 @@ export async function createUserAndProject(userData: any, token: string) {
       vtex_account: userData.account,
     };
 
-    const response = await VTEXFetch(`/_v/create-user-and-project?token=${token}`, {
+    const response = await VTEXFetch(`/_v/create-user-and-project`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -75,7 +86,7 @@ export async function createUserAndProject(userData: any, token: string) {
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false));
 
-    const featureList = await getFeatureList(response.project_uuid, token);
+    const featureList = await getFeatureList(response.project_uuid);
     if (featureList?.error) {
       throw new Error(JSON.stringify(featureList.error))
     }
