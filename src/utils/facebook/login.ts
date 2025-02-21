@@ -52,8 +52,6 @@ export function startFacebookLogin(project_uuid: string) {
     const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
     const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
 
-    console.log('tokens: ', fbAppId, configId)
-
     if (!fbAppId) {
         console.error("Facebook App ID is missing.");
         return;
