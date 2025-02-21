@@ -1,4 +1,4 @@
-import { DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, Checkbox, Time } from "@vtex/shoreline";
+import { DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, Checkbox } from "@vtex/shoreline";
 import { TimeValue } from '@react-aria/datepicker';
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { SettingsContext } from "./SettingsContainer/SettingsContext";

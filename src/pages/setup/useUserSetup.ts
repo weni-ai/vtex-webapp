@@ -1,15 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
-import { checkProject, createUserAndProject, fetchUserData } from '../../services/user.service';
-import { setToken } from '../../store/authSlice';
+import { setAccount, setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
+import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFeatureList, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
-import { getFeatureList } from '../../services/features.service';
 import { useCallback } from 'react';
-import { toast } from '@vtex/shoreline';
+import { updateFeatureList } from '../../services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -33,7 +32,20 @@ export function useUserSetup() {
 
       store.dispatch(setUser(userData));
 
-      const result = await checkProject(userData.account, userData.user, token);
+      const { data: accountData, error: accountError } = await fetchAccountData();
+      if (!accountData || accountError) {
+        console.error("user data not found");
+        navigate('/setup-error');
+        return;
+      }
+
+      store.dispatch(setAccount(accountData));
+
+      if (accountData.hosts) {
+        store.dispatch(setBaseAddress(accountData.hosts[0]))
+      }
+
+      const result = await checkProject(userData.account, userData.user);
       if (result?.error) {
         throw new Error(JSON.stringify(result.error))
       }
@@ -42,22 +54,16 @@ export function useUserSetup() {
       if (has_project) {
         store.dispatch(setProjectUuid(project_uuid));
 
-        const response = await checkWppIntegration(project_uuid, token);
+        const response = await checkWppIntegration(project_uuid);
         const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
 
         if (response?.error) {
-          throw new Error(response.error)
+          throw new Error(JSON.stringify(response.error))
         }
-
-        const featureList = await getFeatureList(project_uuid, token);
-        if (featureList?.error) {
-          throw new Error(JSON.stringify(featureList.error))
-        }
-        store.dispatch(setFeatureList(featureList.data.features))
-
-        const agentIntegration = await checkAgentIntegration(project_uuid, token);
+        
+        const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration.error) {
-          throw new Error(agentIntegration.error)
+          throw new Error(JSON.stringify(agentIntegration.error))
         }
 
         const { name = '', links = '', objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
@@ -77,13 +83,16 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-        }
-
-        if (has_agent && has_whatsapp) {
-          store.dispatch(setAgentIntegrated(true))
-
-          navigate('/dash');
-
+          if (has_agent) {
+            store.dispatch(setAgentIntegrated(true))
+            const updatedFeatures = await updateFeatureList(project_uuid)
+            if (updatedFeatures?.error) {
+              throw new Error(updatedFeatures.error)
+            }
+            navigate('/dash');
+          } else {
+            navigate('/agent-builder');
+          }
         } else {
           navigate('/agent-builder');
         }
@@ -92,17 +101,15 @@ export function useUserSetup() {
       }
     } catch (err) {
       console.error(err);
-      toast.critical(t('integration.error'));
       navigate('/setup-error');
     }
   }, [navigate]);
 
   const initializeUser = useCallback(async () => {
     const userData = store.getState().user.userData;
-    const token = store.getState().auth.token;
     const project_uuid = store.getState().project.project_uuid
     if (!project_uuid) {
-      const response = await createUserAndProject(userData, token);
+      const response = await createUserAndProject(userData);
       if (response.error) {
         console.error("error during user initialization:", response.error);
         navigate('/setup-error');
