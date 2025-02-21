@@ -67,9 +67,11 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     }
 
     await updateFeatureList(project_uuid);
+    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
     return { success: true, data: response };
   } catch (error) {
     return { success: false, error: error || 'unknown error' };
+    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
   } finally {
     storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
   }
