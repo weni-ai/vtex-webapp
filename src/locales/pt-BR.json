@@ -88,5 +88,18 @@
         "title": "Algo deu errado",
         "description": "Tente novamente ou volte mais tarde se o problema persistir.",
         "button": "Tentar novamente"
+    },
+    "terms": {
+        "title": "Termos e Condições",
+        "description": "Ao utilizar este aplicativo, é necessário aceitar os Termos e Condições. Esses termos definem o acesso e o uso dos serviços, detalhando os recursos do plano selecionado, suas limitações, preços e políticas de renovação. Além disso, eles descrevem a funcionalidade do produto, as diretrizes de uso e quaisquer restrições aplicáveis para garantir uma experiência segura e otimizada.",
+        "plan_details": {
+            "title": "1. Detalhes do Plano",
+            "description": "O plano selecionado inclui recursos específicos, limitações e condições de pagamento. Verifique os detalhes da sua assinatura para entender o que está incluído e como funcionam as renovações."
+        },
+        "product_usage": {
+            "title": "2. Uso do Produto",
+            "description": "Este aplicativo foi desenvolvido para aprimorar sua experiência por meio de recursos e funcionalidades específicas. Qualquer uso indevido, acesso não autorizado ou violação dos termos pode resultar na suspensão da conta."
+        },
+        "agree": "Concordo"
     }
 }

@@ -148,5 +148,18 @@
         "title": "Something went wrong",
         "description": "Retry or check back later if the issue persists.",
         "button": "Try again"
+    },
+    "terms": {
+        "title": "Terms and conditions",
+        "description": "By using this application, acceptance of the Terms and Conditions is required. These terms define access to and use of the services, detailing the selected plan's features, limitations, pricing, and renewal policies. Additionally, they outline product functionality, usage guidelines, and any applicable restrictions to ensure a secure and optimal experience.",
+        "plan_details": {
+            "title": "1. Plan Details",
+            "description": "Your selected plan includes specific features, limitations, and billing terms. Please check your subscription details to understand what is included and how renewals work."
+        },
+        "product_usage": {
+            "title": "2. Product Usage",
+            "description": "This application is designed to enhance your experience through specific features and functionalities. Any misuse, unauthorized access, or violation of the terms may result in account suspension."
+        },
+        "agree": "Agree"
     }
 }
