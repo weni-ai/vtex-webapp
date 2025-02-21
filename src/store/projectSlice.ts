@@ -1,6 +1,6 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Feature, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -11,7 +11,7 @@ const initialState: ProjectState = {
   agentLoading: false,
   wppLoading: false,
   featureLoading: false,
-  updateFeatureLoading: false,
+  updateFeatureLoading: [],
   disableFeatureLoading: false,
   agent: {
     name: '',
@@ -46,9 +46,7 @@ const initialState: ProjectState = {
           ]
         }
       }
-    }
-  ],
-  integratedFeatures: [
+    },
     {
       feature_uuid: 'a3d77bf9-1e06-44cb-a550-c691e6d44687',
       name: 'Order status change notification',
@@ -93,7 +91,8 @@ const initialState: ProjectState = {
       config: {},
       code: 'order_status'
     }
-  ]
+  ],
+  integratedFeatures: []
 }
 
 const projectSlice = createSlice({
@@ -133,9 +132,18 @@ const projectSlice = createSlice({
     setIntegratedFeatures: (state, action: PayloadAction<Feature[]>) => {
       state.integratedFeatures = action.payload;
     },
-    setUpdateFeatureLoading: (state, action: PayloadAction<boolean>) => {
-      state.updateFeatureLoading = action.payload;
+    setUpdateFeatureLoading: (state, action: PayloadAction<Loading>) => {
+      const index = state.updateFeatureLoading.findIndex(
+        (item) => item.feature_uuid === action.payload.feature_uuid
+      );
+    
+      if (index !== -1) {
+        state.updateFeatureLoading[index] = action.payload;
+      } else {
+        state.updateFeatureLoading.push(action.payload);
+      }
     },
+    
     setDisableFeatureLoading: (state, action: PayloadAction<boolean>) => {
       state.disableFeatureLoading = action.payload;
     },
@@ -170,6 +178,6 @@ export const featureList = (state: RootState) => state.project.featureList
 export const integratedFeatures = (state: RootState) => state.project.integratedFeatures
 export const wppLoading = (state: RootState) => state.project.wppLoading
 export const featureLoading = (state: RootState) => state.project.featureLoading
-export const updateFeatureLoading = (state: RootState) => state.project.updateFeatureLoading
+export const updateFeatureLoading = (state: RootState, feature_uuid: string) => state.project.updateFeatureLoading.find(feature => feature.feature_uuid === feature_uuid)
 export const disableFeatureLoading = (state: RootState) => state.project.disableFeatureLoading
 export default projectSlice.reducer;

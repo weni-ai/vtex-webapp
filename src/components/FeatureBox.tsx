@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
@@ -17,7 +18,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const features = useSelector(featureList)
-  const isUpdateFeatureLoading = useSelector(updateFeatureLoading)
+  const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
   const featureUuid = features.find((item: { code: string }) => item.code === code)?.feature_uuid || '';
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
