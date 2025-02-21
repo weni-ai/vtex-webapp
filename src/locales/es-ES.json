@@ -88,5 +88,18 @@
         "title": "Algo salió mal",
         "description": "Inténtalo de nuevo o vuelve más tarde si el problema persiste.",
         "button": "Intentar de nuevo"
+    },
+    "terms": {
+        "title": "Términos y Condiciones",
+        "description": "Al utilizar esta aplicación, es necesario aceptar los Términos y Condiciones. Estos términos definen el acceso y uso de los servicios, detallando las características del plan seleccionado, sus limitaciones, precios y políticas de renovación. Además, describen la funcionalidad del producto, las pautas de uso y cualquier restricción aplicable para garantizar una experiencia segura y optimizada.",
+        "plan_details": {
+            "title": "1. Detalles del Plan",
+            "description": "El plan seleccionado incluye características específicas, limitaciones y condiciones de pago. Revisa los detalles de tu suscripción para comprender qué está incluido y cómo funcionan las renovaciones."
+        },
+        "product_usage": {
+            "title": "2. Uso del Producto",
+            "description": "Esta aplicación ha sido diseñada para mejorar tu experiencia mediante funciones y características específicas. Cualquier uso indebido, acceso no autorizado o violación de los términos puede resultar en la suspensión de la cuenta."
+        },
+        "agree": "Aceptar"
     }
 }
