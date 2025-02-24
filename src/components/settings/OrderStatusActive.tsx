@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label, Select, SelectItem } from "@vtex/shoreline";
+import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label } from "@vtex/shoreline";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
 
@@ -8,12 +8,12 @@ export function PreferencesOrderStatusActive() {
   const [hasTestContactNumber, setHasTestContactNumber] = useState(false);
   const [testContactNumber, setTestContactNumber] = useState('');
 
-  const [hasSelectedSellers, setHasSelectedSellers] = useState(false);
-  const [selectedSellers, setSelectedSellers] = useState<string[]>([]);
+  // const [hasSelectedSellers, setHasSelectedSellers] = useState(false);
+  // const [selectedSellers, setSelectedSellers] = useState<string[]>([]);
 
-  function updateSelectedSellers(items: string[]) {
-    setSelectedSellers(items);
-  }
+  // function updateSelectedSellers(items: string[]) {
+  //   setSelectedSellers(items);
+  // }
 
   function beforeSetTestContactNumber(phoneNumber: string) {
     const eventLocal = event as unknown as { target: { selectionStart: number; selectionEnd: number; } };
@@ -82,14 +82,14 @@ export function PreferencesOrderStatusActive() {
     const updatedFormData: SettingsFormData = {
       ...context?.formData,
       order_status_restriction: {
-        is_active: hasTestContactNumber || hasSelectedSellers,
+        is_active: hasTestContactNumber,
         phone_number: hasTestContactNumber ? testContactNumber : "",
-        sellers: hasSelectedSellers ? selectedSellers : [],
+        sellers: [] //hasSelectedSellers ? selectedSellers : [],
       },
     };
 
     context?.setFormData(updatedFormData);
-  }, [hasTestContactNumber, testContactNumber, hasSelectedSellers, selectedSellers]);
+  }, [hasTestContactNumber, testContactNumber]);
 
   return (
     <DrawerContent>
@@ -129,20 +129,20 @@ export function PreferencesOrderStatusActive() {
           marginTop: 'var(--sl-space-6)',
         }}
       >
-        <Checkbox
+        {/* <Checkbox
           checked={hasSelectedSellers}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setHasSelectedSellers(e.target.value as unknown as boolean)}
           aria-label={t('agents.categories.active.order_status.settings.is_selected_sellers.title')}
         >
           {t('agents.categories.active.order_status.settings.is_selected_sellers.title')}
-        </Checkbox>
+        </Checkbox> */}
 
-        <FieldDescription style={{ marginLeft: 'var(--sl-space-7)' }}>
+        {/* <FieldDescription style={{ marginLeft: 'var(--sl-space-7)' }}>
           {t('agents.categories.active.order_status.settings.is_selected_sellers.description')}
-        </FieldDescription>
+        </FieldDescription> */}
       </Field>
 
-      {
+      {/* {
         hasSelectedSellers &&
         <Field
           style={{
@@ -169,7 +169,7 @@ export function PreferencesOrderStatusActive() {
             <SelectItem value="option 5">option 5</SelectItem>
           </Select>
         </Field>
-      }
+      } */}
     </DrawerContent>
   );
 }

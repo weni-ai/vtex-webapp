@@ -70,11 +70,9 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
     return { success: true, data: response };
   } catch (error) {
+    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
     return { success: false, error: error || 'unknown error' };
-    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  } finally {
-    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  }
+  } 
 }
 
 export async function getIntegratedFeatures(project_uuid: string) {
