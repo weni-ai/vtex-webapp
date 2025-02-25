@@ -5,7 +5,7 @@ import {
   IntegratedAgentsListResponse,
   adapterIntegratedAgentsList,
 } from "./adpters";
-import store from "src/store/provider.store";
+import store from "../../store/provider.store";
 
 export async function agentsList() {
   const projectUuid = store.getState().project.project_uuid;
