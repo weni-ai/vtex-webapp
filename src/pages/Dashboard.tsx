@@ -9,11 +9,6 @@ import { featureList, integratedFeatures, selectProject } from '../store/project
 import { selectUser } from "../store/userSlice";
 import { updateFeatureList } from '../services/features.service';
 
-const APICodes = {
-  'order_status': 'order_status' as const,
-  'abandoned_cart': 'abandoned_cart' as const,
-};
-
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const features = useSelector(featureList)
@@ -55,7 +50,7 @@ export function Dashboard() {
         console.error('VTEXFetch failed:', error);
       });
 
-      updateFeatureList(project_uuid);
+      updateFeatureList();
   }, []);
 
   return (
@@ -142,22 +137,22 @@ export function Dashboard() {
           >
             {features.map((item: any) => (
               <FeatureBox
-                key={item.feature_uuid}
-                uuid={item.feature_uuid}
-                code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
+                key={item.uuid}
+                uuid={item.uuid}
+                code={item.code}
                 type="active"
                 isIntegrated={false}
-                isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
+                isInTest={item.isInTest}
               />
             ))}
             {integrated.map((item: any) => (
               <FeatureBox
                 key={item.feature_uuid}
                 uuid={item.feature_uuid}
-                code={APICodes[item.code as 'order_status' | 'abandoned_cart']}
+                code={item.code}
                 type="active"
                 isIntegrated={true}
-                isInTest={item.config?.integration_settings?.order_status_restriction?.phone_number.length > 0}
+                isInTest={item.isInTest}
               />
             ))}
           </Grid>

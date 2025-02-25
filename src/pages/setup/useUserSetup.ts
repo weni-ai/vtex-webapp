@@ -85,7 +85,7 @@ export function useUserSetup() {
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
           if (has_agent) {
             store.dispatch(setAgentIntegrated(true))
-            const updatedFeatures = await updateFeatureList(project_uuid)
+            const updatedFeatures = await updateFeatureList()
             if (updatedFeatures?.error) {
               throw new Error(updatedFeatures.error)
             }
