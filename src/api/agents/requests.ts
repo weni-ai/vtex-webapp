@@ -1,15 +1,14 @@
-import { useSelector } from "react-redux";
 import { VTEXFetch } from "../../utils/VTEXFetch";
-import { selectProject } from "../../store/projectSlice";
 import {
   AgentsListResponse,
   adapterAgentsList,
   IntegratedAgentsListResponse,
   adapterIntegratedAgentsList,
 } from "./adpters";
+import store from "src/store/provider.store";
 
 export async function agentsList() {
-  const projectUuid = useSelector(selectProject);
+  const projectUuid = store.getState().project.project_uuid;
 
   const queryParams = new URLSearchParams({
     projectUUID: projectUuid
@@ -28,7 +27,7 @@ export async function agentsList() {
 }
 
 export async function integratedAgentsList() {
-  const projectUuid = useSelector(selectProject);
+  const projectUuid = store.getState().project.project_uuid;
 
   const queryParams = new URLSearchParams({
     projectUUID: projectUuid
