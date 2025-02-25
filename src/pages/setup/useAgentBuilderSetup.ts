@@ -37,7 +37,7 @@ export function useAgentBuilderSetup() {
             toast.critical(t('agent.error'));
         } else {
             toast.success(t('agent.success'))
-            const orderStatus = store.getState().project.featureList.find(item => item.code === 'order_status')?.feature_uuid
+            const orderStatus = store.getState().project.featureList.find(item => item.code === 'order_status')?.uuid
             if (orderStatus) {
                 const integrateResponse = await integrateFeature(orderStatus, project)
                 if(integrateResponse?.error){

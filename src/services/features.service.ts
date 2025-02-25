@@ -2,41 +2,14 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 import { setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
+import { agentsList, integratedAgentsList } from "../api/agents/requests";
 
-export async function getFeatureList(project_uuid: string) {
-  try {
-    const response = await VTEXFetch(`/_v/get-feature-list?projectUUID=${project_uuid}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+export async function updateFeatureList() {
+  const availableFeatures = await agentsList();
+  storeProvider.dispatch(setFeatureList(availableFeatures));
 
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error retrieving list of agents.');
-    }
-
-    return { success: true, data: response };
-  } catch (error) {
-    console.error('error retrieving list of agents:', error);
-    return { success: false, error: error || 'unknown error' };
-  }
-}
-
-export async function updateFeatureList(project_uuid: string) {
-  const availableFeatures = await getFeatureList(project_uuid);
-
-  if (availableFeatures?.error) {
-    return { success: false, error: JSON.stringify(availableFeatures?.error) || 'unknown error' };
-  }
-  storeProvider.dispatch(setFeatureList(availableFeatures.data.features))
-
-  const integratedFeatures = await getIntegratedFeatures(project_uuid);
-
-  if (integratedFeatures?.error) {
-    return { success: false, error: JSON.stringify(integratedFeatures?.error) || 'unknown error' };
-  }
-  storeProvider.dispatch(setIntegratedFeatures(integratedFeatures.data.integratedFeatures))
+  const integratedFeatures = await integratedAgentsList();
+  storeProvider.dispatch(setIntegratedFeatures(integratedFeatures))
 }
 
 export async function integrateFeature(feature_uuid: string, project_uuid: string) {
@@ -66,32 +39,12 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
       throw new Error(response?.message || 'error integrating agents.');
     }
 
-    await updateFeatureList(project_uuid);
+    await updateFeatureList();
     return { success: true, data: response };
   } catch (error) {
     return { success: false, error: error || 'unknown error' };
   } finally {
     storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  }
-}
-
-export async function getIntegratedFeatures(project_uuid: string) {
-  try {
-    const response = await VTEXFetch(`/_v/get-integrated-features?projectUUID=${project_uuid}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error retrieving list of integrated agents.');
-    }
-
-    return { success: true, data: response };
-  } catch (error) {
-    console.error('error retrieving list of integrated agents:', error);
-    return { success: false, error: error || 'unknown error' };
   }
 }
 
@@ -145,7 +98,7 @@ export async function disableFeature(project_uuid: string, feature_uuid: string)
       throw new Error(response?.message || 'error updating agent.');
     }
 
-    await updateFeatureList(project_uuid);
+    await updateFeatureList();
     return { success: true, data: response };
   } catch(error){
     console.error('error updating agent:', error);
