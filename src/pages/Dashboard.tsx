@@ -147,8 +147,8 @@ export function Dashboard() {
             ))}
             {integrated.map((item: any) => (
               <FeatureBox
-                key={item.feature_uuid}
-                uuid={item.feature_uuid}
+                key={item.uuid}
+                uuid={item.uuid}
                 code={item.code}
                 type="active"
                 isIntegrated={true}
