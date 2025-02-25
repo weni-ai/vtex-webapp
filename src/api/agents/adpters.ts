@@ -23,8 +23,8 @@ export interface AgentsListResponse {
 };
 
 function isInTest(config?: AgentConfig) {
-  return config?.integration_settings?.order_status_restriction?.phone_number
-    && config?.integration_settings?.order_status_restriction?.phone_number.length > 0 || false;
+  const phoneNumber = config?.integration_settings?.order_status_restriction?.phone_number
+  return phoneNumber?.length > 0 || false;
 }
 
 export function adapterAgentsList(response: AgentsListResponse) {
