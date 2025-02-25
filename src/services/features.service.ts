@@ -67,6 +67,7 @@ export async function updateAgentSettings(body: any) {
       throw new Error(response?.message || 'error updating agent.');
     }
 
+    await updateFeatureList()
     return { success: true, data: response };
   } catch (error) {
     console.error('error updating agent:', error);
