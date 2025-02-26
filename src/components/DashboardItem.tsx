@@ -3,9 +3,10 @@ import { ArrowDrop } from "./ArrowDrop";
 
 export function DashboardItem({ title, value, percentageDifference, style }: { title: string, value: string, percentageDifference: number, style?: React.CSSProperties | undefined }) {
   const kindOfPercentageDifference = percentageDifference > 0 ? 'positive' : percentageDifference < 0 ? 'negative' : 'neutral';
-  
+
   return (
     <Flex
+      data-testid="dashboard-item-container"
       direction="column"
       gap="$space-1"
       style={{
@@ -25,18 +26,19 @@ export function DashboardItem({ title, value, percentageDifference, style }: { t
         </Text>
 
         <Flex>
-          <Text variant="caption2" color={{positive: '$fg-success', negative: '$fg-critical', neutral: '$color-gray-6'}[kindOfPercentageDifference]}>
+          <Text variant="caption2" color={{ positive: '$fg-success', negative: '$fg-critical', neutral: '$color-gray-6' }[kindOfPercentageDifference]}>
             {Math.abs(percentageDifference)}%
 
             {
-              kindOfPercentageDifference !== 'neutral' 
+              kindOfPercentageDifference !== 'neutral'
               &&
-                <ArrowDrop
-                  isDown={kindOfPercentageDifference === 'negative'}
-                  style={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',}}
-                  />
+              <ArrowDrop
+                isDown={kindOfPercentageDifference === 'negative'}
+                style={{
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                }}
+              />
             }
           </Text>
         </Flex>
