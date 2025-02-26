@@ -6,7 +6,8 @@ export default defineConfig({
     setupFiles: './src/test/setup.ts',
     globals: true, 
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      provider: 'istanbul',
+      reporter: ['text', 'json'],
       include: ['src/**/*.{tsx, ts}'],
     },
   },
