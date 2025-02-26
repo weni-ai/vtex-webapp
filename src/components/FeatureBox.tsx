@@ -19,7 +19,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [openDisable, setOpenDisable] = useState(false)
   const features = useSelector(featureList)
   const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
-  const featureUuid = features.find((item: { code: string }) => item.code === code)?.feature_uuid || '';
+  const featureUuid = features.find((item: { code: string }) => item.code === code)?.uuid || '';
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }

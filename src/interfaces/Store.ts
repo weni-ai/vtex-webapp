@@ -12,12 +12,10 @@ export interface Agent {
 }
 
 export interface Feature {
-    feature_uuid: string;
-    name: string;
-    description: string;
-    disclaimer: string;
-    code: string;
-    [key: string]: any;
+    uuid: string;
+    category: 'ACTIVE' | 'PASSIVE';
+    code: 'order_status' | 'abandoned_cart';
+    isInTest: boolean;
 }
 
 export interface Loading {
