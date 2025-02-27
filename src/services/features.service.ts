@@ -14,7 +14,7 @@ export async function updateFeatureList() {
 
 export async function integrateFeature(feature_uuid: string, project_uuid: string) {
   storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  const store = storeProvider.getState().auth.base_address;
+  const store = 'anadev--qastore.myvtex.com' //storeProvider.getState().auth.base_address;
   const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
   const wpp_cloud_app_uuid = storeProvider.getState().project.wpp_cloud_app_uuid;
 
@@ -40,12 +40,12 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
     }
 
     await updateFeatureList();
+    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
     return { success: true, data: response };
   } catch (error) {
-    return { success: false, error: error || 'unknown error' };
-  } finally {
     storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  }
+    return { success: false, error: error || 'unknown error' };
+  } 
 }
 
 export async function updateAgentSettings(body: any) {
@@ -67,6 +67,7 @@ export async function updateAgentSettings(body: any) {
       throw new Error(response?.message || 'error updating agent.');
     }
 
+    await updateFeatureList()
     return { success: true, data: response };
   } catch (error) {
     console.error('error updating agent:', error);

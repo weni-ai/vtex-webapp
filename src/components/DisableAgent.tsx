@@ -15,6 +15,7 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
 
 
     async function disable() {
+        console.log('agent uuid:', agentUuid)
         const disableResponse = await disableFeature(projectUuid, agentUuid)
 
         if(disableResponse?.error){
