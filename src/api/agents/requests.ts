@@ -6,7 +6,7 @@ import {
   adapterAgentsList,
   IntegratedAgentsListResponse,
   adapterIntegratedAgentsList,
-} from "./adpters";
+} from "./adapters";
 
 export async function agentsList() {
   const projectUuid = useSelector(selectProject);
