@@ -41,9 +41,12 @@ export function useUserSetup() {
 
       store.dispatch(setAccount(accountData));
 
-      if (accountData.hosts) {
-        store.dispatch(setBaseAddress(accountData.hosts[0]))
+
+      let base_address = `${userData.account}.myvtex.com`;
+      if (accountData.hosts.length) {
+        base_address = accountData.hosts[0]
       }
+      store.dispatch(setBaseAddress(base_address));
 
       const result = await checkProject(userData.account, userData.user);
       if (result?.error) {
@@ -60,7 +63,7 @@ export function useUserSetup() {
         if (response?.error) {
           throw new Error(JSON.stringify(response.error))
         }
-        
+
         const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration?.error) {
           console.log('ta entrando aqui com: ', agentIntegration)
