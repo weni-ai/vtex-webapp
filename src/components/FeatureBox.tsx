@@ -129,7 +129,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               {
                 isUpdateFeatureLoading ?
-                  <Spinner data-testid="spinner" description="loading" />
+                  <Spinner data-testid="loading-spinner" description="loading" />
                   :
                   <>
                     <IconPlus />
