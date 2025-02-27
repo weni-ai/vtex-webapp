@@ -14,7 +14,7 @@ export async function updateFeatureList() {
 
 export async function integrateFeature(feature_uuid: string, project_uuid: string) {
   storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  const store = 'anadev--qastore.myvtex.com' //storeProvider.getState().auth.base_address;
+  const store = storeProvider.getState().auth.base_address;
   const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
   const wpp_cloud_app_uuid = storeProvider.getState().project.wpp_cloud_app_uuid;
 
