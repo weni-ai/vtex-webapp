@@ -5,62 +5,28 @@ import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
-import { featureLoading, selectProject } from "../../../store/projectSlice";
+import { featureLoading } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/features.service";
-
-type codes = 'abandoned_cart' | 'order_status';
+import { Feature } from "../../../interfaces/Store";
 
 export interface SettingsContainerProps {
     open: boolean;
-    code: codes;
+    code: Feature['code'];
     agentUuid: string;
     toggleOpen: () => void;
 }
 
-export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {
-    const projectUuid = useSelector(selectProject);
-    
+export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {    
     const [formData, setFormData] = useState<SettingsFormData>({});
     const isUpdating = useSelector(featureLoading);
 
     async function updateAgent() {
-        let body;
+        const response = await updateAgentSettings({
+            agentUuid,
+            code,
+            formData,
+        });
 
-        if (code === 'abandoned_cart') {
-            body = {
-                "feature_uuid": agentUuid,
-                "project_uuid": projectUuid,
-                "integration_settings": {
-                    "message_time_restriction": {
-                        "is_active": formData?.messageTimeRestriction?.isActive || false,
-                        "periods": {
-                            "weekdays": {
-                                "from": formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
-                                "to": formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
-                            },
-                            "saturdays": {
-                                "from": formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
-                                "to": formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
-                            }
-                        }
-                    }
-                }
-            };
-        } else if (code === 'order_status') {
-            body = {
-                "feature_uuid": agentUuid,
-                "project_uuid": projectUuid,
-                "integration_settings": {
-                    "order_status_restriction": {
-                        "is_active": formData?.order_status_restriction?.is_active || false,
-                        "phone_number": formData?.order_status_restriction?.phone_number || "",
-                        "sellers": formData?.order_status_restriction?.sellers || []
-                    }
-                }
-            };
-        }
-
-        const response = await updateAgentSettings(body);
         toggleOpen();
         
         if (response?.error) {
