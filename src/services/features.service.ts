@@ -3,6 +3,7 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 import { setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
 import { agentsList, integratedAgentsList } from "../api/agents/requests";
+import { integrateFeatureRequest } from "../api/features/requests";
 
 export async function updateFeatureList() {
   const availableFeatures = await agentsList();
@@ -14,36 +15,26 @@ export async function updateFeatureList() {
 
 export async function integrateFeature(feature_uuid: string, project_uuid: string) {
   storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
-  const store = storeProvider.getState().auth.base_address;
-  const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
-  const wpp_cloud_app_uuid = storeProvider.getState().project.wpp_cloud_app_uuid;
-
-  const data = {
-    feature_uuid,
-    project_uuid,
-    store,
-    flows_channel_uuid,
-    wpp_cloud_app_uuid,
-  };
-
   try {
-    const response = await VTEXFetch(`/_v/integrate-feature`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    const store = storeProvider.getState().auth.base_address;
+    const flows_channel_uuid = storeProvider.getState().project.flows_channel_uuid;
+    const wpp_cloud_app_uuid = storeProvider.getState().project.wpp_cloud_app_uuid;
 
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error integrating agents.');
-    }
+    const data = {
+      feature_uuid,
+      project_uuid,
+      store,
+      flows_channel_uuid,
+      wpp_cloud_app_uuid,
+    };
 
+    const response = await integrateFeatureRequest(data);
     await updateFeatureList();
-    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
+    
+    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: false}))
     return { success: true, data: response };
   } catch (error) {
-    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: true}))
+    storeProvider.dispatch(setUpdateFeatureLoading({feature_uuid: feature_uuid, isLoading: false}))
     return { success: false, error: error || 'unknown error' };
   } 
 }
