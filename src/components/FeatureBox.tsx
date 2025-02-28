@@ -9,6 +9,7 @@ import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 import wrench from '../assets/icons/Wrench.svg'
+import { AddAbandonedCart } from "./AddAbandonedCart";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -17,6 +18,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
+  const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const features = useSelector(featureList)
   const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
   const featureUuid = features.find((item: { code: string }) => item.code === code)?.uuid || '';
@@ -32,6 +34,10 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   }
 
   const integrateCurrentFeature = async () => {
+    if (code === 'abandoned_cart') {
+      setOpenAbandonedCartModal(true)
+      return;
+    }
     const result = await integrateFeature(featureUuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
@@ -136,7 +142,6 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
                     <Text> {t('agents.common.add')}</Text>
                   </>
               }
-
             </Button>
           );
         })()}
@@ -163,6 +168,15 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
         toggleModal={openDisableModal}
         agent={t(`agents.categories.${type}.${code}.title`)}
         agentUuid={uuid}
+      />
+
+      <AddAbandonedCart
+        open={openAbandonedCartModal}
+        toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
+        confirm={() => {
+          integrateFeature(featureUuid, projectUUID);
+          setOpenAbandonedCartModal(false);
+        }}
       />
     </>
   );
