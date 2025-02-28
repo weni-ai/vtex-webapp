@@ -3,6 +3,7 @@ import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateFeatureList } from "./features.service";
+import { userAdapters } from "../users/adapters";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -10,18 +11,7 @@ export function getUserFromLocalStorage() {
 }
 
 export async function fetchUserData() {
-  try {
-    const response = await VTEXFetch('/api/vtexid/pub/authenticated/user');
-
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error fetching user data.');
-    }
-
-    return { success: true, data: response };
-  } catch (error) {
-    console.error('error fetching user data:', error);
-    return { success: false, error: error || 'unknown error' };
-  }
+  return userAdapters.fetchUserData();
 }
 
 export async function fetchAccountData() {
