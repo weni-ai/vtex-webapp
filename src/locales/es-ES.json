@@ -60,6 +60,27 @@
                     "details": {
                         "title": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
                         "description": "Este agente mejora la conversión, retiene clientes e impulsa la finalización de compras."
+                    },
+                    "modal": {
+                        "title": "Agregar carrito abandonado",
+                        "description": "Revisa el tipo de tienda en la tienda antes de seguir los pasos a continuación.",
+                        "button": "Ir a la tienda",
+                        "steps": {
+                            "faststore": {
+                                "title": "Faststore",
+                                "description": "El agente solo será funcional después de seguir estos pasos:",
+                                "step1": "Ir al repositorio de GitHub y pegar el código a continuación en el archivo thirdpartyscripts.tsx."
+                            },
+                            "portal": {
+                                "title": "Portal/Layout",
+                                "description": "El agente solo será funcional después de seguir estos pasos:",
+                                "step1": "Ir al repositorio de GitHub y pegar el código a continuación en el archivo thirdpartyscripts.tsx."
+                            },
+                            "site_editor": {
+                                "title": "Site Editor",
+                                "description": "No se requieren pasos de configuración adicionales para el tipo de tienda 'Site Editor'. Una vez confirmado, el agente estará listo para funcionar."
+                            }
+                        }
                     }
                 }
             }

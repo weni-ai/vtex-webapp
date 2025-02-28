@@ -16,7 +16,7 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
             <ModalHeader>
                 <Flex>
                     <ModalHeading>
-                        Add Abandoned Cart
+                        {t('agents.categories.active.abandoned_cart.modal.title')}
                     </ModalHeading>
                 </Flex>
                 <ModalDismiss />
@@ -37,11 +37,11 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                         }}
                     >
                         <Text variant="emphasis" color="$fg-base">
-                            Check the store type in the storefront before following the steps below.
+                            {t('agents.categories.active.abandoned_cart.modal.description')}
                         </Text>
 
                         <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-                            <Text variant='action'> Go to Storefront</Text>
+                            <Text variant='action'> {t('agents.categories.active.abandoned_cart.modal.button')}</Text>
                             <IconArrowUpRight
                                 height="1rem"
                                 width="1rem"
@@ -57,17 +57,17 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                 </Alert>
                 <TabProvider>
                     <TabList style={{ margin: 'var(--sl-space-5) 0' }} >
-                        <Tab>Faststore</Tab>
-                        <Tab>Portal/Layout</Tab>
-                        <Tab>Site Editor</Tab>
+                        <Tab>{t('agents.categories.active.abandoned_cart.modal.steps.faststore.title')}</Tab>
+                        <Tab>{t('agents.categories.active.abandoned_cart.modal.steps.portal.title')}</Tab>
+                        <Tab>{t('agents.categories.active.abandoned_cart.modal.steps.site_editor.title')}</Tab>
                     </TabList>
                     <TabPanel>
                         <Flex direction="column" gap="$space-5">
                             <Flex direction="column" gap="$space-5">
-                                <Text variant="body">The agent will only be functional after following these steps:</Text>
+                                <Text variant="body">{t('agents.categories.active.abandoned_cart.modal.steps.faststore.description')}</Text>
                                 <Text variant="body" style={{ paddingLeft: '1.5rem', position: 'relative' }}>
                                     <span style={{ position: 'absolute', left: 0 }}>1.</span>
-                                    Go to the GitHub repository and paste the code below into the <strong>thirdpartyscripts.tsx</strong> file.
+                                    {t('agents.categories.active.abandoned_cart.modal.steps.faststore.step1')}
                                 </Text>
                             </Flex>
                             <Flex
@@ -115,7 +115,7 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                     </TabPanel>
                     <TabPanel>
                         <Flex direction="column" gap="$space-5">
-                            <Text variant="body">The agent will only be functional after following these steps:</Text>
+                            <Text variant="body">{t('agents.categories.active.abandoned_cart.modal.steps.portal.description')}</Text>
                             <Flex direction="column" gap="$space-0">
                                 <Text variant="body" style={{ paddingLeft: '1.5rem', position: 'relative' }}><span style={{ position: 'absolute', left: 0 }}>1.</span>Navigate to the Storefront Layout.</Text>
                                 <Text variant="body" style={{ paddingLeft: '1.5rem', position: 'relative' }}><span style={{ position: 'absolute', left: 0 }}>2.</span>  Open the CMS folder.</Text>
@@ -166,13 +166,13 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                         </Flex>
                     </TabPanel>
                     <TabPanel>
-                        <Text variant="body">No configuration steps are needed for the 'Site Editor' store type. Once confirmed, the agent is ready to go.</Text>
+                        <Text variant="body">{t('agents.categories.active.abandoned_cart.modal.steps.site_editor.description')}</Text>
                     </TabPanel>
                 </TabProvider>
             </ModalContent>
             <ModalFooter>
-                <Button onClick={toggleModal}>Cancel</Button>
-                <Button variant="primary" onClick={confirm}>Confirm</Button>    
+                <Button onClick={toggleModal}>{t('common.cancel')}</Button>
+                <Button variant="primary" onClick={confirm}>{t('common.confirm')}</Button>    
             </ModalFooter>
         </Modal >
     )
