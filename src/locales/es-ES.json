@@ -80,16 +80,16 @@
                                 "title": "Site Editor",
                                 "description": "No se requieren pasos de configuración adicionales para el tipo de tienda 'Site Editor'. Una vez confirmado, el agente estará listo para funcionar."
                             }
-                        },
-                        "settings": {
-                            "restriction": {
-                                "title": "Restricción de mensaje",
-                                "description": "Restringe el envío de mensajes a las horas configuradas.",
-                                "monday_until_friday": "Lunes hasta Viernes",
-                                "saturday": "Sábado",
-                                "from": "Desde",
-                                "to": "Hasta"
-                            }
+                        }
+                    },
+                    "settings": {
+                        "restriction": {
+                            "title": "Restricción de mensaje",
+                            "description": "Restringe el envío de mensajes a las horas configuradas.",
+                            "monday_until_friday": "Lunes hasta Viernes",
+                            "saturday": "Sábado",
+                            "from": "Desde",
+                            "to": "Hasta"
                         }
                     }
                 }
