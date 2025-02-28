@@ -48,10 +48,10 @@ export function PreferencesAbandonedCartActive() {
   return (
     <DrawerContent>
       <Flex style={{ marginBottom: '1rem' }}>
-          <Checkbox onChange={setRestrictionValue} aria-label={t('agent_gallery.features.abandoned_cart.preferences.restriction_details')}>
+          <Checkbox onChange={setRestrictionValue} aria-label={t('agents.active.abandoned_cart.settings.restriction.description')}>
               <Flex direction="column" style={{ gap: '0px' }}>
-                  <Text variant="body">{t('agent_gallery.features.abandoned_cart.preferences.restriction')}</Text>
-                  <Text variant="caption2" color="$fg-base-soft">{t('agent_gallery.features.abandoned_cart.preferences.restriction_details')}</Text>
+                  <Text variant="body">{t('agents.categories.active.abandoned_cart.settings.restriction.title')}</Text>
+                  <Text variant="caption2" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.description')}</Text>
               </Flex>
           </Checkbox>
       </Flex>
@@ -59,10 +59,10 @@ export function PreferencesAbandonedCartActive() {
       {restriction ? <>
           <Flex direction="column" style={{paddingTop: '24px'}}>
               <Flex direction="column" >
-                  <Text variant="emphasis">{t('agent_gallery.features.abandoned_cart.preferences.monday_until_friday')}</Text>
+                  <Text variant="emphasis">{t('agents.categories.active.abandoned_cart.settings.restriction.monday_until_friday')}</Text>
                   <Grid columns="repeat(2, 1fr)">
                       <GridCell>
-                          <Text variant="body" color="$fg-base-soft">{t('agent_gallery.features.abandoned_cart.preferences.from')}</Text>
+                          <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.from')}</Text>
                           <Flex>
                               <TimeInput
                                 className='custom-time-input'
@@ -72,7 +72,7 @@ export function PreferencesAbandonedCartActive() {
                           </Flex>
                       </GridCell>
                       <GridCell>
-                          <Text variant="body" color="$fg-base-soft">{t('agent_gallery.features.abandoned_cart.preferences.to')}</Text>
+                          <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.to')}</Text>
                           <TimeInput
                             className='custom-time-input'
                             value={weekdaysTo}
@@ -83,10 +83,10 @@ export function PreferencesAbandonedCartActive() {
               </Flex>
               <Divider style={{ margin: 'var(--sl-space-4) 0' }} />
               <Flex direction="column">
-                  <Text variant="emphasis">{t('agent_gallery.features.abandoned_cart.preferences.saturday')}</Text>
+                  <Text variant="emphasis">{t('agents.categories.active.abandoned_cart.settings.restriction.saturday')}</Text>
                   <Grid columns="repeat(2, 1fr)">
                       <GridCell>
-                          <Text variant="body" color="$fg-base-soft">{t('agent_gallery.features.abandoned_cart.preferences.from')}</Text>
+                          <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.from')}</Text>
                           <TimeInput
                             className='custom-time-input'
                             value={saturdaysFrom}
@@ -94,7 +94,7 @@ export function PreferencesAbandonedCartActive() {
                           />
                       </GridCell>
                       <GridCell>
-                          <Text variant="body" color="$fg-base-soft">{t('agent_gallery.features.abandoned_cart.preferences.to')}</Text>
+                          <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.to')}</Text>
                           <TimeInput
                             className='custom-time-input'
                             value={saturdaysTo}

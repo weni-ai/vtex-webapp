@@ -105,6 +105,14 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
 
 
         {(() => {
+          if (isInTest) {
+            return (
+              <Button variant="secondary" onClick={integrateCurrentFeature} size="large" disabled={true}>
+                <img src={wrench} alt="" />
+                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
+              </Button>
+            );
+          }
           if (isIntegrated) {
             return (
               <Flex
@@ -121,16 +129,6 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
               </Flex>
             );
           }
-
-          if (isInTest) {
-            return (
-              <Button variant="secondary" onClick={integrateCurrentFeature} size="large" disabled={true}>
-                <img src={wrench} alt="" />
-                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
-              </Button>
-            );
-          }
-
           return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               {
