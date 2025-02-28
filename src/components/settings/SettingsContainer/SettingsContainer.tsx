@@ -7,6 +7,7 @@ import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
 import { featureLoading, selectProject } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/features.service";
+import { UpdateAgentSettingsData } from "src/api/features/adapters";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -24,23 +25,23 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
     const isUpdating = useSelector(featureLoading);
 
     async function updateAgent() {
-        let body;
+        let body: UpdateAgentSettingsData | undefined;
 
         if (code === 'abandoned_cart') {
             body = {
-                "feature_uuid": agentUuid,
-                "project_uuid": projectUuid,
-                "integration_settings": {
-                    "message_time_restriction": {
-                        "is_active": formData?.messageTimeRestriction?.isActive || false,
-                        "periods": {
-                            "weekdays": {
-                                "from": formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
-                                "to": formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
+                feature_uuid: agentUuid,
+                project_uuid: projectUuid,
+                integration_settings: {
+                    message_time_restriction: {
+                        is_active: formData?.messageTimeRestriction?.isActive || false,
+                        periods: {
+                            weekdays: {
+                                from: formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
+                                to: formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
                             },
-                            "saturdays": {
-                                "from": formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
-                                "to": formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
+                            saturdays: {
+                                from: formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
+                                to: formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
                             }
                         }
                     }
@@ -48,17 +49,19 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
             };
         } else if (code === 'order_status') {
             body = {
-                "feature_uuid": agentUuid,
-                "project_uuid": projectUuid,
-                "integration_settings": {
-                    "order_status_restriction": {
-                        "is_active": formData?.order_status_restriction?.is_active || false,
-                        "phone_number": formData?.order_status_restriction?.phone_number ? [formData.order_status_restriction.phone_number] : [],
-                        "sellers": formData?.order_status_restriction?.sellers ?? []
+                feature_uuid: agentUuid,
+                project_uuid: projectUuid,
+                integration_settings: {
+                    order_status_restriction: {
+                        is_active: formData?.order_status_restriction?.is_active || false,
+                        phone_number: formData?.order_status_restriction?.phone_number ? [formData.order_status_restriction.phone_number] : [],
+                        sellers: formData?.order_status_restriction?.sellers ?? []
                     }
                 }
             };
         }
+
+        if (!body) return;
 
         const response = await updateAgentSettings(body);
         toggleOpen();

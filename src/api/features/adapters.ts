@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { integrateFeatureRequest } from "./requests";
 
 export interface IntegrateFeatureInput {
@@ -41,27 +41,40 @@ export class FeaturesAdapter {
 }
 
 export interface UpdateAgentSettingsData {
-  feature_uuid: string;
-  project_uuid: string;
-  settings: Record<string, any>;
+    feature_uuid: string;
+    project_uuid: string;
+    integration_settings: {
+        message_time_restriction?: {
+            is_active: boolean;
+            periods: {
+                weekdays: { from: string; to: string };
+                saturdays: { from: string; to: string };
+            };
+        };
+        order_status_restriction?: {
+            is_active: boolean;
+            phone_number: string[];
+            sellers: string[];
+        };
+    };
 }
 
 export interface UpdateAgentSettingsResponse {
-  message: string;
-  error: string;
+    message: string;
+    error: string;
 }
 
 export function adaptUpdateAgentSettingsRequest(data: UpdateAgentSettingsData) {
-  return {
-    feature_uuid: data.feature_uuid,
-    project_uuid: data.project_uuid,
-    settings: data.settings,
-  };
+    return {
+        feature_uuid: data.feature_uuid,
+        project_uuid: data.project_uuid,
+        integration_settings: data.integration_settings,
+    };
 }
 
 export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsResponse) {
-  return {
-    message: response.message,
-    error: response.error,
-  };
+    return {
+        message: response.message,
+        error: response.error,
+    };
 } 
