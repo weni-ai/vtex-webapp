@@ -3,6 +3,7 @@ type AgentConfig = {
     order_status_restriction?: {
       phone_number: string;
     };
+    templates_synchronization_status?: 'pending' | 'rejected' | 'approved';
   };
 };
 
@@ -23,8 +24,13 @@ export interface AgentsListResponse {
 };
 
 function isInTest(config?: AgentConfig) {
-  return config?.integration_settings?.order_status_restriction?.phone_number
-    && config?.integration_settings?.order_status_restriction?.phone_number.length > 0 || false;
+  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_number
+    && config?.integration_settings?.order_status_restriction?.phone_number.length > 0;
+  
+  const syncStatus = config?.integration_settings?.templates_synchronization_status;
+  const isPendingOrRejected = syncStatus === 'pending' || syncStatus === 'rejected';
+
+  return hasPhoneNumber || isPendingOrRejected || false;
 }
 
 export function adapterAgentsList(response: AgentsListResponse) {

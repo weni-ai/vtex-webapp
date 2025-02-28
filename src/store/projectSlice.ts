@@ -19,20 +19,7 @@ const initialState: ProjectState = {
     occupation: '',
     objective: ''
   },
-  featureList: [
-    {
-      uuid: 'a3d77bf9-1e06-44cb-a550-c691e6d44687',
-      category: 'ACTIVE',
-      code: 'order_status',
-      isInTest: false
-    },
-    {
-      uuid: '83fe991a-1677-45cf-9096-83fdbb086df7',
-      category: 'ACTIVE',
-      code: 'abandoned_cart',
-      isInTest: false
-    }
-  ],
+  featureList: [],
   integratedFeatures: []
 }
 
