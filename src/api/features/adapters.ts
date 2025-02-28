@@ -1,4 +1,3 @@
-
 import { integrateFeatureRequest } from "./requests";
 
 export interface IntegrateFeatureInput {
@@ -77,4 +76,9 @@ export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsRe
         message: response.message,
         error: response.error,
     };
+}
+
+export interface DisableFeatureData {
+    project_uuid: string;
+    feature_uuid: string;
 } 

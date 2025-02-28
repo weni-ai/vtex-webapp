@@ -48,4 +48,20 @@ export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) 
   );
 
   return adaptUpdateAgentSettingsResponse(response);
+}
+
+export async function disableFeatureRequest(data: {
+  project_uuid: string;
+  feature_uuid: string;
+}) {
+  return await VTEXFetch<{
+    message: string;
+    error: string;
+  }>(`/_v/disable-feature`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
 } 

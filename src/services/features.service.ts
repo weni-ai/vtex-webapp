@@ -1,11 +1,12 @@
- 
-import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 import { setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
 import { agentsList, integratedAgentsList } from "../api/agents/requests";
-import { integrateFeatureRequest } from "../api/features/requests";
+import { 
+  integrateFeatureRequest, 
+  updateAgentSettingsRequest, 
+  disableFeatureRequest 
+} from "../api/features/requests";
 import { UpdateAgentSettingsData } from "../api/features/adapters";
-import { updateAgentSettingsRequest } from "../api/features/requests";
 
 export async function updateFeatureList() {
   const availableFeatures = await agentsList();
@@ -64,31 +65,19 @@ export async function updateAgentSettings(body: UpdateAgentSettingsData) {
 export async function disableFeature(project_uuid: string, feature_uuid: string) {
   storeProvider.dispatch(setDisableFeatureLoading(true))
 
-  try{
-    const response = await VTEXFetch<{
-      message: string;
-      error: string;
-    }>(`/_v/disable-feature`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        project_uuid,
-        feature_uuid
-      }),
-    })
+  try {
+    const response = await disableFeatureRequest({ project_uuid, feature_uuid });
 
-    if(response?.error){
+    if (response?.error) {
       throw new Error(response?.message || 'error updating agent.');
     }
 
     await updateFeatureList();
     return { success: true, data: response };
-  } catch(error){
+  } catch (error) {
     console.error('error updating agent:', error);
     return { success: false, error: error || 'unknown error' };
-  } finally{
+  } finally {
     storeProvider.dispatch(setDisableFeatureLoading(false))
   }
 }
