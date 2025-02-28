@@ -1,4 +1,10 @@
 import { VTEXFetch } from "../../utils/VTEXFetch";
+import { 
+  UpdateAgentSettingsData, 
+  UpdateAgentSettingsResponse,
+  adaptUpdateAgentSettingsRequest,
+  adaptUpdateAgentSettingsResponse 
+} from "./adapters";
 
 interface IntegrateFeatureData {
   feature_uuid: string;
@@ -25,4 +31,21 @@ export async function integrateFeatureRequest(data: IntegrateFeatureData) {
   }
 
   return response;
+}
+
+export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
+  const adaptedData = adaptUpdateAgentSettingsRequest(data);
+  
+  const response = await VTEXFetch<UpdateAgentSettingsResponse>(
+    '/_v/update-feature-settings',
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(adaptedData),
+    }
+  );
+
+  return adaptUpdateAgentSettingsResponse(response);
 } 

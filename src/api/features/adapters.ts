@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { integrateFeatureRequest } from "./requests";
+
 export interface IntegrateFeatureInput {
     featureId: string;
     projectId: string;
@@ -35,4 +38,30 @@ export class FeaturesAdapter {
             throw new Error('Feature integration failed: Unknown error');
         }
     }
+}
+
+export interface UpdateAgentSettingsData {
+  feature_uuid: string;
+  project_uuid: string;
+  settings: Record<string, any>;
+}
+
+export interface UpdateAgentSettingsResponse {
+  message: string;
+  error: string;
+}
+
+export function adaptUpdateAgentSettingsRequest(data: UpdateAgentSettingsData) {
+  return {
+    feature_uuid: data.feature_uuid,
+    project_uuid: data.project_uuid,
+    settings: data.settings,
+  };
+}
+
+export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsResponse) {
+  return {
+    message: response.message,
+    error: response.error,
+  };
 } 

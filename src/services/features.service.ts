@@ -1,9 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { VTEXFetch } from "../utils/VTEXFetch";
 import storeProvider from "../store/provider.store";
 import { setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
 import { agentsList, integratedAgentsList } from "../api/agents/requests";
 import { integrateFeatureRequest } from "../api/features/requests";
+import { UpdateAgentSettingsData } from "../api/features/adapters";
+import { updateAgentSettingsRequest } from "../api/features/requests";
 
 export async function updateFeatureList() {
   const availableFeatures = await agentsList();
@@ -39,20 +41,11 @@ export async function integrateFeature(feature_uuid: string, project_uuid: strin
   } 
 }
 
-export async function updateAgentSettings(body: any) {
+export async function updateAgentSettings(body: UpdateAgentSettingsData) {
   storeProvider.dispatch(setFeatureLoading(true))
 
   try {
-    const response = await VTEXFetch<{
-      message: string;
-      error: string;
-    }>(`/_v/update-feature-settings`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+    const response = await updateAgentSettingsRequest(body);
 
     if (!response || response.error) {
       throw new Error(response?.message || 'error updating agent.');
