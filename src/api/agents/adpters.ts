@@ -24,6 +24,10 @@ export interface AgentsListResponse {
 };
 
 function isInTest(config?: AgentConfig) {
+  if (config && Object.keys(config).length === 0) {
+    return true;
+  }
+
   const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_number
     && config?.integration_settings?.order_status_restriction?.phone_number.length > 0;
   
@@ -39,6 +43,7 @@ export function adapterAgentsList(response: AgentsListResponse) {
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
+    phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_number,
   }));
 }
 

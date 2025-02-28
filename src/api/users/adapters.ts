@@ -1,6 +1,6 @@
-import store from "../store/provider.store";
-import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
-import { updateFeatureList } from "../services/features.service";
+import store from "../../store/provider.store";
+import { setLoadingSetup, setProjectUuid } from "../../store/projectSlice";
+import { updateFeatureList } from "../../services/features.service";
 import { userRequests } from "./requests";
 
 export const userAdapters = {

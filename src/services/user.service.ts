@@ -3,7 +3,7 @@ import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateFeatureList } from "./features.service";
-import { userAdapters } from "../users/adapters";
+import { userAdapters } from "../api/users/adapters";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');

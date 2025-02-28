@@ -1,12 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label } from "@vtex/shoreline";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
 
 export function PreferencesOrderStatusActive() {
-  const context = useContext(SettingsContext);
-  const [hasTestContactNumber, setHasTestContactNumber] = useState(false);
-  const [testContactNumber, setTestContactNumber] = useState('');
+  const { formData = {}, setFormData } = useContext(SettingsContext) || {};
+  
+  // Initialize state from context
+  const [hasTestContactNumber, setHasTestContactNumber] = useState(
+    !!formData.order_status_restriction?.phone_number
+  );
+  const [testContactNumber, setTestContactNumber] = useState(
+    formData.order_status_restriction?.phone_number || ''
+  );
 
   // const [hasSelectedSellers, setHasSelectedSellers] = useState(false);
   // const [selectedSellers, setSelectedSellers] = useState<string[]>([]);
@@ -80,15 +85,15 @@ export function PreferencesOrderStatusActive() {
 
   useEffect(() => {
     const updatedFormData: SettingsFormData = {
-      ...context?.formData,
+      ...formData,
       order_status_restriction: {
         is_active: hasTestContactNumber,
         phone_number: hasTestContactNumber ? testContactNumber : "",
-        sellers: [] //hasSelectedSellers ? selectedSellers : [],
+        sellers: []
       },
     };
 
-    context?.setFormData(updatedFormData);
+    setFormData?.(updatedFormData);
   }, [hasTestContactNumber, testContactNumber]);
 
   return (

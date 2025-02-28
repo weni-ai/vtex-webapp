@@ -1,4 +1,4 @@
-import { VTEXFetch } from "../utils/VTEXFetch";
+import { VTEXFetch } from "../../utils/VTEXFetch";
 
 interface CreateUserAndProjectPayload {
   user_email: string;
