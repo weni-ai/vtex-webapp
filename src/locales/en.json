@@ -85,6 +85,16 @@
                                 "description": "No configuration steps are needed for the 'Site Editor' store type. Once confirmed, the agent is ready to go."
                             }   
                         }
+                    },
+                    "settings": {
+                        "restriction": {
+                            "title": "Message time restriction",
+                            "description": "Restrict message sends to configured hours.",
+                            "monday_until_friday": "Monday until Friday",
+                            "saturday": "Saturday",
+                            "from": "From",
+                            "to": "To"
+                        }
                     }
                 }
             }
