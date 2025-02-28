@@ -53,8 +53,8 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                 "integration_settings": {
                     "order_status_restriction": {
                         "is_active": formData?.order_status_restriction?.is_active || false,
-                        "phone_number": formData?.order_status_restriction?.phone_number || "",
-                        "sellers": formData?.order_status_restriction?.sellers || []
+                        "phone_number": formData?.order_status_restriction?.phone_number ? [formData.order_status_restriction.phone_number] : [],
+                        "sellers": formData?.order_status_restriction?.sellers ?? []
                     }
                 }
             };
