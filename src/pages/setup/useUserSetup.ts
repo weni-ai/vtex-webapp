@@ -79,6 +79,7 @@ export function useUserSetup() {
               links,
               objective,
               occupation,
+              channel: 'faststore'
             })
           );
         }

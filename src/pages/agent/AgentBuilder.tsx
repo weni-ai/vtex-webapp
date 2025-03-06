@@ -59,7 +59,6 @@ export function AgentBuilder() {
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
-  const [selectedRadio, setSelectedRadio] = useState('faststore');
   useEffect(() => {
     initializeUser();
   }, [initializeUser]);
