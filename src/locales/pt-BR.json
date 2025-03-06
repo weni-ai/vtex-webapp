@@ -12,16 +12,16 @@
         "preferences": "Preferências",
         "disable": "Desativar",
         "errors": {
-            "unauthorized": "Você não tem permissão para realizar esta ação.",
-            "internal_server_error": "Erro interno do servidor.",
-            "unexpected_error": "Ocorreu um erro inesperado."
+            "unauthorized": "Você não tem permissão para realizar esta ação",
+            "internal_server_error": "Erro interno do servidor",
+            "unexpected_error": "Ocorreu um erro inesperado"
         },
-        "new_agent": "Novo agente"
+        "new_agent": "Novo Agente"
     },
     "title": "Weni Agentic IA",
-    "description": "Uma solução de CX baseada em IA para marcas e varejistas.",
+    "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
     "improve": {
-        "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizadas.",
+        "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizáveis.",
         "button": "Conectar à Weni"
     },
     "agents": {
@@ -30,23 +30,23 @@
             "active": {
                 "title": "Notificação ativa",
                 "order_status": {
-                    "title": "Agente de status de pedidos",
-                    "description": "Mantenha os clientes informados sobre o status dos pedidos em tempo real.",
+                    "title": "Agente de status do pedido",
+                    "description": "Mantenha os clientes atualizados sobre o status do pedido em tempo real.",
                     "details": {
-                        "title": "Habilite o rastreamento de entrega para os clientes.",
-                        "description": "Este agente reduz verificações manuais e aumenta a transparência, garantindo que os clientes fiquem informados e no controle."
+                        "title": "Ative o rastreamento de entrega de pedidos para clientes.",
+                        "description": "Este agente reduz verificações manuais e aumenta a transparência, garantindo que os clientes permaneçam informados e no controle."
                     },
                     "settings": {
                         "is_test_contact_number": {
-                            "title": "Restringir para número de teste",
-                            "description": "O agente enviará mensagens apenas para o número de teste."
+                            "title": "Restringir ao número de contato de teste",
+                            "description": "O agente enviará mensagens apenas para o número de telefone de teste"
                         },
                         "test_contact_number": {
                             "label": "Número de telefone"
                         },
                         "is_selected_sellers": {
-                            "title": "Restringido para vendedores selecionados",
-                            "description": "O agente enviará mensagens apenas para os vendedores selecionados."
+                            "title": "Restrito para vendedores selecionados",
+                            "description": "O agente enviará mensagens apenas para vendedores selecionados"
                         },
                         "selected_sellers": {
                             "label": "Selecione os vendedores",
@@ -55,38 +55,42 @@
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de recuperação de carrinho",
+                    "title": "Agente de carrinho abandonado",
                     "description": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
                     "details": {
                         "title": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
-                        "description": "Este agente melhora a conversão, retém clientes e incentiva a finalização das compras."
+                        "description": "Este agente aumenta a conversão, retém clientes e incentiva a conclusão do pedido."
                     },
                     "modal": {
-                        "title": "Adicionar carrinho abandonado",
-                        "description": "Revise o tipo de loja na loja antes de seguir os passos abaixo.",
-                        "button": "Ir para a loja",
+                        "title": "Adicionar Carrinho Abandonado",
+                        "description": "Verifique o tipo de loja na vitrine antes de seguir os passos abaixo.",
+                        "button": "Ir para a Vitrine",
                         "steps": {
+                            "title": "O agente só será funcional após seguir estas etapas:",
                             "faststore": {
                                 "title": "Faststore",
-                                "description": "O agente só será funcional após seguir os passos abaixo:",
-                                "step1": "Ir para o repositório de GitHub e colar o código abaixo no arquivo thirdpartyscripts.tsx."
+                                "description": "O agente só será funcional após seguir estas etapas:",
+                                "step1": "Vá ao repositório do GitHub e cole o código abaixo no arquivo thirdpartyscripts.tsx."
                             },
                             "portal": {
                                 "title": "Portal/Layout",
-                                "description": "O agente só será funcional após seguir os passos abaixo:",
-                                "step1": "Ir para o repositório de GitHub e colar o código abaixo no arquivo thirdpartyscripts.tsx."
+                                "description": "O agente só será funcional após seguir estas etapas:",
+                                "step1": "Navegue até o Layout da Vitrine.",
+                                "step2": "Abra a pasta CMS.",
+                                "step3": "Vá para Modelos HTML {`>`} Subtemplates.",
+                                "step4": "Abra commonScripts e cole o script abaixo."
                             },
                             "site_editor": {
-                                "title": "Site Editor",
-                                "description": "Não são necessários passos de configuração adicionais para o tipo de loja 'Site Editor'. Uma vez confirmado, o agente estará pronto para funcionar."
+                                "title": "Editor de Site",
+                                "description": "Não são necessárias etapas de configuração para o tipo de loja 'Editor de Site'. Uma vez confirmado, o agente está pronto para uso."
                             }
                         }
                     },
                     "settings": {
                         "restriction": {
-                            "title": "Restrição de mensagem",
-                            "description": "Restringe o envio de mensagens para as horas configuradas.",
-                            "monday_until_friday": "Segunda à Sexta",
+                            "title": "Restrição de horário de mensagem",
+                            "description": "Restringir envios de mensagens a horários configurados.",
+                            "monday_until_friday": "Segunda a Sexta",
                             "saturday": "Sábado",
                             "from": "De",
                             "to": "Até"
@@ -98,13 +102,13 @@
         "common": {
             "configure": {
                 "success": "Configuração salva com sucesso.",
-                "error": "Não foi possível salvar. Tente novamente mais tarde."
+                "error": "Não foi possível salvar. Por favor, tente novamente mais tarde."
             },
             "disable": {
                 "title": "Desativar agente",
-                "description": "Deseja desativar o agente '{{agent}}'? Depois de desativado, ele não estará mais ativo no seu projeto.",
+                "description": "Deseja desativar o agente '{{agent}}'? Uma vez desativado, este agente não estará mais ativo em seu projeto.",
                 "success": "Agente desativado com sucesso.",
-                "error": "Não foi possível desativar o agente. Tente novamente mais tarde."
+                "error": "Não foi possível desativar o agente. Por favor, tente novamente mais tarde."
             },
             "add": "Adicionar agente",
             "added": "Agente ativo",
@@ -112,25 +116,91 @@
         }
     },
     "setup": {
-        "title": "Configurando seu Weni App",
-        "description": "Estamos finalizando a configuração inicial para garantir uma experiência fluida."
+        "title": "Configurando seu App Weni",
+        "description": "Preparando tudo para você! Estamos finalizando a configuração inicial para garantir uma experiência tranquila."
+    },
+    "agent": {
+        "details": {
+            "title": "Agentes inteligentes",
+            "description": "Aprimore os agentes inteligentes habilitando o controle sobre fluxos de conversação baseados nas intenções do usuário. Com o Plano Starter, personalize linguagem, tom e comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja a demonstração da interação do agente de trocas e devoluções ao lado.",
+            "skills": {
+                "title": "Habilidades do Agente",
+                "analyze": "Analisar o contexto",
+                "comprehend": "Compreender demandas complexas",
+                "provide": "Fornecer respostas personalizadas"
+            },
+            "example": {
+                "description": "Demo do agente de Trocas e Devoluções"
+            }
+        },
+        "setup": {
+            "title": "Configure a persona do seu agente",
+            "forms": {
+                "name": "Nome",
+                "channel": {
+                    "title": "Canal",
+                    "faststore": "Faststore",
+                    "portal": "Portal/Layout",
+                    "site_editor": "Editor de Site"
+                },
+                "occupation": {
+                    "title": "Ocupação (opcional)",
+                    "default": "Assistente inteligente"
+                },
+                "objective": {
+                    "title": "Objetivo (opcional)",
+                    "default": "Seu objetivo é responder às perguntas dos clientes, informar o status do pedido, fornecer informações sobre produtos e vender. Suas principais características são: Compras no WhatsApp e FAQ."
+                },
+                "knowledge": {
+                    "title": "Fonte de conhecimento",
+                    "context": "Forneça o conteúdo que seu agente usará para responder às perguntas."
+                },
+                "error": {
+                    "empty_input": "Preencha esta informação",
+                    "valid_url": "Digite uma URL válida."
+                }
+            },
+            "buttons": {
+                "create_agent": "Criar agente"
+            }
+        },
+        "error": "Não foi possível configurar o agente. Por favor, tente novamente mais tarde.",
+        "success": "Agente registrado com sucesso"
+    },
+    "integration": {
+        "title": "Integrar um canal de suporte",
+        "description": "Escolha o canal que deseja usar e siga o passo a passo para adicioná-lo.",
+        "channels": {
+            "whatsapp": {
+                "title": "Canal WhatsApp",
+                "description": "Utilize uma conta empresarial do WhatsApp para melhorar a comunicação com contatos.",
+                "error": "Não foi possível conectar o WhatsApp, verifique suas credenciais ou tente novamente mais tarde.",
+                "success": "WhatsApp foi integrado com sucesso."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrar",
+            "integrated": "Integrado"
+        },
+        "success": "Integração concluída com sucesso!",
+        "error": "Não foi possível integrar o recurso. Por favor, tente novamente mais tarde."
     },
     "error": {
         "title": "Algo deu errado",
-        "description": "Tente novamente ou volte mais tarde se o problema persistir.",
+        "description": "Tente novamente ou verifique mais tarde se o problema persistir.",
         "button": "Tentar novamente"
     },
     "terms": {
-        "title": "Termos e Condições",
-        "description": "Ao utilizar este aplicativo, é necessário aceitar os Termos e Condições. Esses termos definem o acesso e o uso dos serviços, detalhando os recursos do plano selecionado, suas limitações, preços e políticas de renovação. Além disso, eles descrevem a funcionalidade do produto, as diretrizes de uso e quaisquer restrições aplicáveis para garantir uma experiência segura e otimizada.",
+        "title": "Termos e condições",
+        "description": "Ao usar este aplicativo, é necessária a aceitação dos Termos e Condições. Estes termos definem o acesso e uso dos serviços, detalhando os recursos do plano selecionado, limitações, preços e políticas de renovação. Além disso, descrevem a funcionalidade do produto, diretrizes de uso e quaisquer restrições aplicáveis para garantir uma experiência segura e ideal.",
         "plan_details": {
             "title": "1. Detalhes do Plano",
-            "description": "O plano selecionado inclui recursos específicos, limitações e condições de pagamento. Verifique os detalhes da sua assinatura para entender o que está incluído e como funcionam as renovações."
+            "description": "Seu plano selecionado inclui recursos específicos, limitações e termos de faturamento. Por favor, verifique os detalhes da sua assinatura para entender o que está incluído e como funcionam as renovações."
         },
         "product_usage": {
             "title": "2. Uso do Produto",
-            "description": "Este aplicativo foi desenvolvido para aprimorar sua experiência por meio de recursos e funcionalidades específicas. Qualquer uso indevido, acesso não autorizado ou violação dos termos pode resultar na suspensão da conta."
+            "description": "Este aplicativo foi projetado para melhorar sua experiência através de recursos e funcionalidades específicas. Qualquer uso indevido, acesso não autorizado ou violação dos termos pode resultar na suspensão da conta."
         },
-        "agree": "Concordo"
+        "agree": "Concordar"
     }
 }

@@ -17,7 +17,8 @@ const initialState: ProjectState = {
     name: '',
     links: [],
     occupation: '',
-    objective: ''
+    objective: '',
+    channel: ''
   },
   featureList: [],
   integratedFeatures: []

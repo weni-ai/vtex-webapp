@@ -14,12 +14,14 @@ import {
   PageHeader,
   PageHeaderRow,
   PageHeading,
+  Radio,
+  RadioGroup,
   Spinner,
   Text,
   Textarea,
   Tooltip,
 } from '@vtex/shoreline';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { agentLoading, getAgent, loadingSetup, selectProject } from '../../store/projectSlice';
 import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
@@ -36,6 +38,7 @@ interface FormState {
   knowledge: string;
   occupation: string;
   objective: string;
+  channel: string;
 }
 
 export function AgentBuilder() {
@@ -44,6 +47,7 @@ export function AgentBuilder() {
     knowledge: useSelector(getAgent).links[0] || '',
     occupation: useSelector(getAgent).occupation || t('agent.setup.forms.occupation.default'),
     objective: useSelector(getAgent).objective || t('agent.setup.forms.objective.default'),
+    channel: useSelector(getAgent).channel || t('agent.setup.forms.channel.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
@@ -55,7 +59,7 @@ export function AgentBuilder() {
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
-
+  const [selectedRadio, setSelectedRadio] = useState('faststore');
   useEffect(() => {
     initializeUser();
   }, [initializeUser]);
@@ -111,13 +115,25 @@ export function AgentBuilder() {
             </Button>
           </PageHeaderRow>
         </PageHeader>
-
         <PageContent style={{ maxWidth: '720px', padding: 0 }}>
+          <Flex direction="row" gap="var(--space-5, 20px)" style={{ marginBottom: 'var(--space-5, 20px)' }}>
+            <RadioGroup
+              label={t('agent.setup.forms.channel.title')}
+              defaultValue={form.channel}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setForm({ ...form, channel: e.target.value })}
+            >
+              <Flex direction="row" gap="var(--space-5, 20px)">
+                <Radio value={'faststore'}>{t('agent.setup.forms.channel.faststore')}</Radio>
+                <Radio value={'portal'}>{t('agent.setup.forms.channel.portal')}</Radio>
+                <Radio value={'site_editor'}>{t('agent.setup.forms.channel.site_editor')}</Radio>
+              </Flex>
+            </RadioGroup>
+          </Flex>
           {isSetupLoading ? (
             <AgentBuilderSkeleton />
           ) : (
-            <Flex direction="column" gap="24px">
-              <Flex direction="column" gap="20px">
+            <Flex direction="column" gap="var(--space-5, 20px)">
+              <Flex direction="column" gap="var(--space-5, 20px)">
                 <Field error={!!errors.name}>
                   <Label>{t('agent.setup.forms.name')}</Label>
                   <Input

@@ -137,6 +137,12 @@
             "title": "Setup your agent persona",
             "forms": {
                 "name": "Name",
+                "channel": {
+                    "title": "Channel",
+                    "faststore": "Faststore",
+                    "portal": "Portal/Layout",
+                    "site_editor": "Site Editor"
+                },
                 "occupation": {
                     "title": "Occupation (optional)",
                     "default": "Intelligent assistant"

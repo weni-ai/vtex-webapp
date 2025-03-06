@@ -13,13 +13,6 @@ export function PreferencesOrderStatusActive() {
     formData.order_status_restriction?.phone_number || ''
   );
 
-  // const [hasSelectedSellers, setHasSelectedSellers] = useState(false);
-  // const [selectedSellers, setSelectedSellers] = useState<string[]>([]);
-
-  // function updateSelectedSellers(items: string[]) {
-  //   setSelectedSellers(items);
-  // }
-
   function beforeSetTestContactNumber(phoneNumber: string) {
     const eventLocal = event as unknown as { target: { selectionStart: number; selectionEnd: number; } };
 
@@ -127,54 +120,6 @@ export function PreferencesOrderStatusActive() {
           />
         </Field>
       }
-
-      <Field
-        style={{
-          display: 'flex',
-          marginTop: 'var(--sl-space-6)',
-        }}
-      >
-        {/* <Checkbox
-          checked={hasSelectedSellers}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setHasSelectedSellers(e.target.value as unknown as boolean)}
-          aria-label={t('agents.categories.active.order_status.settings.is_selected_sellers.title')}
-        >
-          {t('agents.categories.active.order_status.settings.is_selected_sellers.title')}
-        </Checkbox> */}
-
-        {/* <FieldDescription style={{ marginLeft: 'var(--sl-space-7)' }}>
-          {t('agents.categories.active.order_status.settings.is_selected_sellers.description')}
-        </FieldDescription> */}
-      </Field>
-
-      {/* {
-        hasSelectedSellers &&
-        <Field
-          style={{
-            display: 'flex',
-            marginTop: 'var(--sl-space-6)',
-          }}
-        >
-          <Label>{t('agents.categories.active.order_status.settings.selected_sellers.label')}</Label>
-
-          <Select
-            value={selectedSellers}
-            setValue={updateSelectedSellers}
-            messages={
-              {
-                placeholder: t('agents.categories.active.order_status.settings.selected_sellers.placeholder')
-              }
-            }
-            style={{ width: '100%' }}
-          >
-            <SelectItem value="option 1">option 1</SelectItem>
-            <SelectItem value="option 2">option 2</SelectItem>
-            <SelectItem value="option 3">option 3</SelectItem>
-            <SelectItem value="option 4">option 4</SelectItem>
-            <SelectItem value="option 5">option 5</SelectItem>
-          </Select>
-        </Field>
-      } */}
     </DrawerContent>
   );
 }

@@ -9,6 +9,7 @@ export interface Agent {
     links: string[];
     occupation: string;
     objective: string;
+    channel: string;
 }
 
 export interface Feature {
@@ -49,10 +50,10 @@ export interface UserData {
 }
 
 export interface AccountData {
-    hosts:  string[];
+    hosts: string[];
     [key: string]: any;
-  }
-  
+}
+
 
 export interface UserState {
     userData: UserData | null;

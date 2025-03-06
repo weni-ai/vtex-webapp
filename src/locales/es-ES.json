@@ -8,21 +8,21 @@
         "back": "Volver",
         "create": "Crear",
         "details": "Ver detalles",
-        "manage_settings": "Gestionar configuraciones",
+        "manage_settings": "Administrar configuración",
         "preferences": "Preferencias",
         "disable": "Desactivar",
         "errors": {
-            "unauthorized": "No tienes permiso para realizar esta acción.",
-            "internal_server_error": "Error interno del servidor.",
-            "unexpected_error": "Ha ocurrido un error inesperado."
+            "unauthorized": "No tienes permiso para realizar esta acción",
+            "internal_server_error": "Error interno del servidor",
+            "unexpected_error": "Ha ocurrido un error inesperado"
         },
-        "new_agent": "Nuevo agente"
+        "new_agent": "Nuevo Agente"
     },
     "title": "Weni Agentic IA",
     "description": "Una solución de CX basada en IA para marcas y minoristas.",
     "improve": {
-        "description": "Conecta agentes a la plataforma Weni para acceder a funciones avanzadas y opciones personalizadas.",
-        "button": "Conectar con Weni"
+        "description": "Conecta agentes a la plataforma Weni para acceder a funciones avanzadas y opciones personalizables.",
+        "button": "Conectar a Weni"
     },
     "agents": {
         "title": "Galería de agentes",
@@ -30,23 +30,23 @@
             "active": {
                 "title": "Notificación activa",
                 "order_status": {
-                    "title": "Agente de estado de pedidos",
-                    "description": "Mantén a los clientes informados en tiempo real sobre el estado de sus pedidos.",
+                    "title": "Agente de estado de pedido",
+                    "description": "Mantén a los clientes actualizados sobre el estado de su pedido en tiempo real.",
                     "details": {
-                        "title": "Habilita el seguimiento de entregas para los clientes.",
-                        "description": "Este agente reduce las consultas manuales y aumenta la transparencia, asegurando que los clientes estén informados y tengan el control."
+                        "title": "Habilita el seguimiento de entrega de pedidos para clientes.",
+                        "description": "Este agente reduce las verificaciones manuales y aumenta la transparencia, asegurando que los clientes permanezcan informados y en control."
                     },
                     "settings": {
                         "is_test_contact_number": {
-                            "title": "Restringir a número de prueba",
-                            "description": "El agente solo enviará mensajes al número de prueba."
+                            "title": "Restringir al número de contacto de prueba",
+                            "description": "El agente enviará mensajes solo al número de teléfono de prueba"
                         },
                         "test_contact_number": {
                             "label": "Número de teléfono"
                         },
                         "is_selected_sellers": {
-                            "title": "Restringido a vendedores seleccionados",
-                            "description": "El agente solo enviará mensajes a vendedores seleccionados."
+                            "title": "Restringido para vendedores seleccionados",
+                            "description": "El agente enviará mensajes solo a vendedores seleccionados"
                         },
                         "selected_sellers": {
                             "label": "Selecciona los vendedores",
@@ -55,38 +55,42 @@
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de recuperación de carrito",
-                    "description": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
+                    "title": "Agente de carrito abandonado",
+                    "description": "Recupera ventas recordando a los clientes los artículos dejados en el carrito.",
                     "details": {
-                        "title": "Recupera ventas recordando a los clientes los artículos que dejaron en el carrito.",
-                        "description": "Este agente mejora la conversión, retiene clientes e impulsa la finalización de compras."
+                        "title": "Recupera ventas recordando a los clientes los artículos dejados en el carrito.",
+                        "description": "Este agente aumenta la conversión, retiene clientes y fomenta la finalización del pedido."
                     },
                     "modal": {
-                        "title": "Agregar carrito abandonado",
-                        "description": "Revisa el tipo de tienda en la tienda antes de seguir los pasos a continuación.",
-                        "button": "Ir a la tienda",
+                        "title": "Agregar Carrito Abandonado",
+                        "description": "Verifica el tipo de tienda en el storefront antes de seguir los pasos a continuación.",
+                        "button": "Ir al Storefront",
                         "steps": {
+                            "title": "El agente solo será funcional después de seguir estos pasos:",
                             "faststore": {
                                 "title": "Faststore",
                                 "description": "El agente solo será funcional después de seguir estos pasos:",
-                                "step1": "Ir al repositorio de GitHub y pegar el código a continuación en el archivo thirdpartyscripts.tsx."
+                                "step1": "Ve al repositorio de GitHub y pega el código a continuación en el archivo thirdpartyscripts.tsx."
                             },
                             "portal": {
                                 "title": "Portal/Layout",
                                 "description": "El agente solo será funcional después de seguir estos pasos:",
-                                "step1": "Ir al repositorio de GitHub y pegar el código a continuación en el archivo thirdpartyscripts.tsx."
+                                "step1": "Navega hasta el Layout del Storefront.",
+                                "step2": "Abre la carpeta CMS.",
+                                "step3": "Ve a Plantillas HTML {`>`} Subtemplates.",
+                                "step4": "Abre commonScripts y pega el script a continuación."
                             },
                             "site_editor": {
-                                "title": "Site Editor",
-                                "description": "No se requieren pasos de configuración adicionales para el tipo de tienda 'Site Editor'. Una vez confirmado, el agente estará listo para funcionar."
+                                "title": "Editor de Sitio",
+                                "description": "No se necesitan pasos de configuración para el tipo de tienda 'Editor de Sitio'. Una vez confirmado, el agente está listo para usar."
                             }
                         }
                     },
                     "settings": {
                         "restriction": {
-                            "title": "Restricción de mensaje",
-                            "description": "Restringe el envío de mensajes a las horas configuradas.",
-                            "monday_until_friday": "Lunes hasta Viernes",
+                            "title": "Restricción de horario de mensajes",
+                            "description": "Restringir envíos de mensajes a horarios configurados.",
+                            "monday_until_friday": "Lunes a Viernes",
                             "saturday": "Sábado",
                             "from": "Desde",
                             "to": "Hasta"
@@ -97,14 +101,14 @@
         },
         "common": {
             "configure": {
-                "success": "Configuración guardada con éxito.",
-                "error": "No se pudo guardar. Inténtalo nuevamente más tarde."
+                "success": "Configuración guardada exitosamente.",
+                "error": "No se pudo guardar. Por favor, inténtalo de nuevo más tarde."
             },
             "disable": {
                 "title": "Desactivar agente",
-                "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, ya no estará activo en tu proyecto.",
-                "success": "Agente desactivado con éxito.",
-                "error": "No se pudo desactivar el agente. Inténtalo nuevamente más tarde."
+                "description": "¿Deseas desactivar el agente '{{agent}}'? Una vez desactivado, este agente ya no estará activo en tu proyecto.",
+                "success": "Agente desactivado exitosamente.",
+                "error": "No se pudo desactivar el agente. Por favor, inténtalo de nuevo más tarde."
             },
             "add": "Agregar agente",
             "added": "Agente activo",
@@ -112,24 +116,90 @@
         }
     },
     "setup": {
-        "title": "Configurando tu Weni App",
-        "description": "Estamos finalizando la configuración inicial para garantizar una experiencia fluida."
+        "title": "Configurando tu App Weni",
+        "description": "¡Preparando todo para ti! Estamos finalizando la configuración inicial para asegurar una experiencia fluida."
+    },
+    "agent": {
+        "details": {
+            "title": "Agentes inteligentes",
+            "description": "Mejora los agentes inteligentes habilitando el control sobre flujos de conversación basados en las intenciones del usuario. Con el Plan Starter, personaliza lenguaje, tono y comportamiento para dar al agente una identidad única y mejorar la calidad de la comunicación. Ve la demostración de la interacción del agente de cambios y devoluciones al lado.",
+            "skills": {
+                "title": "Habilidades del Agente",
+                "analyze": "Analizar el contexto",
+                "comprehend": "Comprender demandas complejas",
+                "provide": "Proporcionar respuestas personalizadas"
+            },
+            "example": {
+                "description": "Demo del agente de Cambios y Devoluciones"
+            }
+        },
+        "setup": {
+            "title": "Configura la persona de tu agente",
+            "forms": {
+                "name": "Nombre",
+                "channel": {
+                    "title": "Canal",
+                    "faststore": "Faststore",
+                    "portal": "Portal/Layout",
+                    "site_editor": "Editor de Sitio"
+                },
+                "occupation": {
+                    "title": "Ocupación (opcional)",
+                    "default": "Asistente inteligente"
+                },
+                "objective": {
+                    "title": "Objetivo (opcional)",
+                    "default": "Tu objetivo es responder preguntas de clientes, informar el estado del pedido, proporcionar información de productos y vender. Tus características principales son: Compras en WhatsApp y FAQ."
+                },
+                "knowledge": {
+                    "title": "Fuente de conocimiento",
+                    "context": "Proporciona el contenido que tu agente usará para responder preguntas."
+                },
+                "error": {
+                    "empty_input": "Completa esta información",
+                    "valid_url": "Ingresa una URL válida."
+                }
+            },
+            "buttons": {
+                "create_agent": "Crear agente"
+            }
+        },
+        "error": "No se pudo configurar el agente. Por favor, inténtalo de nuevo más tarde.",
+        "success": "Agente registrado exitosamente"
+    },
+    "integration": {
+        "title": "Integrar un canal de soporte",
+        "description": "Elige el canal que deseas usar y sigue el paso a paso para agregarlo.",
+        "channels": {
+            "whatsapp": {
+                "title": "Canal WhatsApp",
+                "description": "Utiliza una cuenta empresarial de WhatsApp para mejorar la comunicación con contactos.",
+                "error": "No se pudo conectar WhatsApp, verifica tus credenciales o inténtalo de nuevo más tarde.",
+                "success": "WhatsApp fue integrado exitosamente."
+            }
+        },
+        "buttons": {
+            "integrate": "Integrar",
+            "integrated": "Integrado"
+        },
+        "success": "¡Integración completada exitosamente!",
+        "error": "No se pudo integrar la función. Por favor, inténtalo de nuevo más tarde."
     },
     "error": {
         "title": "Algo salió mal",
-        "description": "Inténtalo de nuevo o vuelve más tarde si el problema persiste.",
+        "description": "Inténtalo de nuevo o verifica más tarde si el problema persiste.",
         "button": "Intentar de nuevo"
     },
     "terms": {
-        "title": "Términos y Condiciones",
-        "description": "Al utilizar esta aplicación, es necesario aceptar los Términos y Condiciones. Estos términos definen el acceso y uso de los servicios, detallando las características del plan seleccionado, sus limitaciones, precios y políticas de renovación. Además, describen la funcionalidad del producto, las pautas de uso y cualquier restricción aplicable para garantizar una experiencia segura y optimizada.",
+        "title": "Términos y condiciones",
+        "description": "Al usar esta aplicación, se requiere la aceptación de los Términos y Condiciones. Estos términos definen el acceso y uso de los servicios, detallando las características del plan seleccionado, limitaciones, precios y políticas de renovación. Además, describen la funcionalidad del producto, pautas de uso y cualquier restricción aplicable para garantizar una experiencia segura y óptima.",
         "plan_details": {
             "title": "1. Detalles del Plan",
-            "description": "El plan seleccionado incluye características específicas, limitaciones y condiciones de pago. Revisa los detalles de tu suscripción para comprender qué está incluido y cómo funcionan las renovaciones."
+            "description": "Tu plan seleccionado incluye características específicas, limitaciones y términos de facturación. Por favor, revisa los detalles de tu suscripción para entender qué está incluido y cómo funcionan las renovaciones."
         },
         "product_usage": {
             "title": "2. Uso del Producto",
-            "description": "Esta aplicación ha sido diseñada para mejorar tu experiencia mediante funciones y características específicas. Cualquier uso indebido, acceso no autorizado o violación de los términos puede resultar en la suspensión de la cuenta."
+            "description": "Esta aplicación está diseñada para mejorar tu experiencia a través de características y funcionalidades específicas. Cualquier mal uso, acceso no autorizado o violación de los términos puede resultar en la suspensión de la cuenta."
         },
         "agree": "Aceptar"
     }
