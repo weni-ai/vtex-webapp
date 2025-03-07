@@ -1,3 +1,4 @@
+import store from "../../store/provider.store";
 import { VTEXFetch } from "../../utils/VTEXFetch";
 import { 
   UpdateAgentSettingsData, 
@@ -67,10 +68,18 @@ export async function disableFeatureRequest(data: {
 } 
 
 export async function getSkillMetricsRequest() {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const queryParams = new URLSearchParams({
+    projectUUID: projectUuid
+  });
+
+  const url = `/_v/get-skill-metrics?${queryParams.toString()}`;
+
   return await VTEXFetch<{
     message: string;
     error: string;
-  }>(`/_v/get-skill-metrics`, {
+  }>(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
