@@ -68,5 +68,6 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
+    phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_numbers,
   }));
 }

@@ -10,7 +10,7 @@ export function PreferencesOrderStatusActive() {
     !!formData.order_status_restriction?.phone_numbers
   );
   const [testContactNumber, setTestContactNumber] = useState(
-    formData.order_status_restriction?.phone_numbers || ''
+    formData.order_status_restriction?.phone_numbers[0] || ''
   );
 
   function beforeSetTestContactNumber(phoneNumber: string) {
