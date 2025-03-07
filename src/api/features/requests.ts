@@ -65,3 +65,15 @@ export async function disableFeatureRequest(data: {
     body: JSON.stringify(data),
   });
 } 
+
+export async function getSkillMetricsRequest() {
+  return await VTEXFetch<{
+    message: string;
+    error: string;
+  }>(`/_v/get-skill-metrics`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+}

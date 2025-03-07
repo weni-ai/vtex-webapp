@@ -4,9 +4,10 @@ import { agentsList, integratedAgentsList } from "../api/agents/requests";
 import { 
   integrateFeatureRequest, 
   updateAgentSettingsRequest, 
-  disableFeatureRequest 
+  disableFeatureRequest, 
+  getSkillMetricsRequest
 } from "../api/features/requests";
-import { UpdateAgentSettingsData } from "../api/features/adapters";
+import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/features/adapters";
 
 export async function updateFeatureList() {
   const availableFeatures = await agentsList();
@@ -79,5 +80,18 @@ export async function disableFeature(project_uuid: string, feature_uuid: string)
     return { success: false, error: error || 'unknown error' };
   } finally {
     storeProvider.dispatch(setDisableFeatureLoading(false))
+  }
+}
+
+export async function getSkillMetrics() {
+  try {
+    const response = await getSkillMetricsRequest() as GetSkillMetricsResponse;
+    if (!response.data) {
+      throw new Error('No metrics data received');
+    }
+    return adaptGetSkillMetricsResponse(response);
+  } catch (error: unknown) {
+    console.error('error getting skill metrics:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
   }
 }

@@ -13,6 +13,23 @@ interface IntegrateFeatureOutput {
     message: string;
 }
 
+export interface DisableFeatureData {
+    project_uuid: string;
+    feature_uuid: string;
+}
+
+export interface GetSkillMetricsResponse {
+    message: string;
+    error: string;
+    data: { title: string; value: string; variation: number; }[][];
+}
+
+export interface UpdateAgentSettingsResponse {
+    message: string;
+    error: string;
+}
+
+
 export class FeaturesAdapter {
     static async integrateFeature(input: IntegrateFeatureInput): Promise<IntegrateFeatureOutput> {
         try {
@@ -58,10 +75,6 @@ export interface UpdateAgentSettingsData {
     };
 }
 
-export interface UpdateAgentSettingsResponse {
-    message: string;
-    error: string;
-}
 
 export function adaptUpdateAgentSettingsRequest(data: UpdateAgentSettingsData) {
     return {
@@ -78,7 +91,12 @@ export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsRe
     };
 }
 
-export interface DisableFeatureData {
-    project_uuid: string;
-    feature_uuid: string;
-} 
+export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) {
+    return {
+        message: response.message,
+        error: response.error,
+        data: response.data,
+    };
+}
+
+
