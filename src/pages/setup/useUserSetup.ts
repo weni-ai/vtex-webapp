@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { setAccount, setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setAccount, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
-import { checkAgentIntegration } from '../../services/agent.service';
+// import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
-import { updateFeatureList } from '../../services/features.service';
+// import { updateFeatureList } from '../../services/features.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -64,40 +64,40 @@ export function useUserSetup() {
           throw new Error(JSON.stringify(response.error))
         }
 
-        const agentIntegration = await checkAgentIntegration(project_uuid);
-        if (agentIntegration?.error) {
-          console.log('ta entrando aqui com: ', agentIntegration)
-          throw new Error(JSON.stringify(agentIntegration.error))
-        }
+        // const agentIntegration = await checkAgentIntegration(project_uuid);
+        // if (agentIntegration?.error) {
+        //   console.log('ta entrando aqui com: ', agentIntegration)
+        //   throw new Error(JSON.stringify(agentIntegration.error))
+        // }
 
-        const { name = '', links = '', objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
+        // const { name = '', links = '', objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
 
-        if (name) {
-          store.dispatch(
-            setAgent({
-              name,
-              links,
-              objective,
-              occupation,
-              channel: 'faststore'
-            })
-          );
-        }
+        // if (name) {
+        //   store.dispatch(
+        //     setAgent({
+        //       name,
+        //       links,
+        //       objective,
+        //       occupation,
+        //       channel: 'faststore'
+        //     })
+        //   );
+        // }
 
         if (has_whatsapp) {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-          console.log('aqui')
-          if (has_agent) {
-            store.dispatch(setAgentIntegrated(true))
+          // if (has_agent) {
+          //   store.dispatch(setAgentIntegrated(true))
 
-            console.log('aqui de novo')
-            await updateFeatureList()
-            navigate('/dash');
-          } else {
-            navigate('/agent-builder');
-          }
+          //   console.log('aqui de novo')
+          //   await updateFeatureList()
+          //   navigate('/dash');
+          // } else {
+          //   navigate('/agent-builder');
+          // }
+          navigate('/dash');
         } else {
           navigate('/agent-builder');
         }
