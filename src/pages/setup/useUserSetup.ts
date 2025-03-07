@@ -8,6 +8,7 @@ import { setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../s
 import { checkWppIntegration } from '../../services/channel.service';
 // import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
+import { updateFeatureList } from '../../services/features.service';
 // import { updateFeatureList } from '../../services/features.service';
 
 export function useUserSetup() {
@@ -97,7 +98,8 @@ export function useUserSetup() {
           // } else {
           //   navigate('/agent-builder');
           // }
-          navigate('/agent-builder');
+          await updateFeatureList()
+          navigate('/dash');
         } else {
           navigate('/agent-builder');
         }
