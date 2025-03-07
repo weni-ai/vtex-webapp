@@ -71,7 +71,8 @@ export async function getSkillMetricsRequest() {
   const projectUuid = store.getState().project.project_uuid;
 
   const queryParams = new URLSearchParams({
-    projectUUID: projectUuid
+    projectUUID: projectUuid,
+    skill: 'abandoned_cart'
   });
 
   const url = `/_v/get-skill-metrics?${queryParams.toString()}`;
