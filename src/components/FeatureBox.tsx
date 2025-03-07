@@ -4,7 +4,7 @@ import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateFeature } from "../services/features.service";
 import { useSelector } from "react-redux";
-import { featureList, selectProject, updateFeatureLoading } from "../store/projectSlice";
+import { featureList, getAgentChannel, selectProject, updateFeatureLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
@@ -22,6 +22,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const features = useSelector(featureList)
   const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
   const featureUuid = features.find((item: { code: string }) => item.code === code)?.uuid || '';
+  const channel = useSelector(getAgentChannel)
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -34,7 +35,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   }
 
   const integrateCurrentFeature = async () => {
-    if (code === 'abandoned_cart') {
+    if (code === 'abandoned_cart' && channel !== 'site_editor') {
       setOpenAbandonedCartModal(true)
       return;
     }
@@ -170,7 +171,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
 
       <AddAbandonedCart
         open={openAbandonedCartModal}
-        toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
+        toggleModal={() => setOpenAbandonedCartModal((o) => !o )}
         confirm={() => {
           integrateFeature(featureUuid, projectUUID);
           setOpenAbandonedCartModal(false);
