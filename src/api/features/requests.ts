@@ -72,7 +72,9 @@ export async function getSkillMetricsRequest() {
 
   const queryParams = new URLSearchParams({
     projectUUID: projectUuid,
-    skill: 'abandoned_cart'
+    skill: 'abandoned_cart',
+    start_date: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0],
+    end_date: new Date().toISOString().split('T')[0]
   });
 
   const url = `/_v/get-skill-metrics?${queryParams.toString()}`;
