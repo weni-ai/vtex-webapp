@@ -97,7 +97,7 @@ export function useUserSetup() {
           // } else {
           //   navigate('/agent-builder');
           // }
-          navigate('/dash');
+          navigate('/agent-builder');
         } else {
           navigate('/agent-builder');
         }
