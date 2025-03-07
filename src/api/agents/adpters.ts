@@ -1,7 +1,7 @@
 type AgentConfig = {
   integration_settings?: {
     order_status_restriction?: {
-      phone_number: string;
+      phone_numbers: string;
     };
   };
   templates_synchronization_status?: 'pending' | 'rejected' | 'approved';
@@ -28,8 +28,8 @@ function isInTest(config?: AgentConfig) {
     return true;
   }
 
-  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_number
-    && config?.integration_settings?.order_status_restriction?.phone_number.length > 0;
+  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
+    && config?.integration_settings?.order_status_restriction?.phone_numbers.length > 0;
   
   const syncStatus = config?.templates_synchronization_status;
   const isPendingOrRejected = syncStatus === 'pending' || syncStatus === 'rejected';
@@ -43,7 +43,7 @@ export function adapterAgentsList(response: AgentsListResponse) {
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
-    phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_number,
+    phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_numbers,
   }));
 }
 
