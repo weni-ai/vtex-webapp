@@ -19,7 +19,7 @@ interface AbandonedCartActiveType {
 interface OrderStatusActiveType {
   order_status_restriction: {
     is_active: boolean;
-    phone_number: string;
+    phone_numbers: string;
     sellers: string[];
   };
 }

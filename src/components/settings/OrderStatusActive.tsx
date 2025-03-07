@@ -7,10 +7,10 @@ export function PreferencesOrderStatusActive() {
   
   // Initialize state from context
   const [hasTestContactNumber, setHasTestContactNumber] = useState(
-    !!formData.order_status_restriction?.phone_number
+    !!formData.order_status_restriction?.phone_numbers
   );
   const [testContactNumber, setTestContactNumber] = useState(
-    formData.order_status_restriction?.phone_number || ''
+    formData.order_status_restriction?.phone_numbers || ''
   );
 
   function beforeSetTestContactNumber(phoneNumber: string) {
@@ -81,7 +81,7 @@ export function PreferencesOrderStatusActive() {
       ...formData,
       order_status_restriction: {
         is_active: hasTestContactNumber,
-        phone_number: hasTestContactNumber ? testContactNumber : "",
+        phone_numbers: hasTestContactNumber ? testContactNumber : "",
         sellers: []
       },
     };
