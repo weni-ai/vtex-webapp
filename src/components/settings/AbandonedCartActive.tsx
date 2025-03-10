@@ -10,7 +10,7 @@ import { TimeValue } from '@react-aria/datepicker';
 export function PreferencesAbandonedCartActive() {
   const context = useContext(SettingsContext);
   const currentMessageTimeRestrictions = useSelector((state: RootState) => integratedFeatures(state).find((feature) => feature.code === 'abandoned_cart')?.message_time_restrictions);
-  const [restriction, setRestriction] = useState(currentMessageTimeRestrictions?.is_active || false)
+  const [restriction, setRestriction] = useState<boolean>(currentMessageTimeRestrictions?.is_active ?? false);
   const setRestrictionValue = (event: ChangeEvent<HTMLInputElement>) => {
     setRestriction(event.target.checked)
   }
@@ -44,7 +44,6 @@ export function PreferencesAbandonedCartActive() {
   };
 
   useEffect(() => {
-
     context?.setFormData({
       messageTimeRestriction: {
         isActive: restriction,
@@ -65,7 +64,7 @@ export function PreferencesAbandonedCartActive() {
   return (
     <DrawerContent>
       <Flex style={{ marginBottom: '1rem' }}>
-        <Checkbox onChange={setRestrictionValue} aria-label={t('agents.active.abandoned_cart.settings.restriction.description')}>
+        <Checkbox checked={restriction} onChange={setRestrictionValue} aria-label={t('agents.active.abandoned_cart.settings.restriction.description')}>
           <Flex direction="column" style={{ gap: '0px' }}>
             <Text variant="body">{t('agents.categories.active.abandoned_cart.settings.restriction.title')}</Text>
             <Text variant="caption2" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.description')}</Text>
