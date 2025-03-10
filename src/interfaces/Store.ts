@@ -17,6 +17,7 @@ export interface Feature {
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
+    phone_numbers: string[];
 }
 
 export interface Loading {

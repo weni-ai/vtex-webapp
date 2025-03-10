@@ -43,7 +43,9 @@ export function adapterAgentsList(response: AgentsListResponse) {
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
-    phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_numbers,
+    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
+      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
+      []
   }));
 }
 
@@ -68,6 +70,8 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
-    phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_numbers,
+    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
+      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
+      []
   }));
 }

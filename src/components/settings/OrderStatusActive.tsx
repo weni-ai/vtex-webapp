@@ -1,16 +1,20 @@
 import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label } from "@vtex/shoreline";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
+import { useSelector } from "react-redux";
+import { integratedFeatures } from "../../store/projectSlice";
+import { RootState } from "../../interfaces/Store";
 
 export function PreferencesOrderStatusActive() {
   const { formData = {}, setFormData } = useContext(SettingsContext) || {};
-  
+
   // Initialize state from context
+  const currentNumber = useSelector((state: RootState) => integratedFeatures(state).find((feature) => feature.code === 'order_status')?.phone_numbers[0]);
   const [hasTestContactNumber, setHasTestContactNumber] = useState(
-    !!formData.order_status_restriction?.phone_numbers
+    !!currentNumber
   );
   const [testContactNumber, setTestContactNumber] = useState(
-    formData.order_status_restriction?.phone_numbers[0] || ''
+    currentNumber || ''
   );
 
   function beforeSetTestContactNumber(phoneNumber: string) {
@@ -38,7 +42,7 @@ export function PreferencesOrderStatusActive() {
         if (!restValue.length) {
           return;
         }
-        
+
         if (restValue.length && typeof element === 'string') {
           finalValue += element;
         }
@@ -51,7 +55,7 @@ export function PreferencesOrderStatusActive() {
     } else {
       finalValue += restValue;
     }
-    
+
     setTestContactNumber(finalValue);
 
     setTimeout(movePointerToOriginalPosition, 0);
@@ -67,7 +71,7 @@ export function PreferencesOrderStatusActive() {
             valueWithPointer.replace(/[^\d|]/g, '').indexOf('|')
           )
           .join('').length;
-      
+
       const pointerCalculated =
         pointerPositionBefore
         + nonNumbersCharactersBeforeThePointer;
