@@ -2,7 +2,7 @@
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
-import { integrateFeature } from "../services/features.service";
+import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
 import { featureList, getAgentChannel, selectProject, updateFeatureLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
@@ -39,7 +39,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
       setOpenAbandonedCartModal(true)
       return;
     }
-    const result = await integrateFeature(featureUuid, projectUUID);
+    const result = await integrateAgent(featureUuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {
@@ -173,7 +173,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o )}
         confirm={() => {
-          integrateFeature(featureUuid, projectUUID);
+          integrateAgent(featureUuid, projectUUID);
           setOpenAbandonedCartModal(false);
         }}
       />

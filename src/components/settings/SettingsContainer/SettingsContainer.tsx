@@ -6,8 +6,8 @@ import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
 import { featureLoading, selectProject } from "../../../store/projectSlice";
-import { updateAgentSettings } from "../../../services/features.service";
-import { UpdateAgentSettingsData } from "src/api/features/adapters";
+import { updateAgentSettings } from "../../../services/agent.service";
+import { UpdateAgentSettingsData } from "../../../api/agents/adapters";
 
 type codes = 'abandoned_cart' | 'order_status';
 

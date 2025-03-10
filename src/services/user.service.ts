@@ -2,7 +2,7 @@
 import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
-import { updateFeatureList } from "./features.service";
+import { updateAgentsList } from "./agent.service";
 import { userAdapters } from "../api/users/adapters";
 
 export function getUserFromLocalStorage() {
@@ -76,7 +76,7 @@ export async function createUserAndProject(userData: any) {
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false));
 
-    await updateFeatureList();
+    await updateAgentsList();
     return { success: true, data: response };
   } catch (error) {
     console.error('error in project and user creation:', error);

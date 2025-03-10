@@ -1,6 +1,6 @@
 import store from "../../store/provider.store";
 import { setLoadingSetup, setProjectUuid } from "../../store/projectSlice";
-import { updateFeatureList } from "../../services/features.service";
+import { updateAgentsList } from "../../services/agent.service";
 import { userRequests } from "./requests";
 
 export const userAdapters = {
@@ -74,7 +74,7 @@ export const userAdapters = {
       store.dispatch(setProjectUuid(response.project_uuid));
       store.dispatch(setLoadingSetup(false));
 
-      await updateFeatureList();
+      await updateAgentsList();
       return { success: true, data: response };
     } catch (error) {
       console.error('error in project and user creation:', error);

@@ -8,7 +8,7 @@ import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } fro
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
-import { updateFeatureList } from '../../services/features.service';
+import { updateAgentsList } from '../../services/agent.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -93,7 +93,7 @@ export function useUserSetup() {
             store.dispatch(setAgentIntegrated(true))
 
             console.log('aqui de novo')
-            await updateFeatureList()
+            await updateAgentsList()
             navigate('/dash');
           } else {
             navigate('/agent-builder');

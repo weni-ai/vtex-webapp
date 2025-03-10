@@ -6,7 +6,7 @@ import { FeatureBox } from '../components/FeatureBox';
 import { useSelector } from 'react-redux';
 import { featureList, integratedFeatures, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
-import { getSkillMetrics } from '../services/features.service';
+import { getSkillMetrics } from '../services/agent.service';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);

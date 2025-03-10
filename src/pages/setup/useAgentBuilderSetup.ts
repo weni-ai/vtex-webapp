@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { toast } from '@vtex/shoreline';
 import store from '../../store/provider.store';
 import { selectProject, setAgentLoading } from '../../store/projectSlice';
-import { integrateFeature } from '../../services/features.service';
+import { integrateAgent } from '../../services/agent.service';
 
 export function useAgentBuilderSetup() {
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ export function useAgentBuilderSetup() {
             toast.success(t('agent.success'))
             const orderStatus = store.getState().project.featureList.find(item => item.code === 'order_status')?.uuid
             if (orderStatus) {
-                const integrateResponse = await integrateFeature(orderStatus, project)
+                const integrateResponse = await integrateAgent(orderStatus, project)
                 if(integrateResponse?.error){
                     toast.critical(t('integration.error'));
                 }

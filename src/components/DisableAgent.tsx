@@ -1,7 +1,7 @@
 import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Spinner, Text, toast } from "@vtex/shoreline";
 import { useSelector } from "react-redux";
 import { disableFeatureLoading, selectProject } from "../store/projectSlice";
-import { disableFeature } from "../services/features.service";
+import { disableAgent } from "../services/agent.service";
 export interface AboutAgentProps {
     open: boolean,
     agentUuid: string,
@@ -16,7 +16,7 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<A
 
     async function disable() {
         console.log('agent uuid:', agentUuid)
-        const disableResponse = await disableFeature(projectUuid, agentUuid)
+        const disableResponse = await disableAgent(projectUuid, agentUuid)
 
         if(disableResponse?.error){
             toast.critical(t('agents.common.disable.error'));
