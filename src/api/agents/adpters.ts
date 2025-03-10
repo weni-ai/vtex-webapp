@@ -3,7 +3,7 @@ type AgentConfig = {
     order_status_restriction?: {
       phone_numbers: string;
     };
-    message_time_restrictions: {
+    message_time_restriction: {
       is_active: boolean;
       periods: {
         saturdays: {
@@ -86,6 +86,6 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
       [],
-    message_time_restrictions: agent.config?.integration_settings?.message_time_restrictions
+    message_time_restrictions: agent.config?.integration_settings?.message_time_restriction
   }));
 }
