@@ -2,13 +2,16 @@ import { DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, Checkbox
 import { TimeValue } from '@react-aria/datepicker';
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { SettingsContext } from "./SettingsContainer/SettingsContext";
+import { integratedFeatures } from "../../store/projectSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "src/interfaces/Store";
 
 export function PreferencesAbandonedCartActive() {
   const context = useContext(SettingsContext);
-  
-  const [restriction, setRestriction] = useState(false)
+  const currentMessageTimeRestrictions = useSelector((state: RootState) => integratedFeatures(state).find((feature) => feature.code === 'abandoned_cart')?.message_time_restrictions);
+  const [restriction, setRestriction] = useState(currentMessageTimeRestrictions?.is_active || false)
   const setRestrictionValue = (event: ChangeEvent<HTMLInputElement>) => {
-      setRestriction(Boolean(event.target.value))
+      setRestriction(event.target.checked)
   }
 
   type TimeType = TimeValue | undefined | null;

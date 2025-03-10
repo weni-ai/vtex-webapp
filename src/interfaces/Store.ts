@@ -18,6 +18,13 @@ export interface Feature {
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
     phone_numbers: string[];
+    message_time_restrictions?: {
+        is_active: boolean;
+        periods: {
+            weekdays: { from: string; to: string };
+            saturdays: { from: string; to: string };
+        };
+    };
 }
 
 export interface Loading {

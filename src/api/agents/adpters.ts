@@ -3,6 +3,19 @@ type AgentConfig = {
     order_status_restriction?: {
       phone_numbers: string;
     };
+    message_time_restrictions: {
+      is_active: boolean;
+      periods: {
+        saturdays: {
+          to: string;
+          from: string;
+        };
+        weekdays: {
+          to: string;
+          from: string;
+        };
+      };
+    };
   };
   templates_synchronization_status?: 'pending' | 'rejected' | 'approved';
 };
@@ -72,6 +85,7 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     isInTest: isInTest(agent.config),
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
-      []
+      [],
+    message_time_restrictions: agent.config?.integration_settings?.message_time_restrictions
   }));
 }
