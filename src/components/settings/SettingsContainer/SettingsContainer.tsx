@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerHeading, DrawerFooter, Button, Spinner, toast } from "@vtex/shoreline";
 import './SettingsContainer.style.css';
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
@@ -5,8 +6,9 @@ import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
-import { featureLoading, selectProject } from "../../../store/projectSlice";
-import { updateAgentSettings } from "../../../services/features.service";
+import { updateAgentLoading, selectProject } from "../../../store/projectSlice";
+import { updateAgentSettings } from "../../../services/agent.service";
+import { UpdateAgentSettingsData } from "../../../api/agents/adapters";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -19,28 +21,27 @@ export interface SettingsContainerProps {
 
 export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {
     const projectUuid = useSelector(selectProject);
-    
     const [formData, setFormData] = useState<SettingsFormData>({});
-    const isUpdating = useSelector(featureLoading);
+    const isUpdating = useSelector(updateAgentLoading);
 
     async function updateAgent() {
-        let body;
+        let body: UpdateAgentSettingsData | undefined;
 
         if (code === 'abandoned_cart') {
             body = {
-                "feature_uuid": agentUuid,
-                "project_uuid": projectUuid,
-                "integration_settings": {
-                    "message_time_restriction": {
-                        "is_active": formData?.messageTimeRestriction?.isActive || false,
-                        "periods": {
-                            "weekdays": {
-                                "from": formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
-                                "to": formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
+                feature_uuid: agentUuid,
+                project_uuid: projectUuid,
+                integration_settings: {
+                    message_time_restriction: {
+                        is_active: formData?.messageTimeRestriction?.isActive || false,
+                        periods: {
+                            weekdays: {
+                                from: formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
+                                to: formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
                             },
-                            "saturdays": {
-                                "from": formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
-                                "to": formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
+                            saturdays: {
+                                from: formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
+                                to: formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
                             }
                         }
                     }
@@ -48,17 +49,19 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
             };
         } else if (code === 'order_status') {
             body = {
-                "feature_uuid": agentUuid,
-                "project_uuid": projectUuid,
-                "integration_settings": {
-                    "order_status_restriction": {
-                        "is_active": formData?.order_status_restriction?.is_active || false,
-                        "phone_number": formData?.order_status_restriction?.phone_number || "",
-                        "sellers": formData?.order_status_restriction?.sellers || []
+                feature_uuid: agentUuid,
+                project_uuid: projectUuid,
+                integration_settings: {
+                    order_status_restriction: {
+                        is_active: formData?.order_status_restriction?.is_active || false,
+                        phone_numbers: formData?.order_status_restriction?.phone_numbers ? [formData.order_status_restriction.phone_numbers] : [],
+                        sellers: formData?.order_status_restriction?.sellers ?? []
                     }
                 }
             };
         }
+
+        if (!body) return;
 
         const response = await updateAgentSettings(body);
         toggleOpen();
