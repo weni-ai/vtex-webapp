@@ -158,6 +158,7 @@ export function Dashboard() {
                 type="active"
                 isIntegrated={false}
                 isInTest={item.isInTest}
+                isConfiguring={item.isConfiguring}
               />
             ))}
             {integrated.map((item: any) => (
@@ -168,6 +169,7 @@ export function Dashboard() {
                 type="active"
                 isIntegrated={true}
                 isInTest={item.isInTest}
+                isConfiguring={item.isConfiguring}
               />
             ))}
           </Grid>

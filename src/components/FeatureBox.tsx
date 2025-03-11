@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
@@ -13,7 +13,7 @@ import { AddAbandonedCart } from "./AddAbandonedCart";
 
 type codes = 'abandoned_cart' | 'order_status';
 
-export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean }) {
+export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfiguring }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
@@ -22,7 +22,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const agentsList = useSelector(agents)
   const isUpdateAgentLoading = useSelector(updateAgentLoading)
   const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
-  const channel = useSelector(getAgentChannel)  
+  const channel = useSelector(getAgentChannel)
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -108,13 +108,32 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
         {(() => {
           if (isInTest) {
             return (
-              <Button variant="secondary" onClick={integrateCurrentFeature} size="large" disabled={true}>
+              <Flex
+                style={{
+                  padding: 'var(--sl-space-2)',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
                 <img src={wrench} alt="" />
-                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
-              </Button>
+                <Text variant="action" color="$fg-warning"> {t('agents.common.test')}</Text>
+              </Flex>
             );
           }
-          if (isIntegrated) {
+          else if (isConfiguring) {
+            return (
+              <Flex
+                style={{
+                  padding: 'var(--sl-space-2)',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <Text variant="action" color="$fg-informational"> {t('agents.common.configuring')}</Text>
+              </Flex>
+            );
+          }
+          else if (isIntegrated) {
             return (
               <Flex
                 style={{
@@ -171,7 +190,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
 
       <AddAbandonedCart
         open={openAbandonedCartModal}
-        toggleModal={() => setOpenAbandonedCartModal((o) => !o )}
+        toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
         confirm={() => {
           integrateAgent(agentUuid, projectUUID);
           setOpenAbandonedCartModal(false);
