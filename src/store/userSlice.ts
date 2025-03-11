@@ -6,8 +6,7 @@ const initialState: UserState = {
   accountData: null,
   loadingWhatsAppIntegration: false,
   isWhatsAppIntegrated: false,
-  isAgentIntegrated: false,
-  isFeatureIntegrated: false,
+  isAgentBuilderIntegrated: false,
   whatsAppError: null,
 };
 
@@ -24,11 +23,8 @@ const userSlice = createSlice({
     setWhatsAppIntegrated: (state, action: PayloadAction<boolean>) => {
       state.isWhatsAppIntegrated = action.payload;
     },
-    setAgentIntegrated: (state, action: PayloadAction<boolean>) => {
-      state.isAgentIntegrated = action.payload;
-    },
-    setFeatureIntegrated: (state, action: PayloadAction<boolean>) => {
-      state.isFeatureIntegrated = action.payload;
+    setAgentBuilderIntegrated: (state, action: PayloadAction<boolean>) => {
+      state.isAgentBuilderIntegrated = action.payload;
     },
     setWhatsAppError: (state, action: PayloadAction<string | null>) => {
       state.whatsAppError = action.payload;
@@ -43,8 +39,7 @@ export const {
   setUser, 
   setAccount,
   setWhatsAppIntegrated, 
-  setAgentIntegrated, 
-  setFeatureIntegrated, 
+  setAgentBuilderIntegrated, 
   setWhatsAppError, 
   setLoadingWhatsAppIntegration 
 } = userSlice.actions;
@@ -52,8 +47,7 @@ export const {
 export const selectUser = (state: RootState) => state.user.userData
 export const selectAccount = (state: RootState) => state.user.accountData
 export const isWhatsAppIntegrated = (state: RootState) => state.user.isWhatsAppIntegrated
-export const isAgentIntegrated = (state: RootState) => state.user.isAgentIntegrated
-export const isFeatureIntegrated = (state: RootState) => state.user.isFeatureIntegrated
+export const isAgentBuilderIntegrated = (state: RootState) => state.user.isAgentBuilderIntegrated
 export const whatsAppError = (state: RootState) => state.user.whatsAppError
 export const loadingWhatsAppIntegration = (state: RootState) => state.user.loadingWhatsAppIntegration
 

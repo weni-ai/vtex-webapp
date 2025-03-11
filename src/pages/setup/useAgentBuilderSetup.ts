@@ -5,7 +5,7 @@ import { setAgentBuilder } from '../../services/agent.service';
 import { useSelector } from 'react-redux';
 import { toast } from '@vtex/shoreline';
 import store from '../../store/provider.store';
-import { selectProject, setAgentLoading } from '../../store/projectSlice';
+import { selectProject, setAgentsLoading } from '../../store/projectSlice';
 import { integrateAgent } from '../../services/agent.service';
 
 export function useAgentBuilderSetup() {
@@ -13,7 +13,7 @@ export function useAgentBuilderSetup() {
     const project = useSelector(selectProject) || ''
     
     const buildAgent = async (payload: any, app_uuid: string) => {
-        store.dispatch(setAgentLoading(true))
+        store.dispatch(setAgentsLoading(true))
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
         );
@@ -37,7 +37,7 @@ export function useAgentBuilderSetup() {
             toast.critical(t('agent.error'));
         } else {
             toast.success(t('agent.success'))
-            const orderStatus = store.getState().project.featureList.find(item => item.code === 'order_status')?.uuid
+            const orderStatus = store.getState().project.agents.find(item => item.code === 'order_status')?.uuid
             if (orderStatus) {
                 const integrateResponse = await integrateAgent(orderStatus, project)
                 if(integrateResponse?.error){
@@ -45,7 +45,7 @@ export function useAgentBuilderSetup() {
                 }
             }
 
-            store.dispatch(setAgentLoading(false))
+            store.dispatch(setAgentsLoading(false))
             navigate('/dash');
         }
     };

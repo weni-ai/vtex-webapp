@@ -1,6 +1,6 @@
 import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Spinner, Text, toast } from "@vtex/shoreline";
 import { useSelector } from "react-redux";
-import { disableFeatureLoading, selectProject } from "../store/projectSlice";
+import {  selectProject, disableAgentLoading } from "../store/projectSlice";
 import { disableAgent } from "../services/agent.service";
 export interface AboutAgentProps {
     open: boolean,
@@ -10,7 +10,7 @@ export interface AboutAgentProps {
 }
 
 export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<AboutAgentProps>) {
-    const isDisabling = useSelector(disableFeatureLoading)
+    const isDisabling = useSelector(disableAgentLoading)
     const projectUuid = useSelector(selectProject);
 
 

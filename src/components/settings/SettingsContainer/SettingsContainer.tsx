@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerHeading, DrawerFooter, Button, Spinner, toast } from "@vtex/shoreline";
 import './SettingsContainer.style.css';
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
@@ -5,7 +6,7 @@ import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
-import { featureLoading, selectProject } from "../../../store/projectSlice";
+import { updateAgentLoading, selectProject } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/agent.service";
 import { UpdateAgentSettingsData } from "../../../api/agents/adapters";
 
@@ -20,9 +21,8 @@ export interface SettingsContainerProps {
 
 export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {
     const projectUuid = useSelector(selectProject);
-    
     const [formData, setFormData] = useState<SettingsFormData>({});
-    const isUpdating = useSelector(featureLoading);
+    const isUpdating = useSelector((state: any) => updateAgentLoading(state, agentUuid));
 
     async function updateAgent() {
         let body: UpdateAgentSettingsData | undefined;
@@ -102,7 +102,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                             onClick={updateAgent}
                             size="large"
                             style={{ width: '50%' }}
-                            disabled={isUpdating}
+                            disabled={isUpdating?.isLoading}
                         >
                             {isUpdating ? <Spinner description="loading" /> : t('common.save')}
                         </Button>

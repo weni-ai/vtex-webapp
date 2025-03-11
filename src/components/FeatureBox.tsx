@@ -4,7 +4,7 @@ import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { featureList, getAgentChannel, selectProject, updateFeatureLoading } from "../store/projectSlice";
+import { agents, getAgentChannel, selectProject, updateAgentLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
@@ -19,9 +19,9 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
-  const features = useSelector(featureList)
-  const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
-  const featureUuid = features.find((item: { code: string }) => item.code === code)?.uuid || '';
+  const agentsList = useSelector(agents)
+  const isUpdateAgentLoading = useSelector((state: any) => updateAgentLoading(state, uuid));
+  const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
   const channel = useSelector(getAgentChannel)
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -39,7 +39,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
       setOpenAbandonedCartModal(true)
       return;
     }
-    const result = await integrateAgent(featureUuid, projectUUID);
+    const result = await integrateAgent(agentUuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {
@@ -133,7 +133,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
           return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               {
-                isUpdateFeatureLoading ?
+                isUpdateAgentLoading ?
                   <Spinner description="loading" />
                   :
                   <>
@@ -173,7 +173,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o )}
         confirm={() => {
-          integrateAgent(featureUuid, projectUUID);
+          integrateAgent(agentUuid, projectUUID);
           setOpenAbandonedCartModal(false);
         }}
       />

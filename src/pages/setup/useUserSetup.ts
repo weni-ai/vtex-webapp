@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { setAccount, setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgentBuilder, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
@@ -74,7 +74,7 @@ export function useUserSetup() {
 
         if (name) {
           store.dispatch(
-            setAgent({
+            setAgentBuilder({
               name,
               links,
               objective,
@@ -90,7 +90,7 @@ export function useUserSetup() {
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
           console.log('aqui')
           if (has_agent) {
-            store.dispatch(setAgentIntegrated(true))
+            store.dispatch(setAgentBuilderIntegrated(true))
 
             console.log('aqui de novo')
             await updateAgentsList()

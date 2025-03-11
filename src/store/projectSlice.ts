@@ -1,6 +1,6 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { AgentBuilder, Agents, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -8,20 +8,20 @@ const initialState: ProjectState = {
   flows_channel_uuid: '',
   loadingSetup: false,
   setupError: false,
-  agentLoading: false,
+  agentBuilderLoading: false,
   wppLoading: false,
-  featureLoading: false,
-  updateFeatureLoading: [],
-  disableFeatureLoading: false,
-  agent: {
+  agentsLoading: false,
+  updateAgentLoading: [],
+  disableAgentLoading: false,
+  agentBuilder: {
     name: '',
     links: [],
     occupation: '',
     objective: '',
     channel: 'faststore'
   },
-  featureList: [],
-  integratedFeatures: []
+  agents: [],
+  integratedAgents: []
 }
 
 const projectSlice = createSlice({
@@ -43,38 +43,38 @@ const projectSlice = createSlice({
     setSetupError: (state, action: PayloadAction<boolean>) => {
       state.setupError = action.payload;
     },
-    setAgentLoading: (state, action: PayloadAction<boolean>) => {
-      state.agentLoading = action.payload;
+    setAgentBuilderLoading: (state, action: PayloadAction<boolean>) => {
+      state.agentBuilderLoading = action.payload;
     },
     setWppLoading: (state, action: PayloadAction<boolean>) => {
       state.wppLoading = action.payload;
     },
-    setFeatureLoading: (state, action: PayloadAction<boolean>) => {
-      state.featureLoading = action.payload;
+    setAgentsLoading: (state, action: PayloadAction<boolean>) => {
+      state.agentsLoading = action.payload;
     },
-    setAgent: (state, action: PayloadAction<Agent>) => {
-      state.agent = action.payload;
+    setAgentBuilder: (state, action: PayloadAction<AgentBuilder>) => {
+      state.agentBuilder = action.payload;
     },
-    setFeatureList: (state, action: PayloadAction<Feature[]>) => {
-      state.featureList = action.payload;
+    setAgents: (state, action: PayloadAction<Agents[]>) => {
+      state.agents = action.payload;
     },
-    setIntegratedFeatures: (state, action: PayloadAction<Feature[]>) => {
-      state.integratedFeatures = action.payload;
+    setIntegratedAgents: (state, action: PayloadAction<Agents[]>) => {
+      state.integratedAgents = action.payload;
     },
-    setUpdateFeatureLoading: (state, action: PayloadAction<Loading>) => {
-      const index = state.updateFeatureLoading.findIndex(
-        (item) => item.feature_uuid === action.payload.feature_uuid
+    setUpdateAgentLoading: (state, action: PayloadAction<Loading>) => {
+      const index = state.updateAgentLoading.findIndex(
+        (item) => item.agent_uuid === action.payload.agent_uuid
       );
     
       if (index !== -1) {
-        state.updateFeatureLoading[index] = action.payload;
+        state.updateAgentLoading[index] = action.payload;
       } else {
-        state.updateFeatureLoading.push(action.payload);
+        state.updateAgentLoading.push(action.payload);
       }
     },
-    
-    setDisableFeatureLoading: (state, action: PayloadAction<boolean>) => {
-      state.disableFeatureLoading = action.payload;
+
+    setDisableAgentLoading: (state, action: PayloadAction<boolean>) => {
+      state.disableAgentLoading = action.payload;
     },
 
   }
@@ -86,14 +86,14 @@ export const {
   setSetupError,
   setWppCloudAppUuid,
   setFlowsChannelUuid,
-  setAgentLoading,
-  setAgent,
-  setFeatureList,
-  setWppLoading,
-  setIntegratedFeatures,
-  setFeatureLoading,
-  setUpdateFeatureLoading,
-  setDisableFeatureLoading
+  setAgentBuilderLoading,
+  setAgentBuilder,
+  setAgents,
+  setAgentsLoading,
+  setIntegratedAgents,
+  setUpdateAgentLoading,
+  setDisableAgentLoading,
+  setWppLoading
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
@@ -101,13 +101,13 @@ export const wppCloudAppUuid = (state: RootState) => state.project.wpp_cloud_app
 export const flowsChannelUuid = (state: RootState) => state.project.flows_channel_uuid
 export const loadingSetup = (state: RootState) => state.project.loadingSetup
 export const setupError = (state: RootState) => state.project.setupError
-export const agentLoading = (state: RootState) => state.project.agentLoading
-export const getAgent = (state: RootState) => state.project.agent
-export const getAgentChannel = (state: RootState) => state.project.agent.channel
-export const featureList = (state: RootState) => state.project.featureList
-export const integratedFeatures = (state: RootState) => state.project.integratedFeatures
+export const agentBuilderLoading = (state: RootState) => state.project.agentBuilderLoading
+export const getAgentBuilder = (state: RootState) => state.project.agentBuilder
+export const getAgentChannel = (state: RootState) => state.project.agentBuilder.channel
+export const agents = (state: RootState) => state.project.agents
+export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading
-export const featureLoading = (state: RootState) => state.project.featureLoading
-export const updateFeatureLoading = (state: RootState, feature_uuid: string) => state.project.updateFeatureLoading.find(feature => feature.feature_uuid === feature_uuid)
-export const disableFeatureLoading = (state: RootState) => state.project.disableFeatureLoading
+export const agentsLoading = (state: RootState) => state.project.agentsLoading
+export const updateAgentLoading = (state: RootState, agent_uuid: string) => state.project.updateAgentLoading.find(agent => agent.agent_uuid === agent_uuid)
+export const disableAgentLoading = (state: RootState) => state.project.disableAgentLoading
 export default projectSlice.reducer;

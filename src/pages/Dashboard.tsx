@@ -4,14 +4,14 @@ import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { useSelector } from 'react-redux';
-import { featureList, integratedFeatures, selectProject } from '../store/projectSlice';
+import { agents, integratedAgents, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
 import { getSkillMetrics } from '../services/agent.service';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
-  const features = useSelector(featureList)
-  const integrated = useSelector(integratedFeatures)
+  const agentsList = useSelector(agents)
+  const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
 
@@ -150,7 +150,7 @@ export function Dashboard() {
           <Grid
             columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
-            {features.map((item: any) => (
+            {agentsList.map((item: any) => (
               <FeatureBox
                 key={item.uuid}
                 uuid={item.uuid}

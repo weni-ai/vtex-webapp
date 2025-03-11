@@ -23,8 +23,8 @@ import {
 } from '@vtex/shoreline';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentLoading, getAgent, loadingSetup, selectProject } from '../../store/projectSlice';
-import { isAgentIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
+import { agentsLoading, getAgentBuilder, loadingSetup, selectProject } from '../../store/projectSlice';
+import { isAgentBuilderIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
@@ -43,19 +43,19 @@ interface FormState {
 
 export function AgentBuilder() {
   const [form, setForm] = useState<FormState>({
-    name: useSelector(getAgent).name || '',
-    knowledge: useSelector(getAgent).links[0] || '',
-    occupation: useSelector(getAgent).occupation || t('agent.setup.forms.occupation.default'),
-    objective: useSelector(getAgent).objective || t('agent.setup.forms.objective.default'),
-    channel: useSelector(getAgent).channel || t('agent.setup.forms.channel.default'),
+    name: useSelector(getAgentBuilder).name || '',
+    knowledge: useSelector(getAgentBuilder).links[0] || '',
+    occupation: useSelector(getAgentBuilder).occupation || t('agent.setup.forms.occupation.default'),
+    objective: useSelector(getAgentBuilder).objective || t('agent.setup.forms.objective.default'),
+    channel: useSelector(getAgentBuilder).channel || t('agent.setup.forms.channel.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
   const project = useSelector(selectProject);
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
-  const isAgentLoading = useSelector(agentLoading)
-  const agentIntegrated = useSelector(isAgentIntegrated)
+  const isAgentLoading = useSelector(agentsLoading)
+  const agentIntegrated = useSelector(isAgentBuilderIntegrated)
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()

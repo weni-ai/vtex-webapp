@@ -2,7 +2,7 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
-import { setAgentLoading, setDisableFeatureLoading, setFeatureList, setFeatureLoading, setIntegratedFeatures, setUpdateFeatureLoading } from "../store/projectSlice";
+import { setAgentBuilderLoading, setAgents, setAgentsLoading, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -35,7 +35,7 @@ export async function checkAgentIntegration(project_uuid: string) {
 }
 
 export async function setAgentBuilder(payload: any, project_uuid: string) {
-  store.dispatch(setAgentLoading(true))
+  store.dispatch(setAgentBuilderLoading(true))
   const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
 
   const response = await VTEXFetch(url, {
@@ -46,7 +46,7 @@ export async function setAgentBuilder(payload: any, project_uuid: string) {
     body: JSON.stringify(payload),
   });
 
-  store.dispatch(setAgentLoading(false))
+  store.dispatch(setAgentBuilderLoading(false))
 
   if (response?.text !== 'OK') {
     return { success: false, error: response?.message || 'Error creating agent' };
@@ -55,15 +55,15 @@ export async function setAgentBuilder(payload: any, project_uuid: string) {
 }
 
 export async function updateAgentsList() {
-  const availableFeatures = await agentsList();
-  store.dispatch(setFeatureList(availableFeatures));
+  const availableAgents = await agentsList();
+  store.dispatch(setAgents(availableAgents));
 
-  const integratedFeatures = await integratedAgentsList();
-  store.dispatch(setIntegratedFeatures(integratedFeatures))
+  const integratedAgents = await integratedAgentsList();
+  store.dispatch(setIntegratedAgents(integratedAgents))
 }
 
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
-  store.dispatch(setUpdateFeatureLoading({ feature_uuid: feature_uuid, isLoading: true }))
+  store.dispatch(setUpdateAgentLoading({ agent_uuid: feature_uuid, isLoading: true }))
   try {
     const storeAddress = store.getState().auth.base_address;
     const flows_channel_uuid = store.getState().project.flows_channel_uuid;
@@ -80,16 +80,16 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
     const response = await integrateAgentRequest(data);
     await updateAgentsList();
 
-    store.dispatch(setUpdateFeatureLoading({ feature_uuid: feature_uuid, isLoading: false }))
+    store.dispatch(setUpdateAgentLoading({ agent_uuid: feature_uuid, isLoading: false }))
     return { success: true, data: response };
   } catch (error) {
-    store.dispatch(setUpdateFeatureLoading({ feature_uuid: feature_uuid, isLoading: false }))
+    store.dispatch(setUpdateAgentLoading({ agent_uuid: feature_uuid, isLoading: false }))
     return { success: false, error: error || 'unknown error' };
   }
 }
 
 export async function updateAgentSettings(body: UpdateAgentSettingsData) {
-    store.dispatch(setFeatureLoading(true))
+      store.dispatch(setAgentsLoading(true))
 
   try {
     const response = await updateAgentSettingsRequest(body);
@@ -104,12 +104,12 @@ export async function updateAgentSettings(body: UpdateAgentSettingsData) {
     console.error('error updating agent:', error);
     return { success: false, error: error || 'unknown error' };
   } finally {
-    store.dispatch(setFeatureLoading(false))
+    store.dispatch(setAgentsLoading(false))
   }
 }
 
 export async function disableAgent(project_uuid: string, feature_uuid: string) {
-  store.dispatch(setDisableFeatureLoading(true))
+  store.dispatch(setDisableAgentLoading(true))
 
   try {
     const response = await disableFeatureRequest({ project_uuid, feature_uuid });
@@ -124,7 +124,7 @@ export async function disableAgent(project_uuid: string, feature_uuid: string) {
     console.error('error updating agent:', error);
     return { success: false, error: error || 'unknown error' };
   } finally {
-    store.dispatch(setDisableFeatureLoading(false))
+    store.dispatch(setDisableAgentLoading(false))
   }
 }
 

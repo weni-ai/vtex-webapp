@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
-import { setFeatureIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated } from "../store/userSlice";
+import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setAgentBuilderIntegrated  } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
 import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
 import { VTEXWhatsAppAdapter } from "../api/channels/adapters";
@@ -36,7 +36,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
 
     store.dispatch(setWhatsAppIntegrated(true));
     store.dispatch(setLoadingWhatsAppIntegration(true));
-    store.dispatch(setFeatureIntegrated(true));
+    store.dispatch(setAgentBuilderIntegrated(true));
     store.dispatch(setFlowsChannelUuid(response.flows_channel_uuid));
     store.dispatch(setWppCloudAppUuid(response.wpp_cloud_app_uuid));
     toast.success(t('integration.channels.whatsapp.success'))
