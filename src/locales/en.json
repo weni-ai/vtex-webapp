@@ -60,6 +60,41 @@
                     "details": {
                         "title": "Recover sales by reminding customers of items left in the cart.",
                         "description": "This agent increases conversion, retains customers and encourages order completion."
+                    },
+                    "modal": {
+                        "title": "Add Abandoned Cart",
+                        "description": "Check the store type in the storefront before following the steps below.",
+                        "button": "Go to Storefront",
+                        "steps": {
+                            "title": "The agent will only be functional after following these steps:",
+                            "faststore": {
+                                "title": "Faststore",
+                                "description": "The agent will only be functional after following these steps:",
+                                "step1": "Go to the GitHub repository and paste the code below into the thirdpartyscripts.tsx file."
+                            },
+                            "portal": {
+                                "title": "Portal/Layout",
+                                "description": "The agent will only be functional after following these steps:",
+                                "step1": "Navigate to the Storefront Layout.",
+                                "step2": "Open the CMS folder.",
+                                "step3": "Go to HTML Templates {`>`} Subtemplates.",
+                                "step4": "Open commonScripts and paste the script below."
+                            },
+                            "site_editor": {
+                                "title": "Site Editor",
+                                "description": "No configuration steps are needed for the 'Site Editor' store type. Once confirmed, the agent is ready to go."
+                            }   
+                        }
+                    },
+                    "settings": {
+                        "restriction": {
+                            "title": "Message time restriction",
+                            "description": "Restrict message sends to configured hours.",
+                            "monday_until_friday": "Monday until Friday",
+                            "saturday": "Saturday",
+                            "from": "From",
+                            "to": "To"
+                        }
                     }
                 }
             }
@@ -102,6 +137,12 @@
             "title": "Setup your agent persona",
             "forms": {
                 "name": "Name",
+                "channel": {
+                    "title": "Channel",
+                    "faststore": "Faststore",
+                    "portal": "Portal/Layout",
+                    "site_editor": "Site Editor"
+                },
                 "occupation": {
                     "title": "Occupation (optional)",
                     "default": "Intelligent assistant"
