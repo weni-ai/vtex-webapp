@@ -17,6 +17,7 @@ export interface Agents {
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
+    isConfiguring: boolean;
     phone_numbers: string[];
     message_time_restrictions?: {
         is_active: boolean;
