@@ -42,7 +42,7 @@ export interface ProjectState {
     agentsLoading: boolean;
     agents: Agents[];
     integratedAgents: Agents[];
-    updateAgentLoading: Loading[];
+    updateAgentLoading: boolean;
     disableAgentLoading: boolean;
     agentBuilder: AgentBuilder;
 }

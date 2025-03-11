@@ -22,7 +22,7 @@ export interface SettingsContainerProps {
 export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {
     const projectUuid = useSelector(selectProject);
     const [formData, setFormData] = useState<SettingsFormData>({});
-    const isUpdating = useSelector((state: any) => updateAgentLoading(state, agentUuid));
+    const isUpdating = useSelector(updateAgentLoading);
 
     async function updateAgent() {
         let body: UpdateAgentSettingsData | undefined;
@@ -102,7 +102,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                             onClick={updateAgent}
                             size="large"
                             style={{ width: '50%' }}
-                            disabled={isUpdating?.isLoading}
+                            disabled={isUpdating}
                         >
                             {isUpdating ? <Spinner description="loading" /> : t('common.save')}
                         </Button>

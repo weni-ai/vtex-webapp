@@ -1,6 +1,6 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AgentBuilder, Agents, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { AgentBuilder, Agents, ProjectState, RootState } from 'src/interfaces/Store';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -11,7 +11,7 @@ const initialState: ProjectState = {
   agentBuilderLoading: false,
   wppLoading: false,
   agentsLoading: false,
-  updateAgentLoading: [],
+  updateAgentLoading: false,
   disableAgentLoading: false,
   agentBuilder: {
     name: '',
@@ -61,16 +61,8 @@ const projectSlice = createSlice({
     setIntegratedAgents: (state, action: PayloadAction<Agents[]>) => {
       state.integratedAgents = action.payload;
     },
-    setUpdateAgentLoading: (state, action: PayloadAction<Loading>) => {
-      const index = state.updateAgentLoading.findIndex(
-        (item) => item.agent_uuid === action.payload.agent_uuid
-      );
-    
-      if (index !== -1) {
-        state.updateAgentLoading[index] = action.payload;
-      } else {
-        state.updateAgentLoading.push(action.payload);
-      }
+    setUpdateAgentLoading: (state, action: PayloadAction<boolean>) => {
+      state.updateAgentLoading = action.payload;
     },
 
     setDisableAgentLoading: (state, action: PayloadAction<boolean>) => {
@@ -108,6 +100,6 @@ export const agents = (state: RootState) => state.project.agents
 export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading
 export const agentsLoading = (state: RootState) => state.project.agentsLoading
-export const updateAgentLoading = (state: RootState, agent_uuid: string) => state.project.updateAgentLoading.find(agent => agent.agent_uuid === agent_uuid)
+export const updateAgentLoading = (state: RootState) => state.project.updateAgentLoading
 export const disableAgentLoading = (state: RootState) => state.project.disableAgentLoading
 export default projectSlice.reducer;

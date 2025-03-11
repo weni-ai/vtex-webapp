@@ -2,7 +2,7 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
-import { setAgentBuilderLoading, setAgents, setAgentsLoading, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading } from "../store/projectSlice";
+import { setAgentBuilderLoading, setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -63,7 +63,7 @@ export async function updateAgentsList() {
 }
 
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
-  store.dispatch(setUpdateAgentLoading({ agent_uuid: feature_uuid, isLoading: true }))
+  store.dispatch(setUpdateAgentLoading(true))
   try {
     const storeAddress = store.getState().auth.base_address;
     const flows_channel_uuid = store.getState().project.flows_channel_uuid;
@@ -80,16 +80,16 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
     const response = await integrateAgentRequest(data);
     await updateAgentsList();
 
-    store.dispatch(setUpdateAgentLoading({ agent_uuid: feature_uuid, isLoading: false }))
+    store.dispatch(setUpdateAgentLoading(false))
     return { success: true, data: response };
   } catch (error) {
-    store.dispatch(setUpdateAgentLoading({ agent_uuid: feature_uuid, isLoading: false }))
+    store.dispatch(setUpdateAgentLoading(false))
     return { success: false, error: error || 'unknown error' };
   }
 }
 
 export async function updateAgentSettings(body: UpdateAgentSettingsData) {
-      store.dispatch(setAgentsLoading(true))
+  store.dispatch(setUpdateAgentLoading(true))
 
   try {
     const response = await updateAgentSettingsRequest(body);
@@ -104,7 +104,7 @@ export async function updateAgentSettings(body: UpdateAgentSettingsData) {
     console.error('error updating agent:', error);
     return { success: false, error: error || 'unknown error' };
   } finally {
-    store.dispatch(setAgentsLoading(false))
+    store.dispatch(setUpdateAgentLoading(false))
   }
 }
 

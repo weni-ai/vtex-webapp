@@ -20,9 +20,9 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const agentsList = useSelector(agents)
-  const isUpdateAgentLoading = useSelector((state: any) => updateAgentLoading(state, uuid));
+  const isUpdateAgentLoading = useSelector(updateAgentLoading)
   const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
-  const channel = useSelector(getAgentChannel)
+  const channel = useSelector(getAgentChannel)  
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
