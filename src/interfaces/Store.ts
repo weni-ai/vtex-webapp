@@ -40,7 +40,7 @@ export interface ProjectState {
     setupError: boolean;
     agentBuilderLoading: boolean;
     wppLoading: boolean;
-    agentsLoading: boolean;
+    agentsLoading: Loading[];
     agents: Agents[];
     integratedAgents: Agents[];
     updateAgentLoading: boolean;

@@ -4,7 +4,7 @@ import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
 import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { agents, getAgentChannel, selectProject, updateAgentLoading } from "../store/projectSlice";
+import { agents, agentsLoading, getAgentChannel, selectProject} from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
@@ -20,7 +20,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const agentsList = useSelector(agents)
-  const isUpdateAgentLoading = useSelector(updateAgentLoading)
+  const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
   const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
   const channel = useSelector(getAgentChannel)
   const openDetailsModal = () => {
@@ -65,6 +65,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
             </Text>
 
             <TagType type={type} />
+            {JSON.stringify(isUpdateAgentLoading)}
           </Flex>
 
           <MenuProvider>

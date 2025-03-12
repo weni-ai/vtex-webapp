@@ -23,7 +23,7 @@ import {
 } from '@vtex/shoreline';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentsLoading, getAgentBuilder, loadingSetup, selectProject } from '../../store/projectSlice';
+import { agentBuilderLoading, getAgentBuilder, loadingSetup, selectProject } from '../../store/projectSlice';
 import { isAgentBuilderIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -54,7 +54,7 @@ export function AgentBuilder() {
   const project = useSelector(selectProject);
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
-  const isAgentLoading = useSelector(agentsLoading)
+  const isAgentBuilderLoading = useSelector(agentBuilderLoading)
   const agentIntegrated = useSelector(isAgentBuilderIntegrated)
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
@@ -109,8 +109,8 @@ export function AgentBuilder() {
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
-            <Button variant="primary" size="large" onClick={handleOpenTerms} disabled={!isWppIntegrated || isAgentLoading}>
-              {isAgentLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
+            <Button variant="primary" size="large" onClick={handleOpenTerms} disabled={!isWppIntegrated || isAgentBuilderLoading}>
+              {isAgentBuilderLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
         </PageHeader>

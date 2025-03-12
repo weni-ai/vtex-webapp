@@ -1,6 +1,6 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AgentBuilder, Agents, ProjectState, RootState } from 'src/interfaces/Store';
+import { AgentBuilder, Agents, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -10,7 +10,7 @@ const initialState: ProjectState = {
   setupError: false,
   agentBuilderLoading: false,
   wppLoading: false,
-  agentsLoading: false,
+  agentsLoading: [],
   updateAgentLoading: false,
   disableAgentLoading: false,
   agentBuilder: {
@@ -49,7 +49,7 @@ const projectSlice = createSlice({
     setWppLoading: (state, action: PayloadAction<boolean>) => {
       state.wppLoading = action.payload;
     },
-    setAgentsLoading: (state, action: PayloadAction<boolean>) => {
+    setAgentsLoading: (state, action: PayloadAction<Loading[]>) => {
       state.agentsLoading = action.payload;
     },
     setAgentBuilder: (state, action: PayloadAction<AgentBuilder>) => {
