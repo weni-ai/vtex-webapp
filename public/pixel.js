@@ -23,15 +23,16 @@ JSON.safeStringify = (obj, indent = 2) => {
 const timeToCallNextAbandonedCartUpdateInSeconds = 15 * 60; // 15 minutes
 let seeOrderFormTimeout;
 
-function getUser() {
-  log('calling getUser function');
-
+function getDetails() {
   return new Promise((resolve) => {
     fetch('/api/sessions?items=*')
       .then((response) => response.json())
       .then((data) => {
         log('got user data:', JSON.safeStringify(data.namespaces.profile, 2));
-        resolve(data.namespaces.profile);
+        resolve({
+          profile: data.namespaces.profile,
+          accountName: data.namespaces.account,
+        });
       });
   });
 }
@@ -49,14 +50,9 @@ function seeOrderForm() {
         timeToCallNextAbandonedCartUpdateInSeconds * 1e3
       );
 
-      let phone = null;
-      let user = null;
+      const { profile, account } = await getDetails();
 
-      if (!phone) {
-        user = await getUser();
-        phone = user.phone?.value;
-        log('got phone:', phone);
-      }
+      const phone = profile.phone?.value;
 
       fetch('/_v/abandoned-cart-notification', {
         method: 'POST',
@@ -67,7 +63,7 @@ function seeOrderForm() {
         body: JSON.stringify({
           cart_id: data.orderFormId,
           phone,
-          account: 'qastore',
+          account: account.accountName?.value,
         }),
       });
     });
