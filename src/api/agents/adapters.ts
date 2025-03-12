@@ -40,7 +40,7 @@ export interface AgentsListResponse {
 
 function isInTest(config?: AgentConfig) {
   if (config && Object.keys(config).length === 0) {
-    return true;
+    return false;
   }
 
   const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
@@ -51,7 +51,7 @@ function isInTest(config?: AgentConfig) {
 
 function isConfiguring(config?: AgentConfig) {
   if (config && Object.keys(config).length === 0) {
-    return true;
+    return false;
   }
 
   const syncStatus = config?.templates_synchronization_status;
