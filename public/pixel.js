@@ -31,7 +31,7 @@ function getDetails() {
         log('got user data:', JSON.safeStringify(data.namespaces.profile, 2));
         resolve({
           profile: data.namespaces.profile,
-          accountName: data.namespaces.account,
+          account: data.namespaces.account,
         });
       });
   });
