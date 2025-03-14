@@ -1,29 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+// import { useState } from 'react';
 import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
-import { DashboardItem } from '../components/DashboardItem';
+// import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { useSelector } from 'react-redux';
 import { agents, integratedAgents, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
-import { getSkillMetrics } from '../services/agent.service';
+// import { getSkillMetrics } from '../services/agent.service';
 
 export function Dashboard() {
-  const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
+  // const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const agentsList = useSelector(agents)
   const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getSkillMetrics();
-      if ('data' in response) {
-        setData(response.data);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await getSkillMetrics();
+  //     if ('data' in response) {
+  //       setData(response.data);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   function navigateToAgent() {
     const dash = new URL(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`);
@@ -84,7 +84,7 @@ export function Dashboard() {
             </Flex>
           </Alert>
 
-          <Flex
+          {/* <Flex
             direction="column"
             gap="$space-0"
           >
@@ -110,9 +110,9 @@ export function Dashboard() {
                 ))}
               </Grid>
             ))}
-          </Flex>
+          </Flex> */}
 
-          <Flex
+          {/* <Flex
             direction="column"
             gap="$space-0"
           >
@@ -138,7 +138,7 @@ export function Dashboard() {
                 ))}
               </Grid>
             ))}
-          </Flex>
+          </Flex> */}
 
 
           <Heading
