@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { toast } from "@vtex/shoreline";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
@@ -87,11 +86,9 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
     await updateAgentsList();
 
     store.dispatch(setAgentsLoading(agentsLoading.filter(loading => loading.agent_uuid !== feature_uuid)));
-    toast.success(t('integration.success'));
     return { success: true, data: response };
   } catch (error) {
     store.dispatch(setAgentsLoading(agentsLoading.filter(loading => loading.agent_uuid !== feature_uuid)));
-    toast.critical(t('integration.error'));
     return { success: false, error: error || 'unknown error' };
   }
 }
@@ -107,11 +104,9 @@ export async function updateAgentSettings(body: UpdateAgentSettingsData) {
     }
 
     await updateAgentsList()
-    toast.success(t('agents.common.configure.success'));
     return { success: true, data: response };
   } catch (error) {
     console.error('error updating agent:', error);
-    toast.critical(t('agents.common.configure.error'));
     return { success: false, error: error || 'unknown error' };
   } finally {
     store.dispatch(setUpdateAgentLoading(false))
@@ -129,11 +124,9 @@ export async function disableAgent(project_uuid: string, feature_uuid: string) {
     }
 
     await updateAgentsList();
-    toast.success(t('agents.common.disable.success'));
     return { success: true, data: response };
   } catch (error) {
     console.error('error updating agent:', error);
-    toast.critical(t('agents.common.disable.error'));
     return { success: false, error: error || 'unknown error' };
   } finally {
     store.dispatch(setDisableAgentLoading(false))
