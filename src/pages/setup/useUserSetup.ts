@@ -6,10 +6,10 @@ import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
 import { setAgentBuilder, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
-import { checkAgentIntegration } from '../../services/agent.service';
+import { checkAgentIntegration, integrateAgent } from '../../services/agent.service';
 import { useCallback } from 'react';
 import { updateAgentsList } from '../../services/agent.service';
-
+import { AgentConfig } from '../../api/agents/adapters';
 export function useUserSetup() {
   const navigate = useNavigate();
 
@@ -89,7 +89,11 @@ export function useUserSetup() {
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
           if (has_agent) {
             store.dispatch(setAgentBuilderIntegrated(true))
-            await updateAgentsList()
+            await updateAgentsList();
+            const hasOrderStatusIntegrated = store.getState().project.agents.find((agent: AgentConfig) => agent.code === 'order_status');
+            if(hasOrderStatusIntegrated){
+              await integrateAgent(project_uuid, hasOrderStatusIntegrated.uuid);
+            }
             navigate('/dash');
           } else {
             navigate('/agent-builder');

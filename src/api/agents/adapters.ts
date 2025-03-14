@@ -1,11 +1,13 @@
 import { integrateAgentRequest } from "./requests";
 
-type AgentConfig = {
+export type AgentConfig = {
+  code: string;
+  uuid: string;
   integration_settings?: {
     order_status_restriction?: {
       phone_numbers: string;
     };
-    message_time_restriction: {
+    message_time_restriction?: {
       is_active: boolean;
       periods: {
         saturdays: {
