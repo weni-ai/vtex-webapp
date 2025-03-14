@@ -91,6 +91,7 @@ export function useUserSetup() {
             store.dispatch(setAgentBuilderIntegrated(true))
             await updateAgentsList();
             const hasOrderStatusIntegrated = store.getState().project.agents.find((agent: AgentConfig) => agent.code === 'order_status');
+            console.log('hasOrderStatusIntegrated', hasOrderStatusIntegrated);
             if(hasOrderStatusIntegrated){
               await integrateAgent(project_uuid, hasOrderStatusIntegrated.uuid);
             }

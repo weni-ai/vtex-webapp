@@ -35,6 +35,7 @@ export async function checkAgentIntegration(project_uuid: string) {
 }
 
 export async function setAgentBuilder(payload: any, project_uuid: string) {
+  console.log('payload', payload)
   store.dispatch(setAgentBuilderLoading(true))
   const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
 
@@ -48,7 +49,7 @@ export async function setAgentBuilder(payload: any, project_uuid: string) {
 
   store.dispatch(setAgentBuilderLoading(false))
 
-  if (response?.text !== 'OK') {
+  if (response.error) {
     return { success: false, error: response?.message || 'Error creating agent' };
   }
   return { success: true, data: response };
