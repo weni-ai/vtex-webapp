@@ -23,7 +23,7 @@ import {
 } from '@vtex/shoreline';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentBuilderLoading, getAgentBuilder, loadingSetup, selectProject } from '../../store/projectSlice';
+import { agentBuilderLoading, getAgentBuilder, loadingSetup } from '../../store/projectSlice';
 import { isAgentBuilderIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -51,7 +51,6 @@ export function AgentBuilder() {
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
-  const project = useSelector(selectProject);
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
   const isAgentBuilderLoading = useSelector(agentBuilderLoading)
@@ -94,7 +93,7 @@ export function AgentBuilder() {
     const payload = Object.fromEntries(
       Object.entries(form).filter(([_, value]) => value.trim())
     );
-    buildAgent(payload, project);
+    buildAgent(payload);
     setOpenTerms(false)
   };
 

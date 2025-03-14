@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
+import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest, createAgentBuilderRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
-import { setAgentBuilderLoading, setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading } from "../store/projectSlice";
+import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -34,20 +34,10 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 }
 
-export async function setAgentBuilder(payload: any, project_uuid: string) {
+export async function setAgentBuilder(payload: any) {
   console.log('payload', payload)
-  store.dispatch(setAgentBuilderLoading(true))
-  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
 
-  const response = await VTEXFetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
-
-  store.dispatch(setAgentBuilderLoading(false))
+  const response = await createAgentBuilderRequest(payload);
 
   if (response.error) {
     return { success: false, error: response?.message || 'Error creating agent' };

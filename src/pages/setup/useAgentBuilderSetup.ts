@@ -12,7 +12,7 @@ export function useAgentBuilderSetup() {
     const navigate = useNavigate();
     const project = useSelector(selectProject) || ''
     
-    const buildAgent = async (payload: any, app_uuid: string) => {
+    const buildAgent = async (payload: any) => {
         store.dispatch(setAgentBuilderLoading(true))
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
@@ -31,7 +31,9 @@ export function useAgentBuilderSetup() {
             links,
         };
 
-        const response = await setAgentBuilder(body, app_uuid);
+        console.log('body', body);
+
+        const response = await setAgentBuilder(body);
 
         if (response?.error) {
             toast.critical(t('agent.error'));
