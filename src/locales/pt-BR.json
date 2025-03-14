@@ -193,15 +193,138 @@
     },
     "terms": {
         "title": "Termos e condições",
-        "description": "Ao usar este aplicativo, é necessária a aceitação dos Termos e Condições. Estes termos definem o acesso e uso dos serviços, detalhando os recursos do plano selecionado, limitações, preços e políticas de renovação. Além disso, descrevem a funcionalidade do produto, diretrizes de uso e quaisquer restrições aplicáveis para garantir uma experiência segura e ideal.",
-        "plan_details": {
-            "title": "1. Detalhes do Plano",
-            "description": "Seu plano selecionado inclui recursos específicos, limitações e termos de faturamento. Por favor, verifique os detalhes da sua assinatura para entender o que está incluído e como funcionam as renovações."
+        "description1": "VTEX e o Contratante celebraram um Contrato de Prestação de Serviços Mestre (\"Contrato\") para estabelecer autorização para o uso e fornecimento de serviços de suporte e manutenção para o Software desenvolvido pela VTEX para soluções de comércio eletrônico. VTEX e o Contratante, juntos, serão aquiinafter referidos como as \"Partes\" e, individualmente, como uma \"Parte\".",
+        "description2": "O Admin Master do Contratante na Plataforma VTEX, devidamente autorizado a agir em nome do Contratante, com todos os poderes e obrigações relacionadas a esta autorização, aceita e reconhece as disposições destes Termos e Condições - Plataforma Weni por VTEX (“T&C”), vinculando as Partes e seus sucessores, em qualquer circunstância, a serem governados pelas seguintes cláusulas:",
+        "definition": {
+            "title": "1. Definição",
+            "description": {
+                "1": "1.1 VTEX, através da Plataforma Weni por VTEX, oferece um serviço para apoiar o Contratante na comunicação com seus clientes por meio de canais de mensagens amplamente utilizados, incluindo, mas não se limitando a WhatsApp, SMS e Webchat.",
+                "2": "1.2 Sujeito às condições estabelecidas neste T&C, a VTEX disponibilizará e concederá ao Contratante um direito não exclusivo de acesso e uso da Plataforma Weni por VTEX para propósitos de negócios internos."
+            }
         },
-        "product_usage": {
-            "title": "2. Uso do Produto",
-            "description": "Este aplicativo foi projetado para melhorar sua experiência através de recursos e funcionalidades específicas. Qualquer uso indevido, acesso não autorizado ou violação dos termos pode resultar na suspensão da conta."
+        "responsabilities": {
+            "title": "2. Responsabilidades do Contratante",
+            "description": {
+                "1": "2.1 O Contratante será responsável por todo o conteúdo de todas as comunicações enviadas por seus usuários através da Plataforma Weni por VTEX, bem como pela conformidade com todas as leis e regulamentos aplicáveis relacionadas às atividades realizadas.",
+                "2": "2.2 O Contratante expressamente concorda em atualizar suas políticas e termos de uso e obter o consentimento expresso de seus consumidores, quando aplicável, para enviar informações sobre serviços por meio de canais de comunicação como e-mail, SMS, WhatsApp e outros canais, com a VTEX sendo dispensado desta responsabilidade.",
+                "3": "2.3 O Contratante reconhece e concorda com os Termos da Solução WhatsApp Business, disponíveis em https://www.whatsapp.com/legal/meta-terms-whatsapp-business, incluindo quaisquer atualizações futuras. O Contratante também reconhece que não pode usar a Plataforma Weni por VTEX para rastrear ou criar perfis individuais de usuários do WhatsApp para qualquer entidade de negócios; rastrear, criar, vender ou distribuir quaisquer dados derivados da Plataforma Weni por VTEX; ou participar de outras ações proibidas pelos termos aplicáveis estabelecidos pela META, a empresa responsável pela manutenção da solução WhatsApp Business."
+            }
         },
-        "agree": "Concordar"
+        "vtex_responsabilites": {
+            "title": "3. Responsabilidades da VTEX e Créditos de Serviço",
+            "description": {
+                "1": "3.1 VTEX, desde que o Contratante cumpra suas obrigações, compromete-se a manter os serviços operacionais pelo menos 99.00% do mês para a Plataforma Weni por VTEX. As Partes concordam que os casos em que qualquer não-conformidade com o Contrato de Nível de Serviço (SLA) seja causada por instabilidades da META ou terceiros envolvidos são excluídos. O SLA (\"Measured SLA\") é calculado considerando o total de minutos no mês medido, subtraindo qualquer tempo de inatividade registrado no mesmo período. Tempo de inatividade significa que a Plataforma Weni por VTEX não está disponível para acesso e uso pelo Contratante e outras conexões da internet, excluindo casos de (1) manutenção planejada, (2) eventos de força maior ou (3) problemas resultantes de uso inadequado da Plataforma Weni por VTEX pelo Contratante ou falha comprovada do Contratante em cumprir suas obrigações.",
+                "2": "3.2 Se o SLA não for cumprido conforme descrito acima e, desde que todas as obrigações do Contratante tenham sido cumpridas, créditos de serviço serão concedidos em uma quantidade igual a 10% (dez por cento) dos pagamentos mensais do Contratante à VTEX para a Plataforma Weni por VTEX, a serem aplicados na próxima fatura após o cálculo do tempo de inatividade. Para receber créditos de serviço, o Contratante deve enviar uma solicitação via o sistema de suporte da VTEX dentro de 10 (dez) dias após o final do mês em que o tempo de inatividade ocorreu, conforme estabelecido no Contrato entre as Partes."
+            }
+        },
+        "services": {
+            "title": "4. Serviços incluídos na solução",
+            "description": {
+                "1": "4.1 As Partes concordam que os módulos incluídos na Plataforma Weni por VTEX são: Módulo de Fluxos; Módulo de Estúdio; Módulo de Inteligência Artificial; Módulo de Integração; Módulo de Chat; SDK para aplicativos móveis; API do WhatsApp Business; e Licença de agente ilimitada em Weni Chat.",
+                "2": "4.2 As Parties agree that the services and support included in the Weni Platform by VTEX comprise: Environment creation in the Weni Platform; Hosting of the Weni Platform; Up to six (6) hours of training; Updates and improvements to the Weni Platform by VTEX; and Support."
+            }
+        },
+        "contracting": {
+            "title": "5. Termos e parâmetros de contrato",
+            "description": {
+                "1": "5.1 As Partes concordam que o Onboarding do Contratante ocorrerá em 5 dias úteis após o pagamento do cargo anual por licença, desde que o Contratante forneça as informações de contato necessárias requeridas pela VTEX.",
+                "2": "5.2 As Partes concordam que o projeto será executado após o pagamento do cargo anual por licença.",
+                "3": "5.3 Os termos deste T&C entram em vigor a partir da data de assinatura e têm validade por um período de 12 (doze) meses, com o prazo de contrato sendo renovado automaticamente por períodos equivalentes a menos que uma Parte notifique a outra, por escrito, pelo menos trinta (30) dias antes da expiração do prazo, de sua intenção de não renovar o T&C.",
+                "4": {
+                    "title": "5.4 Este T&C pode ser terminado por qualquer uma das partes ao final dos 12 (doze) meses sem penalidade ou indenização, desde que se VTEX encerre o acordo, o Contratante seja notificado pelo menos 90 (noventa) dias antes, e se o Contratante encerrar o acordo, a VTEX seja notificada pelo menos 90 (noventa) dias antes.",
+                    "items": {
+                        "1": "5.4.1 Se o Contratante decidir unilateralmente encerrar o Acordo antes do final do prazo de 12 (doze) meses, deve pagar à VTEX o cargo mensal por licença contratado conforme estabelecido na cláusula 6.1, multiplicado pelo número de meses restantes até o final do prazo de 12 (doze) meses estabelecido neste Anexo."
+                    }
+                }
+            }
+        },
+        "payment": {
+            "title": "6. Condições de pagamento",
+            "description": {
+                "1": "6.1 O Contratante pagará à VTEX os valores indicados na tabela abaixo, de acordo com o plano escolhido, mediante apresentação de uma fatura pela VTEX, conforme estabelecido no Contrato.",
+                "table": {
+                    "headers": {
+                        "feature": "",
+                        "starter": "Starter",
+                        "corporate": "Corporate",
+                        "enterprise": "Enterprise"
+                    },
+                    "rows": [
+                        {
+                            "feature": "Taxa de licenciamento anual (Hospedagem em nuvem, entregas e atualizações contínuas)",
+                            "starter": "R$5.000,00/ano",
+                            "corporate": "R$25.000,00/ano",
+                            "enterprise": "R$100.000,00/ano"
+                        },
+                        {
+                            "feature": "Taxa de licenciamento mensal (manutenção, monitoramento e suporte)",
+                            "starter": "R$750,00/mês",
+                            "corporate": "R$3.750,00/mês",
+                            "enterprise": "R$7.500,00/mês"
+                        },
+                        {
+                            "feature": "Taxa de sucesso (por interação com o cliente resolvida pela IA)",
+                            "starter": "R$6,00/resolução",
+                            "corporate": "R$4,50/resolução",
+                            "enterprise": "R$3,00/resolução"
+                        },
+                        {
+                            "feature": "Outbound CX Notification (rastreamento de pedidos, envio de fatura, notificação de pagamento, etc.)",
+                            "starter": "Até 10.000",
+                            "corporate": "Até 100.000",
+                            "enterprise": "Até 1.000.000"
+                        },
+                        {
+                            "feature": "Outbound Marketing Campaign (24 horas de janela de conversação)",
+                            "starter": "R$1,20/unidade",
+                            "corporate": "R$0,90/unidade",
+                            "enterprise": "R$0,60/unidade"
+                        },
+                        {
+                            "feature": "Interações humanas",
+                            "starter": "Ilimitado",
+                            "corporate": "Ilimitado",
+                            "enterprise": "Ilimitado"
+                        },
+                        {
+                            "feature": "Contato de entrada pelo cliente",
+                            "starter": "Ilimitado",
+                            "corporate": "Ilimitado",
+                            "enterprise": "Ilimitado"
+                        },
+                        {
+                            "feature": "Constellation of AI Models",
+                            "starter": "Incluso",
+                            "corporate": "Incluso",
+                            "enterprise": "Incluso"
+                        },
+                        {
+                            "feature": "Weni Framework",
+                            "starter": "Não incluso",
+                            "corporate": "Não incluso",
+                            "enterprise": "Incluso"
+                        },
+                        {
+                            "feature": "Custos com WhatsApp",
+                            "starter": "Incluso",
+                            "corporate": "Incluso",
+                            "enterprise": "Incluso"
+                        }
+                    ]
+                },
+                "note": "Plano escolhido: STARTER",
+                "2": "6.2 Os valores previstos neste T&C serão cobrados na fatura da VTEX ao Contratante, respeitando as mesmas condições de pagamento estipuladas no Contrato previamente assinado entre as Partes."
+            }
+        },
+        "final": {
+            "title": "7. Final Provisions",
+            "description": {
+                "1": "7.1 This T&C will be governed and interpreted in accordance with the law stipulated in the Agreement and any dispute between the Parties that cannot be resolved by mutual agreement will be resolved exclusively in accordance with the Agreement.",
+                "2": "7.2 Any delay in any payment by the Contractor for more than 15 (fifteen) days will authorize VTEX, until the payment of the unpaid invoices, to limit access to the solution provided by the Weni Platform by VTEX.",
+                "3": "7.3 The Contractor acknowledges that the Weni Platform by VTEX utilizes external technology platforms, including but not limited to those offered by the META corporate entity. The Contractor acknowledges that any changes, limitations, or suspensions of the Weni Platform by VTEX due to determinations by the META corporate entity will be communicated to the Contractor as soon as possible by VTEX, even if in a form different from that set forth in this T&C, without VTEX being considered in violation of these terms.",
+                "4": "7.4 The Parties ratify all other provisions of the Agreement that are not expressly revoked or altered by this Addendum, and those that apply to this instrument. In case of conflict between the Agreement and this Addendum, the provisions of this Addendum will prevail."
+            }
+        },
+        "agree": "Agree"
     }
 }

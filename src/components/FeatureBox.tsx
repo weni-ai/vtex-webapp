@@ -65,7 +65,6 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
             </Text>
 
             <TagType type={type} />
-            {JSON.stringify(isUpdateAgentLoading)}
           </Flex>
 
           <MenuProvider>
