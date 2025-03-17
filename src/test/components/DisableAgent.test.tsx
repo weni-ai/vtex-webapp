@@ -3,17 +3,17 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { DisableAgent } from "../../components/DisableAgent";
 import { useSelector } from "react-redux";
-import { disableFeature } from "../../services/features.service";
+import { disableAgent } from "../../services/agent.service";
 import "@testing-library/jest-dom";
-import { disableFeatureLoading, selectProject } from "../../store/projectSlice";
+import { disableAgentLoading, selectProject } from "../../store/projectSlice";
 import { toast } from "@vtex/shoreline";
 
 vi.mock("react-redux", () => ({
     useSelector: vi.fn(),
 }));
 
-vi.mock("../../services/features.service", () => ({
-    disableFeature: vi.fn(),
+vi.mock("../../services/agent.service", () => ({
+    disableAgent: vi.fn(),
 }));
 
 
@@ -53,7 +53,7 @@ describe("DisableAgent Component", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         (useSelector as any).mockImplementation((selector: any) => {
-            if (selector === disableFeatureLoading) return false;
+            if (selector === disableAgentLoading) return false;
             if (selector === selectProject) return "project-uuid";
         });
     });
@@ -78,7 +78,7 @@ describe("DisableAgent Component", () => {
 
     it("deve exibir o `Spinner` quando `isDisabling` for `true`", () => {
         (useSelector as any).mockImplementation((selector: any) => {
-            if (selector === disableFeatureLoading) return true;
+            if (selector === disableAgentLoading) return true;
             if (selector === selectProject) return "project-uuid";
         });
 
@@ -87,8 +87,8 @@ describe("DisableAgent Component", () => {
         expect(screen.getByTestId("spinner")).toBeInTheDocument();
     });
 
-    it("deve chamar `disableFeature` ao clicar no botão de desativação", async () => {
-        (disableFeature as any).mockResolvedValue({});
+    it("deve chamar `disableAgent` ao clicar no botão de desativação", async () => {
+        (disableAgent as any).mockResolvedValue({});
 
         render(<DisableAgent {...mockProps} />);
 
@@ -96,7 +96,7 @@ describe("DisableAgent Component", () => {
         fireEvent.click(disableButton);
 
         await waitFor(() => {
-            expect(disableFeature).toHaveBeenCalledWith("project-uuid", "123");
+            expect(disableAgent).toHaveBeenCalledWith("project-uuid", "123");
         });
 
         await waitFor(() => {
@@ -106,8 +106,8 @@ describe("DisableAgent Component", () => {
         expect(mockProps.toggleModal).toHaveBeenCalledTimes(1);
     });
 
-    it("deve exibir um erro no `toast` caso `disableFeature` retorne erro", async () => {
-        (disableFeature as any).mockResolvedValue({ error: true });
+    it("deve exibir um erro no `toast` caso `disableAgent` retorne erro", async () => {
+        (disableAgent as any).mockResolvedValue({ error: true });
 
         render(<DisableAgent {...mockProps} />);
 

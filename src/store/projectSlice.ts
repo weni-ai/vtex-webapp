@@ -1,4 +1,3 @@
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AgentBuilder, Agents, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 
@@ -18,7 +17,10 @@ const initialState: ProjectState = {
     links: [],
     occupation: '',
     objective: '',
-    channel: 'faststore'
+    channel: {
+      uuid: '',
+      name: ''
+    }
   },
   agents: [],
   integratedAgents: []
@@ -95,7 +97,7 @@ export const loadingSetup = (state: RootState) => state.project.loadingSetup
 export const setupError = (state: RootState) => state.project.setupError
 export const agentBuilderLoading = (state: RootState) => state.project.agentBuilderLoading
 export const getAgentBuilder = (state: RootState) => state.project.agentBuilder
-export const getAgentChannel = (state: RootState) => state.project.agentBuilder.channel
+export const getAgentChannel = (state: RootState) => state.project.flows_channel_uuid
 export const agents = (state: RootState) => state.project.agents
 export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading

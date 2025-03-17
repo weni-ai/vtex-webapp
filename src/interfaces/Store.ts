@@ -9,7 +9,10 @@ export interface AgentBuilder {
     links: string[];
     occupation: string;
     objective: string;
-    channel: string;
+    channel: {
+        uuid: string;
+        name: string;
+    };
 }
 
 export interface Agents {

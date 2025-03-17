@@ -2,18 +2,42 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { FeatureBox } from "../../components/FeatureBox";
-import { useSelector } from "react-redux";
-import { integrateFeature } from "../../services/features.service";
+import { integrateAgent } from "../../services/agent.service";
 import "@testing-library/jest-dom";
-import { featureList, selectProject, updateFeatureLoading } from "../../store/projectSlice";
 import { toast } from "@vtex/shoreline";
 
+// Mock initial state
+const mockState = {
+    project: {
+        project_uuid: "project-uuid",
+        agents: [
+            { 
+                code: "order_status", 
+                uuid: "feature-uuid",
+                category: "ACTIVE",
+                isInTest: false,
+                isConfiguring: false,
+                channel: {
+                    uuid: "channel-uuid",
+                    name: "test-channel"
+                }
+            }
+        ],
+        agentsLoading: [],
+        flows_channel_uuid: "flows-channel-uuid",
+        wpp_cloud_app_uuid: "wpp-cloud-uuid"
+    },
+    auth: {
+        base_address: "test-address"
+    }
+};
+
 vi.mock("react-redux", () => ({
-    useSelector: vi.fn(),
+    useSelector: vi.fn((selector) => selector(mockState))
 }));
 
-vi.mock("../../services/features.service", () => ({
-    integrateFeature: vi.fn().mockResolvedValue({}),
+vi.mock("../../services/agent.service", () => ({
+    integrateAgent: vi.fn().mockResolvedValue({}),
 }));
 
 vi.mock("@vtex/shoreline", async () => {
@@ -34,15 +58,15 @@ describe("FeatureBox Component", () => {
         type: "active" as const,
         isIntegrated: false,
         isInTest: false,
+        isConfiguring: false,
+        channel: {
+            uuid: "channel-uuid",
+            name: "test-channel"
+        }
     };
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (useSelector as any).mockImplementation((selector: any) => {
-            if (selector === selectProject) return "project-uuid";
-            if (selector === featureList) return [{ code: "order_status", uuid: "feature-uuid" }];
-            if (selector === updateFeatureLoading) return () => false;
-        });
     });
 
     it("deve renderizar corretamente os textos e botões", () => {
@@ -60,7 +84,7 @@ describe("FeatureBox Component", () => {
         })));
 
         // Fallback to finding any element with the text
-        const allElements = screen.queryAllByText((content) => 
+        const allElements = screen.queryAllByText((content) =>
             content.includes('order_status')
         );
         console.log('Elements with order_status:', allElements.map(el => ({
@@ -79,7 +103,7 @@ describe("FeatureBox Component", () => {
         fireEvent.click(addButton);
 
         await waitFor(() => {
-            expect(integrateFeature).toHaveBeenCalledWith("feature-uuid", "project-uuid");
+            expect(integrateAgent).toHaveBeenCalledWith("feature-uuid", "project-uuid");
         });
 
         await waitFor(() => {
@@ -87,8 +111,8 @@ describe("FeatureBox Component", () => {
         });
     });
 
-    it("deve exibir um erro no `toast` caso `integrateFeature` retorne erro", async () => {
-        (integrateFeature as any).mockResolvedValue({ error: true });
+    it("deve exibir um erro no `toast` caso `integrateAgent` retorne erro", async () => {
+        (integrateAgent as any).mockResolvedValue({ error: true });
 
         render(<FeatureBox {...mockProps} />);
 
