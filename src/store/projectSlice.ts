@@ -17,10 +17,7 @@ const initialState: ProjectState = {
     links: [],
     occupation: '',
     objective: '',
-    channel: {
-      uuid: '',
-      name: ''
-    }
+    channel: ''
   },
   agents: [],
   integratedAgents: []

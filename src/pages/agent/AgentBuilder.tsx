@@ -47,7 +47,7 @@ export function AgentBuilder() {
     knowledge: useSelector(getAgentBuilder).links[0] || '',
     occupation: useSelector(getAgentBuilder).occupation || t('agent.setup.forms.occupation.default'),
     objective: useSelector(getAgentBuilder).objective || t('agent.setup.forms.objective.default'),
-    channel: useSelector(getAgentBuilder).channel || t('agent.setup.forms.channel.default'),
+    channel: useSelector(getAgentBuilder).channel|| t('agent.setup.forms.channel.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
