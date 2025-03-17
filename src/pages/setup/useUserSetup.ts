@@ -1,15 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { setAccount, setAgentIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setBaseAddress, setToken } from '../../store/authSlice';
 import store from '../../store/provider.store';
 import { getToken } from '../../services/auth.service';
-import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgentBuilder, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
-import { updateFeatureList } from '../../services/features.service';
-
+import { updateAgentsList } from '../../services/agent.service';
 export function useUserSetup() {
   const navigate = useNavigate();
 
@@ -41,9 +40,12 @@ export function useUserSetup() {
 
       store.dispatch(setAccount(accountData));
 
-      if (accountData.hosts) {
-        store.dispatch(setBaseAddress(accountData.hosts[0]))
+
+      let base_address = `${userData.account}.myvtex.com`;
+      if (accountData.hosts.length) {
+        base_address = accountData.hosts[0]
       }
+      store.dispatch(setBaseAddress(base_address));
 
       const result = await checkProject(userData.account, userData.user);
       if (result?.error) {
@@ -60,10 +62,9 @@ export function useUserSetup() {
         if (response?.error) {
           throw new Error(JSON.stringify(response.error))
         }
-        
+
         const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration?.error) {
-          console.log('ta entrando aqui com: ', agentIntegration)
           throw new Error(JSON.stringify(agentIntegration.error))
         }
 
@@ -71,11 +72,12 @@ export function useUserSetup() {
 
         if (name) {
           store.dispatch(
-            setAgent({
+            setAgentBuilder({
               name,
               links,
               objective,
               occupation,
+              channel: 'faststore'
             })
           );
         }
@@ -84,12 +86,9 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-          console.log('aqui')
           if (has_agent) {
-            store.dispatch(setAgentIntegrated(true))
-
-            console.log('aqui de novo')
-            await updateFeatureList()
+            store.dispatch(setAgentBuilderIntegrated(true))
+            await updateAgentsList();
             navigate('/dash');
           } else {
             navigate('/agent-builder');

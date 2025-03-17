@@ -1,32 +1,44 @@
-name: Build vtex Webapp in Shared (Push Tag)
+name: Build Vtex WebApp in Shared (Push Tag)
 
 on:
   push:
     tags:
+      - '*.*.*-develop'
       - '*.*.*-staging'
       - '*.*.*'
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
-      - name: Checkout code
+      - name: Check out the repo
         uses: actions/checkout@v4
+        if: github.event_name != 'pull_request'
         with:
-          fetch-depth: 0
-          fetch-tags: 0
+          ref: "${{env.GITHUB_SHA}}"
+          token: ${{ secrets.DEVOPS_GITHUB_PERMANENT_TOKEN }}
 
       - name: Set variables
         run: |
-            TAG=$(git tag --list --sort=-creatordate | head -n 1)
-            COMMIT_SHA=$(git rev-list -n 1 "$TAG")
-            git checkout $COMMIT_SHA
-            if grep -qs -e '^.*.*-staging' <<< "${TAG}" ; then
+            TAG="$( echo "${GITHUB_REF}" | cut -d'/' -f3 )"
+            if grep -qs -e '^.*.*-develop' <<< "${TAG}" ; then
+              echo "Found environment: DEVELOP - ${TAG}"
+              echo "MANIFESTS_ENVIRONMENT=develop" | tee "${GITHUB_ENV}"
+              export "MANIFESTS_ENVIRONMENT=develop"
+            elif grep -qs -e '^.*.*-staging' <<< "${TAG}" ; then
               echo "Found environment: STAGING - ${TAG}"
               echo "MANIFESTS_ENVIRONMENT=staging" | tee -a "${GITHUB_ENV}"
+              export "MANIFESTS_ENVIRONMENT=staging"
             elif grep -qs -e '^.*.*' <<< "${TAG}" ; then
               echo "No environment found, assuming: PRODUCTION - ${TAG}"
               echo "MANIFESTS_ENVIRONMENT=production" | tee -a "${GITHUB_ENV}"
+              export "MANIFESTS_ENVIRONMENT=production"
             else
               echo 'Not a valid tag. Skipping...'
               exit 1
@@ -34,12 +46,15 @@ jobs:
             echo "TAG=$TAG" | tee -a "${GITHUB_ENV}"
             VERSION="${TAG}"
             echo "VERSION=${VERSION}" | tee -a "${GITHUB_ENV}"
-            echo "COMMIT_SHA=$COMMIT_SHA" | tee -a "${GITHUB_ENV}"
+            echo "COMMIT_SHA=$GITHUB_SHA" | tee -a "${GITHUB_ENV}"
             echo "IMAGE_TAG=${{ secrets.ECR }}/vtex:webapp-${TAG}" | tee -a "${GITHUB_ENV}"
+            echo "OLD_IMAGE=${{ secrets.ECR }}/vtex:webapp-${MANIFESTS_ENVIRONMENT}" | tee -a "${GITHUB_ENV}"
             echo "IMAGE_SOURCE_URL=https://github.com/weni-ai/vtex-webapp" | tee -a "${GITHUB_ENV}"
             echo "MANIFESTS_REPOSITORY=weni-ai/kubernetes-manifests-hermes" | tee -a "${GITHUB_ENV}"
             echo "MANIFESTS_APPLICATION=vtex-webapp" | tee -a "${GITHUB_ENV}"
             echo "MANIFESTS_PATCH_TARGET=deployment.json" | tee -a "${GITHUB_ENV}"
+            platform=${{ matrix.platform }}
+            echo "PLATFORM_PAIR=${platform//\//-}" | tee -a "${GITHUB_ENV}"
 
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -49,34 +64,112 @@ jobs:
           #repository: Ilhasoft/weni-engine
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to ECR
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ${{ secrets.ECR }}
           username: ${{ secrets.AWS_ACCESS_KEY_ID_SHARED }}       # Credentials used to push image to ECR repository
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY_SHARED }}
 
-      - name: Checkout specific commit SHA
-        run: |
-          git checkout ${{env.COMMIT_SHA}}
-
-      - name: Build and push - vtex Webapp Image
-        uses: docker/build-push-action@v3
+      - name: Build and push - Chats-Webapp Image
+        id: build
+        uses: docker/build-push-action@v6
         with:
           context: .
           labels: |
             tag=${{env.TAG}}
             commit=${{env.COMMIT_SHA}}
             repository=${{env.IMAGE_SOURCE_URL}}
+          build-args: |
+            OLD_IMAGE=${{env.OLD_IMAGE}}
           file: docker/Dockerfile
-          push: true
-          tags: "${{env.IMAGE_TAG}}"
-          no-cache: true
+          platforms: ${{ matrix.platform }}
+          # push: true
+          # tags: |
+          #   ${{env.IMAGE_TAG}}
+          #   ${{env.OLD_IMAGE}}
+          # no-cache: true
+          outputs: type=image,name=${{ secrets.ECR }}/chats,push-by-digest=true,name-canonical=true,push=true
+      
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"          
+        
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    runs-on: ubuntu-latest
+    needs:
+      - docker
+    steps:
+      - name: Set variables
+        run: |
+            TAG="$( echo "${GITHUB_REF}" | cut -d'/' -f3 )"
+            if grep -qs -e '^.*.*-develop' <<< "${TAG}" ; then
+              echo "Found environment: DEVELOP - ${TAG}"
+              echo "MANIFESTS_ENVIRONMENT=develop" | tee "${GITHUB_ENV}"
+              export "MANIFESTS_ENVIRONMENT=develop"
+            elif grep -qs -e '^.*.*-staging' <<< "${TAG}" ; then
+              echo "Found environment: STAGING - ${TAG}"
+              echo "MANIFESTS_ENVIRONMENT=staging" | tee -a "${GITHUB_ENV}"
+              export "MANIFESTS_ENVIRONMENT=staging"
+            elif grep -qs -e '^.*.*' <<< "${TAG}" ; then
+              echo "No environment found, assuming: PRODUCTION - ${TAG}"
+              echo "MANIFESTS_ENVIRONMENT=production" | tee -a "${GITHUB_ENV}"
+              export "MANIFESTS_ENVIRONMENT=production"
+            else
+              echo 'Not a valid tag. Skipping...'
+              exit 1
+            fi
+            echo "TAG=$TAG" | tee -a "${GITHUB_ENV}"
+            VERSION="${TAG}"
+            echo "VERSION=${VERSION}" | tee -a "${GITHUB_ENV}"
+            echo "COMMIT_SHA=$GITHUB_SHA" | tee -a "${GITHUB_ENV}"
+            echo "IMAGE_TAG=${{ secrets.ECR }}/vtex:webapp-${TAG}" | tee -a "${GITHUB_ENV}"
+            echo "OLD_IMAGE=${{ secrets.ECR }}/vtex:webapp-${MANIFESTS_ENVIRONMENT}" | tee -a "${GITHUB_ENV}"
+            echo "IMAGE_SOURCE_URL=https://github.com/weni-ai/vtex-webapp" | tee -a "${GITHUB_ENV}"
+            echo "MANIFESTS_REPOSITORY=weni-ai/kubernetes-manifests-hermes" | tee -a "${GITHUB_ENV}"
+            echo "MANIFESTS_APPLICATION=vtex-webapp" | tee -a "${GITHUB_ENV}"
+            echo "MANIFESTS_PATCH_TARGET=deployment.json" | tee -a "${GITHUB_ENV}"
+            platform=${{ matrix.platform }}
+            echo "PLATFORM_PAIR=${platform//\//-}" | tee -a "${GITHUB_ENV}"
+      
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+  
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+  
+      - name: Login to ECR
+        uses: docker/login-action@v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: ${{ secrets.ECR }}
+          username: ${{ secrets.AWS_ACCESS_KEY_ID_SHARED }}
+          password: ${{ secrets.AWS_SECRET_ACCESS_KEY_SHARED }}
+
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create -t "${{ env.IMAGE_TAG }}" \
+            $(printf '${{ secrets.ECR }}/chats@sha256:%s ' *)
 
       - name: Check out Kubernetes Manifests
         # Now, checkout in kubernetes manifests to update image in deployments patches
@@ -143,3 +236,4 @@ jobs:
           directory: ./kubernetes-manifests/
           branch: main
           message: "From Vtex Webapp Build (Push Tag ${{ env.MANIFESTS_ENVIRONMENT }})"
+          

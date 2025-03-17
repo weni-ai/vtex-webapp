@@ -4,22 +4,32 @@ export interface AuthState {
     base_address: string;
 }
 
-export interface Agent {
+export interface AgentBuilder {
     name: string;
     links: string[];
     occupation: string;
     objective: string;
+    channel: string;
 }
 
-export interface Feature {
+export interface Agents {
     uuid: string;
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
+    isConfiguring: boolean;
+    phone_numbers: string[];
+    message_time_restrictions?: {
+        is_active: boolean;
+        periods: {
+            weekdays: { from: string; to: string };
+            saturdays: { from: string; to: string };
+        };
+    };
 }
 
 export interface Loading {
-    feature_uuid: string,
+    agent_uuid: string,
     isLoading: boolean
 }
 export interface ProjectState {
@@ -28,14 +38,14 @@ export interface ProjectState {
     flows_channel_uuid: string;
     loadingSetup: boolean;
     setupError: boolean;
-    agentLoading: boolean;
+    agentBuilderLoading: boolean;
     wppLoading: boolean;
-    featureLoading: boolean;
-    agent: Agent;
-    featureList: Feature[];
-    integratedFeatures: Feature[];
-    updateFeatureLoading: Loading[];
-    disableFeatureLoading: boolean;
+    agentsLoading: Loading[];
+    agents: Agents[];
+    integratedAgents: Agents[];
+    updateAgentLoading: boolean;
+    disableAgentLoading: boolean;
+    agentBuilder: AgentBuilder;
 }
 
 export interface UserData {
@@ -49,18 +59,17 @@ export interface UserData {
 }
 
 export interface AccountData {
-    hosts:  string[];
+    hosts: string[];
     [key: string]: any;
-  }
-  
+}
+
 
 export interface UserState {
     userData: UserData | null;
     accountData: AccountData | null;
     loadingWhatsAppIntegration: boolean;
     isWhatsAppIntegrated: boolean;
-    isAgentIntegrated: boolean;
-    isFeatureIntegrated: boolean;
+    isAgentBuilderIntegrated: boolean;
     whatsAppError: string | null;
 }
 
