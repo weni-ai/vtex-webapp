@@ -35,8 +35,6 @@ export async function checkAgentIntegration(project_uuid: string) {
 }
 
 export async function setAgentBuilder(payload: any) {
-  console.log('payload', payload)
-
   const response = await createAgentBuilderRequest(payload);
 
   if (response.error) {
