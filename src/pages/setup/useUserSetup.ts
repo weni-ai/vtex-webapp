@@ -66,7 +66,6 @@ export function useUserSetup() {
 
         const agentIntegration = await checkAgentIntegration(project_uuid);
         if (agentIntegration?.error) {
-          console.log('ta entrando aqui com: ', agentIntegration)
           throw new Error(JSON.stringify(agentIntegration.error))
         }
 
@@ -88,11 +87,8 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-          console.log('aqui')
           if (has_agent) {
             store.dispatch(setAgentBuilderIntegrated(true))
-
-            console.log('aqui de novo')
             await updateAgentsList()
             navigate('/dash');
           } else {
