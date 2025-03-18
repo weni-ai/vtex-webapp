@@ -2,13 +2,14 @@
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
-import { integrateFeature } from "../services/features.service";
+import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { featureList, selectProject, updateFeatureLoading } from "../store/projectSlice";
+import { agents, getAgentChannel, selectProject, updateAgentLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 import wrench from '../assets/icons/Wrench.svg'
+import { AddAbandonedCart } from "./AddAbandonedCart";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -17,9 +18,11 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
-  const features = useSelector(featureList)
-  const isUpdateFeatureLoading = useSelector((state: any) => updateFeatureLoading(state, uuid));
-  const featureUuid = features.find((item: { code: string }) => item.code === code)?.uuid || '';
+  const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
+  const agentsList = useSelector(agents)
+  const isUpdateAgentLoading = useSelector(updateAgentLoading)
+  const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
+  const channel = useSelector(getAgentChannel)  
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -32,7 +35,11 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
   }
 
   const integrateCurrentFeature = async () => {
-    const result = await integrateFeature(featureUuid, projectUUID);
+    if (code === 'abandoned_cart' && channel !== 'site_editor') {
+      setOpenAbandonedCartModal(true)
+      return;
+    }
+    const result = await integrateAgent(agentUuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {
@@ -99,6 +106,14 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
 
 
         {(() => {
+          if (isInTest) {
+            return (
+              <Button variant="secondary" onClick={integrateCurrentFeature} size="large" disabled={true}>
+                <img src={wrench} alt="" />
+                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
+              </Button>
+            );
+          }
           if (isIntegrated) {
             return (
               <Flex
@@ -115,20 +130,10 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
               </Flex>
             );
           }
-
-          if (isInTest) {
-            return (
-              <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
-                <img src={wrench} alt="" />
-                <Text color="$fg-warning"> {t('agents.common.test')}</Text>
-              </Button>
-            );
-          }
-
           return (
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               {
-                isUpdateFeatureLoading ?
+                isUpdateAgentLoading ?
                   <Spinner description="loading" />
                   :
                   <>
@@ -136,7 +141,6 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
                     <Text> {t('agents.common.add')}</Text>
                   </>
               }
-
             </Button>
           );
         })()}
@@ -163,6 +167,15 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest }: { uuid:
         toggleModal={openDisableModal}
         agent={t(`agents.categories.${type}.${code}.title`)}
         agentUuid={uuid}
+      />
+
+      <AddAbandonedCart
+        open={openAbandonedCartModal}
+        toggleModal={() => setOpenAbandonedCartModal((o) => !o )}
+        confirm={() => {
+          integrateAgent(agentUuid, projectUUID);
+          setOpenAbandonedCartModal(false);
+        }}
       />
     </>
   );
