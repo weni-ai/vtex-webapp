@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
+import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest, createAgentBuilderRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
-import { setAgentBuilderLoading, setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading } from "../store/projectSlice";
+import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -34,21 +34,12 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 }
 
-export async function setAgentBuilder(payload: any, project_uuid: string) {
-  store.dispatch(setAgentBuilderLoading(true))
-  const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
+export async function setAgentBuilder(payload: any) {
+  console.log('payload', payload)
 
-  const response = await VTEXFetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  const response = await createAgentBuilderRequest(payload);
 
-  store.dispatch(setAgentBuilderLoading(false))
-
-  if (response?.text !== 'OK') {
+  if (response.error) {
     return { success: false, error: response?.message || 'Error creating agent' };
   }
   return { success: true, data: response };
@@ -60,10 +51,15 @@ export async function updateAgentsList() {
 
   const integratedAgents = await integratedAgentsList();
   store.dispatch(setIntegratedAgents(integratedAgents))
+  store.dispatch(setAgentsLoading(availableAgents.map(agent => ({ agent_uuid: agent.uuid, isLoading: false }))))
 }
 
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
-  store.dispatch(setUpdateAgentLoading(true))
+  const agentsLoading = store.getState().project.agentsLoading;
+  const agentLoading = agentsLoading.find(loading => loading.agent_uuid === feature_uuid);
+  if (agentLoading) {
+    store.dispatch(setAgentsLoading([...agentsLoading, { agent_uuid: feature_uuid, isLoading: true }]));
+  }
   try {
     const storeAddress = store.getState().auth.base_address;
     const flows_channel_uuid = store.getState().project.flows_channel_uuid;
@@ -80,10 +76,10 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
     const response = await integrateAgentRequest(data);
     await updateAgentsList();
 
-    store.dispatch(setUpdateAgentLoading(false))
+    store.dispatch(setAgentsLoading(agentsLoading.filter(loading => loading.agent_uuid !== feature_uuid)));
     return { success: true, data: response };
   } catch (error) {
-    store.dispatch(setUpdateAgentLoading(false))
+    store.dispatch(setAgentsLoading(agentsLoading.filter(loading => loading.agent_uuid !== feature_uuid)));
     return { success: false, error: error || 'unknown error' };
   }
 }
