@@ -29,7 +29,7 @@ export function AboutAgent({ code, open, category, toggleModal }: AboutAgentProp
                         {t(`agents.categories.${category}.${code}.title`)}
                     </ModalHeading>
 
-                    <TagType type={category} />
+                    <TagType type={category} data-testid="tag-type"/>
                 </Flex>
                 <ModalDismiss />
             </ModalHeader>
