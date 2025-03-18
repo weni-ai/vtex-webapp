@@ -16,7 +16,8 @@
             "internal_server_error": "Error interno del servidor",
             "unexpected_error": "Ha ocurrido un error inesperado"
         },
-        "new_agent": "Nuevo Agente"
+        "new_agent": "Nuevo agente",
+        "copy_code": "Copiar código"
     },
     "title": "Weni Agentic IA",
     "description": "Una solución de CX basada en IA para marcas y minoristas.",
