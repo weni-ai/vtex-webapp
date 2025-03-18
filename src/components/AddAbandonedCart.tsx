@@ -62,7 +62,7 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                                     navigator.clipboard.writeText(`script src="https://weni.ai/vtex-app.js"></script>`);
                                 }}
                             >
-                                Copy Code
+                                {t('agents.common.copy_code')}
                                 <IconCopySimple
                                     height="1rem"
                                     width="1rem"
@@ -124,7 +124,7 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                                     navigator.clipboard.writeText(`script src="https://weni.ai/vtex-app.js"></script>`);
                                 }}
                             >
-                                Copy Code
+                                {t('agents.common.copy_code')}
                                 <IconCopySimple
                                     height="1rem"
                                     width="1rem"
