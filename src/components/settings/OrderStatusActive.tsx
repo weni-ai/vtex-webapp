@@ -8,7 +8,6 @@ import { RootState } from "../../interfaces/Store";
 export function PreferencesOrderStatusActive() {
   const { formData = {}, setFormData } = useContext(SettingsContext) || {};
 
-  // Initialize state from context
   const currentNumber = useSelector((state: RootState) => integratedAgents(state).find((agent) => agent.code === 'order_status')?.phone_numbers[0]);
   const [hasTestContactNumber, setHasTestContactNumber] = useState(
     !!currentNumber
