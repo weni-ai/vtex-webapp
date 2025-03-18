@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
-import { setBaseAddress, setToken } from '../../store/authSlice';
+import { setBaseAddress } from '../../store/authSlice';
 import store from '../../store/provider.store';
-import { getToken } from '../../services/auth.service';
 import { setAgentBuilder, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
@@ -14,14 +13,6 @@ export function useUserSetup() {
 
   const initializeProject = useCallback(async () => {
     try {
-      const { token, error } = await getToken();
-      if (error) {
-        console.error("token not found");
-        navigate('/setup-error');
-        return;
-      }
-      store.dispatch(setToken(token));
-
       const { data: userData, error: errorData } = await fetchUserData();
       if (!userData || errorData) {
         console.error("user data not found");
@@ -55,6 +46,7 @@ export function useUserSetup() {
 
       if (has_project) {
         store.dispatch(setProjectUuid(project_uuid));
+        await updateAgentsList();
 
         const response = await checkWppIntegration(project_uuid);
         const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
@@ -88,7 +80,6 @@ export function useUserSetup() {
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
           if (has_agent) {
             store.dispatch(setAgentBuilderIntegrated(true))
-            await updateAgentsList();
             navigate('/dash');
           } else {
             navigate('/agent-builder');
