@@ -9,9 +9,11 @@ import i18n from 'i18next';
 import './i18n';
 import { ToastStack } from '@vtex/shoreline'
 
-(globalThis as any).t = (key: string, options?: Record<string, unknown>) => {
-  return i18n.t(key, options);
-};
+Object.assign(globalThis, {
+  t: (key: string, options?: Record<string, unknown>) => {
+    return i18n.t(key, options);
+  }
+});
 
 const query = decodeURIComponent(window.location.search);
 const params = new URLSearchParams(query);
