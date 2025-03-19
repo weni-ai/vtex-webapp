@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import getEnv from "../utils/env";
 
 export async function getToken() : Promise<{ success: boolean, token?: string, error?: unknown }> {
