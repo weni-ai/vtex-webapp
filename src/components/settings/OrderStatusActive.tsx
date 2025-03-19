@@ -97,6 +97,7 @@ export function PreferencesOrderStatusActive() {
     <DrawerContent>
       <Field style={{ display: 'flex', }}>
         <Checkbox
+          data-testid="is-test-contact-number"
           checked={hasTestContactNumber}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setHasTestContactNumber(e.target.value as unknown as boolean)}
           aria-label={t('agents.categories.active.order_status.settings.is_test_contact_number.title')}
@@ -118,6 +119,7 @@ export function PreferencesOrderStatusActive() {
           <Label>{t('agents.categories.active.order_status.settings.test_contact_number.label')}</Label>
 
           <Input
+            data-testid="test-contact-number"
             name="contact-number"
             value={testContactNumber}
             onChange={beforeSetTestContactNumber}
