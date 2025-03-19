@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
@@ -34,7 +33,17 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 }
 
-export async function setAgentBuilder(payload: any, project_uuid: string) {
+export async function setAgentBuilder(
+  payload: {
+    agent: {
+      name: string;
+      objective: string;
+      occupation: string;
+    },
+    links: string[],
+  },
+  project_uuid: string
+) {
   store.dispatch(setAgentBuilderLoading(true))
   const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
 
