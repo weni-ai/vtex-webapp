@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface AuthState {
     token: string;
     base_address: string;
@@ -50,8 +49,7 @@ export interface UserData {
 
 export interface AccountData {
     hosts:  string[];
-    [key: string]: any;
-  }
+}
   
 
 export interface UserState {
