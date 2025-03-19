@@ -31,7 +31,7 @@
             "active": {
                 "title": "Notificação ativa",
                 "order_status": {
-                    "title": "Agente de status do pedido",
+                    "title": "Agente de status de pedidos",
                     "description": "Mantenha os clientes atualizados sobre o status do pedido em tempo real.",
                     "details": {
                         "title": "Ative o rastreamento de entrega de pedidos para clientes.",
@@ -40,7 +40,7 @@
                     "settings": {
                         "is_test_contact_number": {
                             "title": "Restringir ao número de contato de teste",
-                            "description": "O agente enviará mensagens apenas para o número de telefone de teste"
+                            "description": "O agente enviará mensagens apenas para o número de teste."
                         },
                         "test_contact_number": {
                             "label": "Número de telefone"
@@ -56,7 +56,7 @@
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de carrinho abandonado",
+                    "title": "Agente de recuperação de carrinho",
                     "description": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
                     "details": {
                         "title": "Recupere vendas lembrando os clientes dos itens deixados no carrinho.",
