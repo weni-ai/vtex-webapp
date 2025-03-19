@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateAgentsList } from "./agent.service";
 import { userAdapters } from "../api/users/adapters";
+import { UserData } from "../interfaces/Store";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -50,7 +50,7 @@ export async function checkProject(vtex_account: string, user_email: string) {
   }
 }
 
-export async function createUserAndProject(userData: any) {
+export async function createUserAndProject(userData: UserData) {
   store.dispatch(setLoadingSetup(true));
 
   try {
