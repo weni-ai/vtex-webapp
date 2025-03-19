@@ -16,7 +16,7 @@ export function useUserSetup() {
   const initializeProject = useCallback(async () => {
     try {
       const { token, error } = await getToken();
-      if (error) {
+      if (error || !token) {
         console.error("token not found");
         navigate('/setup-error');
         return;
