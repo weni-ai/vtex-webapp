@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createChannel } from "../../services/channel.service";
 import getEnv from "../env";
 
