@@ -8,6 +8,7 @@ import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
 import { updateAgentsList } from '../../services/agent.service';
+
 export function useUserSetup() {
   const navigate = useNavigate();
 
@@ -80,6 +81,7 @@ export function useUserSetup() {
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
           if (has_agent) {
             store.dispatch(setAgentBuilderIntegrated(true))
+            await updateAgentsList()
             navigate('/dash');
           } else {
             navigate('/agent-builder');

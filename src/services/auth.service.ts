@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import getEnv from "../utils/env";
 
-export async function getToken() : Promise<any> {
+export async function getToken() : Promise<{ success: boolean, token?: string, error?: unknown }> {
     const auth_url = getEnv('VITE_APP_AUTH_URL') || '';
     const client_id = getEnv('VITE_APP_CLIENT_ID') || '';
     const client_secret = getEnv('VITE_APP_CLIENT_SECRET') || '';
