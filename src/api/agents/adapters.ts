@@ -55,7 +55,7 @@ function isConfiguring(config?: AgentConfig) {
   if (config && Object.keys(config).length === 0) {
     return false;
   }
-
+  
   const syncStatus = config?.templates_synchronization_status;
   const isPendingOrRejected = syncStatus === 'pending' || syncStatus === 'rejected';
 
@@ -203,5 +203,3 @@ export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) 
         data: response.data,
     };
 }
-
-
