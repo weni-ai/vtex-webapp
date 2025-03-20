@@ -93,13 +93,14 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                     }
 
                     <DrawerFooter style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Button onClick={toggleOpen} size="large" style={{ width: '50%' }}>
+                        <Button onClick={toggleOpen} size="large" style={{ width: '50%' }} data-testid="cancel-button">
                             {t('common.cancel')}
                         </Button>
 
                         <Button
                             variant="primary"
                             onClick={updateAgent}
+                            data-testid="save-button"
                             size="large"
                             style={{ width: '50%' }}
                             disabled={isUpdating}
