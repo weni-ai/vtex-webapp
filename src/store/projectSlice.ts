@@ -17,10 +17,7 @@ const initialState: ProjectState = {
     links: [],
     occupation: '',
     objective: '',
-    channel: {
-      uuid: '',
-      name: ''
-    }
+    channel: ''
   },
   agents: [],
   integratedAgents: []
@@ -97,7 +94,7 @@ export const loadingSetup = (state: RootState) => state.project.loadingSetup
 export const setupError = (state: RootState) => state.project.setupError
 export const agentBuilderLoading = (state: RootState) => state.project.agentBuilderLoading
 export const getAgentBuilder = (state: RootState) => state.project.agentBuilder
-export const getAgentChannel = (state: RootState) => state.project.flows_channel_uuid
+export const getAgentChannel = (state: RootState) => state.project.agentBuilder.channel
 export const agents = (state: RootState) => state.project.agents
 export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading

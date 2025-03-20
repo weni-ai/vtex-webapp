@@ -53,7 +53,7 @@ function isInTest(config?: AgentConfig) {
 
 function isConfiguring(config?: AgentConfig) {
   if (config && Object.keys(config).length === 0) {
-    return false;
+    return true;
   }
 
   const syncStatus = config?.templates_synchronization_status;
