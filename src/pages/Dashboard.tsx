@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { VTEXFetch } from '../utils/VTEXFetch';
 import { useSelector } from 'react-redux';
-import { featureList, integratedFeatures, selectProject } from '../store/projectSlice';
+import { agents, integratedAgents, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
-import { updateFeatureList } from '../services/features.service';
+import { updateAgentsList } from '../services/agent.service';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
-  const features = useSelector(featureList)
-  const integrated = useSelector(integratedFeatures)
+  const features = useSelector(agents)
+  const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
 
@@ -50,7 +49,7 @@ export function Dashboard() {
         console.error('VTEXFetch failed:', error);
       });
 
-      updateFeatureList();
+      updateAgentsList();
   }, []);
 
   return (
@@ -135,7 +134,7 @@ export function Dashboard() {
           <Grid
             columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
-            {features.map((item: any) => (
+            {features.map((item) => (
               <FeatureBox
                 key={item.uuid}
                 uuid={item.uuid}
@@ -145,10 +144,10 @@ export function Dashboard() {
                 isInTest={item.isInTest}
               />
             ))}
-            {integrated.map((item: any) => (
+            {integrated.map((item) => (
               <FeatureBox
-                key={item.feature_uuid}
-                uuid={item.feature_uuid}
+                key={item.uuid}
+                uuid={item.uuid}
                 code={item.code}
                 type="active"
                 isIntegrated={true}

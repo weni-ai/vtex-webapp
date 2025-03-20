@@ -18,7 +18,30 @@ interface IntegrateAgentData {
   wpp_cloud_app_uuid: string;
 }
 
+interface CreateAgentBuilderData {
+  agent: {
+    name: string;
+    objective: string;
+    occupation: string;
+  };
+  links: string[];
+}
+export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
+  const projectUuid = store.getState().project.project_uuid;
+  const url = `/_v/create-agent-builder?projectUUID=${projectUuid}`;
+  const response = await VTEXFetch<{
+    message: string;
+    error: string;
+  }>(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
 
+  return response;
+}
 
 export async function agentsList() {
   const projectUuid = store.getState().project.project_uuid;

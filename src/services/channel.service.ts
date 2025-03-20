@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setAgentBuilderIntegrated  } from "../store/userSlice";
@@ -12,7 +11,7 @@ export async function checkWppIntegration(project_uuid: string) {
   return whatsappAdapter.checkIntegration(project_uuid);
 }
 
-export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string): Promise<any> {
+export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string): Promise<{ success: boolean, error?: unknown }> {
   store.dispatch(setWppLoading(true))
   const data = {
     waba_id: wabaId,
@@ -41,7 +40,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     store.dispatch(setWppCloudAppUuid(response.wpp_cloud_app_uuid));
     toast.success(t('integration.channels.whatsapp.success'))
 
-    return { success: true, data: response };
+    return { success: true };
   } catch (error) {
     console.error('error creating channel:', error);
     store.dispatch(setWhatsAppError(JSON.stringify(error) || 'unknown error'));

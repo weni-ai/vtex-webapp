@@ -8,7 +8,7 @@ import { setAgent, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } fro
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
-import { updateFeatureList } from '../../services/features.service';
+import { updateAgentsList } from '../../services/agent.service';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export function useUserSetup() {
   const initializeProject = useCallback(async () => {
     try {
       const { token, error } = await getToken();
-      if (error) {
+      if (error || !token) {
         console.error("token not found");
         navigate('/setup-error');
         return;
@@ -86,7 +86,7 @@ export function useUserSetup() {
           if (has_agent) {
             store.dispatch(setAgentIntegrated(true))
 
-            await updateFeatureList()
+            await updateAgentsList()
             navigate('/dash');
           } else {
             navigate('/agent-builder');
