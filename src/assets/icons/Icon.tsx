@@ -18,7 +18,7 @@ interface IconProps {
 const Icon = ({ icon }: IconProps) => {
   return (
     <Center>
-      <img src={iconList[icon]} alt='' />
+      <img src={iconList[icon]} alt='' data-testid={icon} />
     </Center>
   );
 };
