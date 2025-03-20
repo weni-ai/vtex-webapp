@@ -1,6 +1,7 @@
 export function ArrowDrop({ isDown, style }: { isDown: boolean, style?: React.CSSProperties | undefined }) {
   return (
     <svg
+      data-testid="arrow-drop"
       xmlns="http://www.w3.org/2000/svg"
       width={20}
       height={20}
