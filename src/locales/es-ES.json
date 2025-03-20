@@ -16,7 +16,8 @@
             "internal_server_error": "Error interno del servidor",
             "unexpected_error": "Ha ocurrido un error inesperado"
         },
-        "new_agent": "Nuevo Agente"
+        "new_agent": "Nuevo agente",
+        "copy_code": "Copiar código"
     },
     "title": "Weni Agentic IA",
     "description": "Una solución de CX basada en IA para marcas y minoristas.",
@@ -324,6 +325,15 @@
                 "3": "7.3 El Contratista reconoce que la Plataforma Weni por VTEX utiliza plataformas de tecnología externas, incluidas pero no limitadas a aquellas ofrecidas por la entidad corporativa de META. El Contratista reconoce que cualquier cambio, limitación o suspensión de la Plataforma Weni por VTEX debido a determinaciones de la entidad corporativa de META se comunicará al Contratista lo antes posible por VTEX, incluso si en una forma diferente a la establecida en este T&C, sin que VTEX se considere en violación de estos términos.",
                 "4": "7.4 Las Partes ratifican todas las demás disposiciones del Acuerdo que no sean revocadas o alteradas por este Anexo, y las que se apliquen a este instrumento. En caso de conflicto entre el Acuerdo y este Anexo, prevalecerán las disposiciones de este Anexo."
             }
+        },
+        "description": "Al usar esta aplicación, se requiere la aceptación de los Términos y Condiciones. Estos términos definen el acceso y uso de los servicios, detallando las características del plan seleccionado, limitaciones, precios y políticas de renovación. Además, describen la funcionalidad del producto, pautas de uso y cualquier restricción aplicable para garantizar una experiencia segura y óptima.",
+        "plan_details": {
+            "title": "1. Detalles del Plan",
+            "description": "Tu plan seleccionado incluye características específicas, limitaciones y términos de facturación. Por favor, revisa los detalles de tu suscripción para entender qué está incluido y cómo funcionan las renovaciones."
+        },
+        "product_usage": {
+            "title": "2. Uso del Producto",
+            "description": "Esta aplicación está diseñada para mejorar tu experiencia a través de características y funcionalidades específicas. Cualquier mal uso, acceso no autorizado o violación de los términos puede resultar en la suspensión de la cuenta."
         },
         "agree": "Aceptar"
     }

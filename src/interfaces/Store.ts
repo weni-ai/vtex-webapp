@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface AuthState {
     token: string;
     base_address: string;
@@ -32,11 +31,17 @@ export interface Loading {
     agent_uuid: string,
     isLoading: boolean
 }
+
 export interface ProjectState {
     project_uuid: string;
     wpp_cloud_app_uuid: string;
     flows_channel_uuid: string;
     loadingSetup: boolean;
+    agentBuilderLoading: boolean;
+    agentsLoading: boolean;
+    updateAgentLoading: boolean;
+    disableAgentLoading: boolean;
+    agentBuilder: Agent;
     setupError: boolean;
     agentBuilderLoading: boolean;
     wppLoading: boolean;
@@ -59,10 +64,9 @@ export interface UserData {
 }
 
 export interface AccountData {
-    hosts: string[];
-    [key: string]: any;
+    hosts:  string[];
 }
-
+  
 
 export interface UserState {
     userData: UserData | null;

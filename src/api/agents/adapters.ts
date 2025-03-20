@@ -123,6 +123,12 @@ export interface DisableFeatureData {
     feature_uuid: string;
 }
 
+export interface GetSkillMetricsResponse {
+    message: string;
+    error: string;
+    data: { title: string; value: string; variation: number; }[][];
+}
+
 export interface UpdateAgentSettingsResponse {
     message: string;
     error: string;
@@ -190,4 +196,10 @@ export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsRe
     };
 }
 
-
+export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) {
+    return {
+        message: response.message,
+        error: response.error,
+        data: response.data,
+    };
+}
