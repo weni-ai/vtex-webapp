@@ -43,9 +43,10 @@ function isInTest(config?: AgentConfig) {
   if (config && Object.keys(config).length === 0) {
     return true;
   }
-
-  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
-    && config?.integration_settings?.order_status_restriction?.phone_numbers.length > 0;
+  
+  const phoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
+  const hasPhoneNumber = phoneNumber
+    && phoneNumber?.length > 0 || false;
   
   const syncStatus = config?.templates_synchronization_status;
   const isPendingOrRejected = syncStatus === 'pending' || syncStatus === 'rejected';
@@ -192,5 +193,3 @@ export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) 
         data: response.data,
     };
 }
-
-
