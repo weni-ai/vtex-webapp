@@ -34,7 +34,7 @@ export function useAgentBuilderSetup() {
             links,
         };
 
-        const response = await setAgentBuilder(body, app_uuid);
+        const response = await setAgentBuilder(body);
 
         if (response?.error) {
             toast.critical(t('agent.error'));
@@ -51,6 +51,7 @@ export function useAgentBuilderSetup() {
             store.dispatch(setAgentBuilderLoading(false))
             navigate('/dash');
         }
+        store.dispatch(setAgentBuilderLoading(false))
     };
 
     return { buildAgent };
