@@ -63,7 +63,7 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
             </Text>
           </Flex>
           :
-          <Button variant="primary" onClick={callFacebookSDK}> {isWppLoading ? <Spinner description="loading" /> : <span>{t('integration.buttons.integrate')}</span>}</Button>
+          <Button variant="primary" onClick={callFacebookSDK} data-testid="integrate-button"> {isWppLoading ? <Spinner description="loading" data-testid="loading-spinner"/> : <span>{t('integration.buttons.integrate')}</span>}</Button>
       }
     </Flex>
   )
