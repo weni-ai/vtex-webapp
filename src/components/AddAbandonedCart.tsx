@@ -1,5 +1,5 @@
 import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Text, ModalFooter, IconCopySimple } from "@vtex/shoreline";
-import { getAgentBuilder } from "../store/projectSlice";
+import { getAgentChannel } from "../store/projectSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "src/interfaces/Store";
 export interface AddAbandonedCartProps {
@@ -9,7 +9,7 @@ export interface AddAbandonedCartProps {
 }
 
 export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCartProps) {
-    const channel = useSelector((state: RootState) => getAgentBuilder(state).channel);
+    const channel = useSelector((state: RootState) => getAgentChannel(state));
     return (
         <Modal open={open} onClose={toggleModal} >
             <ModalHeader>

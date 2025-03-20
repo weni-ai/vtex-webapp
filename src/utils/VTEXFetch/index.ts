@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const requestsAwaitingResponses: Record<string, { resolve: (value: any) => void; reject: (reason: any) => void }> = {};
 
 window.addEventListener('message', (event: MessageEvent) => {
@@ -18,7 +17,18 @@ window.addEventListener('message', (event: MessageEvent) => {
   }
 });
 
-export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+interface FetchOptions {
+  method?: HttpMethod;
+  headers?: HeadersInit;
+  body?: BodyInit | null;
+  credentials?: RequestCredentials;
+  cache?: RequestCache;
+  mode?: RequestMode;
+}
+
+export function VTEXFetch<T = any>(url: string, options?: FetchOptions): Promise<T> {
     const responseId = generateId(10);
 
     return new Promise<T>((resolve, reject) => {
@@ -41,7 +51,7 @@ export function VTEXFetch<T = any>(...args: any[]): Promise<T> {
 
       setTimeout(() => {
         window.parent.postMessage(
-          { name: 'VTEXFetch', id: responseId, args },
+          { name: 'VTEXFetch', id: responseId, args: [url, options] },
           '*'
         );
       }, 0);

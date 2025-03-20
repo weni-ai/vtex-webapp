@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from 'react-router-dom';
 import { setAgentBuilder } from '../../services/agent.service';
 import { useSelector } from 'react-redux';
@@ -12,7 +10,12 @@ export function useAgentBuilderSetup() {
     const navigate = useNavigate();
     const project = useSelector(selectProject) || ''
     
-    const buildAgent = async (payload: any) => {
+    const buildAgent = async (payload: {
+        name: string;
+        knowledge: string;
+        occupation: string;
+        objective: string;
+      }, app_uuid: string) => {
         store.dispatch(setAgentBuilderLoading(true))
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
@@ -44,6 +47,8 @@ export function useAgentBuilderSetup() {
                     toast.critical(t('integration.error'));
                 }
             }
+
+            store.dispatch(setAgentBuilderLoading(false))
             navigate('/dash');
         }
         store.dispatch(setAgentBuilderLoading(false))

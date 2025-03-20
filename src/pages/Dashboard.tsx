@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
 import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
@@ -6,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { agents, integratedAgents, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
 import { useEffect, useState } from 'react';
-import { getSkillMetrics } from '../services/agent.service';
+import { getSkillMetrics, updateAgentsList } from '../services/agent.service';
 
 export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
@@ -38,6 +37,10 @@ export function Dashboard() {
 
     window.open(dash.toString(), '_blank');
   }
+
+  useEffect(() => {
+    updateAgentsList();
+  }, []);
 
   return (
     <Page>
@@ -150,7 +153,7 @@ export function Dashboard() {
           <Grid
             columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
           >
-            {agentsList.map((item: any) => (
+            {agentsList.map((item) => (
               <FeatureBox
                 key={item.uuid}
                 uuid={item.uuid}
@@ -161,7 +164,7 @@ export function Dashboard() {
                 isConfiguring={item.isConfiguring}
               />
             ))}
-            {integrated.map((item: any) => (
+            {integrated.map((item) => (
               <FeatureBox
                 key={item.uuid}
                 uuid={item.uuid}
