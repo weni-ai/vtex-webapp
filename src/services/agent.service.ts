@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { setAgentLoading } from "../store/projectSlice";
+import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
+import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest } from "../api/agents/requests";
+import { agentsList } from "../api/agents/requests";
+import { setAgentBuilderLoading, setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -31,8 +33,18 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 }
 
-export async function setAgentBuilder(payload: any, project_uuid: string) {
-  store.dispatch(setAgentLoading(true))
+export async function setAgentBuilder(
+  payload: {
+    agent: {
+      name: string;
+      objective: string;
+      occupation: string;
+    },
+    links: string[],
+  },
+  project_uuid: string
+) {
+  store.dispatch(setAgentBuilderLoading(true))
   const url = `/_v/create-agent-builder?projectUUID=${project_uuid}`;
 
   const response = await VTEXFetch(url, {
@@ -43,10 +55,97 @@ export async function setAgentBuilder(payload: any, project_uuid: string) {
     body: JSON.stringify(payload),
   });
 
-  store.dispatch(setAgentLoading(false))
+  store.dispatch(setAgentBuilderLoading(false))
 
   if (response?.text !== 'OK') {
     return { success: false, error: response?.message || 'Error creating agent' };
   }
   return { success: true, data: response };
+}
+
+export async function updateAgentsList() {
+  const availableAgents = await agentsList();
+  store.dispatch(setAgents(availableAgents));
+
+  const integratedAgents = await integratedAgentsList();
+  store.dispatch(setIntegratedAgents(integratedAgents))
+}
+
+export async function integrateAgent(feature_uuid: string, project_uuid: string) {
+  store.dispatch(setUpdateAgentLoading(true))
+  try {
+    const storeAddress = store.getState().auth.base_address;
+    const flows_channel_uuid = store.getState().project.flows_channel_uuid;
+    const wpp_cloud_app_uuid = store.getState().project.wpp_cloud_app_uuid;
+
+    const data = {
+      feature_uuid,
+      project_uuid,
+      store: storeAddress,
+      flows_channel_uuid,
+      wpp_cloud_app_uuid,
+    };
+
+    const response = await integrateAgentRequest(data);
+    await updateAgentsList();
+
+    store.dispatch(setUpdateAgentLoading(false))
+    return { success: true, data: response };
+  } catch (error) {
+    store.dispatch(setUpdateAgentLoading(false))
+    return { success: false, error: error || 'unknown error' };
+  }
+}
+
+export async function updateAgentSettings(body: UpdateAgentSettingsData) {
+  store.dispatch(setUpdateAgentLoading(true))
+
+  try {
+    const response = await updateAgentSettingsRequest(body);
+
+    if (!response || response.error) {
+      throw new Error(response?.message || 'error updating agent.');
+    }
+
+    await updateAgentsList()
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('error updating agent:', error);
+    return { success: false, error: error || 'unknown error' };
+  } finally {
+    store.dispatch(setUpdateAgentLoading(false))
+  }
+}
+
+export async function disableAgent(project_uuid: string, feature_uuid: string) {
+  store.dispatch(setDisableAgentLoading(true))
+
+  try {
+    const response = await disableFeatureRequest({ project_uuid, feature_uuid });
+
+    if (response?.error) {
+      throw new Error(response?.message || 'error updating agent.');
+    }
+
+    await updateAgentsList();
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('error updating agent:', error);
+    return { success: false, error: error || 'unknown error' };
+  } finally {
+    store.dispatch(setDisableAgentLoading(false))
+  }
+}
+
+export async function getSkillMetrics() {
+  try {
+    const response = await getSkillMetricsRequest() as GetSkillMetricsResponse;
+    if (!response.data) {
+      throw new Error('No metrics data received');
+    }
+    return adaptGetSkillMetricsResponse(response);
+  } catch (error: unknown) {
+    console.error('error getting skill metrics:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
+  }
 }

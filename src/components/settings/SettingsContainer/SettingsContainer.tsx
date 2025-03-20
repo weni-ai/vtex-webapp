@@ -5,9 +5,11 @@ import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";
 import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
-import { featureLoading } from "../../../store/projectSlice";
-import { updateAgentSettings } from "../../../services/features.service";
-import { Feature } from "../../../interfaces/Store";
+import { updateAgentLoading, selectProject } from "../../../store/projectSlice";
+import { updateAgentSettings } from "../../../services/agent.service";
+import { UpdateAgentSettingsData } from "../../../api/agents/adapters";
+
+type codes = 'abandoned_cart' | 'order_status';
 
 export interface SettingsContainerProps {
     open: boolean;
@@ -18,7 +20,7 @@ export interface SettingsContainerProps {
 
 export function SettingsContainer({ open, toggleOpen, code, agentUuid }: SettingsContainerProps) {    
     const [formData, setFormData] = useState<SettingsFormData>({});
-    const isUpdating = useSelector(featureLoading);
+    const isUpdating = useSelector(updateAgentLoading);
 
     async function updateAgent() {
         const response = await updateAgentSettings({

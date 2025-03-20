@@ -1,9 +1,26 @@
+
+import { integrateAgentRequest } from "./requests";
+
 type AgentConfig = {
   integration_settings?: {
     order_status_restriction?: {
-      phone_number: string;
+      phone_numbers: string;
+    };
+    message_time_restriction: {
+      is_active: boolean;
+      periods: {
+        saturdays: {
+          to: string;
+          from: string;
+        };
+        weekdays: {
+          to: string;
+          from: string;
+        };
+      };
     };
   };
+  templates_synchronization_status?: 'pending' | 'rejected' | 'approved';
 };
 
 export interface AgentsListResponse {
@@ -23,8 +40,18 @@ export interface AgentsListResponse {
 };
 
 function isInTest(config?: AgentConfig) {
-  const phoneNumber = config?.integration_settings?.order_status_restriction?.phone_number
-  return phoneNumber?.length > 0 || false;
+  if (config && Object.keys(config).length === 0) {
+    return true;
+  }
+  
+  const phoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
+  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
+    && phoneNumber?.length > 0 || false;
+  
+  const syncStatus = config?.templates_synchronization_status;
+  const isPendingOrRejected = syncStatus === 'pending' || syncStatus === 'rejected';
+
+  return hasPhoneNumber || isPendingOrRejected || false;
 }
 
 export function adapterAgentsList(response: AgentsListResponse) {
@@ -33,6 +60,9 @@ export function adapterAgentsList(response: AgentsListResponse) {
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
+    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
+      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
+      []
   }));
 }
 
@@ -57,5 +87,109 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
+    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
+      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
+      [],
+    message_time_restrictions: agent.config?.integration_settings?.message_time_restriction
   }));
+}
+
+
+export interface IntegrateFeatureInput {
+    featureId: string;
+    projectId: string;
+    storeName: string;
+    flowsChannelId: string;
+    whatsappAppId: string;
+}
+
+interface IntegrateFeatureOutput {
+    success: boolean;
+    message: string;
+}
+
+export interface DisableFeatureData {
+    project_uuid: string;
+    feature_uuid: string;
+}
+
+export interface GetSkillMetricsResponse {
+    message: string;
+    error: string;
+    data: { title: string; value: string; variation: number; }[][];
+}
+
+export interface UpdateAgentSettingsResponse {
+    message: string;
+    error: string;
+}
+
+
+export class FeaturesAdapter {
+    static async integrateFeature(input: IntegrateFeatureInput): Promise<IntegrateFeatureOutput> {
+        try {
+            const adaptedData = {
+                feature_uuid: input.featureId,
+                project_uuid: input.projectId,
+                store: input.storeName,
+                flows_channel_uuid: input.flowsChannelId,
+                wpp_cloud_app_uuid: input.whatsappAppId,
+            };
+
+            const response = await integrateAgentRequest(adaptedData);
+
+            return {
+                success: !response.error,
+                message: response.message,
+            };
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Feature integration failed: ${error.message}`);
+            }
+            throw new Error('Feature integration failed: Unknown error');
+        }
+    }
+}
+
+export interface UpdateAgentSettingsData {
+    feature_uuid: string;
+    project_uuid: string;
+    integration_settings: {
+        message_time_restriction?: {
+            is_active: boolean;
+            periods: {
+                weekdays: { from: string; to: string };
+                saturdays: { from: string; to: string };
+            };
+        };
+        order_status_restriction?: {
+            is_active: boolean;
+            phone_numbers: string[];
+            sellers: string[];
+        };
+    };
+}
+
+
+export function adaptUpdateAgentSettingsRequest(data: UpdateAgentSettingsData) {
+    return {
+        feature_uuid: data.feature_uuid,
+        project_uuid: data.project_uuid,
+        integration_settings: data.integration_settings,
+    };
+}
+
+export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsResponse) {
+    return {
+        message: response.message,
+        error: response.error,
+    };
+}
+
+export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) {
+    return {
+        message: response.message,
+        error: response.error,
+        data: response.data,
+    };
 }
