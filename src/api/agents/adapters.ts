@@ -1,12 +1,13 @@
-
 import { integrateAgentRequest } from "./requests";
 
-type AgentConfig = {
+export type AgentConfig = {
+  code: string;
+  uuid: string;
   integration_settings?: {
     order_status_restriction?: {
       phone_numbers: string;
     };
-    message_time_restriction: {
+    message_time_restriction?: {
       is_active: boolean;
       periods: {
         saturdays: {
@@ -41,17 +42,24 @@ export interface AgentsListResponse {
 
 function isInTest(config?: AgentConfig) {
   if (config && Object.keys(config).length === 0) {
-    return true;
+    return false;
   }
-  
-  const phoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
-  const hasPhoneNumber = phoneNumber
-    && phoneNumber?.length > 0 || false;
+
+  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
+    && config?.integration_settings?.order_status_restriction?.phone_numbers.length > 0;
+
+  return hasPhoneNumber || false;
+}
+
+function isConfiguring(config?: AgentConfig) {
+  if (config && Object.keys(config).length === 0) {
+    return false;
+  }
   
   const syncStatus = config?.templates_synchronization_status;
   const isPendingOrRejected = syncStatus === 'pending' || syncStatus === 'rejected';
 
-  return hasPhoneNumber || isPendingOrRejected || false;
+  return isPendingOrRejected || false;
 }
 
 export function adapterAgentsList(response: AgentsListResponse) {
@@ -60,6 +68,7 @@ export function adapterAgentsList(response: AgentsListResponse) {
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
+    isConfiguring: isConfiguring(agent.config),
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
       []
@@ -87,6 +96,7 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     category: agent.category,
     code: agent.code,
     isInTest: isInTest(agent.config),
+    isConfiguring: isConfiguring(agent.config),
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
       [],
