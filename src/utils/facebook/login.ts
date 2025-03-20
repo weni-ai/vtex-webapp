@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createChannel } from "../../services/channel.service";
 import getEnv from "../env";
 
@@ -90,7 +89,7 @@ export function startFacebookLogin(project_uuid: string) {
         window.addEventListener("message", sessionInfoListener);
 
         FB.login(
-            (response: any) => {
+            (response) => {
                 if (response.authResponse) {
                     const code = response.authResponse.code;
                     console.log("Login Successful.");
@@ -100,7 +99,7 @@ export function startFacebookLogin(project_uuid: string) {
                 }
             },
             {
-                config_id: configId,
+                config_id: configId ?? "",
                 response_type: "code",
                 override_default_response_type: true,
                 extras: {
