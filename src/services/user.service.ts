@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setLoadingSetup, setProjectUuid } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
-import { updateFeatureList } from "./features.service";
+import { updateAgentsList } from "./agent.service";
+import { userAdapters } from "../api/users/adapters";
+import { UserData } from "../interfaces/Store";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -10,18 +11,7 @@ export function getUserFromLocalStorage() {
 }
 
 export async function fetchUserData() {
-  try {
-    const response = await VTEXFetch('/api/vtexid/pub/authenticated/user');
-
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error fetching user data.');
-    }
-
-    return { success: true, data: response };
-  } catch (error) {
-    console.error('error fetching user data:', error);
-    return { success: false, error: error || 'unknown error' };
-  }
+  return userAdapters.fetchUserData();
 }
 
 export async function fetchAccountData() {
@@ -60,7 +50,7 @@ export async function checkProject(vtex_account: string, user_email: string) {
   }
 }
 
-export async function createUserAndProject(userData: any) {
+export async function createUserAndProject(userData: UserData) {
   store.dispatch(setLoadingSetup(true));
 
   try {
@@ -86,7 +76,7 @@ export async function createUserAndProject(userData: any) {
     store.dispatch(setProjectUuid(response.project_uuid));
     store.dispatch(setLoadingSetup(false));
 
-    await updateFeatureList();
+    await updateAgentsList();
     return { success: true, data: response };
   } catch (error) {
     console.error('error in project and user creation:', error);
