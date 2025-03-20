@@ -1,5 +1,3 @@
-console.log('test');
-
 function log(...messages) {
   console.log(`[Gist Pixel Script - ${new Date().toISOString()}] ${messages.join(' ')}`);
 }
