@@ -10,48 +10,44 @@ export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agen
 
   const url = '/_v/update-feature-settings';
 
-  let body;
+const messageTimeRestriction = formData?.messageTimeRestriction;
+const orderStatusRestriction = formData?.order_status_restriction;
 
-  if (code === 'abandoned_cart') {
-    body = {
-      "feature_uuid": agentUuid,
-      "project_uuid": projectUuid,
-      "integration_settings": {
-        "message_time_restriction": {
-          "is_active": formData?.messageTimeRestriction?.isActive || false,
-          "periods": {
-            "weekdays": {
-              "from": formData?.messageTimeRestriction?.periods?.weekdays?.from || "",
-              "to": formData?.messageTimeRestriction?.periods?.weekdays?.to || ""
+const integrationSettings =
+    code === "abandoned_cart"
+      ? {
+          message_time_restriction: {
+            is_active: messageTimeRestriction?.isActive || false,
+            periods: {
+              weekdays: {
+                from: messageTimeRestriction?.periods?.weekdays?.from || "",
+                to: messageTimeRestriction?.periods?.weekdays?.to || "",
+              },
+              saturdays: {
+                from: messageTimeRestriction?.periods?.saturdays?.from || "",
+                to: messageTimeRestriction?.periods?.saturdays?.to || "",
+              },
             },
-            "saturdays": {
-              "from": formData?.messageTimeRestriction?.periods?.saturdays?.from || "",
-              "to": formData?.messageTimeRestriction?.periods?.saturdays?.to || ""
-            }
-          }
+          },
         }
-      }
-    };
-  } else if (code === 'order_status') {
-    body = {
-      "feature_uuid": agentUuid,
-      "project_uuid": projectUuid,
-      "integration_settings": {
-        "order_status_restriction": {
-          "is_active": formData?.order_status_restriction?.is_active || false,
-          "phone_number": formData?.order_status_restriction?.phone_number || "",
-          "sellers": formData?.order_status_restriction?.sellers || []
+      : {
+          order_status_restriction: {
+            is_active: orderStatusRestriction?.is_active || false,
+            phone_number: orderStatusRestriction?.phone_number || "",
+            sellers: orderStatusRestriction?.sellers || [],
+          },
         }
-      }
-    };
-  }
 
   const response = await VTEXFetch<AgentsSettingsUpdateResponse>(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      feature_uuid: agentUuid,
+      project_uuid: projectUuid,
+      integration_settings: integrationSettings,
+    }),
   });
 
   return adapterAgentsSettingsUpdate(response);
