@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest, createAgentBuilderRequest } from "../api/agents/requests";
+import { UpdateAgentSettingsData } from "../api/agents/adapters";
+import { disableFeatureRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest, createAgentBuilderRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
 import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -121,18 +121,5 @@ export async function disableAgent(project_uuid: string, feature_uuid: string) {
     return { success: false, error: error || 'unknown error' };
   } finally {
     store.dispatch(setDisableAgentLoading(false))
-  }
-}
-
-export async function getSkillMetrics() {
-  try {
-    const response = await getSkillMetricsRequest() as GetSkillMetricsResponse;
-    if (!response.data) {
-      throw new Error('No metrics data received');
-    }
-    return adaptGetSkillMetricsResponse(response);
-  } catch (error: unknown) {
-    console.error('error getting skill metrics:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
   }
 }
