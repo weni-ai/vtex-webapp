@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Button,
   Container,
@@ -90,7 +89,7 @@ export function AgentBuilder() {
   const handleSubmit = () => {
     const payload = Object.fromEntries(
       Object.entries(form).filter(([_, value]) => value.trim())
-    );
+    ) as FormState;
     buildAgent(payload, project);
     setOpenTerms(false)
   };
