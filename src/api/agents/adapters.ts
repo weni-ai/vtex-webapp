@@ -45,7 +45,7 @@ function isInTest(config?: AgentConfig) {
   }
   
   const phoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
-  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
+  const hasPhoneNumber = phoneNumber
     && phoneNumber?.length > 0 || false;
   
   const syncStatus = config?.templates_synchronization_status;
