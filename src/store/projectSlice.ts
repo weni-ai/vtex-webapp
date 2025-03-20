@@ -1,6 +1,5 @@
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Feature, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -10,7 +9,7 @@ const initialState: ProjectState = {
   setupError: false,
   agentBuilderLoading: false,
   wppLoading: false,
-  agentsLoading: false,
+  agentsLoading: [],
   updateAgentLoading: false,
   disableAgentLoading: false,
   agentBuilder: {
@@ -18,7 +17,7 @@ const initialState: ProjectState = {
     links: [],
     occupation: '',
     objective: '',
-    channel: 'faststore'
+    channel: ''
   },
   agents: [],
   integratedAgents: []
@@ -49,7 +48,7 @@ const projectSlice = createSlice({
     setWppLoading: (state, action: PayloadAction<boolean>) => {
       state.wppLoading = action.payload;
     },
-    setAgentsLoading: (state, action: PayloadAction<boolean>) => {
+    setAgentsLoading: (state, action: PayloadAction<Loading[]>) => {
       state.agentsLoading = action.payload;
     },
     setAgentBuilder: (state, action: PayloadAction<Agent>) => {
