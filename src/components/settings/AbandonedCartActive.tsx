@@ -33,7 +33,7 @@ export function PreferencesAbandonedCartActive() {
       convertStringToTimeValue(currentMessageTimeRestrictions?.periods?.saturdays?.from) :
       null
   );
-      const [saturdaysTo, setSaturdaysTo] = useState<TimeType>(
+  const [saturdaysTo, setSaturdaysTo] = useState<TimeType>(
     currentMessageTimeRestrictions?.periods?.saturdays?.to ?
       convertStringToTimeValue(currentMessageTimeRestrictions?.periods?.saturdays?.to) :
       null
@@ -82,6 +82,7 @@ export function PreferencesAbandonedCartActive() {
                 <Flex>
                   <TimeInput
                     className='custom-time-input'
+                    data-testid="time-input"
                     value={weekdaysFrom}
                     onChange={handleTimeChange(setWeekdaysFrom)}
                   />
@@ -91,6 +92,7 @@ export function PreferencesAbandonedCartActive() {
                 <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.to')}</Text>
                 <TimeInput
                   className='custom-time-input'
+                  data-testid="time-input-weekdays-to"
                   value={weekdaysTo}
                   onChange={handleTimeChange(setWeekdaysTo)}
                 />
@@ -104,6 +106,7 @@ export function PreferencesAbandonedCartActive() {
               <GridCell>
                 <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.from')}</Text>
                 <TimeInput
+                  data-testid="time-input-saturdays-from"
                   className='custom-time-input'
                   value={saturdaysFrom}
                   onChange={handleTimeChange(setSaturdaysFrom)}
@@ -112,6 +115,7 @@ export function PreferencesAbandonedCartActive() {
               <GridCell>
                 <Text variant="body" color="$fg-base-soft">{t('agents.categories.active.abandoned_cart.settings.restriction.to')}</Text>
                 <TimeInput
+                  data-testid="time-input-saturdays-to"
                   className='custom-time-input'
                   value={saturdaysTo}
                   onChange={handleTimeChange(setSaturdaysTo)}
