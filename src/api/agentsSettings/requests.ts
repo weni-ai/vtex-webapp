@@ -6,8 +6,6 @@ import store from "../../store/provider.store";
 
 export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agentUuid: string, code: Feature['code'], formData: SettingsFormData }) {
   const projectUuid = store.getState().project.project_uuid;
-
-  console.log('formData', formData);
   
   const url = '/_v/update-feature-settings';
 
