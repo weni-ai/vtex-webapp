@@ -52,11 +52,14 @@ export async function setAgentBuilder(
 }
 
 export async function updateAgentsList() {
-  const availableAgents = await agentsList();
-  store.dispatch(setAgents(availableAgents));
+  const [availableAgents, integratedAgents] = await Promise.all([
+    agentsList(),
+    integratedAgentsList()
+  ]);
 
-  const integratedAgents = await integratedAgentsList();
-  store.dispatch(setIntegratedAgents(integratedAgents))
+  store.dispatch(setAgents(availableAgents));
+  store.dispatch(setIntegratedAgents(integratedAgents));
+
   store.dispatch(setAgentsLoading(availableAgents.map(agent => ({ agent_uuid: agent.uuid, isLoading: false }))))
 }
 
