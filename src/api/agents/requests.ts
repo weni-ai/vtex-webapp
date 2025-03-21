@@ -101,7 +101,7 @@ export async function integrateAgentRequest(data: IntegrateAgentData) {
 }
 
 export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
-  const adaptedData = adaptUpdateAgentSettingsRequest(data);
+  const adaptedData = adaptUpdateAgentSettingsRequest(store.getState().project.project_uuid, data);
   
   const response = await VTEXFetch<UpdateAgentSettingsResponse>(
     '/_v/update-feature-settings',

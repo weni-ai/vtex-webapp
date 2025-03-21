@@ -6,10 +6,6 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
     if (existingScript) {
         existingScript.remove();
     }
-
-    if (window.FB) {
-        delete window.FB;
-    }
     
     window.fbAsyncInit = function () {
         FB.init({

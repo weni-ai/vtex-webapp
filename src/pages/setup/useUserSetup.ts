@@ -75,7 +75,7 @@ export function useUserSetup() {
           );
         }
 
-        if (has_whatsapp) {
+        if (has_whatsapp && wpp_cloud_app_uuid && flows_channel_uuid) {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
@@ -101,7 +101,7 @@ export function useUserSetup() {
   const initializeUser = useCallback(async () => {
     const userData = store.getState().user.userData;
     const project_uuid = store.getState().project.project_uuid
-    if (!project_uuid) {
+    if (!project_uuid && userData) {
       const response = await createUserAndProject(userData);
       if (response.error) {
         console.error("error during user initialization:", response.error);
