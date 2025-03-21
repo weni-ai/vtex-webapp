@@ -1,28 +1,16 @@
 import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
-import { DashboardItem } from '../components/DashboardItem';
 import { FeatureBox } from '../components/FeatureBox';
 import { useSelector } from 'react-redux';
 import { agents, integratedAgents, selectProject } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
-import { useEffect, useState } from 'react';
-import { getSkillMetrics, updateAgentsList } from '../services/agent.service';
+import { useEffect } from 'react';
+import { updateAgentsList } from '../services/agent.service';
 
 export function Dashboard() {
-  const [data, setData] = useState<{ title: string; value: string; variation: number }[][]>([]);
   const agentsList = useSelector(agents)
   const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getSkillMetrics();
-      if ('data' in response) {
-        setData(response.data);
-      }
-    };
-    fetchData();
-  }, []);
 
   function navigateToAgent() {
     const dash = new URL(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`);
@@ -86,63 +74,6 @@ export function Dashboard() {
               </Button>
             </Flex>
           </Alert>
-
-          <Flex
-            direction="column"
-            gap="$space-0"
-          >
-            {data.map((line, indexOfLine) => (
-              <Grid
-                key={`line-${indexOfLine}`}
-                columns="1fr 1fr 1fr"
-                gap="$space-0"
-                style={{
-                  borderBottom: indexOfLine !== data.length - 1 ? 'var(--sl-border-base)' : undefined,
-                }}
-              >
-                {line.map((detail, indexOfDetail) => (
-                  <DashboardItem
-                    key={`detail-${detail.value}`}
-                    title={detail.title}
-                    value={detail.value}
-                    percentageDifference={detail.variation}
-                    style={{
-                      borderRight: indexOfDetail !== line.length - 1 ? 'var(--sl-border-base)' : undefined,
-                    }}
-                  />
-                ))}
-              </Grid>
-            ))}
-          </Flex>
-
-          <Flex
-            direction="column"
-            gap="$space-0"
-          >
-            {data.map((line, indexOfLine) => (
-              <Grid
-                key={`line-${indexOfLine}`}
-                columns="1fr 1fr 1fr"
-                gap="$space-0"
-                style={{
-                  borderBottom: indexOfLine !== data.length - 1 ? 'var(--sl-border-base)' : undefined,
-                }}
-              >
-                {line.map((detail, indexOfDetail) => (
-                  <DashboardItem
-                    key={`detail-${detail.value}`}
-                    title={detail.title}
-                    value={detail.value}
-                    percentageDifference={detail.variation}
-                    style={{
-                      borderRight: indexOfDetail !== line.length - 1 ? 'var(--sl-border-base)' : undefined,
-                    }}
-                  />
-                ))}
-              </Grid>
-            ))}
-          </Flex>
-
 
           <Heading
             variant="display2"
