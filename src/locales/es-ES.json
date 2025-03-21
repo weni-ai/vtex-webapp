@@ -39,14 +39,14 @@
                     },
                     "settings": {
                         "is_test_contact_number": {
-                            "title": "Restringir al número de contacto de prueba",
+                            "title": "Restringir a número de prueba",
                             "description": "El agente enviará mensajes solo al número de teléfono de prueba"
                         },
                         "test_contact_number": {
                             "label": "Número de teléfono"
                         },
                         "is_selected_sellers": {
-                            "title": "Restringido para vendedores seleccionados",
+                            "title": "Restringido a vendedores seleccionados",
                             "description": "El agente enviará mensajes solo a vendedores seleccionados"
                         },
                         "selected_sellers": {
@@ -56,7 +56,7 @@
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de carrito abandonado",
+                    "title": "Agente de recuperación de carrito",
                     "description": "Recupera ventas recordando a los clientes los artículos dejados en el carrito.",
                     "details": {
                         "title": "Recupera ventas recordando a los clientes los artículos dejados en el carrito.",
