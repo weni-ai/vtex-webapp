@@ -46,7 +46,7 @@ export function AgentBuilder() {
     knowledge: useSelector(getAgentBuilder).links[0] || '',
     occupation: useSelector(getAgentBuilder).occupation || t('agent.setup.forms.occupation.default'),
     objective: useSelector(getAgentBuilder).objective || t('agent.setup.forms.objective.default'),
-    channel: useSelector(getAgentBuilder).channel|| t('agent.setup.forms.channel.default'),
+    channel: useSelector(getAgentBuilder).channel || t('agent.setup.forms.channel.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
@@ -113,7 +113,7 @@ export function AgentBuilder() {
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
-            <Button variant="primary" size="large" onClick={handleOpenTerms} disabled={!isWppIntegrated || isAgentBuilderLoading}>
+            <Button variant="primary" size="large" onClick={handleOpenTerms} disabled={!isWppIntegrated || isAgentBuilderLoading || !form.channel}>
               {isAgentBuilderLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
@@ -126,9 +126,9 @@ export function AgentBuilder() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setForm({ ...form, channel: e.target.value })}
             >
               <Flex direction="row" gap="var(--space-5, 20px)">
-                <Radio value={'faststore'}>{t('agent.setup.forms.channel.faststore')}</Radio>
-                <Radio value={'portal'}>{t('agent.setup.forms.channel.portal')}</Radio>
-                <Radio value={'site_editor'}>{t('agent.setup.forms.channel.site_editor')}</Radio>
+                <Radio value={'faststore'} checked={form.channel === 'faststore'}>{t('agent.setup.forms.channel.faststore')}</Radio>
+                <Radio value={'portal'} checked={form.channel === 'portal'}>{t('agent.setup.forms.channel.portal')}</Radio>
+                <Radio value={'site_editor'} checked={form.channel === 'site_editor'}>{t('agent.setup.forms.channel.site_editor')}</Radio>
               </Flex>
             </RadioGroup>
           </Flex>
