@@ -23,10 +23,8 @@ if (locale) {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-        <App />
-        <ToastStack />
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <App />
+    <ToastStack />
+  </Provider>
 );
