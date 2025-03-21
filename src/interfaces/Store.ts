@@ -16,10 +16,25 @@ export interface Feature {
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
+    isConfiguring: boolean;
+    phone_numbers?: string[];
+    message_time_restrictions?: {
+        is_active: boolean;
+        periods: {
+            weekdays: {
+                from: string;
+                to: string;
+            };
+            saturdays: {
+                from: string;
+                to: string;
+            };
+        };
+    };
 }
 
 export interface Loading {
-    feature_uuid: string,
+    agent_uuid: string,
     isLoading: boolean
 }
 
@@ -29,7 +44,7 @@ export interface ProjectState {
     flows_channel_uuid: string;
     loadingSetup: boolean;
     agentBuilderLoading: boolean;
-    agentsLoading: boolean;
+    agentsLoading: Loading[];
     updateAgentLoading: boolean;
     disableAgentLoading: boolean;
     agentBuilder: Agent;
@@ -59,8 +74,7 @@ export interface UserState {
     accountData: AccountData | null;
     loadingWhatsAppIntegration: boolean;
     isWhatsAppIntegrated: boolean;
-    isAgentIntegrated: boolean;
-    isFeatureIntegrated: boolean;
+    isAgentBuilderIntegrated: boolean;
     whatsAppError: string | null;
 }
 

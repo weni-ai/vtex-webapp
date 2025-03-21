@@ -1,3 +1,4 @@
+import { SettingsFormData } from "../../components/settings/SettingsContainer/SettingsContext";
 import { integrateAgentRequest } from "./requests";
 
 export type AgentConfig = {
@@ -162,30 +163,16 @@ export class FeaturesAdapter {
 }
 
 export interface UpdateAgentSettingsData {
-    feature_uuid: string;
-    project_uuid: string;
-    integration_settings: {
-        message_time_restriction?: {
-            is_active: boolean;
-            periods: {
-                weekdays: { from: string; to: string };
-                saturdays: { from: string; to: string };
-            };
-        };
-        order_status_restriction?: {
-            is_active: boolean;
-            phone_numbers: string[];
-            sellers: string[];
-        };
-    };
+    agentUuid: string;
+    formData: SettingsFormData,
 }
 
 
-export function adaptUpdateAgentSettingsRequest(data: UpdateAgentSettingsData) {
+export function adaptUpdateAgentSettingsRequest(projectUuid: string, data: UpdateAgentSettingsData) {
     return {
-        feature_uuid: data.feature_uuid,
-        project_uuid: data.project_uuid,
-        integration_settings: data.integration_settings,
+        feature_uuid: data.agentUuid,
+        project_uuid: projectUuid,
+        integration_settings: data.formData,
     };
 }
 
