@@ -113,7 +113,8 @@
             },
             "add": "Agregar agente",
             "added": "Agente activo",
-            "test": "Agente en prueba"
+            "test": "Agente en prueba",
+            "configuring": "Configurando agente"
         }
     },
     "setup": {
