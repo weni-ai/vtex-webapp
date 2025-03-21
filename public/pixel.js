@@ -50,7 +50,7 @@ function seeOrderForm() {
 
       const { profile, account } = await getDetails();
 
-      const phone = profile.phone?.value;
+      const phone = profile.phone?.value || data.clientProfileData.phone;
 
       fetch('/_v/abandoned-cart-notification', {
         method: 'POST',
@@ -62,6 +62,7 @@ function seeOrderForm() {
           cart_id: data.orderFormId,
           phone,
           account: account.accountName?.value,
+          name: data.clientProfileData.firstName,
         }),
       });
     });
