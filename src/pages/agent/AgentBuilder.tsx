@@ -22,7 +22,7 @@ import {
 } from '@vtex/shoreline';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { agentBuilderLoading, getAgentBuilder, loadingSetup } from '../../store/projectSlice';
+import { agentBuilderLoading, getAgentBuilder, loadingSetup, setStoreType } from '../../store/projectSlice';
 import { isAgentBuilderIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
@@ -32,6 +32,8 @@ import { useNavigate } from 'react-router-dom';
 import question from '../../assets/icons/question.svg'
 import { TermsAndConditions } from '../../components/TermsAndConditions';
 import { cleanURL } from '../../utils';
+import store from '../../store/provider.store';
+import { VTEXFetch } from '../../utils/VTEXFetch';
 
 interface FormState {
   name: string;
@@ -41,13 +43,30 @@ interface FormState {
   channel: string;
 }
 
+async function updateStoreType(storeType: string) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  await VTEXFetch('/_v/set-vtex-store-type', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "projectUUID": projectUuid,
+      "vtexStoreType": storeType,
+    }),
+  });
+
+  store.dispatch(setStoreType(storeType));
+}
+
 export function AgentBuilder() {
   const [form, setForm] = useState<FormState>({
     name: useSelector(getAgentBuilder).name || '',
     knowledge: useSelector(getAgentBuilder).links[0] || '',
     occupation: useSelector(getAgentBuilder).occupation || t('agent.setup.forms.occupation.default'),
     objective: useSelector(getAgentBuilder).objective || t('agent.setup.forms.objective.default'),
-    channel: useSelector(getAgentBuilder).channel || 'faststore',
+    channel: store.getState().project.storeType || '',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
@@ -94,13 +113,15 @@ export function AgentBuilder() {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const payload = Object.fromEntries(
       Object.entries(form).filter(([_, value]) => value.trim())
     ) as FormState;
 
     buildAgent(payload);
-    setOpenTerms(false)
+    setOpenTerms(false);
+
+    await updateStoreType(form.channel);
   };
 
   return (
