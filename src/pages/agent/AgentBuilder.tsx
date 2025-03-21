@@ -31,6 +31,7 @@ import { Channel } from '../Channel';
 import { useNavigate } from 'react-router-dom';
 import question from '../../assets/icons/question.svg'
 import { TermsAndConditions } from '../../components/TermsAndConditions';
+import { cleanURL } from '../../utils';
 
 interface FormState {
   name: string;
@@ -46,7 +47,7 @@ export function AgentBuilder() {
     knowledge: useSelector(getAgentBuilder).links[0] || '',
     occupation: useSelector(getAgentBuilder).occupation || t('agent.setup.forms.occupation.default'),
     objective: useSelector(getAgentBuilder).objective || t('agent.setup.forms.objective.default'),
-    channel: useSelector(getAgentBuilder).channel || t('agent.setup.forms.channel.default'),
+    channel: useSelector(getAgentBuilder).channel || 'faststore',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
   const [openTerms, setOpenTerms] = useState(false)
@@ -81,7 +82,7 @@ export function AgentBuilder() {
 
   const handleInputChange = (field: keyof FormState, value: string) => {
     if (field === 'knowledge') {
-      value = value.trim().replace(/^https?:\/\//, '');
+      value = cleanURL(value);
     }
 
     setForm((prev) => ({ ...prev, [field]: value }));
