@@ -38,7 +38,8 @@ export interface AgentsListResponse {
     config?: AgentConfig;
     sectors: string[];
     initial_flow: { uuid: string; name: string; }[];
-  }[]
+  }[],
+  store_type: string;
 };
 
 function isInTest(config?: AgentConfig) {
