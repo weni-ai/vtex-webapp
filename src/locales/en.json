@@ -203,6 +203,11 @@
                 "2": "1.2 Subject to the conditions set forth in this T&C, VTEX will make the Weni Platform by VTEX available and grant the Contractor a non-exclusive right to access and use the Weni Platform by VTEX for its internal business purposes."
             }
         },
+        "description": "By using this application, acceptance of the Terms and Conditions is required. These terms define access to and use of the services, detailing the selected plan's features, limitations, pricing, and renewal policies. Additionally, they outline product functionality, usage guidelines, and any applicable restrictions to ensure a secure and optimal experience.",
+        "plan_details": {
+            "title": "1. Plan Details",
+            "description": "Your selected plan includes specific features, limitations, and billing terms. Please check your subscription details to understand what is included and how renewals work."
+        },
         "responsabilities": {
             "title": "2. Contractor's Responsibilities",
             "description": {

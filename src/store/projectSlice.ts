@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AgentBuilder, Agents, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { cleanURL } from '../utils';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -51,8 +52,11 @@ const projectSlice = createSlice({
     setAgentsLoading: (state, action: PayloadAction<Loading[]>) => {
       state.agentsLoading = action.payload;
     },
-    setAgentBuilder: (state, action: PayloadAction<AgentBuilder>) => {
-      state.agentBuilder = action.payload;
+    setAgentBuilder: (state, action: PayloadAction<Agent>) => {
+      state.agentBuilder = {
+        ...action.payload,
+        links: action.payload.links.map(cleanURL),
+      };
     },
     setAgents: (state, action: PayloadAction<Agents[]>) => {
       state.agents = action.payload;

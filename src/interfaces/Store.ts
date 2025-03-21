@@ -17,12 +17,18 @@ export interface Agents {
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
     isConfiguring: boolean;
-    phone_numbers: string[];
+    phone_numbers?: string[];
     message_time_restrictions?: {
         is_active: boolean;
         periods: {
-            weekdays: { from: string; to: string };
-            saturdays: { from: string; to: string };
+            weekdays: {
+                from: string;
+                to: string;
+            };
+            saturdays: {
+                from: string;
+                to: string;
+            };
         };
     };
 }
@@ -38,7 +44,7 @@ export interface ProjectState {
     flows_channel_uuid: string;
     loadingSetup: boolean;
     agentBuilderLoading: boolean;
-    agentsLoading: boolean;
+    agentsLoading: Loading[];
     updateAgentLoading: boolean;
     disableAgentLoading: boolean;
     agentBuilder: Agent;

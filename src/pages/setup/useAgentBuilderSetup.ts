@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { setAgentBuilder } from '../../services/agent.service';
+import { setAgentBuilder, updateAgentsList } from '../../services/agent.service';
 import { useSelector } from 'react-redux';
 import { toast } from '@vtex/shoreline';
 import store from '../../store/provider.store';
@@ -15,7 +15,7 @@ export function useAgentBuilderSetup() {
         knowledge: string;
         occupation: string;
         objective: string;
-      }, app_uuid: string) => {
+      }) => {
         store.dispatch(setAgentBuilderLoading(true))
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
@@ -40,9 +40,12 @@ export function useAgentBuilderSetup() {
             toast.critical(t('agent.error'));
         } else {
             toast.success(t('agent.success'))
-            const orderStatus = store.getState().project.agents.find(item => item.code === 'order_status')?.uuid
-            if (orderStatus) {
-                const integrateResponse = await integrateAgent(orderStatus, project)
+            
+            await updateAgentsList();
+            const orderStatusUuid = store.getState().project.agents.find(item => item.code === 'order_status')?.uuid
+            
+            if (orderStatusUuid) {
+                const integrateResponse = await integrateAgent(orderStatusUuid, project)
                 if(integrateResponse?.error){
                     toast.critical(t('integration.error'));
                 }
