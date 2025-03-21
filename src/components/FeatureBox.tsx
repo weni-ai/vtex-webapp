@@ -3,12 +3,13 @@ import { AboutAgent } from "./AboutAgent";
 import { useMemo, useState } from "react";
 import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { agents, agentsLoading, getAgentChannel, selectProject} from "../store/projectSlice";
+import { agents, agentsLoading, selectProject} from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 import wrench from '../assets/icons/Wrench.svg'
 import { AddAbandonedCart } from "./AddAbandonedCart";
+import store from "../store/provider.store";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -21,7 +22,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
   const agentsList = useSelector(agents)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
   const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
-  const channel = useSelector(getAgentChannel)
+  const channel = store.getState().project.storeType
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
