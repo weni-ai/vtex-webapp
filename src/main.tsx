@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@vtex/shoreline/css';
 import App from './App.tsx';
@@ -23,10 +22,8 @@ if (locale) {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-        <App />
-        <ToastStack />
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <App />
+    <ToastStack />
+  </Provider>
 );
