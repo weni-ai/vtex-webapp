@@ -1,19 +1,18 @@
 import { SettingsFormData } from "../../components/settings/SettingsContainer/SettingsContext";
-import { useSelector } from "react-redux";
-import { selectProject } from "../../store/projectSlice";
 import { VTEXFetch } from "../../utils/VTEXFetch";
 import { adapterAgentsSettingsUpdate, AgentsSettingsUpdateResponse } from "./adapters";
 import { Feature } from "../../interfaces/Store";
+import store from "../../store/provider.store";
 
 export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agentUuid: string, code: Feature['code'], formData: SettingsFormData }) {
-  const projectUuid = useSelector(selectProject);
-
+  const projectUuid = store.getState().project.project_uuid;
+  
   const url = '/_v/update-feature-settings';
 
-const messageTimeRestriction = formData?.messageTimeRestriction;
-const orderStatusRestriction = formData?.order_status_restriction;
+  const messageTimeRestriction = formData?.messageTimeRestriction;
+  const orderStatusRestriction = formData?.order_status_restriction;
 
-const integrationSettings =
+  const integrationSettings =
     code === "abandoned_cart"
       ? {
           message_time_restriction: {
@@ -33,7 +32,7 @@ const integrationSettings =
       : {
           order_status_restriction: {
             is_active: orderStatusRestriction?.is_active || false,
-            phone_number: orderStatusRestriction?.phone_number || "",
+            phone_numbers: orderStatusRestriction?.phone_numbers || "",
             sellers: orderStatusRestriction?.sellers || [],
           },
         }

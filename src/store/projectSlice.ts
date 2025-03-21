@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { cleanURL } from '../utils';
 
 const initialState: ProjectState = {
   project_uuid: '',
@@ -52,7 +53,10 @@ const projectSlice = createSlice({
       state.agentsLoading = action.payload;
     },
     setAgentBuilder: (state, action: PayloadAction<Agent>) => {
-      state.agentBuilder = action.payload;
+      state.agentBuilder = {
+        ...action.payload,
+        links: action.payload.links.map(cleanURL),
+      };
     },
     setAgents: (state, action: PayloadAction<Feature[]>) => {
       state.agents = action.payload;
