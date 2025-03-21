@@ -79,8 +79,13 @@ export function AgentBuilder() {
     return !Object.values(newErrors).some((error) => error);
   };
 
-  const handleInputChange = (field: keyof FormState, value: string) =>
+  const handleInputChange = (field: keyof FormState, value: string) => {
+    if (field === 'knowledge') {
+      value = value.trim().replace(/^https?:\/\//, '');
+    }
+
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
 
   const handleOpenTerms = () => {
     if (validateForm() && isWppIntegrated) {
