@@ -50,7 +50,7 @@ export function useUserSetup() {
         await updateAgentsList();
 
         const response = await checkWppIntegration(project_uuid);
-        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data.data || {};
+        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data || {};
 
         if (response?.error) {
           throw new Error(JSON.stringify(response.error))

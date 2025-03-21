@@ -3,6 +3,11 @@ import { checkWhatsAppIntegration } from "./requests";
 export interface WhatsAppIntegrationResponse {
     success: boolean;
     error?: string;
+    data?: {
+        has_whatsapp: boolean;
+        wpp_cloud_app_uuid: string;
+        flows_channel_uuid: string;
+    };
 }
 
 export interface WhatsAppAdapter {
@@ -18,7 +23,7 @@ export class VTEXWhatsAppAdapter implements WhatsAppAdapter {
                 throw new Error(response?.error || '');
             }
 
-            return { success: true };
+            return { success: true, data: response.data };
         } catch (error: unknown) {
             console.error('error verifying WhatsApp integration:', error);
             return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
