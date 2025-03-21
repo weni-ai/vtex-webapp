@@ -10,6 +10,7 @@ import {
   adaptUpdateAgentSettingsResponse 
 } from "./adapters";
 import store from "../../store/provider.store";
+import { setStoreType } from "../../store/projectSlice";
 interface IntegrateAgentData {
   feature_uuid: string;
   project_uuid: string;
@@ -58,6 +59,8 @@ export async function agentsList() {
       'Content-Type': 'application/json',
     },
   });
+
+  store.dispatch(setStoreType(response.store_type));
 
   return adapterAgentsList(response);
 }

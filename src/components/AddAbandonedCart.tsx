@@ -1,7 +1,5 @@
 import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Text, ModalFooter, IconCopySimple } from "@vtex/shoreline";
-import { getAgentChannel } from "../store/projectSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "src/interfaces/Store";
+import store from "../store/provider.store";
 export interface AddAbandonedCartProps {
     open: boolean,
     toggleModal: () => void;
@@ -9,7 +7,7 @@ export interface AddAbandonedCartProps {
 }
 
 export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCartProps) {
-    const channel = useSelector((state: RootState) => getAgentChannel(state));
+    const channel = store.getState().project.storeType;
     return (
         <Modal open={open} onClose={toggleModal} >
             <ModalHeader>
@@ -45,7 +43,7 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                         >
                             <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
                                 <code>
-                                    {`<script src="https://weni.ai/vtex-app.js"></script>`}
+                                    {`<script type="text/javascript" src="https://appvtexio.weni.ai/pixel.js"></script>`}
                                 </code>
                             </pre>
                             <Button
@@ -59,10 +57,10 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                                     transform: 'translateY(-50%)'
                                 }}
                                 onClick={() => {
-                                    navigator.clipboard.writeText(`script src="https://weni.ai/vtex-app.js"></script>`);
+                                    navigator.clipboard.writeText(`<script type="text/javascript" src="https://appvtexio.weni.ai/pixel.js"></script>`);
                                 }}
                             >
-                                {t('agents.common.copy_code')}
+                                {t('common.copy_code')}
                                 <IconCopySimple
                                     height="1rem"
                                     width="1rem"
@@ -107,7 +105,7 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                         >
                             <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
                                 <code>
-                                    {`<script src="https://weni.ai/vtex-app.js"></script>`}
+                                    {`<script type="text/javascript" src="https://appvtexio.weni.ai/pixel.js"></script>`}
                                 </code>
                             </pre>
                             <Button
@@ -121,10 +119,10 @@ export function AddAbandonedCart({ open, toggleModal, confirm }: AddAbandonedCar
                                     transform: 'translateY(-50%)'
                                 }}
                                 onClick={() => {
-                                    navigator.clipboard.writeText(`script src="https://weni.ai/vtex-app.js"></script>`);
+                                    navigator.clipboard.writeText(`<script type="text/javascript" src="https://appvtexio.weni.ai/pixel.js"></script>`);
                                 }}
                             >
-                                {t('agents.common.copy_code')}
+                                {t('common.copy_code')}
                                 <IconCopySimple
                                     height="1rem"
                                     width="1rem"

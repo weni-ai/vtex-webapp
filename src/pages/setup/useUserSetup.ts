@@ -70,7 +70,7 @@ export function useUserSetup() {
               links,
               objective,
               occupation,
-              channel: 'faststore'
+              channel: '',
             })
           );
         }
@@ -79,9 +79,11 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-          if (has_agent) {
+
+          await updateAgentsList();
+          
+          if (has_agent && store.getState().project.storeType) {
             store.dispatch(setAgentBuilderIntegrated(true))
-            await updateAgentsList()
             navigate('/dash');
           } else {
             navigate('/agent-builder');

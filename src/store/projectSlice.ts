@@ -21,7 +21,8 @@ const initialState: ProjectState = {
     channel: ''
   },
   agents: [],
-  integratedAgents: []
+  integratedAgents: [],
+  storeType: '',
 }
 
 const projectSlice = createSlice({
@@ -71,7 +72,9 @@ const projectSlice = createSlice({
     setDisableAgentLoading: (state, action: PayloadAction<boolean>) => {
       state.disableAgentLoading = action.payload;
     },
-
+    setStoreType: (state, action: PayloadAction<string>) => {
+      state.storeType = action.payload;
+    },
   }
 })
 
@@ -88,7 +91,8 @@ export const {
   setIntegratedAgents,
   setUpdateAgentLoading,
   setDisableAgentLoading,
-  setWppLoading
+  setWppLoading,
+  setStoreType,
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid

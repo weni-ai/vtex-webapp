@@ -52,6 +52,7 @@ export interface ProjectState {
     wppLoading: boolean;
     agents: Feature[];
     integratedAgents: Feature[];
+    storeType: string;
 }
 
 export interface UserData {
