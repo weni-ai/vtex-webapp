@@ -1,10 +1,12 @@
+import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, updateAgentSettingsRequest, createAgentBuilderRequest } from "../api/agents/requests";
+import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, createAgentBuilderRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
 import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
+import { Feature } from "../interfaces/Store";
 
 export async function checkAgentIntegration(project_uuid: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
@@ -93,12 +95,11 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
   }
 }
 
-export async function updateAgentSettings(body: UpdateAgentSettingsData) {
+export async function updateAgentSettings(code: Feature['code'], body: UpdateAgentSettingsData) {
   store.dispatch(setUpdateAgentLoading(true))
 
   try {
-    const response = await updateAgentSettingsRequest(body);
-
+    const response = await agentsSettingsUpdate({ agentUuid: body.agentUuid, code, formData: body.formData });
     if (!response || response.error) {
       throw new Error(response?.message || 'error updating agent.');
     }
