@@ -1,6 +1,6 @@
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
 import { agents, agentsLoading, getAgentChannel, selectProject} from "../store/projectSlice";
@@ -45,6 +45,19 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
       toast.success(t('integration.success'));
     }
   }
+
+  const status = useMemo(() => {
+    if (isInTest) {
+      return 'test';
+    } else if (isConfiguring) {
+      return 'configuring';
+    } else if (isIntegrated) {
+      return 'integrated';
+    } else {
+      return 'availableToIntegrate';
+    }
+  }, [isInTest, isConfiguring, isIntegrated]);
+  
   return (
     <>
       <Flex
@@ -79,17 +92,24 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
                 {t('common.details')}
               </MenuItem>
 
-              <MenuItem onClick={toggleIsPreferencesOpen}>
-                <IconGearSix />
-                {t('common.manage_settings')}
-              </MenuItem>
+              {
+                ['test', 'configuring', 'integrated'].includes(status)
+                && (
+                  <>
+                    <MenuItem onClick={toggleIsPreferencesOpen}>
+                      <IconGearSix />
+                      {t('common.manage_settings')}
+                    </MenuItem>
 
-              <MenuSeparator />
+                    <MenuSeparator />
 
-              <MenuItem onClick={openDisableModal}>
-                <IconPauseCircle />
-                {t('common.disable')}
-              </MenuItem>
+                    <MenuItem onClick={openDisableModal}>
+                      <IconPauseCircle />
+                      {t('common.disable')}
+                    </MenuItem>
+                  </>
+                )
+              }
             </MenuPopover>
           </MenuProvider>
         </Flex>
@@ -103,67 +123,64 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
           </Text>
         </Flex>
 
-
         {(() => {
-          if (isInTest) {
-            return (
-              <Flex
-                style={{
-                  padding: 'var(--sl-space-2)',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <img src={wrench} alt="" />
-                <Text variant="action" color="$fg-warning"> {t('agents.common.test')}</Text>
-              </Flex>
-            );
+          switch (status) {
+            case 'test':
+              return (
+                <Flex
+                  style={{
+                    padding: 'var(--sl-space-2)',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <img src={wrench} alt="" />
+                  <Text variant="action" color="$fg-warning"> {t('agents.common.test')}</Text>
+                </Flex>
+              );
+            case 'configuring':
+              return (
+                <Flex
+                  style={{
+                    padding: 'var(--sl-space-2)',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <Text variant="action" color="$fg-informational"> {t('agents.common.configuring')}</Text>
+                </Flex>
+              );
+            case 'integrated':
+              return (
+                <Flex
+                  style={{
+                    padding: 'var(--sl-space-2)',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <IconCheck color="green" />
+                  <Text variant="action" color="$fg-success">
+                    {t('agents.common.added')}
+                  </Text>
+                </Flex>
+              );
+            case 'availableToIntegrate':
+              return (
+                <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
+                  {
+                    isUpdateAgentLoading ?
+                      <Spinner description="loading" />
+                      :
+                      <>
+                        <IconPlus />
+                        <Text> {t('agents.common.add')}</Text>
+                      </>
+                  }
+                </Button>
+              );
           }
-          else if (isConfiguring) {
-            return (
-              <Flex
-                style={{
-                  padding: 'var(--sl-space-2)',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <Text variant="action" color="$fg-informational"> {t('agents.common.configuring')}</Text>
-              </Flex>
-            );
-          }
-          else if (isIntegrated) {
-            return (
-              <Flex
-                style={{
-                  padding: 'var(--sl-space-2)',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <IconCheck color="green" />
-                <Text variant="action" color="$fg-success">
-                  {t('agents.common.added')}
-                </Text>
-              </Flex>
-            );
-          }
-          return (
-            <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
-              {
-                isUpdateAgentLoading ?
-                  <Spinner description="loading" />
-                  :
-                  <>
-                    <IconPlus />
-                    <Text> {t('agents.common.add')}</Text>
-                  </>
-              }
-            </Button>
-          );
         })()}
-
-
       </Flex>
 
       <AboutAgent
