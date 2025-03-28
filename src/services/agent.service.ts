@@ -67,10 +67,22 @@ export async function updateAgentsList() {
 
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
   const agentsLoading = store.getState().project.agentsLoading;
-  const agentLoading = agentsLoading.find(loading => loading.agent_uuid === feature_uuid);
-  if (agentLoading) {
+  const agentLoadingExists = agentsLoading.find(loading => loading.agent_uuid === feature_uuid);
+
+  if (agentLoadingExists) {
+    const newAgentsLoading = agentsLoading.map(
+      ({ agent_uuid, isLoading }) =>
+        ({
+          agent_uuid,
+          isLoading: agent_uuid === feature_uuid ? true : isLoading,
+        })
+    );
+
+    store.dispatch(setAgentsLoading(newAgentsLoading));
+  } else {
     store.dispatch(setAgentsLoading([...agentsLoading, { agent_uuid: feature_uuid, isLoading: true }]));
   }
+
   try {
     const storeAddress = store.getState().auth.base_address;
     const flows_channel_uuid = store.getState().project.flows_channel_uuid;
