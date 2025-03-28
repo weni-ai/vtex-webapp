@@ -168,16 +168,9 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
               );
             case 'availableToIntegrate':
               return (
-                <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
-                  {
-                    isUpdateAgentLoading ?
-                      <Spinner description="loading" />
-                      :
-                      <>
-                        <IconPlus />
-                        <Text> {t('agents.common.add')}</Text>
-                      </>
-                  }
+                <Button variant="secondary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
+                  <IconPlus />
+                  <Text>{t('agents.common.add')}</Text>
                 </Button>
               );
           }
