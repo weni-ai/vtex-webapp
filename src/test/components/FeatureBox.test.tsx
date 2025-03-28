@@ -6,7 +6,6 @@ import { integrateAgent } from "../../services/agent.service";
 import "@testing-library/jest-dom";
 import { toast } from "@vtex/shoreline";
 
-// Mock initial state
 const mockState = {
     project: {
         project_uuid: "project-uuid",
@@ -72,10 +71,6 @@ describe("FeatureBox Component", () => {
     it("deve renderizar corretamente os textos e botões", () => {
         render(<FeatureBox {...mockProps} />);
 
-        // Debug the rendered output
-        screen.debug();
-
-        // More permissive queries to see what's available
         const allHeadings = screen.queryAllByRole('heading');
         console.log('All headings:', allHeadings.map(h => ({
             text: h.textContent,
@@ -83,7 +78,6 @@ describe("FeatureBox Component", () => {
             tag: h.tagName
         })));
 
-        // Fallback to finding any element with the text
         const allElements = screen.queryAllByText((content) =>
             content.includes('order_status')
         );
@@ -92,7 +86,6 @@ describe("FeatureBox Component", () => {
             tag: el.tagName
         })));
 
-        // For now, let's just verify the component renders
         expect(document.body).toBeInTheDocument();
     });
 

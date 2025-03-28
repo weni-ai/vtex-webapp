@@ -1,21 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import { Channel } from "../../pages/Channel";
+import { Dashboard } from "../../pages/Dashboard";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import projectReducer from "../../store/projectSlice";
+import userReducer from "../../store/userSlice";
 import { expect, vi, describe, it } from "vitest";
-import { startFacebookLogin } from "../../utils/facebook/login";
+import { UserState } from "src/interfaces/Store";
 
-vi.mock("../../utils/facebook/login", () => ({
-    startFacebookLogin: vi.fn()
-}));
-
-const mockStore = (wppLoadingState = false) => configureStore({ 
-    reducer: { project: projectReducer },
-    preloadedState: { 
+const mockStore = (agents = [], integratedAgents = []) => configureStore({ 
+    reducer: { project: projectReducer, user: userReducer },
+    preloadedState: {
         project: { 
-            wppLoading: wppLoadingState,
+            agents, 
+            integratedAgents, 
+            selectProject: "test-project",
             project_uuid: '',
             wpp_cloud_app_uuid: '',
             flows_channel_uuid: '',
@@ -27,16 +27,15 @@ const mockStore = (wppLoadingState = false) => configureStore({
             settings: null,
             integrations: null,
             flows: [],
-            agents: [],
             setupError: false,
             agentBuilderLoading: false,
             agentsLoading: [],
-            integratedAgents: [],
             selectedAgent: null,
             selectedFlow: null,
             selectedIntegration: null,
             updateAgentLoading: false,
             disableAgentLoading: false,
+            wppLoading: false,
             agentBuilder: {
                 name: '',
                 description: '',
@@ -52,43 +51,62 @@ const mockStore = (wppLoadingState = false) => configureStore({
                     name: ''
                 }
             }
-        } 
+        },
+        user: { 
+            user: "test@example.com",
+            userData: null,
+            accountData: null,
+            loadingWhatsAppIntegration: false,
+            isWhatsAppIntegrated: false,
+            error: null,
+            isAgentBuilderIntegrated: false,
+            whatsAppError: null
+        } as UserState
     }
 });
 
-const renderComponent = (isIntegrated = false, wppLoading = false) => {
-    return render(  
-        <Provider store={mockStore(wppLoading)}>
-            <Channel isIntegrated={isIntegrated}/>
+global.open = vi.fn();
+
+const renderComponent = (agents = [], integratedAgents = []) => {
+    return render(
+        <Provider store={mockStore(agents, integratedAgents)}>
+            <Dashboard />
         </Provider>
     );
 };
 
-describe("Channel Component", () => {
-    it("renders the WhatsApp integration title and description", () => {
+describe("Dashboard Component", () => {
+    it("renders the dashboard title", () => {
         renderComponent();
-        expect(screen.getByText("integration.channels.whatsapp.title")).toBeInTheDocument();
-        expect(screen.getByText("integration.channels.whatsapp.description")).toBeInTheDocument();
+        expect(screen.getByTestId("title")).toBeInTheDocument();
     });
 
-    it("shows the integrate button when not integrated", () => {
-        renderComponent(false);
-        expect(screen.getByText("integration.buttons.integrate")).toBeInTheDocument();
+    it("renders the improvement alert with button", () => {
+        renderComponent();
+        expect(screen.getByTestId("improve-alert")).toBeInTheDocument();
+        expect(screen.getByTestId("improve-button")).toBeInTheDocument();
     });
 
-    it("calls startFacebookLogin when the integrate button is clicked", () => {
-        renderComponent(false);
-        fireEvent.click(screen.getByTestId("integrate-button"));
-        expect(startFacebookLogin).toHaveBeenCalled();
+    it("calls window.open when clicking the improve button", () => {
+        renderComponent();
+        fireEvent.click(screen.getByTestId("improve-button"));
+        expect(global.open).toHaveBeenCalled();
     });
 
-    it("shows the integrated status when already integrated", () => {
-        renderComponent(true);
-        expect(screen.getByText("integration.buttons.integrated")).toBeInTheDocument();
+    it("renders the agents section title", () => {
+        renderComponent();
+        expect(screen.getByText("agents.title")).toBeInTheDocument();
     });
 
-    it("shows a loading spinner when WhatsApp integration is in progress", () => {
-        renderComponent(false, true);
-        expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    it("renders the agent list when agents are available", () => {
+        const agentsMock = [{ uuid: "1", code: "test-agent", isInTest: false, isConfiguring: false }];
+        renderComponent(agentsMock as never[], []);
+        expect(screen.getByText("test-agent")).toBeInTheDocument();
+    });
+
+    it("renders the integrated agent list when agents are integrated", () => {
+        const integratedAgentsMock = [{ uuid: "2", code: "integrated-agent", isInTest: false, isConfiguring: false }];
+        renderComponent([], integratedAgentsMock as never[]);
+        expect(screen.getByText("integrated-agent")).toBeInTheDocument();
     });
 });
