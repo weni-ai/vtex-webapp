@@ -1,10 +1,10 @@
-import { Alert, Button, Flex, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
+import { Alert, Button, Flex, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { AgentBox, AgentBoxSkeleton, AgentBoxContainer } from '../components/AgentBox';
 import { useSelector } from 'react-redux';
 import { agents, integratedAgents, selectProject, hasTheFirstLoadOfTheAgentsHappened } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
-import { useEffect } from 'react';
-import { updateAgentsList } from '../services/agent.service';
+import { useEffect, useState } from 'react';
+import { disableAgent, updateAgentsList } from '../services/agent.service';
 
 export function Dashboard() {
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
@@ -12,6 +12,8 @@ export function Dashboard() {
   const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
+  const [agentsRemoving, setAgentsRemoving] = useState<string[]>([]);
+  const [updateAgentsListTimeout, setUpdateAgentsListTimeout] = useState<NodeJS.Timeout | null>(null);
 
   function navigateToAgent() {
     const dash = new URL(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`);
@@ -30,6 +32,46 @@ export function Dashboard() {
   useEffect(() => {
     updateAgentsList();
   }, []);
+
+  useEffect(() => {
+    const rejectedAgents = integrated.filter((item) => item.templateSynchronizationStatus === 'rejected');
+
+    rejectedAgents.forEach(({ uuid }) => {
+      tryRemoveAgent(uuid);
+    });
+  }, [integrated]);
+
+  useEffect(() => {
+    const pendingAgents = integrated.filter((item) => item.templateSynchronizationStatus === 'pending');
+
+    if (pendingAgents.length > 0) {
+      updateAgentsListSoon();
+    }
+  }, [integrated]);
+
+  async function tryRemoveAgent(uuid: string) {
+    if (agentsRemoving.includes(uuid)) {
+      return;
+    }
+
+    setAgentsRemoving((prev) => [...prev, uuid]);
+
+    toast.critical(t('agents.common.errors.template_synchronization.rejected'));
+
+    await disableAgent(project_uuid, uuid);
+
+    setAgentsRemoving((prev) => prev.filter((item) => item !== uuid));
+  }
+
+  function updateAgentsListSoon() {
+    if (updateAgentsListTimeout) {
+      clearTimeout(updateAgentsListTimeout);
+    }
+
+    setUpdateAgentsListTimeout(setTimeout(async () => {
+      await updateAgentsList();
+    }, 3000));
+  }
 
   return (
     <Page>
@@ -91,14 +133,14 @@ export function Dashboard() {
               <>
                 {agentsList.map((item) => (
                   <AgentBox
-                  key={item.uuid}
-                  uuid={item.uuid}
-                  code={item.code}
-                  type="active"
-                  isIntegrated={false}
-                  isInTest={item.isInTest}
-                  isConfiguring={item.isConfiguring}
-                />
+                    key={item.uuid}
+                    uuid={item.uuid}
+                    code={item.code}
+                    type="active"
+                    isIntegrated={false}
+                    isInTest={item.isInTest}
+                    isConfiguring={item.isConfiguring}
+                  />
                 ))}
                 {integrated.map((item) => (
                   <AgentBox
