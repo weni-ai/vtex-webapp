@@ -17,6 +17,7 @@ export interface Feature {
     code: 'order_status' | 'abandoned_cart';
     isInTest: boolean;
     isConfiguring: boolean;
+    templateSynchronizationStatus?: 'pending' | 'rejected' | 'approved';
     phone_numbers?: string[];
     message_time_restrictions?: {
         is_active: boolean;
