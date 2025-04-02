@@ -50,6 +50,7 @@ export interface ProjectState {
     agentBuilder: Agent;
     setupError: boolean;
     wppLoading: boolean;
+    hasTheFirstLoadOfTheAgentsHappened: boolean;
     agents: Feature[];
     integratedAgents: Feature[];
     storeType: string;

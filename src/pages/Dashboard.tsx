@@ -1,12 +1,13 @@
-import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
-import { FeatureBox } from '../components/FeatureBox';
+import { Alert, Button, Flex, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from '@vtex/shoreline';
+import { AgentBox, AgentBoxSkeleton, AgentBoxContainer } from '../components/AgentBox';
 import { useSelector } from 'react-redux';
-import { agents, integratedAgents, selectProject } from '../store/projectSlice';
+import { agents, integratedAgents, selectProject, hasTheFirstLoadOfTheAgentsHappened } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
 import { useEffect } from 'react';
 import { updateAgentsList } from '../services/agent.service';
 
 export function Dashboard() {
+  const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
   const agentsList = useSelector(agents)
   const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
@@ -81,32 +82,38 @@ export function Dashboard() {
             {t('agents.title')}
           </Heading>
 
-          <Grid
-            columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
-          >
-            {agentsList.map((item) => (
-              <FeatureBox
-                key={item.uuid}
-                uuid={item.uuid}
-                code={item.code}
-                type="active"
-                isIntegrated={false}
-                isInTest={item.isInTest}
-                isConfiguring={item.isConfiguring}
-              />
-            ))}
-            {integrated.map((item) => (
-              <FeatureBox
-                key={item.uuid}
-                uuid={item.uuid}
-                code={item.code}
-                type="active"
-                isIntegrated={true}
-                isInTest={item.isInTest}
-                isConfiguring={item.isConfiguring}
-              />
-            ))}
-          </Grid>
+          <AgentBoxContainer>
+            {!hasTheFirstLoadHappened && (
+              <AgentBoxSkeleton count={2} />
+            )}
+
+            {hasTheFirstLoadHappened && (
+              <>
+                {agentsList.map((item) => (
+                  <AgentBox
+                  key={item.uuid}
+                  uuid={item.uuid}
+                  code={item.code}
+                  type="active"
+                  isIntegrated={false}
+                  isInTest={item.isInTest}
+                  isConfiguring={item.isConfiguring}
+                />
+                ))}
+                {integrated.map((item) => (
+                  <AgentBox
+                    key={item.uuid}
+                    uuid={item.uuid}
+                    code={item.code}
+                    type="active"
+                    isIntegrated={true}
+                    isInTest={item.isInTest}
+                    isConfiguring={item.isConfiguring}
+                  />
+                ))}
+              </>
+            )}
+          </AgentBoxContainer>
         </Flex>
       </PageContent>
     </Page>
