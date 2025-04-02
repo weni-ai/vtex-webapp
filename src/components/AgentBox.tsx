@@ -1,4 +1,4 @@
-import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useMemo, useState } from "react";
 import { integrateAgent } from "../services/agent.service";
@@ -13,7 +13,27 @@ import store from "../store/provider.store";
 
 type codes = 'abandoned_cart' | 'order_status';
 
-export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfiguring }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
+export function AgentBoxContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <Grid
+      columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
+      rows="222px"
+      autoRows="var(--sl-grid-rows)"
+    >
+      { children }
+    </Grid>
+  )
+}
+
+export function AgentBoxSkeleton({ count }: { count: number }) {
+  return (
+    Array.from({ length: count }).map((_, index) => (
+      <Skeleton key={index} />
+    ))
+  )
+}
+
+export function AgentBox({ uuid, code, type, isIntegrated, isInTest, isConfiguring }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
@@ -65,7 +85,6 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
         direction="column"
         gap="$space-2"
         style={{
-          height: '222px',
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-1)',
           padding: '16px 16px 24px 16px',
