@@ -2,7 +2,7 @@ import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, createAgentBuilderRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
-import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading } from "../store/projectSlice";
+import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading, setHasTheFirstLoadOfTheAgentsHappened } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -61,6 +61,7 @@ export async function updateAgentsList() {
 
   store.dispatch(setAgents(availableAgents));
   store.dispatch(setIntegratedAgents(integratedAgents));
+  store.dispatch(setHasTheFirstLoadOfTheAgentsHappened(true));
 
   store.dispatch(setAgentsLoading(availableAgents.map(agent => ({ agent_uuid: agent.uuid, isLoading: false }))))
 }
