@@ -99,6 +99,7 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     code: agent.code,
     isInTest: isInTest(agent.config),
     isConfiguring: isConfiguring(agent.config),
+    templateSynchronizationStatus: agent.config?.templates_synchronization_status,
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
       [],

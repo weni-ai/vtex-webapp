@@ -114,7 +114,12 @@
             "add": "Add agent",
             "added": "Agent active",
             "test": "Agent in test",
-            "configuring": "Configuring agent"
+            "configuring": "Configuring agent",
+            "errors": {
+                "template_synchronization": {
+                    "rejected": "The agent template was not approved. Try re-adding the agent."
+                }
+            }
         }
     },
     "setup": {
