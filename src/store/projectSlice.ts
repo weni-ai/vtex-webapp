@@ -20,6 +20,7 @@ const initialState: ProjectState = {
     objective: '',
     channel: ''
   },
+  hasTheFirstLoadOfTheAgentsHappened: false,
   agents: [],
   integratedAgents: [],
   storeType: '',
@@ -59,6 +60,9 @@ const projectSlice = createSlice({
         links: action.payload.links.map(cleanURL),
       };
     },
+    setHasTheFirstLoadOfTheAgentsHappened: (state, action: PayloadAction<boolean>) => {
+      state.hasTheFirstLoadOfTheAgentsHappened = action.payload;
+    },
     setAgents: (state, action: PayloadAction<Feature[]>) => {
       state.agents = action.payload;
     },
@@ -86,6 +90,7 @@ export const {
   setFlowsChannelUuid,
   setAgentBuilderLoading,
   setAgentBuilder,
+  setHasTheFirstLoadOfTheAgentsHappened,
   setAgents,
   setAgentsLoading,
   setIntegratedAgents,
@@ -103,6 +108,7 @@ export const setupError = (state: RootState) => state.project.setupError
 export const agentBuilderLoading = (state: RootState) => state.project.agentBuilderLoading
 export const getAgentBuilder = (state: RootState) => state.project.agentBuilder
 export const getAgentChannel = (state: RootState) => state.project.agentBuilder.channel
+export const hasTheFirstLoadOfTheAgentsHappened = (state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened
 export const agents = (state: RootState) => state.project.agents
 export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading
