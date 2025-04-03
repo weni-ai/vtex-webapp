@@ -1,22 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { render, screen, fireEvent } from "@testing-library/react";
+ 
+import { render, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import { Dashboard } from "../../pages/Dashboard";
+import { Channel } from "../../pages/Channel";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import projectReducer from "../../store/projectSlice";
 import userReducer from "../../store/userSlice";
-import { expect, vi, describe, it } from "vitest";
+import { expect, describe, it } from "vitest";
 import { UserState } from "src/interfaces/Store";
 
-const mockStore = (agents = [], integratedAgents = []) => configureStore({ 
+const mockStore = (isWppLoading = false) => configureStore({ 
     reducer: { project: projectReducer, user: userReducer },
     preloadedState: {
         project: { 
-            agents, 
-            integratedAgents, 
+            agents: [], 
+            integratedAgents: [], 
             selectProject: "test-project",
-            project_uuid: '',
+            project_uuid: 'test-uuid',
             wpp_cloud_app_uuid: '',
             flows_channel_uuid: '',
             loadingSetup: false,
@@ -35,7 +35,7 @@ const mockStore = (agents = [], integratedAgents = []) => configureStore({
             selectedIntegration: null,
             updateAgentLoading: false,
             disableAgentLoading: false,
-            wppLoading: false,
+            wppLoading: isWppLoading,
             agentBuilder: {
                 name: '',
                 description: '',
@@ -46,10 +46,7 @@ const mockStore = (agents = [], integratedAgents = []) => configureStore({
                 links: [],
                 occupation: '',
                 objective: '',
-                channel: {
-                    uuid: '',
-                    name: ''
-                }
+                channel: ''
             }
         },
         user: { 
@@ -65,48 +62,35 @@ const mockStore = (agents = [], integratedAgents = []) => configureStore({
     }
 });
 
-global.open = vi.fn();
-
-const renderComponent = (agents = [], integratedAgents = []) => {
+const renderComponent = (isIntegrated = false, isWppLoading = false) => {
     return render(
-        <Provider store={mockStore(agents, integratedAgents)}>
-            <Dashboard />
+        <Provider store={mockStore(isWppLoading)}>
+            <Channel isIntegrated={isIntegrated} />
         </Provider>
     );
 };
 
-describe("Dashboard Component", () => {
-    it("renders the dashboard title", () => {
+describe("Channel Component", () => {
+    it("renders the WhatsApp integration section", () => {
         renderComponent();
-        expect(screen.getByTestId("title")).toBeInTheDocument();
+        expect(screen.getByText("integration.channels.whatsapp.title")).toBeInTheDocument();
+        expect(screen.getByText("integration.channels.whatsapp.description")).toBeInTheDocument();
     });
 
-    it("renders the improvement alert with button", () => {
-        renderComponent();
-        expect(screen.getByTestId("improve-alert")).toBeInTheDocument();
-        expect(screen.getByTestId("improve-button")).toBeInTheDocument();
+    it("renders the integrate button when not integrated", () => {
+        renderComponent(false);
+        expect(screen.getByTestId("integrate-button")).toBeInTheDocument();
+        expect(screen.queryByText("integration.buttons.integrated")).not.toBeInTheDocument();
     });
 
-    it("calls window.open when clicking the improve button", () => {
-        renderComponent();
-        fireEvent.click(screen.getByTestId("improve-button"));
-        expect(global.open).toHaveBeenCalled();
+    it("renders the integrated status when integrated", () => {
+        renderComponent(true);
+        expect(screen.getByText("integration.buttons.integrated")).toBeInTheDocument();
+        expect(screen.queryByTestId("integrate-button")).not.toBeInTheDocument();
     });
 
-    it("renders the agents section title", () => {
-        renderComponent();
-        expect(screen.getByText("agents.title")).toBeInTheDocument();
-    });
-
-    it("renders the agent list when agents are available", () => {
-        const agentsMock = [{ uuid: "1", code: "test-agent", isInTest: false, isConfiguring: false }];
-        renderComponent(agentsMock as never[], []);
-        expect(screen.getByText("test-agent")).toBeInTheDocument();
-    });
-
-    it("renders the integrated agent list when agents are integrated", () => {
-        const integratedAgentsMock = [{ uuid: "2", code: "integrated-agent", isInTest: false, isConfiguring: false }];
-        renderComponent([], integratedAgentsMock as never[]);
-        expect(screen.getByText("integrated-agent")).toBeInTheDocument();
+    it("shows loading spinner when wppLoading is true", () => {
+        renderComponent(false, true);
+        expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
     });
 });

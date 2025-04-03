@@ -5,6 +5,12 @@ import { FeatureBox } from "../../components/FeatureBox";
 import { integrateAgent } from "../../services/agent.service";
 import "@testing-library/jest-dom";
 import { toast } from "@vtex/shoreline";
+import { useSelector } from "react-redux";
+
+interface AgentLoading {
+    agent_uuid: string;
+    isLoading: boolean;
+}
 
 const mockState = {
     project: {
@@ -22,9 +28,22 @@ const mockState = {
                 }
             }
         ],
-        agentsLoading: [],
+        agentsLoading: [] as AgentLoading[],
         flows_channel_uuid: "flows-channel-uuid",
-        wpp_cloud_app_uuid: "wpp-cloud-uuid"
+        wpp_cloud_app_uuid: "wpp-cloud-uuid",
+        channel: "site_editor",
+        agentBuilder: {
+            name: '',
+            description: '',
+            code: '',
+            settings: null,
+            flows: [],
+            integrations: [],
+            links: [],
+            occupation: '',
+            objective: '',
+            channel: "site_editor"
+        }
     },
     auth: {
         base_address: "test-address"
@@ -32,7 +51,7 @@ const mockState = {
 };
 
 vi.mock("react-redux", () => ({
-    useSelector: vi.fn((selector) => selector(mockState))
+    useSelector: vi.fn((selector: (state: typeof mockState) => any) => selector(mockState))
 }));
 
 vi.mock("../../services/agent.service", () => ({
@@ -68,31 +87,26 @@ describe("FeatureBox Component", () => {
         vi.clearAllMocks();
     });
 
-    it("deve renderizar corretamente os textos e botões", () => {
+    it("should render correctly with texts and buttons", () => {
         render(<FeatureBox {...mockProps} />);
 
-        const allHeadings = screen.queryAllByRole('heading');
-        console.log('All headings:', allHeadings.map(h => ({
-            text: h.textContent,
-            role: h.role,
-            tag: h.tagName
-        })));
+        // Find the title within the main feature box
+        const titleElement = screen.getByTestId('feature-box-title');
+        expect(titleElement).toBeInTheDocument();
 
-        const allElements = screen.queryAllByText((content) =>
-            content.includes('order_status')
-        );
-        console.log('Elements with order_status:', allElements.map(el => ({
-            text: el.textContent,
-            tag: el.tagName
-        })));
+        // Find the description text
+        const descriptionElement = screen.getByText(/agents.categories.active.order_status.description/i);
+        expect(descriptionElement).toBeInTheDocument();
 
-        expect(document.body).toBeInTheDocument();
+        // Find the add button
+        const addButton = screen.getByRole('button', { name: /agents.common.add/i });
+        expect(addButton).toBeInTheDocument();
     });
 
-    it("deve chamar `integrateFeature` ao clicar no botão de adicionar", async () => {
+    it("should call integrateAgent when clicking the add button", async () => {
         render(<FeatureBox {...mockProps} />);
 
-        const addButton = screen.getByText("agents.common.add");
+        const addButton = screen.getByRole('button', { name: /agents.common.add/i });
         fireEvent.click(addButton);
 
         await waitFor(() => {
@@ -104,16 +118,45 @@ describe("FeatureBox Component", () => {
         });
     });
 
-    it("deve exibir um erro no `toast` caso `integrateAgent` retorne erro", async () => {
+    it("should display error toast when integrateAgent returns error", async () => {
         (integrateAgent as any).mockResolvedValue({ error: true });
 
         render(<FeatureBox {...mockProps} />);
 
-        const addButton = screen.getByText("agents.common.add");
+        const addButton = screen.getByRole('button', { name: /agents.common.add/i });
         fireEvent.click(addButton);
 
         await waitFor(() => {
             expect(toast.critical).toHaveBeenCalledWith("integration.error");
         });
+    });
+
+    it("should show loading spinner when isUpdateAgentLoading is true", () => {
+        const loadingState = {
+            ...mockState,
+            project: {
+                ...mockState.project,
+                agentsLoading: [{ agent_uuid: "123", isLoading: true }]
+            }
+        };
+        vi.mocked(useSelector).mockImplementation((selector: (state: typeof mockState) => any) => selector(loadingState));
+
+        render(<FeatureBox {...mockProps} />);
+        expect(screen.getByRole('status')).toBeInTheDocument();
+    });
+
+    it("should show test status when isInTest is true", () => {
+        render(<FeatureBox {...mockProps} isInTest={true} />);
+        expect(screen.getByText(/agents.common.test/i)).toBeInTheDocument();
+    });
+
+    it("should show configuring status when isConfiguring is true", () => {
+        render(<FeatureBox {...mockProps} isConfiguring={true} />);
+        expect(screen.getByText(/agents.common.configuring/i)).toBeInTheDocument();
+    });
+
+    it("should show integrated status when isIntegrated is true", () => {
+        render(<FeatureBox {...mockProps} isIntegrated={true} />);
+        expect(screen.getByText(/agents.common.added/i)).toBeInTheDocument();
     });
 });

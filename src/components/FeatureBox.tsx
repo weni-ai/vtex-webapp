@@ -1,4 +1,3 @@
-
 import { Button, Flex, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Spinner, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useState } from "react";
@@ -60,7 +59,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
       >
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
-            <Text variant="display3" color="$fg-base">
+            <Text data-testid="feature-box-title" variant="display3" color="$fg-base">
               {t(`agents.categories.${type}.${code}.title`)}
             </Text>
 
@@ -153,7 +152,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
             <Button variant="secondary" onClick={integrateCurrentFeature} size="large">
               {
                 isUpdateAgentLoading ?
-                  <Spinner description="loading" />
+                  <Spinner description="loading" role="status" />
                   :
                   <>
                     <IconPlus />
@@ -168,6 +167,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
       </Flex>
 
       <AboutAgent
+        data-testid="about-agent-modal"
         open={openAbout}
         code={code}
         category={type}
@@ -175,6 +175,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
       />
 
       <SettingsContainer
+        data-testid="settings-container"
         open={isPreferencesOpen}
         code={code}
         agentUuid={uuid}
@@ -182,6 +183,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
       />
 
       <DisableAgent
+        data-testid="disable-agent-modal"
         open={openDisable}
         toggleModal={openDisableModal}
         agent={t(`agents.categories.${type}.${code}.title`)}
@@ -189,6 +191,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
       />
 
       <AddAbandonedCart
+        data-testid="add-abandoned-cart-modal"
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
         confirm={() => {
