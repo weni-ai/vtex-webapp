@@ -29,7 +29,7 @@ export function Dashboard() {
     <Page>
       <PageHeader>
         <PageHeaderRow style={{ height: '44px' }}>
-          <PageHeading >
+          <PageHeading data-testid="title">
             {t('title')}
           </PageHeading>
         </PageHeaderRow>
@@ -42,6 +42,7 @@ export function Dashboard() {
             style={{
               width: '100%',
             }}
+            data-testid="improve-alert"
           >
             <Flex
               align="center"
@@ -54,7 +55,7 @@ export function Dashboard() {
                 {t('improve.description')}
               </Text>
 
-              <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
+              <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent} data-testid="improve-button">
                 <Text variant='action'> {t('improve.button')}</Text>
                 <IconArrowUpRight
                   height="1rem"
@@ -88,6 +89,7 @@ export function Dashboard() {
                 isIntegrated={false}
                 isInTest={item.isInTest}
                 isConfiguring={item.isConfiguring}
+                data-testid="agents-list"
               />
             ))}
             {integrated.map((item: any) => (
@@ -99,6 +101,7 @@ export function Dashboard() {
                 isIntegrated={true}
                 isInTest={item.isInTest}
                 isConfiguring={item.isConfiguring}
+                data-testid="integrated-agents-list"
               />
             ))}
           </Grid>

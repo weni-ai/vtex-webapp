@@ -56,6 +56,7 @@ export function FeatureBox({ uuid, code, type, isIntegrated, isInTest, isConfigu
           borderRadius: 'var(--sl-radius-1)',
           padding: '16px 16px 24px 16px',
         }}
+        data-testid={`feature-box-${uuid}`}
       >
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
