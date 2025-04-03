@@ -10,7 +10,7 @@ export interface TermsProps {
 export function TermsAndConditions({ open, approve, dismiss }: Readonly<TermsProps>) {
 
     return (
-        <Modal open={open} onClose={dismiss} >
+        <Modal open={open} onClose={dismiss} data-testid="terms-and-conditions-modal" >
             <ModalHeader>
                 <Flex>
                     <ModalHeading>{t("terms.title")}</ModalHeading>
@@ -113,7 +113,7 @@ export function TermsAndConditions({ open, approve, dismiss }: Readonly<TermsPro
             </ModalContent>
             <ModalFooter>
                 <Button size="large" onClick={dismiss}>{t("common.cancel")}</Button>
-                <Button variant="primary" size="large" onClick={approve}>{t("terms.agree")}</Button>
+                <Button variant="primary" size="large" onClick={approve} data-testid="terms-and-conditions-approve">{t("terms.agree")}</Button>
             </ModalFooter>
         </Modal>
     )

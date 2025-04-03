@@ -186,7 +186,7 @@ export function AgentBuilder() {
           )}
         </PageContent>
       </Page>
-      <TermsAndConditions open={openTerms} dismiss={() => setOpenTerms(false)} approve={handleSubmit} />
+      <TermsAndConditions open={openTerms} dismiss={() => setOpenTerms(false)} approve={handleSubmit}/>
     </Container>
   );
 }
