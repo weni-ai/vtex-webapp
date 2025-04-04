@@ -1,4 +1,4 @@
-const requestsAwaitingResponses: Record<string, { resolve: (value: any) => void; reject: (reason: any) => void }> = {};
+const requestsAwaitingResponses: Record<string, { resolve: (value: unknown) => void; reject: (reason: unknown) => void }> = {};
 
 window.addEventListener('message', (event: MessageEvent) => {
   const { name, id, status, response, reason } = event.data || {};
@@ -28,7 +28,7 @@ interface FetchOptions {
   mode?: RequestMode;
 }
 
-export function VTEXFetch<T = any>(url: string, options?: FetchOptions): Promise<T> {
+export function VTEXFetch<T = unknown>(url: string, options?: FetchOptions): Promise<T> {
     const responseId = generateId(10);
 
     return new Promise<T>((resolve, reject) => {
