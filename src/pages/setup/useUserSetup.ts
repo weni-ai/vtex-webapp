@@ -3,7 +3,7 @@ import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated }
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setBaseAddress } from '../../store/authSlice';
 import store from '../../store/provider.store';
-import { setAgentBuilder, setFlowsChannelUuid, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
 import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
@@ -14,6 +14,8 @@ export function useUserSetup() {
 
   const initializeProject = useCallback(async () => {
     try {
+      store.dispatch(setInitialLoading(true));
+      
       const { data: userData, error: errorData } = await fetchUserData();
       if (!userData || errorData) {
         console.error("user data not found");
@@ -97,6 +99,8 @@ export function useUserSetup() {
     } catch (err) {
       console.error(err);
       navigate('/setup-error');
+    } finally {
+      store.dispatch(setInitialLoading(false));
     }
   }, [navigate]);
 
