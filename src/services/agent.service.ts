@@ -17,7 +17,7 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 
   try {
-    const response = await VTEXFetch(`/_v/check-agent-builder?projectUUID=${project_uuid}`, {
+    const response = await VTEXFetch<{ error?: boolean, message?: string, data: { has_agent: boolean, name: string, links: string[], objective: string, occupation: string } }>(`/_v/check-agent-builder?projectUUID=${project_uuid}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

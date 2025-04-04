@@ -82,4 +82,4 @@ export const userAdapters = {
       return { success: false, error: error || 'unknown error' };
     }
   },
-}; 
+};
