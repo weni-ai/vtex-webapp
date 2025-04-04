@@ -24,6 +24,7 @@ const initialState: ProjectState = {
   agents: [],
   integratedAgents: [],
   storeType: '',
+  initialLoading: false,
 }
 
 const projectSlice = createSlice({
@@ -79,6 +80,9 @@ const projectSlice = createSlice({
     setStoreType: (state, action: PayloadAction<string>) => {
       state.storeType = action.payload;
     },
+    setInitialLoading: (state, action: PayloadAction<boolean>) => {
+      state.initialLoading = action.payload;
+    },
   }
 })
 
@@ -98,6 +102,7 @@ export const {
   setDisableAgentLoading,
   setWppLoading,
   setStoreType,
+  setInitialLoading,
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
@@ -115,4 +120,5 @@ export const wppLoading = (state: RootState) => state.project.wppLoading
 export const agentsLoading = (state: RootState) => state.project.agentsLoading
 export const updateAgentLoading = (state: RootState) => state.project.updateAgentLoading
 export const disableAgentLoading = (state: RootState) => state.project.disableAgentLoading
+export const initialLoading = (state: RootState) => state.project.initialLoading
 export default projectSlice.reducer;
