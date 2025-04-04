@@ -3,7 +3,7 @@ import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateAgentsList } from "./agent.service";
 import { userAdapters } from "../api/users/adapters";
-import { UserData } from "../interfaces/Store";
+import { AccountData, UserData } from "../interfaces/Store";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -16,7 +16,7 @@ export async function fetchUserData() {
 
 export async function fetchAccountData() {
   try {
-    const response = await VTEXFetch('/api/license-manager/account');
+    const response = await VTEXFetch<AccountData & { error?: boolean, message?: string }>('/api/license-manager/account');
 
     if (!response || response.error) {
       throw new Error(response?.message || 'error fetching account data.');
@@ -32,7 +32,7 @@ export async function fetchAccountData() {
 export async function checkProject(vtex_account: string, user_email: string) {
 
   try {
-  const response = await VTEXFetch(`/_v/check-project-by-user?vtex_account=${vtex_account}&user_email=${user_email}`, {
+  const response = await VTEXFetch<{ project_uuid: string, error?: boolean, message?: string, data: { project_uuid: string, has_project: boolean } }>(`/_v/check-project-by-user?vtex_account=${vtex_account}&user_email=${user_email}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export async function createUserAndProject(userData: UserData) {
       vtex_account: userData.account,
     };
 
-    const response = await VTEXFetch(`/_v/create-user-and-project`, {
+    const response = await VTEXFetch<{ project_uuid: string, error?: boolean, message?: string }>(`/_v/create-user-and-project`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

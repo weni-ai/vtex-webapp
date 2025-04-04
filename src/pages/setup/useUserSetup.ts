@@ -42,7 +42,7 @@ export function useUserSetup() {
       store.dispatch(setBaseAddress(base_address));
 
       const result = await checkProject(userData.account, userData.user);
-      if (result?.error) {
+      if (result?.error || !result.data) {
         throw new Error(JSON.stringify(result.error))
       }
       const { has_project, project_uuid } = result.data.data;
@@ -59,11 +59,11 @@ export function useUserSetup() {
         }
 
         const agentIntegration = await checkAgentIntegration(project_uuid);
-        if (agentIntegration?.error) {
+        if (agentIntegration?.error || !agentIntegration.data) {
           throw new Error(JSON.stringify(agentIntegration.error))
         }
 
-        const { name = '', links = '', objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
+        const { name = '', links = [], objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
 
         if (name) {
           store.dispatch(
