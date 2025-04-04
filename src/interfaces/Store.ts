@@ -55,6 +55,7 @@ export interface ProjectState {
     agents: Feature[];
     integratedAgents: Feature[];
     storeType: string;
+    initialLoading: boolean;
 }
 
 export interface UserData {
