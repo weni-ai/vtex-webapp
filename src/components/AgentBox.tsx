@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Spinner, Text, toast } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconCheck, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useMemo, useState } from "react";
 import { integrateAgent } from "../services/agent.service";

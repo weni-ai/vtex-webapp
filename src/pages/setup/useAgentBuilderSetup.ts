@@ -18,7 +18,7 @@ export function useAgentBuilderSetup() {
       }) => {
         store.dispatch(setAgentBuilderLoading(true))
         const cleanedPayload = Object.fromEntries(
-            Object.entries(payload).filter(([_, value]) => value !== null && value !== undefined && value !== '')
+            Object.entries(payload).filter(([, value]) => value !== null && value !== undefined && value !== '')
         );
 
         const { name, occupation, objective, knowledge } = cleanedPayload;
