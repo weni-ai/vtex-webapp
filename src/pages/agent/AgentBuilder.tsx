@@ -115,7 +115,7 @@ export function AgentBuilder() {
 
   const handleSubmit = async () => {
     const payload = Object.fromEntries(
-      Object.entries(form).filter(([_, value]) => value.trim())
+      Object.entries(form).filter(([, value]) => value.trim())
     ) as FormState;
 
     buildAgent(payload);
