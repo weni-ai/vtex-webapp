@@ -21,7 +21,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
   };
 
   try {
-    const response = await VTEXFetch(`/_v/whatsapp-integration`, {
+    const response = await VTEXFetch<{ flows_channel_uuid: string, wpp_cloud_app_uuid: string, error?: string, }>(`/_v/whatsapp-integration`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
