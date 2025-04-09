@@ -122,6 +122,18 @@
             }
         }
     },
+    "insights": {
+        "dashboard": {
+            "abandoned_cart": {
+                "sent_messages": "Mensagens enviadas",
+                "delivered_messages": "Mensagens entregues",
+                "read_messages": "Mensagens lidas",
+                "interactions": "Interações",
+                "utm_revenue": "Receita UTM",
+                "orders_placed": "Pedidos realizados"
+            }
+        }
+    },
     "setup": {
         "title": "Configurando seu App Weni",
         "description": "Preparando tudo para você! Estamos finalizando a configuração inicial para garantir uma experiência tranquila."
