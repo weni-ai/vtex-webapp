@@ -129,7 +129,7 @@ export interface DisableFeatureData {
 export interface GetSkillMetricsResponse {
     message: string;
     error: string;
-    data: { title: string; value: string; variation: number; }[][];
+    data: { id: 'sent-messages' | 'delivered-messages' | 'read-messages' | 'interactions' | 'utm-revenue' | 'orders-placed'; value: number; prefix?: string }[];
 }
 
 export interface UpdateAgentSettingsResponse {
@@ -186,9 +186,12 @@ export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsRe
 }
 
 export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) {
-    return {
-        message: response.message,
-        error: response.error,
-        data: response.data,
-    };
+  return {
+      message: response.message,
+      error: response.error,
+      data: response.data.map(({ id, value, prefix }) => ({
+        title: id,
+        value: prefix ? `${prefix} ${value}` : `${value}`,
+      })),
+  };
 }

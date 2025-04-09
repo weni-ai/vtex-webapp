@@ -1,10 +1,11 @@
-import { Alert, Button, Flex, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
+import { Alert, Button, Flex, Grid, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { AgentBox, AgentBoxSkeleton, AgentBoxContainer } from '../components/AgentBox';
 import { useSelector } from 'react-redux';
 import { agents, integratedAgents, selectProject, hasTheFirstLoadOfTheAgentsHappened } from '../store/projectSlice';
 import { selectUser } from "../store/userSlice";
 import { useEffect, useState } from 'react';
-import { disableAgent, updateAgentsList } from '../services/agent.service';
+import { disableAgent, getSkillMetrics, updateAgentsList } from '../services/agent.service';
+import { DashboardItem } from '../components/DashboardItem';
 
 export function Dashboard() {
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
@@ -14,6 +15,7 @@ export function Dashboard() {
   const userData = useSelector(selectUser);
   const [agentsRemoving, setAgentsRemoving] = useState<string[]>([]);
   const [updateAgentsListTimeout, setUpdateAgentsListTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [data, setData] = useState<{ title: string; value: string; }[][]>([]);
 
   function navigateToAgent() {
     const dash = new URL(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`);
@@ -28,6 +30,25 @@ export function Dashboard() {
 
     window.open(dash.toString(), '_blank');
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setData([]);
+      
+      const response = await getSkillMetrics();
+
+      if ('data' in response) {
+        let data = [];
+
+        for (let i = 0; i < response.data.length; i += 3) {
+          data.push(response.data.slice(i, i + 3));
+        }
+        
+        setData(data);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     updateAgentsList();
@@ -71,6 +92,16 @@ export function Dashboard() {
     setUpdateAgentsListTimeout(setTimeout(async () => {
       await updateAgentsList();
     }, 3000));
+  }
+
+  function getDashboardTitleById(id: string) {
+    const knownIds = ['sent-messages', 'delivered-messages', 'read-messages', 'interactions', 'utm-revenue', 'orders-placed'];
+
+    if (knownIds.includes(id)) {
+      return t(`insights.dashboard.abandoned_cart.${id.replace(/-/g, '_')}`);
+    }
+
+    return id;
   }
 
   return (
@@ -117,6 +148,38 @@ export function Dashboard() {
               </Button>
             </Flex>
           </Alert>
+
+          <Flex
+            direction="column"
+            gap="$space-0"
+            style={{
+              border: 'var(--sl-border-base)',
+              borderRadius: 'var(--sl-radius-2)',
+              display: data.length > 0 ? 'block' : 'none',
+            }}
+          >
+            {data.map((line, indexOfLine) => (
+              <Grid
+                key={`line-${indexOfLine}`}
+                columns="1fr 1fr 1fr"
+                gap="$space-0"
+                style={{
+                  borderBottom: indexOfLine !== data.length - 1 ? 'var(--sl-border-base)' : undefined,
+                }}
+              >
+                {line.map((detail, indexOfDetail) => (
+                  <DashboardItem
+                    key={`detail-${detail.value}`}
+                    title={getDashboardTitleById(detail.title)}
+                    value={detail.value}
+                    style={{
+                      borderRight: indexOfDetail !== line.length - 1 ? 'var(--sl-border-base)' : undefined,
+                    }}
+                  />
+                ))}
+              </Grid>
+            ))}
+          </Flex>
 
           <Heading
             variant="display2"

@@ -139,22 +139,30 @@ export async function disableFeatureRequest(data: {
 export async function getSkillMetricsRequest() {
   const projectUuid = store.getState().project.project_uuid;
 
+  const sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
+
+  const [startDate] = sevenDaysAgo.toISOString().split('T');
+  const [endDate] = new Date().toISOString().split('T');
+
   const queryParams = new URLSearchParams({
     projectUUID: projectUuid,
     skill: 'abandoned_cart',
-    start_date: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0],
-    end_date: new Date().toISOString().split('T')[0]
+    start_date: startDate,
+    end_date: endDate,
   });
 
   const url = `/_v/get-skill-metrics?${queryParams.toString()}`;
 
-  return await VTEXFetch<{
-    message: string;
-    error: string;
-  }>(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  return {
+    data: await VTEXFetch<{
+      id: 'sent-messages' | 'delivered-messages' | 'read-messages' | 'interactions' | 'utm-revenue' | 'orders-placed';
+      value: number;
+      prefix?: string;
+    }[]>(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+  };
 }
