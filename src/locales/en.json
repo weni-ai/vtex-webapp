@@ -122,6 +122,18 @@
             }
         }
     },
+    "insights": {
+        "dashboard": {
+            "abandoned_cart": {
+                "sent_messages": "Sent messages",
+                "delivered_messages": "Delivered messages",
+                "read_messages": "Read messages",
+                "interactions": "Interactions",
+                "utm_revenue": "UTM revenue",
+                "orders_placed": "Orders placed"
+            }
+        }
+    },
     "setup": {
         "title": "Setting up your Weni App",
         "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."
