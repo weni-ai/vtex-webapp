@@ -10,19 +10,19 @@
         "details": "View details",
         "manage_settings": "Manage settings",
         "preferences": "Preferences",
-        "disable": "Disable",
+        "disable": "Deactivate",
         "errors": {
-            "unauthorized": "You do not have permission to perform this action",
+            "unauthorized": "You don't have permission to perform this action",
             "internal_server_error": "Internal server error",
             "unexpected_error": "An unexpected error occurred"
         },
-        "new_agent": "New Agent",
-        "copy_code": "Copy Code"
+        "new_agent": "New agent",
+        "copy_code": "Copy code"
     },
     "title": "Weni Agentic IA",
-    "description": "An enterprise AI-based CX SOLUTION for brands and retailers.",
+    "description": "An AI-based CX business solution for brands and retailers.",
     "improve": {
-        "description": " Connect agents to the Weni platform to access advanced features and customizable options.",
+        "description": "Connect agents to the Weni platform to access advanced features and customizable options",
         "button": "Connect to Weni"
     },
     "agents": {
@@ -32,66 +32,66 @@
                 "title": "Active notification",
                 "order_status": {
                     "title": "Order status agent",
-                    "description": "Keep customers updated on their order status in real time.",
+                    "description": "Keep customers updated on the order status in real time",
                     "details": {
-                        "title": "Enable order delivery tracking for customers.",
-                        "description": "This agent reduces manual checks and increase transparency, ensuring customers stay informed and in control."
+                        "title": "Activate order delivery tracking for customers",
+                        "description": "This agent reduces manual checks and increases transparency, ensuring that customers remain informed and in control"
                     },
                     "settings": {
                         "is_test_contact_number": {
-                            "title": "Restrict to test contact number",
-                            "description": "Agent will message only the test phone number"
+                            "title": "Restrict to test contact",
+                            "description": "The agent will only send messages to the test phone"
                         },
                         "test_contact_number": {
-                            "label": "Phone number"
+                            "label": "Phone"
                         },
                         "is_selected_sellers": {
-                            "title": "Restricted for selected sellers",
-                            "description": "Agent will message only selected sellers"
+                            "title": "Restricted to selected sales associates",
+                            "description": "The agent will only send messages to selected sales associates"
                         },
                         "selected_sellers": {
-                            "label": "Select the sellers",
-                            "placeholder": "Select…"
+                            "label": "Select sales associates",
+                            "placeholder": "Select..."
                         }
                     }
                 },
                 "abandoned_cart": {
                     "title": "Abandoned cart agent",
-                    "description": "Recover sales by reminding customers of items left in the cart.",
+                    "description": "Recover sales by reminding customers of items left in the cart",
                     "details": {
-                        "title": "Recover sales by reminding customers of items left in the cart.",
-                        "description": "This agent increases conversion, retains customers and encourages order completion."
+                        "title": "Recover sales by reminding customers of items left in the cart",
+                        "description": "This agent boosts conversion, retains customers and encourages them to complete their order"
                     },
                     "modal": {
-                        "title": "Add Abandoned Cart",
-                        "description": "Check the store type in the storefront before following the steps below.",
-                        "button": "Go to Storefront",
+                        "title": "Add abandoned cart",
+                        "description": "Check the store type before following the steps below",
+                        "button": "Go to storefront",
                         "steps": {
-                            "title": "The agent will only be functional after following these steps:",
+                            "title": "Follow these steps to make the agent operational:",
                             "faststore": {
-                                "title": "Faststore",
-                                "description": "The agent will only be functional after following these steps:",
-                                "step1": "Go to the GitHub repository and paste the code below into the thirdpartyscripts.tsx file."
+                                "title": "FastStore",
+                                "description": "Follow these steps to make the agent operational:",
+                                "step1": "Go to the GitHub repository and paste the code below into the `thirdpartyscripts.tsx` file"
                             },
                             "portal": {
                                 "title": "Portal/Layout",
-                                "description": "The agent will only be functional after following these steps:",
-                                "step1": "Navigate to the Storefront Layout.",
+                                "description": "Follow these steps to make the agent operational:",
+                                "step1": "In the VTEX Admin, go to Storefront > Layout.",
                                 "step2": "Open the CMS folder.",
-                                "step3": "Go to HTML Templates {`>`} Subtemplates.",
-                                "step4": "Open commonScripts and paste the script below."
+                                "step3": "Click HTML Templates, then Sub Templates.",
+                                "step4": "Open `commonScripts` and paste the script below."
                             },
                             "site_editor": {
                                 "title": "Site Editor",
-                                "description": "No configuration steps are needed for the 'Site Editor' store type. Once confirmed, the agent is ready to go."
-                            }   
+                                "description": "No configuration steps are required for stores using 'Site Editor'. Once confirmed, the agent will be ready to use."
+                            }
                         }
                     },
                     "settings": {
                         "restriction": {
-                            "title": "Message time restriction",
-                            "description": "Restrict message sends to configured hours.",
-                            "monday_until_friday": "Monday until Friday",
+                            "title": "Restrict when messages can be sent",
+                            "description": "Limit messages to the configured times",
+                            "monday_until_friday": "Monday to Friday",
                             "saturday": "Saturday",
                             "from": "From",
                             "to": "To"
@@ -102,164 +102,147 @@
         },
         "common": {
             "configure": {
-                "success": "Configuration saved successfully.",
-                "error": "It could not be saved. Please try again later."
+                "success": "Settings saved successfully",
+                "error": "Error while saving. Try again later."
             },
             "disable": {
-                "title": "Disable agent",
-                "description": "Do you want to disable the '{{agent}}' agent? Once disabled, this agent will no longer be active in your project.",
-                "success": "Agent disabled successfully.",
-                "error": "The agent could not be disabled. Please try again later."
+                "title": "Deactivate agent",
+                "description": "Do you want to deactivate the agent '{{agent}}'? Once deactivated, this agent will no longer be active in your project.",
+                "success": "Agent deactivated successfully",
+                "error": "Error deactivating the agent. Try again later."
             },
-            "add": "Add agent",
-            "added": "Agent active",
-            "test": "Agent in test",
-            "configuring": "Configuring agent",
-            "errors": {
-                "template_synchronization": {
-                    "rejected": "The agent template was not approved. Try re-adding the agent."
-                }
-            }
-        }
-    },
-    "insights": {
-        "dashboard": {
-            "abandoned_cart": {
-                "sent_messages": "Sent messages",
-                "delivered_messages": "Delivered messages",
-                "read_messages": "Read messages",
-                "interactions": "Interactions",
-                "utm_revenue": "UTM revenue",
-                "orders_placed": "Orders placed"
-            }
+            "add": "New agent",
+            "added": "Active agent",
+            "test": "Agent in test mode",
+            "configuring": "Configuring agent"
         }
     },
     "setup": {
-        "title": "Setting up your Weni App",
-        "description": "Getting everything ready for you! We're finalizing the initial setup to ensure a smooth experience."
+        "title": "Configuring your Weni app",
+        "description": "We're getting everything ready for you! The initial setup will be completed soon to ensure a great experience."
     },
     "agent": {
         "details": {
-            "title": "Intelligent agents",
-            "description": "Enhance intelligent agents by enabling control over conversation flows based on user intentions. With the Starter Plan, customize language, tone, and behavior to give the agent a unique identity and improve communication quality. See the demonstration of the exchange and return agent interaction on the side.",
+            "title": "Smart agents",
+            "description": "Enhance your smart agents by enabling control over conversation flows based on user intent. With the Starter Plan, you can customize language, tone, and behavior to give your agent a unique identity and improve communication quality. See the exchanges and returns agent demo on the side.",
             "skills": {
-                "title": "Agent Skills",
+                "title": "Agent skills",
                 "analyze": "Analyze the context",
-                "comprehend": "Comprehend complex demands",
-                "provide": "Provide customized responses"
+                "comprehend": "Understand complex requests",
+                "provide": "Generate custom responses"
             },
             "example": {
-                "description": "Return and exchange agent Demo"
+                "description": "Exchanges and returns agent demo"
             }
         },
         "setup": {
-            "title": "Setup your agent persona",
+            "title": "Configure your agent's persona",
             "forms": {
                 "name": "Name",
                 "channel": {
                     "title": "Channel",
-                    "faststore": "Faststore",
+                    "faststore": "FastStore",
                     "portal": "Portal/Layout",
                     "site_editor": "Site Editor"
                 },
                 "occupation": {
                     "title": "Occupation (optional)",
-                    "default": "Intelligent assistant"
+                    "default": "Smart assistant"
                 },
                 "objective": {
                     "title": "Objective (optional)",
-                    "default": "Your goal is to answer customer questions, inform the order status, provide product information, and sell. Your main features are: Shopping on WhatsApp and FAQ."
+                    "default": "Its goal is to answer customer questions, share order status updates, provide product information, and support sales. Key features include shopping via WhatsApp and an integrated FAQ."
                 },
                 "knowledge": {
-                    "title": "Knowledge source",
-                    "context": "Provide the content your agent will use to answer questions."
+                    "title": "Knowledge base",
+                    "context": "Provide the source of the content your agent will use to answer the questions"
                 },
                 "error": {
-                    "empty_input": "Fill this information",
-                    "valid_url": "Enter a valid URL."
+                    "empty_input": "Required field",
+                    "valid_url": "Enter a valid URL"
                 }
             },
             "buttons": {
                 "create_agent": "Create agent"
             }
         },
-        "error": "Unable to set the agent. Please try again later.",
-        "success": "Agent successfully registered"
+        "error": "Error configuring agent. Try again later.",
+        "success": "Agent created successfully"
     },
     "integration": {
         "title": "Integrate a support channel",
-        "description": "Choose the channel you want to use and follow the step by step to add it.",
+        "description": "Choose the channel you want to use and follow the steps to integrate it",
         "channels": {
             "whatsapp": {
-                "title": "WhatsApp Channel",
-                "description": "Utilize an enterprise WhatsApp account to enhance communication with contacts.",
-                "error": "WhatApp unable to connect, check your credentials or try again later.",
-                "success": "WhatApp was successfully integrated."
+                "title": "WhatsApp",
+                "description": "Use a WhatsApp Business account to improve communication with your contacts",
+                "error": "Error connecting to WhatsApp. Check your credentials or try again later.",
+                "success": "WhatsApp integrated successfully"
             }
         },
         "buttons": {
             "integrate": "Integrate",
             "integrated": "Integrated"
         },
-        "success": "Integration completed successfully!",
-        "error": "Unable to integrate the feature. Please try again later."
+        "success": "Integration completed successfully",
+        "error": "Error integrating the feature. Try again later."
     },
     "error": {
         "title": "Something went wrong",
-        "description": "Retry or check back later if the issue persists.",
+        "description": "Try again or check later if the problem persists",
         "button": "Try again"
     },
     "terms": {
-        "title": "Terms and conditions",
-        "description1": "VTEX and the Contractor have entered into a Master Services Agreement (\"Agreement\") to establish authorization for the use and provision of support and maintenance services for the Software developed by VTEX for e-commerce solutions. VTEX and the Contractor, together, will hereinafter be referred to as the \"Parties\" and, individually, as a \"Party.\"",
-        "description2": "The Contractor's Admin Master on the VTEX Platform, duly authorized to act on behalf of the Contractor, with all powers and obligations related to this authorization, accepts and acknowledges the provisions of these Terms and Conditions - Weni Platform by VTEX (“T&C”), binding the Parties and their successors, under any circumstances, to be governed by the following clauses:",
+        "title": "Terms and Conditions",
+        "description1": "VTEX and the Contractor have entered into a Master Service Agreement (\"Agreement\") to establish the authorization for use, as well as the provision of support and maintenance services, for the software developed by VTEX for ecommerce solutions. VTEX and the Contractor are hereinafter referred to collectively as the \"Parties\" and individually as a \"Party\".",
+        "description2": "The Admin Master (\"Owner (Admin Super)\") of the Contractor on the VTEX Platform, duly authorized to act on behalf of the Contractor with full powers and obligations related to this authorization, hereby accepts and acknowledges the provisions of these Terms and Conditions — Weni by VTEX Platform (\"T&C\"), binding the Parties and their successors to be governed, under any circumstances, by the following clauses:",
         "definition": {
             "title": "1. Definition",
             "description": {
-                "1": "1.1 VTEX, through the Weni Platform by VTEX, provides a service to support the Contractor in communicating with its customers through multiple widely used messaging channels, including but not limited to WhatsApp, SMS, and Webchat.",
-                "2": "1.2 Subject to the conditions set forth in this T&C, VTEX will make the Weni Platform by VTEX available and grant the Contractor a non-exclusive right to access and use the Weni Platform by VTEX for its internal business purposes."
+                "1": "1.1 VTEX, through the Weni by VTEX Platform, offers a service to support the Contractor in communicating with their clients via widely used messaging channels, including but not limited to WhatsApp, SMS, and Webchat.",
+                "2": "1.2 Subject to the conditions set forth in these T&C, VTEX shall provide the Contractor with a non-exclusive right to access and use the Weni by VTEX Platform for internal business purposes."
             }
         },
         "responsabilities": {
-            "title": "2. Contractor's Responsibilities",
+            "title": "2. Contractor responsibilities",
             "description": {
-                "1": "2.1 The Contractor will be solely responsible for the content of all communications sent by its users through the Weni Platform by VTEX, as well as for compliance with all applicable laws and regulations related to the activities carried out.",
-                "2": "2.2 The Contractor expressly agrees to update its policies and terms of use and to obtain the express consent of its consumers, where applicable, to send information about services via email, SMS, WhatsApp, and other communication channels, with VTEX being exempt from this responsibility.",
-                "3": "2.3 The Contractor acknowledges and agrees to the WhatsApp Business Solution Terms, available at https://www.whatsapp.com/legal/meta-terms-whatsapp-business, including any future updates. The Contractor also acknowledges that it cannot use the Weni Platform by VTEX to track or create individual profiles of WhatsApp users for any business entity; track, create, sell, or distribute any data derived from the Weni Platform by VTEX; or engage in other actions prohibited by the applicable terms established by META, the company responsible for maintaining the WhatsApp Business solution."
+                "1": "2.1 The Contractor shall be responsible for the entire content of all communications sent by their users through the Weni by VTEX Platform, as well as for ensuring compliance with all applicable laws and regulations related to the activities performed.",
+                "2": "2.2 The Contractor expressly agrees to update their policies and terms of use, and to obtain the express consent of their consumers, where applicable, for sending service-related information through communication channels such as email, SMS, WhatsApp, and others, thereby releasing VTEX from any liability in this regard.",
+                "3": "2.3 The Contractor acknowledges and agrees to the WhatsApp Business Solution Terms, available at https://www.whatsapp.com/legal/meta-terms-whatsapp-business, including any future updates. The Contractor further acknowledges that they may not use the Weni by VTEX Platform to track or create individual user profiles for any business entity; to track, create, sell, or distribute any data derived from the Weni by VTEX Platform; or to engage in any actions prohibited by the applicable terms established by Meta, the company that maintains the WhatsApp Business solution."
             }
         },
         "vtex_responsabilites": {
-            "title": "3. VTEX's Responsibilities and Service Credits",
+            "title": "3. VTEX responsibilities and service credits",
             "description": {
-                "1": "3.1 VTEX, provided that the Contractor fulfills its obligations, commits to maintaining the services operational for at least 99.00% of the month for the Weni Platform by VTEX. The Parties agree that cases in which any Service Level Agreement (SLA) non-compliance is caused by instabilities from META or third parties involved are excluded. The SLA (\"Measured SLA\") is calculated by considering the total minutes in the measured month, subtracting any downtime recorded in the same period. Downtime means that the Weni Platform by VTEX is unavailable for access and use by the Contractor and other internet connections, excluding cases of (1) planned maintenance, (2) force majeure events, or (3) issues arising from improper use of the Weni Platform by VTEX by the Contractor or proven failure of the Contractor to fulfill its obligations.",
-                "2": "3.2 If the SLA is not met as described above, and provided that all Contractor obligations have been met, Service Credits will be granted in an amount equal to 10% (ten percent) of the monthly fees paid by the Contractor to VTEX for the Weni Platform by VTEX, to be applied to the next invoice after the downtime calculation. To receive Service Credits, the Contractor must submit a request via VTEX's support system within 10 (ten) days after the end of the month in which the downtime occurred, as per the Agreement between the Parties."
+                "1": "3.1 Provided that the Contractor fulfills its obligations, VTEX commits to keeping the Weni by VTEX Platform services operational at least 99% of the time each month. The Parties agree that any non-compliance with the Service Level Agreement (SLA) due to instabilities from Meta or other involved third parties are excluded. The SLA (\"Measured SLA\") is calculated by taking the total minutes in the analyzed month and subtracting any recorded downtime during that period. Downtime refers to periods when the Weni by VTEX Platform is not accessible and usable by the Contractor and other internet connections, excluding cases of (1) planned maintenance, (2) events of force majeure, or (3) problems arising from improper use of the Weni by VTEX Platform by the Contractor or proven failure to fulfill their obligations.",
+                "2": "3.2 If the SLA is not met as described above, provided that the Contractor has fulfilled all their obligations, VTEX shall grant service credits in an amount equal to 10% (ten percent) of the Contractor's monthly payments for the Weni by VTEX Platform to VTEX. These credits will be applied to the next invoice issued after the downtime calculation. To receive service credits, the Contractor must submit a request through the VTEX Support system within ten (10) days following the end of the month in which the downtime occurred, in accordance with the terms established in the Agreement between the Parties."
             }
         },
         "services": {
-            "title": "4. Services Included in the Solution",
+            "title": "4. Services included in the solution",
             "description": {
-                "1": "4.1 The Parties agree that the modules included in the Weni Platform by VTEX comprise: Flows Module; Studio Module; Artificial Intelligence Module; Integration Module; Chat Module; SDK for mobile applications; WhatsApp Business API; and Unlimited agent license in Weni Chat.",
-                "2": "4.2 As Parties agree that the services and support included in the Weni Platform by VTEX comprise: Environment creation in the Weni Platform; Hosting of the Weni Platform; Up to six (6) hours of training; Updates and improvements to the Weni Platform by VTEX; and Support."
+                "1": "4.1 The Parties agree that the modules included in the Weni Platform by VTEX are: Flows Module; Studio Module; Artificial Intelligence Module; Integration Module; Chat Module; SDK for mobile applications; WhatsApp Business API; and Unlimited agent license for Weni Chat.",
+                "2": "4.2 The Parties agree that the services and support included in the Weni by VTEX Platform comprise: the creation of an environment on the Weni Platform; hosting of the Weni Platform; up to six (6) hours of training; updates and improvements to the Weni by VTEX Platform; and support."
             }
         },
         "contracting": {
-            "title": "5. Contracting Terms and Parameters",
+            "title": "5. Terms and parameters of the agreement",
             "description": {
-                "1": "5.1 The Parties agree that the Contractor's Onboarding will take place within 5 business days after payment of the annual licensing fee, provided that the Contractor provides the necessary contact information required by VTEX.",
-                "2": "5.2 The Parties agree that the project will be executed after the payment of the annual licensing fee.",
-                "3": "5.3 The terms of this T&C take effect from the date of signing for a period of 12 (twelve) months, with the contract term being automatically renewed for additional equivalent periods unless one Party notifies the other, in writing, at least thirty (30) days before the term's expiration, of its intention not to renew the T&C.",
+                "1": "5.1 The Parties agree that the platform will be presented to the Contractor within five (5) business days following payment of the annual license fee, provided that the Contractor has provided VTEX with the necessary contact information.",
+                "2": "5.2 The Parties agree that the project shall commence after payment of the annual license fee.",
+                "3": "5.3 The terms of these T&C shall take effect on the date of signature and remain valid for a period of twelve (12) months. The agreement will be automatically renewed for successive periods of the same duration, unless either Party notifies the other in writing, at least thirty (30) days prior to the expiration date, expressing their intention not to renew the T&C.",
                 "4": {
-                    "title": "5.4 This T&C may be terminated by either party at the end of the 12 (twelve) months without penalty or indemnification, provided that if VTEX terminates the agreement, the Contractor is notified at least 90 (ninety) days in advance, and if the Contractor terminates the agreement, VTEX is notified at least 90 (ninety) days in advance.",
+                    "title": "5.4 These T&C can be terminated by either Party at the end of the twelve (12) month period without penalty or compensation, provided the Party wishing to terminate notifies the other Party at least ninety (90) days in advance.",
                     "items": {
-                        "1": "5.4.1 If the Contractor decides to unilaterally terminate the Agreement before the end of the 12-month Term, it must pay VTEX the contracted monthly licensing fee as specified in clause 6.1, multiplied by the number of months remaining until the end of the 12-month Term established in this Addendum."
+                        "1": "5.4.1 If the Contractor unilaterally decides to terminate the Agreement before the end of the twelve (12) month term, they shall pay VTEX the monthly contracted license fee, as set forth in clause 6.1, until the end of the twelve (12) month term established in this Section."
                     }
                 }
             }
         },
         "payment": {
-            "title": "6. Payment Conditions",
+            "title": "6. Payment terms",
             "description": {
-                "1": "6.1 The Contractor shall pay VTEX the amounts indicated in the table below, according to the chosen plan, upon presentation of an invoice by VTEX, as established in the Agreement.",
+                "1": "6.1 The Contractor shall pay VTEX the amounts indicated in the table below, in accordance with the selected plan, upon receipt of an invoice issued by VTEX, as set forth in the Agreement.",
                 "table": {
                     "headers": {
                         "feature": "",
@@ -269,34 +252,34 @@
                     },
                     "rows": [
                         {
-                            "feature": "Annual licensing fee (Cloud hosting, deliveries, and continuous updates)",
-                            "starter": "R$5,000.00/year",
-                            "corporate": "R$25,000.00/year",
-                            "enterprise": "R$100,000.00/year"
+                            "feature": "Annual licensing fee (cloud hosting, services, and continuous updates)",
+                            "starter": "$1,000/year",
+                            "corporate": "$5,000/year",
+                            "enterprise": "$20,000/year"
                         },
                         {
                             "feature": "Monthly licensing fee (maintenance, monitoring, and support)",
-                            "starter": "R$750.00/month",
-                            "corporate": "R$3,750.00/month",
-                            "enterprise": "R$7,500.00/month"
+                            "starter": "$150/month",
+                            "corporate": "$750/month",
+                            "enterprise": "$1,500/month"
                         },
                         {
-                            "feature": "Success fee (per AI-resolved customer interaction)",
-                            "starter": "R$6.00/resolution",
-                            "corporate": "R$4.50/resolution",
-                            "enterprise": "R$3.00/resolution"
+                            "feature": "Success rate (per customer interaction resolved by AI)",
+                            "starter": "$1.20/resolution",
+                            "corporate": "$0.90/resolution",
+                            "enterprise": "$0.60/resolution"
                         },
                         {
-                            "feature": "Outbound CX Notification (order tracking, invoice sending, payment notification, etc.)",
+                            "feature": "Outbound CX notifications (order tracking, invoice sending, payment notification, etc.)",
                             "starter": "Up to 10,000",
                             "corporate": "Up to 100,000",
                             "enterprise": "Up to 1,000,000"
                         },
                         {
-                            "feature": "Outbound Marketing Campaign (24-hour conversation window)",
-                            "starter": "R$1.20/unit",
-                            "corporate": "R$0.90/unit",
-                            "enterprise": "R$0.60/unit"
+                            "feature": "Outbound marketing campaign (24-hour conversation window)",
+                            "starter": "$0.24/unit",
+                            "corporate": "$0.18/unit",
+                            "enterprise": "$0.12/unit"
                         },
                         {
                             "feature": "Human interactions",
@@ -305,13 +288,13 @@
                             "enterprise": "Unlimited"
                         },
                         {
-                            "feature": "Customer-initiated contact",
+                            "feature": "Initial customer contact",
                             "starter": "Unlimited",
                             "corporate": "Unlimited",
                             "enterprise": "Unlimited"
                         },
                         {
-                            "feature": "Constellation of AI Models",
+                            "feature": "AI agents",
                             "starter": "Included",
                             "corporate": "Included",
                             "enterprise": "Included"
@@ -330,28 +313,31 @@
                         }
                     ]
                 },
-                "note": "Selected plan: STARTER",
-                "2": "6.2 The values foreseen in this T&C will be charged in the VTEX invoice to the Contractor, respecting the same payment conditions stipulated in the previously signed Agreement between the Parties."
+                "note": "Selected plan: Starter",
+                "2": "6.2 The amounts stipulated in these T&C shall be charged on the invoice issued by VTEX to the Contractor, in accordance with the payment terms established in the Agreement previously signed between the Parties."
             }
         },
         "final": {
-            "title": "7. Final Provisions",
+            "title": "7. Final provisions",
             "description": {
-                "1": "7.1 This T&C will be governed and interpreted in accordance with the law stipulated in the Agreement and any dispute between the Parties that cannot be resolved by mutual agreement will be resolved exclusively in accordance with the Agreement.",
-                "2": "7.2 Any delay in any payment by the Contractor for more than 15 (fifteen) days will authorize VTEX, until the payment of the unpaid invoices, to limit access to the solution provided by the Weni Platform by VTEX.",
-                "3": "7.3 The Contractor acknowledges that the Weni Platform by VTEX utilizes external technology platforms, including but not limited to those offered by the META corporate entity. The Contractor acknowledges that any changes, limitations, or suspensions of the Weni Platform by VTEX due to determinations by the META corporate entity will be communicated to the Contractor as soon as possible by VTEX, even if in a form different from that set forth in this T&C, without VTEX being considered in violation of these terms.",
-                "4": "7.4 The Parties ratify all other provisions of the Agreement that are not expressly revoked or altered by this Addendum, and those that apply to this instrument. In case of conflict between the Agreement and this Addendum, the provisions of this Addendum will prevail."
+                "1": "7.1 These T&C shall be governed by and interpreted in accordance with the legislation stipulated in the Agreement. Any dispute between the Parties that cannot be resolved by mutual agreement will be settled exclusively under the terms of the said Agreement.",
+                "2": "7.2 Any delay in payment by the Contractor exceeding fifteen (15) days shall entitle VTEX to restrict access to the solution provided through the Weni by VTEX Platform until payment of the unpaid invoices.",
+                "3": "7.3 The Contractor acknowledges that the Weni by VTEX Platform uses external technology platforms, including but not limited to those offered by the corporate entity Meta. The Contractor acknowledges that any changes, limitations, or suspensions of the Weni by VTEX Platform due to determinations made by the corporate entity Meta will be communicated by VTEX to the Contractor as soon as possible, even if through means other than those established in these T&C, without constituting a violation of these terms by VTEX.",
+                "4": "7.4 The Parties ratify all other provisions of the Agreement that have not been expressly revoked or amended by this Addendum, including those applicable to this instrument. In the event of any conflict between the Agreement and this Addendum, the provisions of this Addendum shall prevail."
             }
         },
-        "description": "By using this application, acceptance of the Terms and Conditions is required. These terms define access to and use of the services, detailing the selected plan's features, limitations, pricing, and renewal policies. Additionally, they outline product functionality, usage guidelines, and any applicable restrictions to ensure a secure and optimal experience.",
+        "description": "By using this application, you must accept the Terms and Conditions. These terms define access to and use of the services, detailing the features of the selected plan, its limitations, pricing, and renewal policies. They also describe the product's functionality, usage guidelines and any applicable restrictions to ensure a safe and satisfactory experience.",
         "plan_details": {
-            "title": "1. Plan Details",
-            "description": "Your selected plan includes specific features, limitations, and billing terms. Please check your subscription details to understand what is included and how renewals work."
+            "title": "1. Plan details",
+            "description": "Your plan includes specific features, limitations, and billing terms. Check your subscription details to understand what it offers and how renewals work."
         },
         "product_usage": {
-            "title": "2. Product Usage",
-            "description": "This application is designed to enhance your experience through specific features and functionalities. Any misuse, unauthorized access, or violation of the terms may result in account suspension."
+            "title": "2. Product usage",
+            "description": "This app was developed to enhance your experience through specific features and functionalities. Any misuse, unauthorized access, or violation of the terms may result in account suspension."
         },
         "agree": "Agree"
+    },
+    "template_synchronization": {
+        "rejected": "Agent model not approved. Try adding it again."
     }
 }
