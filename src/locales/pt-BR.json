@@ -31,7 +31,7 @@
             "active": {
                 "title": "Notificação ativa",
                 "order_status": {
-                    "title": "Agente de status do pedido",
+                    "title": "Agente de status de pedidos",
                     "description": "Mantenha os clientes atualizados sobre o status do pedido em tempo real",
                     "details": {
                         "title": "Ative o rastreamento da entrega dos pedidos para os clientes",
@@ -56,7 +56,7 @@
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de carrinho abandonado",
+                    "title": "Agente de recuperação de carrinho",
                     "description": "Recupere vendas lembrando os clientes dos itens deixados no carrinho",
                     "details": {
                         "title": "Recupere vendas lembrando os clientes dos itens deixados no carrinho",
@@ -82,7 +82,7 @@
                                 "step4": "Abra `commonScripts` e cole o script abaixo."
                             },
                             "site_editor": {
-                                "title": "Site Editor",
+                                "title": "Editor de Site",
                                 "description": "Não são necessárias etapas de configuração para o tipo de loja 'Site Editor'. Uma vez confirmado, o agente estará pronto para uso."
                             }
                         }
@@ -143,7 +143,7 @@
                     "title": "Canal",
                     "faststore": "FastStore",
                     "portal": "Portal/Layout",
-                    "site_editor": "Site Editor"
+                    "site_editor": "Editor de Site"
                 },
                 "occupation": {
                     "title": "Ocupação (opcional)",
