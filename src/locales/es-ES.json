@@ -56,7 +56,7 @@
                     }
                 },
                 "abandoned_cart": {
-                    "title": "Agente de carrito abandonado",
+                    "title": "Agente de recuperación de carrito",
                     "description": "Recupera ventas recordando a los clientes los ítems abandonados en el carrito",
                     "details": {
                         "title": "Recupera ventas recordando a los clientes los ítems abandonados en el carrito",
@@ -82,7 +82,7 @@
                                 "step4": "Abre `commonScripts` y pega el script a continuación."
                             },
                             "site_editor": {
-                                "title": "Site Editor",
+                                "title": "Editor de Sitio",
                                 "description": "El tipo de tienda 'Site Editor' no requiere configuración. Una vez confirmado, el agente está listo para activación."
                             }
                         }
@@ -143,7 +143,7 @@
                     "title": "Canal",
                     "faststore": "FastStore",
                     "portal": "Portal/Layout",
-                    "site_editor": "Site Editor"
+                    "site_editor": "Editor de Sitio"
                 },
                 "occupation": {
                     "title": "Profesión (opcional)",
