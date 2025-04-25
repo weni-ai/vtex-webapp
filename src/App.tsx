@@ -11,6 +11,7 @@ import { Setup } from './pages/Setup';
 import { Dashboard } from './pages/Dashboard';
 import { Grid, Spinner } from '@vtex/shoreline';
 import { initialLoading } from './store/projectSlice';
+import { TermsAndConditions } from './pages/TermsAndConditions';
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Setup />}></Route>
             <Route path='/agent-details' element={<AgentDetails />}></Route>
+            <Route path='/terms-and-conditions' element={<TermsAndConditions />}></Route>
             <Route path='/agent-builder' element={<AgentBuilder />}></Route>
             <Route path='/setup-error' element={<SetupError />}></Route>
             <Route path='/dash' element={<Dashboard />}></Route>
