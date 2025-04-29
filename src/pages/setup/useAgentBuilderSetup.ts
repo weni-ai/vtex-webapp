@@ -15,7 +15,7 @@ export function useAgentBuilderSetup() {
         knowledge: string;
         occupation: string;
         objective: string;
-      }) => {
+      }, redirect: boolean = true) => {
         store.dispatch(setAgentBuilderLoading(true))
         const cleanedPayload = Object.fromEntries(
             Object.entries(payload).filter(([, value]) => value !== null && value !== undefined && value !== '')
@@ -51,8 +51,11 @@ export function useAgentBuilderSetup() {
                 }
             }
 
-            store.dispatch(setAgentBuilderLoading(false))
-            navigate('/dash');
+            store.dispatch(setAgentBuilderLoading(false));
+
+            if (redirect) {
+                navigate('/dash');
+            }
         }
         store.dispatch(setAgentBuilderLoading(false))
     };
