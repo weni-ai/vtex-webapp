@@ -6,6 +6,7 @@ import { selectUser } from "../store/userSlice";
 import { useEffect, useState } from 'react';
 import { disableAgent, getSkillMetrics, updateAgentsList } from '../services/agent.service';
 import { DashboardItem } from '../components/DashboardItem';
+import getEnv from '../utils/env';
 
 export function Dashboard() {
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
@@ -18,7 +19,7 @@ export function Dashboard() {
   const [data, setData] = useState<{ title: string; value: string; }[][]>([]);
 
   function navigateToAgent() {
-    const dash = new URL(`https://dash.stg.cloud.weni.ai/projects/${project_uuid}`);
+    const dash = new URL(`/projects/${project_uuid}`, getEnv("VITE_APP_DASH_URL"));
 
     const VTEXAppParams = new URLSearchParams();
 
