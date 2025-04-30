@@ -69,6 +69,7 @@ export interface UserData {
 }
 
 export interface AccountData {
+    accountName: string;
     hosts:  string[];
 }
   

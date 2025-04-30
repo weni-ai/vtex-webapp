@@ -23,7 +23,7 @@ import {
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { agentBuilderLoading, getAgentBuilder, loadingSetup, setStoreType } from '../../store/projectSlice';
-import { isAgentBuilderIntegrated, isWhatsAppIntegrated } from '../../store/userSlice';
+import { isAgentBuilderIntegrated, isWhatsAppIntegrated, selectAccount } from '../../store/userSlice';
 import { useAgentBuilderSetup } from '../setup/useAgentBuilderSetup';
 import { useUserSetup } from '../setup/useUserSetup';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
@@ -61,11 +61,13 @@ async function updateStoreType(storeType: string) {
 }
 
 export function AgentBuilder() {
+  const agentBuilder = useSelector(getAgentBuilder);
+  const account = useSelector(selectAccount);
   const [form, setForm] = useState<FormState>({
-    name: useSelector(getAgentBuilder).name || '',
-    knowledge: useSelector(getAgentBuilder).links[0] || '',
-    occupation: useSelector(getAgentBuilder).occupation || t('agent.setup.forms.occupation.default'),
-    objective: useSelector(getAgentBuilder).objective || t('agent.setup.forms.objective.default'),
+    name: agentBuilder.name || account?.accountName || '',
+    knowledge: agentBuilder.links[0] || '',
+    occupation: agentBuilder.occupation || t('agent.setup.forms.occupation.default'),
+    objective: agentBuilder.objective || t('agent.setup.forms.objective.default'),
     channel: store.getState().project.storeType || '',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
@@ -79,6 +81,16 @@ export function AgentBuilder() {
   const navigate = useNavigate()
   useEffect(() => {
     initializeUser();
+
+    const shouldUpdateAgentBuilder = agentBuilder.name !== form.name;
+
+    if (shouldUpdateAgentBuilder) {
+      const payload = Object.fromEntries(
+        Object.entries(form).filter(([, value]) => value.trim())
+      ) as FormState;
+  
+      buildAgent(payload, false);
+    }
   }, [initializeUser]);
 
   const isValidURL = (url: string) => {
@@ -90,7 +102,7 @@ export function AgentBuilder() {
     const newErrors: { [key in keyof FormState]?: string } = {
       name: !form.name.trim() ? t('agent.setup.forms.error.empty_input') : '',
       knowledge: !form.knowledge.trim()
-        ? t('agent.setup.forms.error.empty_input')
+        ? ''
         : !isValidURL(form.knowledge.trim())
           ? t('agent.setup.forms.error.valid_url')
           : '',
