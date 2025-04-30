@@ -5,7 +5,7 @@ export type AgentConfig = {
   code: string;
   uuid: string;
   integration_settings?: {
-    order_status_restriction?: {
+    restriction?: {
       phone_numbers: string;
     };
     message_time_restriction?: {
@@ -47,8 +47,8 @@ function isInTest(config?: AgentConfig) {
     return false;
   }
 
-  const hasPhoneNumber = config?.integration_settings?.order_status_restriction?.phone_numbers
-    && config?.integration_settings?.order_status_restriction?.phone_numbers.length > 0;
+  const hasPhoneNumber = config?.integration_settings?.restriction?.phone_numbers
+    && config?.integration_settings?.restriction?.phone_numbers.length > 0;
 
   return hasPhoneNumber || false;
 }
@@ -71,8 +71,8 @@ export function adapterAgentsList(response: AgentsListResponse) {
     code: agent.code,
     isInTest: isInTest(agent.config),
     isConfiguring: isConfiguring(agent.config),
-    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
-      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
+    phone_numbers: agent.config?.integration_settings?.restriction?.phone_numbers ? 
+      [agent.config.integration_settings.restriction.phone_numbers] : 
       []
   }));
 }
@@ -100,8 +100,8 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
     isInTest: isInTest(agent.config),
     isConfiguring: isConfiguring(agent.config),
     templateSynchronizationStatus: agent.config?.templates_synchronization_status,
-    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
-      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
+    phone_numbers: agent.config?.integration_settings?.restriction?.phone_numbers ? 
+      [agent.config.integration_settings.restriction.phone_numbers] : 
       [],
     message_time_restrictions: agent.config?.integration_settings?.message_time_restriction
   }));

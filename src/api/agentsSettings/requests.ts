@@ -10,7 +10,7 @@ export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agen
   const url = '/_v/update-feature-settings';
 
   const messageTimeRestriction = formData?.messageTimeRestriction;
-  const orderStatusRestriction = formData?.order_status_restriction;
+  const restriction = formData?.restriction;
 
   const integrationSettings =
     code === "abandoned_cart"
@@ -28,14 +28,17 @@ export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agen
               },
             },
           },
+          restriction: {},
         }
       : {
-          order_status_restriction: {
-            is_active: orderStatusRestriction?.is_active || false,
-            phone_numbers: orderStatusRestriction?.phone_numbers || "",
-            sellers: orderStatusRestriction?.sellers || [],
-          },
-        }
+        restriction: {},
+      }
+
+  integrationSettings.restriction = {
+    is_active: restriction?.is_active || false,
+    phone_numbers: restriction?.phone_numbers || "",
+    sellers: restriction?.sellers || [],
+  }
 
   const response = await VTEXFetch<AgentsSettingsUpdateResponse>(url, {
     method: 'PUT',

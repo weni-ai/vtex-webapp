@@ -1,6 +1,13 @@
 import { createContext } from "react";
 
+interface RestrictionType {
+  is_active: boolean;
+  phone_numbers: string;
+  sellers: string[];
+}
+
 interface AbandonedCartActiveType {
+  restriction: RestrictionType;
   messageTimeRestriction: {
     isActive: boolean;
     periods: {
@@ -17,11 +24,7 @@ interface AbandonedCartActiveType {
 }
 
 interface OrderStatusActiveType {
-  order_status_restriction: {
-    is_active: boolean;
-    phone_numbers: string;
-    sellers: string[];
-  };
+  restriction: RestrictionType;
 }
 
 export interface SettingsFormData extends Partial<AbandonedCartActiveType>, Partial<OrderStatusActiveType> {}
