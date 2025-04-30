@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "src/interfaces/Store";
 import { convertStringToTimeValue, convertTimeValueToString } from "../../utils/timeConversor";
 import { TimeValue } from '@react-aria/datepicker';
+import { TestContact } from "./TestContact";
 
 export function PreferencesAbandonedCartActive() {
   const context = useContext(SettingsContext);
@@ -63,6 +64,8 @@ export function PreferencesAbandonedCartActive() {
 
   return (
     <DrawerContent>
+      <TestContact code="abandoned_cart" />
+      
       <Flex style={{ marginBottom: '1rem' }}>
         <Checkbox checked={restriction} onChange={setRestrictionValue} aria-label={t('agents.active.abandoned_cart.settings.restriction.description')}>
           <Flex direction="column" style={{ gap: '0px' }}>
