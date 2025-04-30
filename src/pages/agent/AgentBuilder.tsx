@@ -30,7 +30,6 @@ import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
 import { Channel } from '../Channel';
 import { useNavigate } from 'react-router-dom';
 import question from '../../assets/icons/question.svg'
-import { TermsAndConditions } from '../../components/TermsAndConditions';
 import { cleanURL } from '../../utils';
 import store from '../../store/provider.store';
 import { VTEXFetch } from '../../utils/VTEXFetch';
@@ -71,7 +70,6 @@ export function AgentBuilder() {
     channel: store.getState().project.storeType || '',
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
-  const [openTerms, setOpenTerms] = useState(false)
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const isSetupLoading = useSelector(loadingSetup);
   const isAgentBuilderLoading = useSelector(agentBuilderLoading)
@@ -117,23 +115,18 @@ export function AgentBuilder() {
     }
 
     setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  const handleOpenTerms = () => {
-    if (validateForm() && isWppIntegrated) {
-      setOpenTerms(true)
-    }
-  }
+  };
 
   const handleSubmit = async () => {
-    const payload = Object.fromEntries(
-      Object.entries(form).filter(([, value]) => value.trim())
-    ) as FormState;
-
-    buildAgent(payload);
-    setOpenTerms(false);
-
-    await updateStoreType(form.channel);
+    if (validateForm() && isWppIntegrated) {
+      const payload = Object.fromEntries(
+        Object.entries(form).filter(([, value]) => value.trim())
+      ) as FormState;
+  
+      buildAgent(payload);
+  
+      await updateStoreType(form.channel);
+    }
   };
 
   return (
@@ -143,11 +136,11 @@ export function AgentBuilder() {
           <PageHeaderRow style={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <PageHeading style={{ display: 'flex', alignItems: 'center' }}>
               <IconButton label='' variant="tertiary">
-                <IconArrowLeft onClick={() => navigate('/agent-details')} />
+                <IconArrowLeft onClick={() => navigate('/terms-and-conditions')} />
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
-            <Button variant="primary" size="large" onClick={handleOpenTerms} disabled={!isWppIntegrated || isAgentBuilderLoading || !form.channel}>
+            <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isWppIntegrated || isAgentBuilderLoading || !form.channel}>
               {isAgentBuilderLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
@@ -225,7 +218,6 @@ export function AgentBuilder() {
           )}
         </PageContent>
       </Page>
-      <TermsAndConditions open={openTerms} dismiss={() => setOpenTerms(false)} approve={handleSubmit} />
     </Container>
   );
 }
