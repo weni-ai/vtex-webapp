@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export function AgentDetails() {
     const navigate = useNavigate();
     const navigateToBuilder = () => {
-        navigate('/agent-builder')
+        navigate('/terms-and-conditions')
     }
     return (
         <Container>
