@@ -28,6 +28,9 @@
     "agents": {
         "title": "Agent gallery",
         "categories": {
+            "passive": {
+                "title": "Passive notification"
+            },
             "active": {
                 "title": "Active notification",
                 "order_status": {
@@ -339,5 +342,17 @@
     },
     "template_synchronization": {
         "rejected": "Agent model not approved. Try adding it again."
+    },
+    "insights": {
+        "dashboard": {
+            "abandoned_cart": {
+                "sent_messages": "Sent messages",
+                "delivered_messages": "Delivered messages",
+                "read_messages": "Read messages",
+                "interactions": "Interactions",
+                "utm_revenue": "UTM revenue",
+                "orders_placed": "Orders placed"
+            }
+        }
     }
 }

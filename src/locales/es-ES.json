@@ -28,6 +28,9 @@
     "agents": {
         "title": "Galería de agentes",
         "categories": {
+            "passive": {
+                "title": "Notificación pasiva"
+            },
             "active": {
                 "title": "Notificación activa",
                 "order_status": {
@@ -339,5 +342,17 @@
     },
     "template_synchronization": {
         "rejected": "Modelo de agente no aprobado. Intenta agregarlo de nuevo."
+    },
+    "insights": {
+        "dashboard": {
+            "abandoned_cart": {
+                "sent_messages": "Mensajes enviados",
+                "delivered_messages": "Mensajes entregados",
+                "read_messages": "Mensajes leídos",
+                "interactions": "Interacciones",
+                "utm_revenue": "Ingresos UTM",
+                "orders_placed": "Pedidos realizados"
+            }
+        }
     }
 }

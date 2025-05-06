@@ -15,6 +15,8 @@ export interface Feature {
     uuid: string;
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
+    name: string;
+    description: string;
     isInTest: boolean;
     isConfiguring: boolean;
     templateSynchronizationStatus?: 'pending' | 'rejected' | 'approved';
@@ -32,6 +34,9 @@ export interface Feature {
             };
         };
     };
+    origin?: 'commerce' | 'nexus';
+    integrated?: boolean;
+    agent_uuid?: string;
 }
 
 export interface Loading {
