@@ -89,13 +89,22 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
     const flows_channel_uuid = store.getState().project.flows_channel_uuid;
     const wpp_cloud_app_uuid = store.getState().project.wpp_cloud_app_uuid;
 
+    const agent = store.getState().project.agents.find(agent => agent.uuid === feature_uuid);
+
     const data = {
       feature_uuid,
       project_uuid,
       store: storeAddress,
       flows_channel_uuid,
       wpp_cloud_app_uuid,
+      is_nexus_agent: false,
+      agent_uuid: '',
     };
+
+    if (agent?.origin === 'nexus') {
+      data.is_nexus_agent = true;
+      data.agent_uuid = feature_uuid;
+    }
 
     const response = await integrateAgentRequest(data);
     await updateAgentsList();
@@ -127,11 +136,16 @@ export async function updateAgentSettings(code: Feature['code'], body: UpdateAge
   }
 }
 
-export async function disableAgent(project_uuid: string, feature_uuid: string) {
+export async function disableAgent(project_uuid: string, feature_uuid: string, agentOrigin: string) {
   store.dispatch(setDisableAgentLoading(true))
 
   try {
-    const response = await disableFeatureRequest({ project_uuid, feature_uuid });
+    const data =
+      agentOrigin === 'nexus' ?
+      { project_uuid, feature_uuid, agent_uuid: feature_uuid, is_nexus_agent: true }:
+      { project_uuid, feature_uuid };
+
+    const response = await disableFeatureRequest(data);
 
     if (response?.error) {
       throw new Error(response?.message || 'error updating agent.');

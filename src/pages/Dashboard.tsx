@@ -80,7 +80,7 @@ export function Dashboard() {
 
     toast.critical(t('agents.common.errors.template_synchronization.rejected'));
 
-    await disableAgent(project_uuid, uuid);
+    await disableAgent(project_uuid, uuid, 'commerce');
 
     setAgentsRemoving((prev) => prev.filter((item) => item !== uuid));
   }
@@ -198,10 +198,13 @@ export function Dashboard() {
                 {agentsList.map((item) => (
                   <AgentBox
                     key={item.uuid}
+                    name={item.name || ''}
+                    description={item.description || ''}
                     uuid={item.uuid}
                     code={item.code}
-                    type="active"
-                    isIntegrated={false}
+                    type={item.category.toLocaleLowerCase() as 'active' | 'passive'}
+                    isIntegrated={item.integrated || false}
+                    origin={item.origin || 'commerce'}
                     isInTest={item.isInTest}
                     isConfiguring={item.isConfiguring}
                   />
@@ -209,10 +212,13 @@ export function Dashboard() {
                 {integrated.map((item) => (
                   <AgentBox
                     key={item.uuid}
+                    name={item.name || ''}
+                    description={item.description || ''}
                     uuid={item.uuid}
                     code={item.code}
-                    type="active"
+                    type={item.category?.toLocaleLowerCase() as 'active' | 'passive'}
                     isIntegrated={true}
+                    origin={item.origin || 'commerce'}
                     isInTest={item.isInTest}
                     isConfiguring={item.isConfiguring}
                   />
