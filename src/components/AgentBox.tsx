@@ -3,7 +3,7 @@ import { AboutAgent } from "./AboutAgent";
 import { useMemo, useState } from "react";
 import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { agents, agentsLoading, selectProject} from "../store/projectSlice";
+import { agentsLoading, selectProject} from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
