@@ -39,9 +39,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
-  const agentsList = useSelector(agents)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
-  const agentUuid = agentsList.find((item: { code: string }) => item.code === code)?.uuid || '';
   const channel = store.getState().project.storeType
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -55,11 +53,11 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const integrateCurrentFeature = async () => {
-    if (code === 'abandoned_cart' && channel !== 'site_editor') {
+    if (origin === 'commerce' && code === 'abandoned_cart' && channel !== 'site_editor') {
       setOpenAbandonedCartModal(true)
       return;
     }
-    const result = await integrateAgent(agentUuid, projectUUID);
+    const result = await integrateAgent(uuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {
@@ -248,7 +246,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
         confirm={() => {
-          integrateAgent(agentUuid, projectUUID);
+          integrateAgent(uuid, projectUUID);
           setOpenAbandonedCartModal(false);
         }}
       />
