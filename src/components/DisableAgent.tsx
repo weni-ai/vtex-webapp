@@ -6,16 +6,17 @@ export interface AboutAgentProps {
     open: boolean,
     agentUuid: string,
     agent: string,
+    agentOrigin: string,
     toggleModal: () => void;
 }
 
-export function DisableAgent({ open, agent, agentUuid, toggleModal }: Readonly<AboutAgentProps>) {
+export function DisableAgent({ open, agent, agentUuid, toggleModal, agentOrigin }: Readonly<AboutAgentProps>) {
     const isDisabling = useSelector(disableAgentLoading)
     const projectUuid = useSelector(selectProject);
 
 
     async function disable() {
-        const disableResponse = await disableAgent(projectUuid, agentUuid)
+        const disableResponse = await disableAgent(projectUuid, agentUuid, agentOrigin)
 
         if(disableResponse?.error){
             toast.critical(t('agents.common.disable.error'));

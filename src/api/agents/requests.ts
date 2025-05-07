@@ -17,6 +17,7 @@ interface IntegrateAgentData {
   store: string;
   flows_channel_uuid: string;
   wpp_cloud_app_uuid: string;
+  origin?: 'commerce' | 'nexus';
 }
 
 interface CreateAgentBuilderData {
