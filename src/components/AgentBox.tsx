@@ -158,6 +158,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           <Text
             variant="body"
             color="$fg-base-soft"
+            style={{
+              'display': '-webkit-box',
+              '-webkit-line-clamp': '3',
+              '-webkit-box-orient': 'vertical',
+              'overflow': 'hidden',
+              'text-overflow': 'ellipsis',
+            }}
           >
             {
               t(`agents.categories.${type}.${code}.description`) === `agents.categories.${type}.${code}.description`
