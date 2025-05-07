@@ -80,7 +80,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const agentName =
     t(`agents.categories.${type}.${code}.title`) === `agents.categories.${type}.${code}.title`
       ? name
-      : t(`agents.categories.${type}.${code}.title`)
+      : t(`agents.categories.${type}.${code}.title`);
+
+  const agentDescription =
+    t(`agents.categories.${type}.${code}.description`) === `agents.categories.${type}.${code}.description`
+      ? description
+      : t(`agents.categories.${type}.${code}.description`);
+
   const isNexusAgent = origin === 'nexus';
   const isStatusBetweenIntegrated = ['test', 'configuring', 'integrated'].includes(status);
   
@@ -159,18 +165,14 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             variant="body"
             color="$fg-base-soft"
             style={{
-              'display': '-webkit-box',
-              '-webkit-line-clamp': '3',
-              '-webkit-box-orient': 'vertical',
-              'overflow': 'hidden',
-              'text-overflow': 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: '3',
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
-            {
-              t(`agents.categories.${type}.${code}.description`) === `agents.categories.${type}.${code}.description`
-              ? description
-              : t(`agents.categories.${type}.${code}.description`)
-            }
+            { agentDescription }
           </Text>
         </Flex>
 
