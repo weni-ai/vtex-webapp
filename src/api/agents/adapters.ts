@@ -40,6 +40,13 @@ export interface AgentsListResponse {
     initial_flow: { uuid: string; name: string; }[];
   }[],
   store_type: string;
+  agents: {
+    uuid: string;
+    name: string;
+    description: string;
+    assigned: boolean;
+    slug: string;
+  }[];
 };
 
 function isInTest(config?: AgentConfig) {
@@ -64,17 +71,44 @@ function isConfiguring(config?: AgentConfig) {
   return isPendingOrRejected || false;
 }
 
-export function adapterAgentsList(response: AgentsListResponse) {
-  return response.features.map((agent) => ({
+export function adapterAgentsList(response: AgentsListResponse): {
+  origin: 'commerce' | 'nexus';
+  uuid: string;
+  category: "ACTIVE" | "PASSIVE";
+  code: "order_status" | "abandoned_cart";
+  name: string;
+  description: string;
+  isInTest: boolean;
+  isConfiguring: boolean;
+  phone_numbers: string[];
+  integrated?: boolean;
+}[] {
+  const commerceAgents = response.features.map((agent) => ({
+    origin: 'commerce' as const,
     uuid: agent.feature_uuid,
-    category: agent.category,
+    category: 'ACTIVE' as const,
     code: agent.code,
+    name: agent.name,
+    description: agent.description,
     isInTest: isInTest(agent.config),
     isConfiguring: isConfiguring(agent.config),
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
       []
   }));
+
+  return [...commerceAgents, ...response.agents.map((agent) => ({
+    origin: 'nexus' as const,
+    uuid: agent.uuid,
+    category: 'PASSIVE' as const,
+    code: 'abandoned_cart' as const,
+    name: agent.name,
+    description: agent.description,
+    isInTest: false,
+    isConfiguring: false,
+    phone_numbers: [],
+    integrated: agent.assigned,
+  }))];
 }
 
 export interface IntegratedAgentsListResponse {
@@ -95,8 +129,10 @@ export interface IntegratedAgentsListResponse {
 export function adapterIntegratedAgentsList(response: IntegratedAgentsListResponse) {
   return response.integratedFeatures.map((agent) => ({
     uuid: agent.feature_uuid,
-    category: agent.category,
+    category: 'ACTIVE' as const,
     code: agent.code,
+    name: agent.name,
+    description: agent.description,
     isInTest: isInTest(agent.config),
     isConfiguring: isConfiguring(agent.config),
     templateSynchronizationStatus: agent.config?.templates_synchronization_status,

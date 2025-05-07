@@ -33,7 +33,7 @@ export function AgentBoxSkeleton({ count }: { count: number }) {
   )
 }
 
-export function AgentBox({ uuid, code, type, isIntegrated, isInTest, isConfiguring }: { uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
+export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring }: { origin: 'commerce' | 'nexus', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
@@ -78,6 +78,13 @@ export function AgentBox({ uuid, code, type, isIntegrated, isInTest, isConfiguri
       return 'availableToIntegrate';
     }
   }, [isInTest, isConfiguring, isIntegrated]);
+
+  const agentName =
+    t(`agents.categories.${type}.${code}.title`) === `agents.categories.${type}.${code}.title`
+      ? name
+      : t(`agents.categories.${type}.${code}.title`)
+  const isNexusAgent = origin === 'nexus';
+  const isStatusBetweenIntegrated = ['test', 'configuring', 'integrated'].includes(status);
   
   return (
     <>
@@ -93,45 +100,60 @@ export function AgentBox({ uuid, code, type, isIntegrated, isInTest, isConfiguri
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-1">
             <Text variant="display3" color="$fg-base">
-              {t(`agents.categories.${type}.${code}.title`)}
+              { agentName }
             </Text>
 
             <TagType type={type} />
           </Flex>
 
-          <MenuProvider>
-            <MenuTrigger asChild>
-              <IconButton variant="tertiary" label="Actions">
-                <IconDotsThreeVertical />
-              </IconButton>
-            </MenuTrigger>
+          {
+            (!isNexusAgent || isStatusBetweenIntegrated) && (
+              <MenuProvider>
+                <MenuTrigger asChild>
+                  <IconButton variant="tertiary" label="Actions">
+                    <IconDotsThreeVertical />
+                  </IconButton>
+                </MenuTrigger>
 
-            <MenuPopover>
-              <MenuItem onClick={openDetailsModal}>
-                <IconInfo />
-                {t('common.details')}
-              </MenuItem>
+                <MenuPopover>
+                  {
+                    !isNexusAgent && (
+                      <MenuItem onClick={openDetailsModal}>
+                        <IconInfo />
+                        {t('common.details')}
+                      </MenuItem>
+                    )
+                  }
 
-              {
-                ['test', 'configuring', 'integrated'].includes(status)
-                && (
-                  <>
-                    <MenuItem onClick={toggleIsPreferencesOpen}>
-                      <IconGearSix />
-                      {t('common.manage_settings')}
-                    </MenuItem>
+                  {
+                    isStatusBetweenIntegrated && (
+                      <>
+                        {
+                          !isNexusAgent && (
+                            <>
+                              <MenuItem onClick={toggleIsPreferencesOpen}>
+                                <IconGearSix />
+                                {t('common.manage_settings')}
+                              </MenuItem>
 
-                    <MenuSeparator />
+                              <MenuSeparator />
+                            </>
+                          )
+                        }
+                        
+                        
 
-                    <MenuItem onClick={openDisableModal}>
-                      <IconPauseCircle />
-                      {t('common.disable')}
-                    </MenuItem>
-                  </>
-                )
-              }
-            </MenuPopover>
-          </MenuProvider>
+                        <MenuItem onClick={openDisableModal}>
+                          <IconPauseCircle />
+                          {t('common.disable')}
+                        </MenuItem>
+                      </>
+                    )
+                  }
+                </MenuPopover>
+              </MenuProvider>
+            )
+          }
         </Flex>
 
         <Flex style={{ height: '4.125rem' }}>
@@ -139,7 +161,11 @@ export function AgentBox({ uuid, code, type, isIntegrated, isInTest, isConfiguri
             variant="body"
             color="$fg-base-soft"
           >
-            {t(`agents.categories.${type}.${code}.description`)}
+            {
+              t(`agents.categories.${type}.${code}.description`) === `agents.categories.${type}.${code}.description`
+              ? description
+              : t(`agents.categories.${type}.${code}.description`)
+            }
           </Text>
         </Flex>
 
@@ -213,8 +239,9 @@ export function AgentBox({ uuid, code, type, isIntegrated, isInTest, isConfiguri
       <DisableAgent
         open={openDisable}
         toggleModal={openDisableModal}
-        agent={t(`agents.categories.${type}.${code}.title`)}
+        agent={agentName}
         agentUuid={uuid}
+        agentOrigin={origin}
       />
 
       <AddAbandonedCart
