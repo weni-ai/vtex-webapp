@@ -27,6 +27,11 @@
     },
     "agents": {
         "title": "Agent gallery",
+        "list": {
+            "empty": {
+                "title": "No agent assigned to team"
+            }
+        },
         "categories": {
             "passive": {
                 "title": "Passive notification"
