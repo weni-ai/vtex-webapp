@@ -7,7 +7,6 @@ import { agentsLoading, selectProject} from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
-import wrench from '../assets/icons/Wrench.svg'
 import { AddAbandonedCart } from "./AddAbandonedCart";
 import store from "../store/provider.store";
 
