@@ -27,6 +27,11 @@
     },
     "agents": {
         "title": "Galeria de agentes",
+        "list": {
+            "empty": {
+                "title": "Nenhum agente atribuído à equipe"
+            }
+        },
         "categories": {
             "passive": {
                 "title": "Notificação passiva"
