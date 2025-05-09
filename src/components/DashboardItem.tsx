@@ -11,17 +11,13 @@ export function DashboardItem({ title, value, style }: { title: string, value: s
         ...style,
       }}
     >
-      <Flex align="center" gap="$space-2">
-        <Text variant="display4" color="$fg-base-soft">
-          {title}
-        </Text>
-      </Flex>
+      <Text variant="display1" color="$color-gray-12">
+        {value}
+      </Text>
 
-      <Flex align="center" gap="$space-2">
-        <Text variant="display1" color="$fg-base">
-          {value}
-        </Text>
-      </Flex>
+      <Text variant="display4" color="$fg-base-soft">
+        {title}
+      </Text>
     </Flex>
   );
 }
