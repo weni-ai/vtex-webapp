@@ -22,8 +22,6 @@ export function AgentMetrics() {
 
       const lines = Math.floor(count / 3) || 1;
       const itensByLine = Math.floor(count / lines);
-      
-      console.log(response.data.length)
 
       if ('data' in response) {
         let data = [];
