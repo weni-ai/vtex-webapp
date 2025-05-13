@@ -11,6 +11,7 @@
     "test": "vitest --watch"
   },
   "dependencies": {
+    "@growthbook/growthbook-react": "^1.5.1",
     "@reduxjs/toolkit": "^2.5.0",
     "@vtex/shoreline": "^1.11.12",
     "axios": "^1.7.9",
