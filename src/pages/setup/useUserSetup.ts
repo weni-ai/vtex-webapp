@@ -8,6 +8,7 @@ import { checkWppIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 import { useCallback } from 'react';
 import { updateAgentsList } from '../../services/agent.service';
+import { growthbook } from '../../plugins/growthbook';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -24,6 +25,11 @@ export function useUserSetup() {
       }
 
       store.dispatch(setUser(userData));
+
+      growthbook.setAttributes({
+        email: userData.user,
+        VTEXAccountName: userData.account,
+      });
 
       const { data: accountData, error: accountError } = await fetchAccountData();
       if (!accountData || accountError) {
