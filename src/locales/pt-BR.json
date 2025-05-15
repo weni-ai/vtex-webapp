@@ -149,7 +149,7 @@
             "forms": {
                 "name": "Nome",
                 "channel": {
-                    "title": "Canal",
+                    "title": "Tecnologia de VTEX frontend",
                     "faststore": "FastStore",
                     "portal": "Portal/Layout",
                     "site_editor": "Editor de Site"
