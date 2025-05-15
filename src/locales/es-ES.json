@@ -17,7 +17,8 @@
             "unexpected_error": "Se produjo un error inesperado"
         },
         "new_agent": "Nuevo agente",
-        "copy_code": "Copiar código"
+        "copy_code": "Copiar código",
+        "return": "Volver"
     },
     "title": "Weni Agentic AI",
     "description": "Una solución empresarial de CX basada en IA para grandes marcas y retailers.",
@@ -148,7 +149,7 @@
             "forms": {
                 "name": "Nombre",
                 "channel": {
-                    "title": "Canal",
+                    "title": "Tecnología de VTEX frontend",
                     "faststore": "FastStore",
                     "portal": "Portal/Layout",
                     "site_editor": "Editor de Sitio"
@@ -357,6 +358,114 @@
                 "interactions": "Interacciones",
                 "utm_revenue": "Ingresos UTM",
                 "orders_placed": "Pedidos realizados"
+            }
+        }
+    },
+    "template": {
+        "modals": {
+            "add": {
+                "title": "Agregar nueva variable",
+                "buttons": {
+                    "cancel": "Cancelar",
+                    "done": "Listo"
+                }
+            }
+        },
+        "form": {
+            "create": {
+                "title": "Crear plantilla personalizada",
+                "buttons": {
+                    "save": "Guardar",
+                    "cancel": "Cancelar"
+                }
+            },
+            "areas": {
+                "basic": {
+                    "title": "Básico"
+                },
+                "content": {
+                    "title": "Contenido",
+                    "buttons": {
+                        "add": "Agregar elemento",
+                        "remove": "Eliminar elemento"
+                    },
+                    "header": {
+                        "media": {
+                            "empty": {
+                                "description": "Adjunta un ejemplo del archivo que se enviará"
+                            },
+                            "buttons": {
+                                "upload": "Subir",
+                                "remove": "Eliminar archivo"
+                            }
+                        }
+                    },
+                    "elements": {
+                        "header": "Encabezado",
+                        "footer": "Pie de página",
+                        "button": "Botón"
+                    }
+                },
+                "variables": {
+                    "title": "Variables",
+                    "empty": {
+                        "title": "No se han agregado variables",
+                        "description": "Usa variables para personalizar y adaptar dinámicamente el mensaje para tu contacto"
+                    },
+                    "buttons": {
+                        "add": "Agregar nueva variable"
+                    }
+                }
+            },
+            "fields": {
+                "name": {
+                    "label": "Nombre de la plantilla"
+                },
+                "language": {
+                    "label": "Idiomas soportados"
+                },
+                "start_condition": {
+                    "label": "Condición de inicio",
+                    "description": "Define la condición que inicia el agente.",
+                    "help": "Visitas al almacén que pueden incluir una serie de interacciones del usuario y finalizan después de 30 minutos de inactividad."
+                },
+                "content": {
+                    "label": "Contenido de texto",
+                    "description": "Escribe ‘{{’ para agregar variables",
+                    "header": {
+                        "title": "Encabezado",
+                        "label": "Texto",
+                        "radio": {
+                            "text": {
+                                "label": "Texto"
+                            },
+                            "media": {
+                                "label": "Media"
+                            }
+                        }
+                    },
+                    "footer": {
+                        "title": "Pie de página",
+                        "label": "Texto"
+                    },
+                    "button": {
+                        "title": "Botón CTA",
+                        "text": {
+                            "label": "Texto"
+                        },
+                        "url": {
+                            "label": "URL"
+                        }
+                    }
+                },
+                "variables": {
+                    "definition": {
+                        "label": "Definición"
+                    },
+                    "fallback_text": {
+                        "label": "Texto de fallback si la variable está ausente"
+                    }
+                }
             }
         }
     }

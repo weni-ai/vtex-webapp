@@ -17,7 +17,8 @@
             "unexpected_error": "An unexpected error occurred"
         },
         "new_agent": "New agent",
-        "copy_code": "Copy code"
+        "copy_code": "Copy code",
+        "return": "Return"
     },
     "title": "Weni Agentic IA",
     "description": "An AI-based CX business solution for brands and retailers.",
@@ -148,7 +149,7 @@
             "forms": {
                 "name": "Name",
                 "channel": {
-                    "title": "Channel",
+                    "title": "VTEX frontend technology",
                     "faststore": "FastStore",
                     "portal": "Portal/Layout",
                     "site_editor": "Site Editor"
@@ -357,6 +358,114 @@
                 "interactions": "Interactions",
                 "utm_revenue": "UTM revenue",
                 "orders_placed": "Orders placed"
+            }
+        }
+    },
+    "template": {
+        "modals": {
+            "add": {
+                "title": "Add new variable",
+                "buttons": {
+                    "cancel": "Cancel",
+                    "done": "Done"
+                }
+            }
+        },
+        "form": {
+            "create": {
+                "title": "Create custom template",
+                "buttons": {
+                    "save": "Save",
+                    "cancel": "Cancel"
+                }
+            },
+            "areas": {
+                "basic": {
+                    "title": "Basic"
+                },
+                "content": {
+                    "title": "Content",
+                    "buttons": {
+                        "add": "Add element",
+                        "remove": "Remove element"
+                    },
+                    "header": {
+                        "media": {
+                            "empty": {
+                                "description": "Attach an example of the file that will be sent"
+                            },
+                            "buttons": {
+                                "upload": "Upload",
+                                "remove": "Remove file"
+                            }
+                        }
+                    },
+                    "elements": {
+                        "header": "Header",
+                        "footer": "Footer",
+                        "button": "Button"
+                    }
+                },
+                "variables": {
+                    "title": "Variables",
+                    "empty": {
+                        "title": "No variables added",
+                        "description": "Use variables to personalize and dynamically customize the message for your contact"
+                    },
+                    "buttons": {
+                        "add": "Add new variable"
+                    }
+                }
+            },
+            "fields": {
+                "name": {
+                    "label": "Template name"
+                },
+                "language": {
+                    "label": "Languages supported"
+                },
+                "start_condition": {
+                    "label": "Start condition",
+                    "description": "Defines the condition that starts the agent.",
+                    "help": "Visits to the store which can include a series of user interactions and end after 30 minutes of inactivity."
+                },
+                "content": {
+                    "label": "Text content",
+                    "description": "Type ‘{{’ to add variables",
+                    "header": {
+                        "title": "Header",
+                        "label": "Text",
+                        "radio": {
+                            "text": {
+                                "label": "Text"
+                            },
+                            "media": {
+                                "label": "Media"
+                            }
+                        }
+                    },
+                    "footer": {
+                        "title": "Footer",
+                        "label": "Text"
+                    },
+                    "button": {
+                        "title": "CTA Button",
+                        "text": {
+                            "label": "Text"
+                        },
+                        "url": {
+                            "label": "URL"
+                        }
+                    }
+                },
+                "variables": {
+                    "definition": {
+                        "label": "Definition"
+                    },
+                    "fallback_text": {
+                        "label": "Fallback text if variable is missing"
+                    }
+                }
             }
         }
     }
