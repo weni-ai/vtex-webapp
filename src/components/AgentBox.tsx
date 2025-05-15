@@ -9,6 +9,8 @@ import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 import { AddAbandonedCart } from "./AddAbandonedCart";
 import store from "../store/provider.store";
+import { useFeatureIsOn } from "@growthbook/growthbook-react";
+import { useNavigate } from "react-router-dom";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -83,13 +85,16 @@ function DescriptiveStatus({ status }: { status: 'test' | 'configuring' | 'integ
 }
 
 export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring }: { origin: 'commerce' | 'nexus', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
+  const navigate = useNavigate();
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
-  const channel = store.getState().project.storeType
+  const channel = store.getState().project.storeType;
+  const isAgentDetailsPageAccessEnabled = useFeatureIsOn('agentDetailsPageAccess');
+
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -139,6 +144,14 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const isNexusAgent = origin === 'nexus';
   const isStatusBetweenIntegrated = ['test', 'configuring', 'integrated'].includes(status);
 
+  const stopPropagation = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+  }
+
+  const navigateToAgentDetailsPage = () => {
+    navigate('/template/custom');
+  }
+
   return (
     <>
       <Flex
@@ -148,6 +161,12 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-2)',
           padding: '16px 16px 24px 16px',
+          cursor: isAgentDetailsPageAccessEnabled ? 'pointer' : 'default',
+        }}
+        onClick={() => {
+          if (isAgentDetailsPageAccessEnabled) {
+            navigateToAgentDetailsPage();
+          }
         }}
       >
         <Flex gap="$space-1" justify="space-between">
@@ -162,13 +181,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           {
             (!isNexusAgent || isStatusBetweenIntegrated) && (
               <MenuProvider>
-                <MenuTrigger asChild>
+                <MenuTrigger asChild onClick={stopPropagation}>
                   <IconButton variant="tertiary" label="Actions">
                     <IconDotsThreeVertical />
                   </IconButton>
                 </MenuTrigger>
 
-                <MenuPopover>
+                <MenuPopover onClick={stopPropagation}>
                   {
                     !isNexusAgent && (
                       <MenuItem onClick={openDetailsModal}>
