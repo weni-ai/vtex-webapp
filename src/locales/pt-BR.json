@@ -17,7 +17,8 @@
             "unexpected_error": "Ocorreu um erro inesperado"
         },
         "new_agent": "Novo agente",
-        "copy_code": "Copiar código"
+        "copy_code": "Copiar código",
+        "return": "Voltar"
     },
     "title": "Weni Agentic IA",
     "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
@@ -357,6 +358,114 @@
                 "interactions": "Interações",
                 "utm_revenue": "Receita UTM",
                 "orders_placed": "Pedidos realizados"
+            }
+        }
+    },
+    "template": {
+        "modals": {
+            "add": {
+                "title": "Adicionar nova variável",
+                "buttons": {
+                    "cancel": "Cancelar",
+                    "done": "Concluir"
+                }
+            }
+        },
+        "form": {
+            "create": {
+                "title": "Criar template personalizado",
+                "buttons": {
+                    "save": "Salvar",
+                    "cancel": "Cancelar"
+                }
+            },
+            "areas": {
+                "basic": {
+                    "title": "Básico"
+                },
+                "content": {
+                    "title": "Conteúdo",
+                    "buttons": {
+                        "add": "Adicionar elemento",
+                        "remove": "Remover elemento"
+                    },
+                    "header": {
+                        "media": {
+                            "empty": {
+                                "description": "Anexe um exemplo do arquivo que será enviado"
+                            },
+                            "buttons": {
+                                "upload": "Upload",
+                                "remove": "Remover arquivo"
+                            }
+                        }
+                    },
+                    "elements": {
+                        "header": "Cabeçalho",
+                        "footer": "Rodapé",
+                        "button": "Botão"
+                    }
+                },
+                "variables": {
+                    "title": "Variáveis",
+                    "empty": {
+                        "title": "Nenhuma variável adicionada",
+                        "description": "Use variáveis para personalizar e dinamizar a mensagem para seu contato"
+                    },
+                    "buttons": {
+                        "add": "Adicionar nova variável"
+                    }
+                }
+            },
+            "fields": {
+                "name": {
+                    "label": "Nome do template"
+                },
+                "language": {
+                    "label": "Idiomas suportados"
+                },
+                "start_condition": {
+                    "label": "Condição de início",
+                    "description": "Define a condição que inicia o agente.",
+                    "help": "Visitas ao loja que podem incluir uma série de interações do usuário e terminam após 30 minutos de inatividade."
+                },
+                "content": {
+                    "label": "Conteúdo de texto",
+                    "description": "Digite ‘{{’ para adicionar variáveis",
+                    "header": {
+                        "title": "Cabeçalho",
+                        "label": "Texto",
+                        "radio": {
+                            "text": {
+                                "label": "Texto"
+                            },
+                            "media": {
+                                "label": "Mídia"
+                            }
+                        }
+                    },
+                    "footer": {
+                        "title": "Rodapé",
+                        "label": "Texto"
+                    },
+                    "button": {
+                        "title": "Botão CTA",
+                        "text": {
+                            "label": "Texto"
+                        },
+                        "url": {
+                            "label": "URL"
+                        }
+                    }
+                },
+                "variables": {
+                    "definition": {
+                        "label": "Definição"
+                    },
+                    "fallback_text": {
+                        "label": "Texto de fallback se a variável estiver ausente"
+                    }
+                }
             }
         }
     }
