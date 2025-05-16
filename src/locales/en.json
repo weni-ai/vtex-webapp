@@ -131,6 +131,11 @@
         "description": "We're getting everything ready for you! The initial setup will be completed soon to ensure a great experience."
     },
     "agent": {
+        "buttons": {
+            "preview": "Preview",
+            "publish": "Publish and go live",
+            "switch_to_test": "Switch to test mode"
+        },
         "actions": {
             "publish": {
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} published"
