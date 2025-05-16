@@ -131,6 +131,43 @@
         "description": "La configuración inicial está en proceso. En breve estará todo listo para que tengas una excelente experiencia."
     },
     "agent": {
+        "buttons": {
+            "preview": "Vista previa",
+            "publish": "Publicar y poner en vivo",
+            "switch_to_test": "Pasar a modo de prueba"
+        },
+        "actions": {
+            "publish": {
+                "success": "{{agentName, lowerCase, firstLetterUpperCase}} publicado"
+            },
+            "switch_to_test": {
+                "success": "{{agentName, lowerCase, firstLetterUpperCase}} pasado a modo de prueba"
+            }
+        },
+        "modals": {
+            "publish": {
+                "title": "Publicar y poner en vivo",
+                "description": "Confirmar esta acción publicará el agente en producción, donde comenzará a manejar interacciones en vivo.",
+                "fields": {
+                    "percentage": {
+                        "title": "Porcentaje de la base de contactos que será activado",
+                        "description": "Intenta con un porcentaje menor si solo quieres probar con parte de tu base"
+                    }
+                },
+                "buttons": {
+                    "publish": "Publicar",
+                    "cancel": "Cancelar"
+                }
+            },
+            "switch_to_test": {
+                "title": "Pasar a modo de prueba",
+                "description": "Confirmar esta acción moverá el agente a modo de prueba, desactivando su manejo de interacciones en vivo.",
+                "buttons": {
+                    "confirm": "Confirmar",
+                    "cancel": "Cancelar"
+                }
+            }
+        },
         "details": {
             "title": "Agentes inteligentes",
             "description": "Optimiza tus agentes inteligentes activando el control sobre los flujos de conversación adaptados a las intenciones del usuario. Con el plan Starter, personaliza el lenguaje, el tono y el comportamiento para darles una identidad única y mejorar la calidad de la comunicación. A la derecha puedes consultar una demostración del agente de cambios y devoluciones.",

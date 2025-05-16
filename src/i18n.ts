@@ -18,6 +18,14 @@ i18n.use(initReactI18next).init({
   },
 });
 
+i18n.services.formatter?.add('lowerCase', (value: string) => {
+  return value.toLowerCase();
+});
+
+i18n.services.formatter?.add('firstLetterUpperCase', (value: string) => {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+});
+
 export const t = i18n.t.bind(i18n);
 
 export default i18n;
