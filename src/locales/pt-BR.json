@@ -131,6 +131,38 @@
         "description": "Estamos preparando tudo para você! Em breve, a configuração inicial será concluída para que você tenha uma excelente experiência."
     },
     "agent": {
+        "actions": {
+            "publish": {
+                "success": "{{agentName, lowerCase, firstLetterUpperCase}} publicado"
+            },
+            "switch_to_test": {
+                "success": "{{agentName, lowerCase, firstLetterUpperCase}} passado para o modo de teste"
+            }
+        },
+        "modals": {
+            "publish": {
+                "title": "Publicar e ir para o vivo",
+                "description": "Confirmar esta ação publicará o agente para produção, onde ele começará a lidar com interações em tempo real.",
+                "fields": {
+                    "percentage": {
+                        "title": "Porcentagem da base de contatos que será acionada",
+                        "description": "Tente um percentual menor se você quiser testar com parte da sua base"
+                    }
+                },
+                "buttons": {
+                    "publish": "Publicar",
+                    "cancel": "Cancelar"
+                }
+            },
+            "switch_to_test": {
+                "title": "Passar para o modo de teste",
+                "description": "Confirmar esta ação moverá o agente para o modo de teste, desativando-o de lidar com interações em tempo real.",
+                "buttons": {
+                    "confirm": "Confirmar",
+                    "cancel": "Cancelar"
+                }
+            }
+        },
         "details": {
             "title": "Agentes inteligentes",
             "description": "Aprimore os agentes inteligentes habilitando o controle sobre fluxos de conversação baseados nas intenções do usuário. Com o Plano Starter, personalize a linguagem, o tom e o comportamento para dar ao agente uma identidade única e melhorar a qualidade da comunicação. Veja ao lado a demonstração da interação com o agente de trocas e devoluções.",
