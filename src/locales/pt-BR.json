@@ -131,6 +131,11 @@
         "description": "Estamos preparando tudo para você! Em breve, a configuração inicial será concluída para que você tenha uma excelente experiência."
     },
     "agent": {
+        "buttons": {
+            "preview": "Prévia",
+            "publish": "Publicar e entrar no ar",
+            "switch_to_test": "Mudar para o modo de teste"
+        },
         "actions": {
             "publish": {
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} publicado"

@@ -131,6 +131,11 @@
         "description": "La configuración inicial está en proceso. En breve estará todo listo para que tengas una excelente experiencia."
     },
     "agent": {
+        "buttons": {
+            "preview": "Vista previa",
+            "publish": "Publicar y poner en vivo",
+            "switch_to_test": "Pasar a modo de prueba"
+        },
         "actions": {
             "publish": {
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} publicado"
