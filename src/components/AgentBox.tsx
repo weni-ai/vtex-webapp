@@ -149,7 +149,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const navigateToAgentDetailsPage = () => {
-    navigate('/template/custom');
+    navigate(`/agents/${uuid}`);
   }
 
   return (

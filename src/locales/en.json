@@ -371,6 +371,28 @@
                 }
             }
         },
+        "buttons": {
+            "add": "Add custom template"
+        },
+        "list": {
+            "title": "Templates",
+            "description": "Edit your templates or create a new one"
+        },
+        "card": {
+            "actions": {
+                "label": "Actions",
+                "disable": "Disable template"
+            },
+            "status": {
+                "active": "Active",
+                "rejected": "Rejected",
+                "pending": "Pending",
+                "needs_editing": "Needs editing"
+            },
+            "buttons": {
+                "edit": "Edit template"
+            }
+        },
         "form": {
             "create": {
                 "title": "Create custom template",
