@@ -37,6 +37,7 @@ export interface Feature {
     origin?: 'commerce' | 'nexus';
     integrated?: boolean;
     agent_uuid?: string;
+    skills?: string[];
 }
 
 export interface Loading {
@@ -61,6 +62,7 @@ export interface ProjectState {
     integratedAgents: Feature[];
     storeType: string;
     initialLoading: boolean;
+    WhatsAppURL: string;
 }
 
 export interface UserData {
