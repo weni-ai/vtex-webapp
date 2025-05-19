@@ -195,7 +195,7 @@ export async function getWhatsAppURLRequest(): Promise<{
     body: JSON.stringify({
       method: 'POST',
       url: `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-demo/apps/get-or-create/`,
-      params: {
+      data: {
         project_uuid: projectUuid,
       }
     }),
