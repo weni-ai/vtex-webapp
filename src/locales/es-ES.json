@@ -371,6 +371,28 @@
                 }
             }
         },
+        "buttons": {
+            "add": "Agregar plantilla personalizada"
+        },
+        "list": {
+            "title": "Plantillas",
+            "description": "Edita tus plantillas o crea una nueva"
+        },
+        "card": {
+            "actions": {
+                "label": "Acciones",
+                "disable": "Desactivar plantilla"
+            },
+            "status": {
+                "active": "Activo",
+                "rejected": "Rechazado",
+                "pending": "Pendiente",
+                "needs_editing": "Necesita edición"
+            },
+            "buttons": {
+                "edit": "Editar plantilla"
+            }
+        },
         "form": {
             "create": {
                 "title": "Crear plantilla personalizada",
