@@ -1,8 +1,8 @@
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, createAgentBuilderRequest } from "../api/agents/requests";
+import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, createAgentBuilderRequest, getWhatsAppURLRequest } from "../api/agents/requests";
 import { agentsList } from "../api/agents/requests";
-import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading, setHasTheFirstLoadOfTheAgentsHappened } from "../store/projectSlice";
+import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading, setHasTheFirstLoadOfTheAgentsHappened, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -172,4 +172,23 @@ export async function getSkillMetrics() {
     console.error('error getting skill metrics:', error);
     return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
   }
+}
+
+export async function getWhatsAppURLService() {
+  const WhatsAppURL = store.getState().project.WhatsAppURL;
+
+  if (WhatsAppURL) {
+    return WhatsAppURL;
+  }
+
+  const response = await getWhatsAppURLRequest();
+
+  if (response.error?.detail) {
+    throw new Error(response.error.detail);
+  }
+
+  const redirectUrl = response.config?.redirect_url || '';
+
+  store.dispatch(setWhatsAppURL(redirectUrl));
+  return redirectUrl;
 }

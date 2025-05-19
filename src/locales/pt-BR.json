@@ -166,6 +166,29 @@
                     "confirm": "Confirmar",
                     "cancel": "Cancelar"
                 }
+            },
+            "details": {
+                "sections": {
+                    "about": {
+                        "title": "Sobre",
+                        "status": {
+                            "title": "Status",
+                            "in_production": "Em produção"
+                        }
+                    },
+                    "preview": {
+                        "title": "Vista previa e teste",
+                        "description": "Teste seu agente escaneando o código QR abaixo:",
+                        "fields": {
+                            "url": {
+                                "description": "Ou copie e cole no seu navegador"
+                            }
+                        },
+                        "buttons": {
+                            "copy": "Copiar"
+                        }
+                    }
+                }
             }
         },
         "details": {

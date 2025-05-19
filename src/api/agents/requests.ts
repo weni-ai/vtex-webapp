@@ -1,16 +1,18 @@
+import { setStoreType } from "../../store/projectSlice";
+import store from "../../store/provider.store";
+import getEnv from "../../utils/env";
 import { VTEXFetch } from "../../utils/VTEXFetch";
 import {
   AgentsListResponse,
-  adapterAgentsList,
   IntegratedAgentsListResponse,
-  adapterIntegratedAgentsList,
-  UpdateAgentSettingsData, 
+  UpdateAgentSettingsData,
   UpdateAgentSettingsResponse,
   adaptUpdateAgentSettingsRequest,
-  adaptUpdateAgentSettingsResponse 
+  adaptUpdateAgentSettingsResponse,
+  adapterAgentsList,
+  adapterIntegratedAgentsList,
 } from "./adapters";
-import store from "../../store/provider.store";
-import { setStoreType } from "../../store/projectSlice";
+
 interface IntegrateAgentData {
   feature_uuid: string;
   project_uuid: string;
@@ -106,7 +108,7 @@ export async function integrateAgentRequest(data: IntegrateAgentData) {
 
 export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
   const adaptedData = adaptUpdateAgentSettingsRequest(store.getState().project.project_uuid, data);
-  
+
   const response = await VTEXFetch<UpdateAgentSettingsResponse>(
     '/_v/update-feature-settings',
     {
@@ -135,7 +137,7 @@ export async function disableFeatureRequest(data: {
     },
     body: JSON.stringify(data),
   });
-} 
+}
 
 export async function getSkillMetricsRequest() {
   const projectUuid = store.getState().project.project_uuid;
@@ -166,4 +168,38 @@ export async function getSkillMetricsRequest() {
       },
     }),
   };
+}
+
+interface IntegrationsError {
+  error?: {
+    detail: string;
+  }
+}
+
+export async function getWhatsAppURLRequest(): Promise<{
+  config?: {
+    redirect_url?: string;
+  };
+} & IntegrationsError> {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await VTEXFetch<{
+    config?: {
+      redirect_url?: string;
+    };
+  } & IntegrationsError>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method: 'POST',
+      url: `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-demo/apps/get-or-create/`,
+      data: {
+        project_uuid: projectUuid,
+      }
+    }),
+  });
+
+  return response;
 }
