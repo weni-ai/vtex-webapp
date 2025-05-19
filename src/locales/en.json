@@ -131,6 +131,66 @@
         "description": "We're getting everything ready for you! The initial setup will be completed soon to ensure a great experience."
     },
     "agent": {
+        "buttons": {
+            "preview": "Preview",
+            "publish": "Publish and go live",
+            "switch_to_test": "Switch to test mode"
+        },
+        "actions": {
+            "publish": {
+                "success": "{{agentName, lowerCase, firstLetterUpperCase}} published"
+            },
+            "switch_to_test": {
+                "success": "{{agentName, lowerCase, firstLetterUpperCase}} switched to test mode"
+            }
+        },
+        "modals": {
+            "publish": {
+                "title": "Publish and go live",
+                "description": "Confirming this action will publish the agent to production, where it will begin handling live interactions.",
+                "fields": {
+                    "percentage": {
+                        "title": "Percentage of the contact base that will be triggered",
+                        "description": "Try a smaller percentage if you just want to test with part of your base"
+                    }
+                },
+                "buttons": {
+                    "publish": "Publish",
+                    "cancel": "Cancel"
+                }
+            },
+            "switch_to_test": {
+                "title": "Switch to test mode",
+                "description": "Confirming this action will move the agent to test mode, disabling it from handling live interactions.",
+                "buttons": {
+                    "confirm": "Confirm",
+                    "cancel": "Cancel"
+                }
+            },
+            "details": {
+                "sections": {
+                    "about": {
+                        "title": "About",
+                        "status": {
+                            "title": "Status",
+                            "in_production": "In production"
+                        }
+                    },
+                    "preview": {
+                        "title": "Preview and test",
+                        "description": "Test your agent by scanning the QR code below:",
+                        "fields": {
+                            "url": {
+                                "description": "Or copy and paste in your browser"
+                            }
+                        },
+                        "buttons": {
+                            "copy": "Copy"
+                        }
+                    }
+                }
+            }
+        },
         "details": {
             "title": "Smart agents",
             "description": "Enhance your smart agents by enabling control over conversation flows based on user intent. With the Starter Plan, you can customize language, tone, and behavior to give your agent a unique identity and improve communication quality. See the exchanges and returns agent demo on the side.",
@@ -369,6 +429,28 @@
                     "cancel": "Cancel",
                     "done": "Done"
                 }
+            }
+        },
+        "buttons": {
+            "add": "Add custom template"
+        },
+        "list": {
+            "title": "Templates",
+            "description": "Edit your templates or create a new one"
+        },
+        "card": {
+            "actions": {
+                "label": "Actions",
+                "disable": "Disable template"
+            },
+            "status": {
+                "active": "Active",
+                "rejected": "Rejected",
+                "pending": "Pending",
+                "needs_editing": "Needs editing"
+            },
+            "buttons": {
+                "edit": "Edit template"
             }
         },
         "form": {

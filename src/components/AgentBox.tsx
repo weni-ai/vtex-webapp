@@ -11,6 +11,7 @@ import { AddAbandonedCart } from "./AddAbandonedCart";
 import store from "../store/provider.store";
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
 import { useNavigate } from "react-router-dom";
+import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -84,7 +85,7 @@ function DescriptiveStatus({ status }: { status: 'test' | 'configuring' | 'integ
   );
 }
 
-export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring }: { origin: 'commerce' | 'nexus', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean }) {
+export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills }: { origin: 'commerce' | 'nexus', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[] }) {
   const navigate = useNavigate();
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
@@ -94,6 +95,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
   const channel = store.getState().project.storeType;
   const isAgentDetailsPageAccessEnabled = useFeatureIsOn('agentDetailsPageAccess');
+  const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
 
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -149,7 +151,20 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const navigateToAgentDetailsPage = () => {
-    navigate('/template/custom');
+    navigate(`/agents/${uuid}`);
+  }
+
+  const handleAgentClick = () => {
+    if (!isAgentDetailsPageAccessEnabled) {
+      return;
+    }
+
+    if (origin === 'nexus' && type === 'passive') {
+      setIsPassiveDetailsModalOpen(true);
+      return;
+    }
+
+    navigateToAgentDetailsPage();
   }
 
   return (
@@ -163,11 +178,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           padding: '16px 16px 24px 16px',
           cursor: isAgentDetailsPageAccessEnabled ? 'pointer' : 'default',
         }}
-        onClick={() => {
-          if (isAgentDetailsPageAccessEnabled) {
-            navigateToAgentDetailsPage();
-          }
-        }}
+        onClick={handleAgentClick}
       >
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-2">
@@ -288,6 +299,14 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           integrateAgent(uuid, projectUUID);
           setOpenAbandonedCartModal(false);
         }}
+      />
+
+      <ModalAgentPassiveDetails
+        open={isPassiveDetailsModalOpen}
+        onClose={() => setIsPassiveDetailsModalOpen(false)}
+        agentName={agentName}
+        agentDescription={agentDescription}
+        skills={skills}
       />
     </>
   );

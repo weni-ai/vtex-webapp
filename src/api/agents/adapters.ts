@@ -46,6 +46,7 @@ export interface AgentsListResponse {
     description: string;
     assigned: boolean;
     slug: string;
+    skills: { name: string; }[];
   }[];
 };
 
@@ -94,7 +95,8 @@ export function adapterAgentsList(response: AgentsListResponse): {
     isConfiguring: isConfiguring(agent.config),
     phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
       [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
-      []
+      [],
+    skills: [],
   }));
 
   return [...commerceAgents, ...response.agents.map((agent) => ({
@@ -108,6 +110,7 @@ export function adapterAgentsList(response: AgentsListResponse): {
     isConfiguring: false,
     phone_numbers: [],
     integrated: agent.assigned,
+    skills: agent.skills.map((skill) => skill.name),
   }))];
 }
 
