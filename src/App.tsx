@@ -13,6 +13,7 @@ import { Grid, Spinner } from '@vtex/shoreline';
 import { initialLoading } from './store/projectSlice';
 import { TermsAndConditions } from './pages/TermsAndConditions';
 import { Template } from './pages/template/Template';
+import { AgentIndex } from './pages/agent/Index';
 
 function App() {
   const dispatch = useDispatch();
@@ -46,7 +47,8 @@ function App() {
             <Route path='/agent-builder' element={<AgentBuilder />}></Route>
             <Route path='/setup-error' element={<SetupError />}></Route>
             <Route path='/dash' element={<Dashboard />}></Route>
-            <Route path='/template/custom' element={<Template />}></Route>
+            <Route path='/agents/:agentUuid' element={<AgentIndex />}></Route>
+            <Route path='/agents/:agentUuid/templates/create' element={<Template />}></Route>
           </Routes>
         </Router>
       )}
