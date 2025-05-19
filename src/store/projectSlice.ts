@@ -25,6 +25,7 @@ const initialState: ProjectState = {
   integratedAgents: [],
   storeType: '',
   initialLoading: false,
+  WhatsAppURL: '',
 }
 
 const projectSlice = createSlice({
@@ -83,6 +84,9 @@ const projectSlice = createSlice({
     setInitialLoading: (state, action: PayloadAction<boolean>) => {
       state.initialLoading = action.payload;
     },
+    setWhatsAppURL: (state, action: PayloadAction<string>) => {
+      state.WhatsAppURL = action.payload;
+    },
   }
 })
 
@@ -103,6 +107,7 @@ export const {
   setWppLoading,
   setStoreType,
   setInitialLoading,
+  setWhatsAppURL,
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
