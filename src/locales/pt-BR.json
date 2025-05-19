@@ -371,6 +371,28 @@
                 }
             }
         },
+        "buttons": {
+            "add": "Adicionar template personalizado"
+        },
+        "list": {
+            "title": "Templates",
+            "description": "Edite seus templates ou crie um novo"
+        },
+        "card": {
+            "actions": {
+                "label": "Ações",
+                "disable": "Desativar template"
+            },
+            "status": {
+                "active": "Ativo",
+                "rejected": "Rejeitado",
+                "pending": "Pendente",
+                "needs_editing": "Precisa de edição"
+            },
+            "buttons": {
+                "edit": "Editar template"
+            }
+        },
         "form": {
             "create": {
                 "title": "Criar template personalizado",
