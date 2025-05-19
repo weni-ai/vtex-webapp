@@ -58,7 +58,7 @@ export function Dashboard() {
 
     setAgentsRemoving((prev) => [...prev, uuid]);
 
-    toast.critical(t('agents.common.errors.template_synchronization.rejected'));
+    toast.critical(t('template_synchronization.rejected'));
 
     await disableAgent(project_uuid, uuid, 'commerce');
 
@@ -147,6 +147,7 @@ export function Dashboard() {
                     origin={item.origin || 'commerce'}
                     isInTest={item.isInTest}
                     isConfiguring={item.isConfiguring}
+                    skills={item.skills || []}
                   />
                 ))}
                 {integrated.map((item) => (
@@ -161,6 +162,7 @@ export function Dashboard() {
                     origin={item.origin || 'commerce'}
                     isInTest={item.isInTest}
                     isConfiguring={item.isConfiguring}
+                    skills={item.skills || []}
                   />
                 ))}
               </>
