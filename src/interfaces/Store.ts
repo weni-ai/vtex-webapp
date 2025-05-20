@@ -58,8 +58,7 @@ export interface ProjectState {
     setupError: boolean;
     wppLoading: boolean;
     hasTheFirstLoadOfTheAgentsHappened: boolean;
-    agents: Feature[];
-    integratedAgents: Feature[];
+    agents: (AgentCommerce | AgentNexus)[];
     storeType: string;
     initialLoading: boolean;
     WhatsAppURL: string;

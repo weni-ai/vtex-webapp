@@ -1,17 +1,16 @@
 import { Alert, Button, Flex, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
-import { AgentBox, AgentBoxSkeleton, AgentBoxContainer } from '../components/AgentBox';
-import { useSelector } from 'react-redux';
-import { agents, integratedAgents, selectProject, hasTheFirstLoadOfTheAgentsHappened } from '../store/projectSlice';
-import { selectUser } from "../store/userSlice";
 import { useEffect, useState } from 'react';
-import { disableAgent, updateAgentsList } from '../services/agent.service';
-import getEnv from '../utils/env';
+import { useSelector } from 'react-redux';
+import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from '../components/AgentBox';
 import { AgentMetrics } from '../components/AgentMetrics';
+import { disableAgent, updateAgentsList } from '../services/agent.service';
+import { agents, hasTheFirstLoadOfTheAgentsHappened, selectProject } from '../store/projectSlice';
+import { selectUser } from "../store/userSlice";
+import getEnv from '../utils/env';
 
 export function Dashboard() {
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
   const agentsList = useSelector(agents)
-  const integrated = useSelector(integratedAgents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
   const [agentsRemoving, setAgentsRemoving] = useState<string[]>([]);
@@ -31,25 +30,31 @@ export function Dashboard() {
     window.open(dash.toString(), '_blank');
   }
 
+  function assignedCommerceAgents() {
+    return agentsList
+      .filter((item) => item.isAssigned)
+      .filter((item) => item.origin === 'commerce')
+  }
+
   useEffect(() => {
     updateAgentsList();
   }, []);
 
   useEffect(() => {
-    const rejectedAgents = integrated.filter((item) => item.templateSynchronizationStatus === 'rejected');
+    const rejectedAgents = assignedCommerceAgents().filter((item) => item.templateSynchronizationStatus === 'rejected');
 
     rejectedAgents.forEach(({ uuid }) => {
       tryRemoveAgent(uuid);
     });
-  }, [integrated]);
+  }, [agentsList]);
 
   useEffect(() => {
-    const pendingAgents = integrated.filter((item) => item.templateSynchronizationStatus === 'pending');
+    const pendingAgents = assignedCommerceAgents().filter((item) => item.templateSynchronizationStatus === 'pending');
 
     if (pendingAgents.length > 0) {
       updateAgentsListSoon();
     }
-  }, [integrated]);
+  }, [agentsList]);
 
   async function tryRemoveAgent(uuid: string) {
     if (agentsRemoving.includes(uuid)) {
@@ -134,38 +139,21 @@ export function Dashboard() {
             )}
 
             {hasTheFirstLoadHappened && (
-              <>
-                {agentsList.map((item) => (
-                  <AgentBox
-                    key={item.uuid}
-                    name={item.name || ''}
-                    description={item.description || ''}
-                    uuid={item.uuid}
-                    code={item.code}
-                    type={item.category.toLocaleLowerCase() as 'active' | 'passive'}
-                    isIntegrated={item.integrated || false}
-                    origin={item.origin || 'commerce'}
-                    isInTest={item.isInTest}
-                    isConfiguring={item.isConfiguring}
-                    skills={item.skills || []}
-                  />
-                ))}
-                {integrated.map((item) => (
-                  <AgentBox
-                    key={item.uuid}
-                    name={item.name || ''}
-                    description={item.description || ''}
-                    uuid={item.uuid}
-                    code={item.code}
-                    type={item.category?.toLocaleLowerCase() as 'active' | 'passive'}
-                    isIntegrated={true}
-                    origin={item.origin || 'commerce'}
-                    isInTest={item.isInTest}
-                    isConfiguring={item.isConfiguring}
-                    skills={item.skills || []}
-                  />
-                ))}
-              </>
+              agentsList.map((item) => (
+                <AgentBox
+                  key={item.uuid}
+                  name={item.name || ''}
+                  description={item.description || ''}
+                  uuid={item.uuid}
+                  code={item.code as 'order_status' | 'abandoned_cart'}
+                  type={item.notificationType}
+                  isIntegrated={item.isAssigned}
+                  origin={item.origin || 'commerce'}
+                  isInTest={item.isInTest}
+                  isConfiguring={item.isConfiguring || false}
+                  skills={item.skills || []}
+                />
+              ))
             )}
           </AgentBoxContainer>
         </Flex>
