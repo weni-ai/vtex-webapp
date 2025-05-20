@@ -1,6 +1,7 @@
-import { Alert, Button, Flex, Heading, IconArrowUpRight, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
+import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
 import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from '../components/AgentBox';
 import { AgentMetrics } from '../components/AgentMetrics';
 import { disableAgent, updateAgentsList } from '../services/agent.service';
@@ -127,11 +128,18 @@ export function Dashboard() {
 
           <AgentMetrics />
 
-          <Heading
-            variant="display2"
-          >
-            {t('agents.title')}
-          </Heading>
+          <Flex gap="$space-4" align="center" justify="space-between">
+            <Heading
+              variant="display2"
+            >
+              {t('agents.title')}
+            </Heading>
+
+            <Button variant="secondary" size="large">
+              <IconPlus />
+              View agents gallery
+            </Button>
+          </Flex>
 
           <AgentBoxContainer>
             {!hasTheFirstLoadHappened && (
@@ -157,6 +165,8 @@ export function Dashboard() {
             )}
           </AgentBoxContainer>
         </Flex>
+
+        <AgentsGalleryModal open={true} onClose={() => { }} />
       </PageContent>
     </Page>
   )
