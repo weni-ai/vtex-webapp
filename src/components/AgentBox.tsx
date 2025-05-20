@@ -12,6 +12,8 @@ import store from "../store/provider.store";
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
 import { useNavigate } from "react-router-dom";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
+import { WhatsAppRequiredModal } from "./agent/modals/WhatsAppRequired";
+import { RootState } from "../interfaces/Store";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -96,6 +98,8 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const channel = store.getState().project.storeType;
   const isAgentDetailsPageAccessEnabled = useFeatureIsOn('agentDetailsPageAccess');
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
+  const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
+  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
 
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -110,14 +114,34 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
 
   const integrateCurrentFeature = async () => {
     if (origin === 'commerce' && code === 'abandoned_cart' && channel !== 'site_editor') {
-      setOpenAbandonedCartModal(true)
+      setOpenAbandonedCartModal(true);
       return;
     }
+    
+    verifyIfWhatsAppIntegrationIsRequired();
+  }
+
+  async function verifyIfWhatsAppIntegrationIsRequired() {
+    if (!(isWppIntegrated || type === 'passive')) {
+      integrateAgentInside();
+    } else {
+      setIsWhatsAppRequiredModalOpen(true);
+    }
+  }
+
+  async function integrateAgentInside() {
     const result = await integrateAgent(uuid, projectUUID);
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {
       toast.success(t('integration.success'));
+      afterIntegrateAgent();
+    }
+  }
+
+  function afterIntegrateAgent() {
+    if (type === 'passive' && !isWppIntegrated) {
+      setIsPassiveDetailsModalOpen(true);
     }
   }
 
@@ -154,8 +178,12 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
     navigate(`/agents/${uuid}`);
   }
 
+  const isAgentClickable = useMemo(() => {
+    return (isAgentDetailsPageAccessEnabled || (type === 'passive' && !isWppIntegrated)) && isIntegrated;
+  }, [isAgentDetailsPageAccessEnabled, isIntegrated, type, isWppIntegrated]);
+
   const handleAgentClick = () => {
-    if (!isAgentDetailsPageAccessEnabled) {
+    if (!isAgentClickable) {
       return;
     }
 
@@ -176,7 +204,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-2)',
           padding: '16px 16px 24px 16px',
-          cursor: isAgentDetailsPageAccessEnabled ? 'pointer' : 'default',
+          cursor: isAgentClickable ? 'pointer' : 'default',
         }}
         onClick={handleAgentClick}
       >
@@ -262,7 +290,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             (
               <DescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} />
             ) : (
-              <Button variant="secondary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
+              <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
                 <IconPlus />
                 <Text>{t('agents.common.add')}</Text>
               </Button>
@@ -296,7 +324,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
         confirm={() => {
-          integrateAgent(uuid, projectUUID);
+          verifyIfWhatsAppIntegrationIsRequired();
           setOpenAbandonedCartModal(false);
         }}
       />
@@ -307,6 +335,16 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         agentName={agentName}
         agentDescription={agentDescription}
         skills={skills}
+      />
+
+      <WhatsAppRequiredModal
+        open={isWhatsAppRequiredModalOpen}
+        onClose={() => setIsWhatsAppRequiredModalOpen(false)}
+        isLoading={isUpdateAgentLoading}
+        onConfirm={async () => {
+          await integrateAgentInside();
+          setIsWhatsAppRequiredModalOpen(false);
+        }}
       />
     </>
   );
