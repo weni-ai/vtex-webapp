@@ -122,7 +122,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   async function verifyIfWhatsAppIntegrationIsRequired() {
-    if (!(isWppIntegrated || type === 'passive')) {
+    if (isWppIntegrated || type === 'passive') {
       integrateAgentInside();
     } else {
       setIsWhatsAppRequiredModalOpen(true);
