@@ -1,12 +1,11 @@
-import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { disableFeatureRequest, getSkillMetricsRequest, integrateAgentRequest, integratedAgentsList, createAgentBuilderRequest, getWhatsAppURLRequest } from "../api/agents/requests";
-import { agentsList } from "../api/agents/requests";
-import { setAgents, setDisableAgentLoading, setIntegratedAgents, setUpdateAgentLoading, setAgentsLoading, setHasTheFirstLoadOfTheAgentsHappened, setWhatsAppURL } from "../store/projectSlice";
+import { agentsList, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
+import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
+import { Feature } from "../interfaces/Store";
+import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
-import { Feature } from "../interfaces/Store";
 
 export async function checkAgentIntegration(project_uuid: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
@@ -59,8 +58,7 @@ export async function updateAgentsList() {
     integratedAgentsList()
   ]);
 
-  store.dispatch(setAgents(availableAgents));
-  store.dispatch(setIntegratedAgents(integratedAgents));
+  store.dispatch(setAgents([...availableAgents, ...integratedAgents]));
   store.dispatch(setHasTheFirstLoadOfTheAgentsHappened(true));
 
   store.dispatch(setAgentsLoading(availableAgents.map(agent => ({ agent_uuid: agent.uuid, isLoading: false }))))

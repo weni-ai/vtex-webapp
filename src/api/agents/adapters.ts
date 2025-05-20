@@ -26,7 +26,7 @@ export type AgentConfig = {
 };
 
 export interface AgentsListResponse {
-  features: {
+  results: {
     feature_uuid: string;
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
@@ -40,7 +40,7 @@ export interface AgentsListResponse {
     initial_flow: { uuid: string; name: string; }[];
   }[],
   store_type: string;
-  agents: {
+  nexus_agents: {
     uuid: string;
     name: string;
     description: string;
@@ -72,46 +72,33 @@ function isConfiguring(config?: AgentConfig) {
   return isPendingOrRejected || false;
 }
 
-export function adapterAgentsList(response: AgentsListResponse): {
-  origin: 'commerce' | 'nexus';
-  uuid: string;
-  category: "ACTIVE" | "PASSIVE";
-  code: "order_status" | "abandoned_cart";
-  name: string;
-  description: string;
-  isInTest: boolean;
-  isConfiguring: boolean;
-  phone_numbers: string[];
-  integrated?: boolean;
-}[] {
-  const commerceAgents = response.features.map((agent) => ({
+export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce | AgentNexus)[] {
+  const agents: (AgentCommerce | AgentNexus)[] = response.results.map((agent) => ({
     origin: 'commerce' as const,
     uuid: agent.feature_uuid,
-    category: 'ACTIVE' as const,
-    code: agent.code,
     name: agent.name,
     description: agent.description,
+    notificationType: 'active' as const,
+    code: agent.code,
+    isAssigned: false,
     isInTest: isInTest(agent.config),
     isConfiguring: isConfiguring(agent.config),
-    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
-      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
-      [],
-    skills: [],
+    templateSynchronizationStatus: 'unset',
   }));
 
-  return [...commerceAgents, ...response.agents.map((agent) => ({
+  agents.push(...response.nexus_agents.map((agent) => ({
     origin: 'nexus' as const,
     uuid: agent.uuid,
-    category: 'PASSIVE' as const,
-    code: 'abandoned_cart' as const,
     name: agent.name,
     description: agent.description,
+    notificationType: 'passive' as const,
+    code: agent.slug,
+    isAssigned: agent.assigned,
     isInTest: false,
-    isConfiguring: false,
-    phone_numbers: [],
-    integrated: agent.assigned,
     skills: agent.skills.map((skill) => skill.name),
-  }))];
+  })));
+
+  return agents;
 }
 
 export interface IntegratedAgentsListResponse {
@@ -131,18 +118,33 @@ export interface IntegratedAgentsListResponse {
 
 export function adapterIntegratedAgentsList(response: IntegratedAgentsListResponse) {
   return response.integratedFeatures.map((agent) => ({
-    uuid: agent.feature_uuid,
-    category: 'ACTIVE' as const,
-    code: agent.code,
-    name: agent.name,
-    description: agent.description,
-    isInTest: isInTest(agent.config),
-    isConfiguring: isConfiguring(agent.config),
-    templateSynchronizationStatus: agent.config?.templates_synchronization_status,
-    phone_numbers: agent.config?.integration_settings?.order_status_restriction?.phone_numbers ? 
-      [agent.config.integration_settings.order_status_restriction.phone_numbers] : 
-      [],
-    message_time_restrictions: agent.config?.integration_settings?.message_time_restriction
+      origin: 'commerce' as const,
+      uuid: agent.feature_uuid,
+      name: agent.name,
+      description: agent.description,
+      notificationType: 'active' as const,
+      code: agent.code,
+      isAssigned: true,
+      isInTest: isInTest(agent.config),
+      isConfiguring: isConfiguring(agent.config),
+      templateSynchronizationStatus: agent.config?.templates_synchronization_status || 'unset' as const,
+      restrictTestContact: {
+        isActive: !!agent.config?.integration_settings?.order_status_restriction?.phone_numbers,
+        phoneNumber: agent.config?.integration_settings?.order_status_restriction?.phone_numbers || '',
+      },
+      restrictMessageTime: {
+        isActive: !!agent.config?.integration_settings?.message_time_restriction?.is_active,
+        periods: {
+          weekdays: {
+            from: agent.config?.integration_settings?.message_time_restriction?.periods?.weekdays?.from || '',
+            to: agent.config?.integration_settings?.message_time_restriction?.periods?.weekdays?.to || '',
+          },
+          saturdays: {
+            from: agent.config?.integration_settings?.message_time_restriction?.periods?.saturdays?.from || '',
+            to: agent.config?.integration_settings?.message_time_restriction?.periods?.saturdays?.to || '',
+          },
+        },
+    },
   }));
 }
 
