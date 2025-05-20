@@ -18,7 +18,8 @@
         },
         "new_agent": "New agent",
         "copy_code": "Copy code",
-        "return": "Return"
+        "return": "Return",
+        "finish": "Finish"
     },
     "title": "Weni Agentic IA",
     "description": "An AI-based CX business solution for brands and retailers.",
@@ -120,7 +121,7 @@
                 "success": "Agent deactivated successfully",
                 "error": "Error deactivating the agent. Try again later."
             },
-            "add": "New agent",
+            "add": "Assign",
             "added": "Active agent",
             "test": "Agent in test mode",
             "configuring": "Configuring agent"
@@ -145,6 +146,9 @@
             }
         },
         "modals": {
+            "integrate_whatsapp": {
+                "title": "Integrate WhatsApp"
+            },
             "publish": {
                 "title": "Publish and go live",
                 "description": "Confirming this action will publish the agent to production, where it will begin handling live interactions.",
@@ -246,7 +250,8 @@
                 "title": "WhatsApp",
                 "description": "Use a WhatsApp Business account to improve communication with your contacts",
                 "error": "Error connecting to WhatsApp. Check your credentials or try again later.",
-                "success": "WhatsApp integrated successfully"
+                "success": "WhatsApp integrated successfully",
+                "skip_disclaimer": "You can skip this step and integrate WhatsApp Channel later"
             }
         },
         "buttons": {
