@@ -28,7 +28,20 @@
         "button": "Connect to Weni"
     },
     "agents": {
-        "title": "Agent gallery",
+        "buttons": {
+            "gallery": "Assign agents"
+        },
+        "modals": {
+            "gallery": {
+                "title": "Agents Gallery",
+                "list": {
+                    "empty": {
+                        "title": "No results founded"
+                    }
+                }
+            }
+        },
+        "title": "My agents team",
         "list": {
             "empty": {
                 "title": "No agent assigned to team"
