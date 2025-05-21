@@ -118,7 +118,7 @@ export function AgentBuilder() {
   };
 
   const handleSubmit = async () => {
-    if (validateForm() && isWppIntegrated) {
+    if (validateForm()) {
       const payload = Object.fromEntries(
         Object.entries(form).filter(([, value]) => value.trim())
       ) as FormState;
@@ -140,7 +140,7 @@ export function AgentBuilder() {
               </IconButton>
               <Text>{t('common.new_agent')}</Text>
             </PageHeading>
-            <Button variant="primary" size="large" onClick={handleSubmit} disabled={!isWppIntegrated || isAgentBuilderLoading || !form.channel}>
+            <Button variant="primary" size="large" onClick={handleSubmit} disabled={isAgentBuilderLoading || !form.channel}>
               {isAgentBuilderLoading ? <Spinner description="loading" /> : <span>{t('common.create')}</span>}
             </Button>
           </PageHeaderRow>
@@ -213,7 +213,7 @@ export function AgentBuilder() {
                 </Field>
               </Flex>
               <Text variant="display3">{t('integration.title')}</Text>
-              <Channel isIntegrated={isWppIntegrated} />
+              <Channel isIntegrated={isWppIntegrated} showSkipDisclaimer={!isWppIntegrated} />
             </Flex>
           )}
         </PageContent>

@@ -87,15 +87,13 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
+        }
 
-          await updateAgentsList();
-          
-          if (has_agent && store.getState().project.storeType) {
-            store.dispatch(setAgentBuilderIntegrated(true))
-            navigate('/dash');
-          } else {
-            navigate('/agent-builder');
-          }
+        await updateAgentsList();
+        
+        if (has_agent && store.getState().project.storeType) {
+          store.dispatch(setAgentBuilderIntegrated(true))
+          navigate('/dash');
         } else {
           navigate('/agent-builder');
         }
