@@ -56,8 +56,8 @@ export async function agentsList() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      method: 'POST',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}`,
+      method: 'GET',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
       params: {
         category: 'ACTIVE',
         can_vtex_integrate: true,

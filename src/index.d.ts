@@ -59,3 +59,8 @@ interface AgentNexus extends AgentNext {
   notificationType: 'passive';
   skills: string[];
 }
+
+interface AgentCLI extends AgentNext {
+  origin: 'CLI';
+  notificationType: 'active';
+}

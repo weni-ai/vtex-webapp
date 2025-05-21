@@ -1,5 +1,6 @@
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
 import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from '../components/AgentBox';
@@ -11,11 +12,23 @@ import getEnv from '../utils/env';
 
 export function Dashboard() {
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
-  const agentsList = useSelector(agents)
+  const agentsListOriginal = useSelector(agents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
   const [agentsRemoving, setAgentsRemoving] = useState<string[]>([]);
   const [updateAgentsListTimeout, setUpdateAgentsListTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const isAgentGalleryModalAccessEnabled = useFeatureIsOn('agentGalleryModalAccess');
+
+  const agentsList = useMemo(() => {
+    return agentsListOriginal.filter((item) => {
+      if (isAgentGalleryModalAccessEnabled) {
+        return item.isAssigned;
+      }
+
+      return ['commerce', 'nexus'].includes(item.origin);
+    });
+  }, [agentsListOriginal, isAgentGalleryModalAccessEnabled]);
 
   function navigateToAgent() {
     const dash = new URL(`/projects/${project_uuid}`, getEnv("VITE_APP_DASH_URL"));
@@ -135,10 +148,12 @@ export function Dashboard() {
               {t('agents.title')}
             </Heading>
 
-            <Button variant="secondary" size="large">
-              <IconPlus />
-              View agents gallery
-            </Button>
+            {isAgentGalleryModalAccessEnabled && (
+              <Button variant="secondary" size="large" onClick={() => setIsGalleryModalOpen(true)}>
+                <IconPlus />
+                {t('agents.buttons.gallery')}
+              </Button>
+            )}
           </Flex>
 
           <AgentBoxContainer>
@@ -160,13 +175,14 @@ export function Dashboard() {
                   isInTest={item.isInTest}
                   isConfiguring={item.isConfiguring || false}
                   skills={item.skills || []}
+                  onAssign={() => { }}
                 />
               ))
             )}
           </AgentBoxContainer>
         </Flex>
 
-        <AgentsGalleryModal open={true} onClose={() => { }} />
+        <AgentsGalleryModal open={isGalleryModalOpen} onClose={() => setIsGalleryModalOpen(false)} />
       </PageContent>
     </Page>
   )

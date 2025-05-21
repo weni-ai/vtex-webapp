@@ -48,6 +48,18 @@ export interface AgentsListResponse {
     slug: string;
     skills: { name: string; }[];
   }[];
+  gallery_agents: {
+    uuid: string;
+    name: string;
+    is_oficial: boolean;
+    lambda_arn: string;
+    templates: {
+      name: string;
+      content: string;
+      is_valid: boolean;
+      metadata: {};
+    }[];
+  }[];
 };
 
 function isInTest(config?: AgentConfig) {
@@ -72,8 +84,8 @@ function isConfiguring(config?: AgentConfig) {
   return isPendingOrRejected || false;
 }
 
-export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce | AgentNexus)[] {
-  const agents: (AgentCommerce | AgentNexus)[] = response.results.map((agent) => ({
+export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce | AgentNexus | AgentCLI)[] {
+  const agents: (AgentCommerce | AgentNexus | AgentCLI)[] = response.results.map((agent) => ({
     origin: 'commerce' as const,
     uuid: agent.feature_uuid,
     name: agent.name,
@@ -96,6 +108,17 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     isAssigned: agent.assigned,
     isInTest: false,
     skills: agent.skills.map((skill) => skill.name),
+  })));
+
+  agents.push(...response.gallery_agents.map((agent) => ({
+    origin: 'CLI' as const,
+    uuid: agent.uuid,
+    name: agent.name,
+    description: '',
+    notificationType: 'active' as const,
+    code: agent.name.toLowerCase().replace(/ /g, '_'),
+    isAssigned: false,
+    isInTest: false,
   })));
 
   return agents;

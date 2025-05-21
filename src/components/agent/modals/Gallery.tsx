@@ -6,17 +6,22 @@ import { AgentBox, AgentBoxContainer } from "../../AgentBox";
 export function AgentsGalleryModal({ open, onClose }: { open: boolean, onClose: () => void }) {
   const agentsList = useSelector((state: RootState) => state.project.agents).filter((agent) => !agent.isAssigned);
 
+  function assignAgent(uuid: string) {
+    console.log('assignAgent', uuid);
+    onClose();
+  }
+
   return (
     <Modal open={open} onClose={onClose} size="large">
       <ModalHeader>
-        <ModalHeading>Agents Gallery</ModalHeading>
+        <ModalHeading>{t('agents.modals.gallery.title')}</ModalHeading>
         <ModalDismiss />
       </ModalHeader>
 
       <ModalContent>
         {agentsList.length === 0 && (
           <Flex justify="center" align="center" style={{ height: '400px' }}>
-            <Heading variant="display3">No results founded</Heading>
+            <Heading variant="display3">{t('agents.modals.gallery.list.empty.title')}</Heading>
           </Flex>
         )}
 
@@ -35,6 +40,7 @@ export function AgentsGalleryModal({ open, onClose }: { open: boolean, onClose: 
                 isInTest={item.isInTest}
                 isConfiguring={item.isConfiguring || false}
                 skills={item.skills || []}
+                onAssign={assignAgent}
               />
             ))}
           </AgentBoxContainer>
