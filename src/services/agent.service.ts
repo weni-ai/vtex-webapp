@@ -1,7 +1,6 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { agentsList, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
-import { Feature } from "../interfaces/Store";
 import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
@@ -71,10 +70,10 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
   if (agentLoadingExists) {
     const newAgentsLoading = agentsLoading.map(
       ({ agent_uuid, isLoading }) =>
-        ({
-          agent_uuid,
-          isLoading: agent_uuid === feature_uuid ? true : isLoading,
-        })
+      ({
+        agent_uuid,
+        isLoading: agent_uuid === feature_uuid ? true : isLoading,
+      })
     );
 
     store.dispatch(setAgentsLoading(newAgentsLoading));
@@ -115,7 +114,7 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
   }
 }
 
-export async function updateAgentSettings(code: Feature['code'], body: UpdateAgentSettingsData) {
+export async function updateAgentSettings(code: AgentCommerce['code'], body: UpdateAgentSettingsData) {
   store.dispatch(setUpdateAgentLoading(true))
 
   try {
@@ -140,8 +139,8 @@ export async function disableAgent(project_uuid: string, feature_uuid: string, a
   try {
     const data =
       agentOrigin === 'nexus' ?
-      { project_uuid, feature_uuid, agent_uuid: feature_uuid, is_nexus_agent: true }:
-      { project_uuid, feature_uuid };
+        { project_uuid, feature_uuid, agent_uuid: feature_uuid, is_nexus_agent: true } :
+        { project_uuid, feature_uuid };
 
     const response = await disableFeatureRequest(data);
 

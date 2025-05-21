@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 import { cleanURL } from '../utils';
 
 const initialState: ProjectState = {
@@ -80,7 +80,7 @@ const projectSlice = createSlice({
     setWhatsAppURL: (state, action: PayloadAction<string>) => {
       state.WhatsAppURL = action.payload;
     },
-    setAgents: (state, action: PayloadAction<(AgentCommerce | AgentNexus)[]>) => {
+    setAgents: (state, action: PayloadAction<(AgentCommerce | AgentNexus | AgentCLI)[]>) => {
       state.agents = action.payload;
     },
   }
