@@ -18,7 +18,8 @@
         },
         "new_agent": "Novo agente",
         "copy_code": "Copiar código",
-        "return": "Voltar"
+        "return": "Voltar",
+        "finish": "Finalizar"
     },
     "title": "Weni Agentic IA",
     "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
@@ -120,7 +121,7 @@
                 "success": "Agente desativado com sucesso",
                 "error": "Erro ao desativar o agente. Tente novamente mais tarde."
             },
-            "add": "Novo agente",
+            "add": "Atribuir",
             "added": "Agente ativo",
             "test": "Agente em teste",
             "configuring": "Configurando agente"
@@ -145,6 +146,9 @@
             }
         },
         "modals": {
+            "integrate_whatsapp": {
+                "title": "Integrar WhatsApp"
+            },
             "publish": {
                 "title": "Publicar e ir para o vivo",
                 "description": "Confirmar esta ação publicará o agente para produção, onde ele começará a lidar com interações em tempo real.",
@@ -246,7 +250,8 @@
                 "title": "WhatsApp",
                 "description": "Use uma conta empresarial do WhatsApp para melhorar a comunicação com seus contatos",
                 "error": "Erro ao conectar com o WhatsApp. Verifique suas credenciais ou tente novamente mais tarde.",
-                "success": "WhatsApp integrado com sucesso"
+                "success": "WhatsApp integrado com sucesso",
+                "skip_disclaimer": "Você pode pular este passo e integrar o canal WhatsApp mais tarde"
             }
         },
         "buttons": {

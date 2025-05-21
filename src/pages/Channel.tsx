@@ -4,7 +4,7 @@ import { startFacebookLogin } from "../utils/facebook/login";
 import { useSelector } from "react-redux";
 import { selectProject, wppLoading } from "../store/projectSlice";
 
-export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
+export function Channel({ isIntegrated, showSkipDisclaimer }: Readonly<{ isIntegrated: boolean, showSkipDisclaimer: boolean }>) {
   const project_uuid = useSelector(selectProject)
   const isWppLoading = useSelector(wppLoading)
   const callFacebookSDK = () => {
@@ -33,16 +33,23 @@ export function Channel({ isIntegrated }: Readonly<{ isIntegrated: boolean }>) {
             borderRadius: 'var(--sl-radius-1)',
           }}
         />
+        <Flex direction="column" gap="$space-4">
+          <Flex
+            direction="column"
+            gap="$space-1"
+          >
+            <Text variant="display3" color="$fg-muted">{t('integration.channels.whatsapp.title')}</Text>
 
-        <Flex
-          direction="column"
-          gap="$space-1"
-        >
-          <Text variant="display3" color="$fg-muted">{t('integration.channels.whatsapp.title')}</Text>
+            <Text variant="body" color="$fg-base-soft">
+              {t('integration.channels.whatsapp.description')}
+            </Text>
+          </Flex>
 
-          <Text variant="body" color="$fg-base-soft">
-            {t('integration.channels.whatsapp.description')}
-          </Text>
+          {showSkipDisclaimer && (
+            <Text variant="body" color="$fg-base-disabled">
+              {t('integration.channels.whatsapp.skip_disclaimer')}
+            </Text>
+          )}
         </Flex>
       </Flex>
 
