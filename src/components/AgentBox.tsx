@@ -87,7 +87,7 @@ function DescriptiveStatus({ status }: { status: 'test' | 'configuring' | 'integ
   );
 }
 
-export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
+export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
   const navigate = useNavigate();
   const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
