@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 import { cleanURL } from '../utils';
 
 const initialState: ProjectState = {
@@ -22,7 +22,6 @@ const initialState: ProjectState = {
   },
   hasTheFirstLoadOfTheAgentsHappened: false,
   agents: [],
-  integratedAgents: [],
   storeType: '',
   initialLoading: false,
   WhatsAppURL: '',
@@ -65,12 +64,6 @@ const projectSlice = createSlice({
     setHasTheFirstLoadOfTheAgentsHappened: (state, action: PayloadAction<boolean>) => {
       state.hasTheFirstLoadOfTheAgentsHappened = action.payload;
     },
-    setAgents: (state, action: PayloadAction<Feature[]>) => {
-      state.agents = action.payload;
-    },
-    setIntegratedAgents: (state, action: PayloadAction<Feature[]>) => {
-      state.integratedAgents = action.payload;
-    },
     setUpdateAgentLoading: (state, action: PayloadAction<boolean>) => {
       state.updateAgentLoading = action.payload;
     },
@@ -87,6 +80,9 @@ const projectSlice = createSlice({
     setWhatsAppURL: (state, action: PayloadAction<string>) => {
       state.WhatsAppURL = action.payload;
     },
+    setAgents: (state, action: PayloadAction<(AgentCommerce | AgentNexus | AgentCLI)[]>) => {
+      state.agents = action.payload;
+    },
   }
 })
 
@@ -101,7 +97,6 @@ export const {
   setHasTheFirstLoadOfTheAgentsHappened,
   setAgents,
   setAgentsLoading,
-  setIntegratedAgents,
   setUpdateAgentLoading,
   setDisableAgentLoading,
   setWppLoading,
@@ -120,7 +115,6 @@ export const getAgentBuilder = (state: RootState) => state.project.agentBuilder
 export const getAgentChannel = (state: RootState) => state.project.agentBuilder.channel
 export const hasTheFirstLoadOfTheAgentsHappened = (state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened
 export const agents = (state: RootState) => state.project.agents
-export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading
 export const agentsLoading = (state: RootState) => state.project.agentsLoading
 export const updateAgentLoading = (state: RootState) => state.project.updateAgentLoading

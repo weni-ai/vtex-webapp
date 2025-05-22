@@ -50,17 +50,20 @@ export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
 export async function agentsList() {
   const projectUuid = store.getState().project.project_uuid;
 
-  const queryParams = new URLSearchParams({
-    projectUUID: projectUuid
-  });
-
-  const url = `/_v/get-feature-list?${queryParams.toString()}`;
-
-  const response = await VTEXFetch<AgentsListResponse>(url, {
-    method: 'GET',
+  const response = await VTEXFetch<AgentsListResponse>('/_v/proxy-request', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      method: 'GET',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
+      params: {
+        category: 'ACTIVE',
+        can_vtex_integrate: true,
+        nexus_agents: true,
+      },
+    }),
   });
 
   store.dispatch(setStoreType(response.store_type));

@@ -28,7 +28,20 @@
         "button": "Conectarse con Weni"
     },
     "agents": {
-        "title": "Galería de agentes",
+        "buttons": {
+            "gallery": "Asignar agentes"
+        },
+        "modals": {
+            "gallery": {
+                "title": "Galería de Agentes",
+                "list": {
+                    "empty": {
+                        "title": "No hay agentes asignados al equipo"
+                    }
+                }
+            }
+        },
+        "title": "Mi equipo de agentes",
         "list": {
             "empty": {
                 "title": "Ningún agente asignado al equipo"

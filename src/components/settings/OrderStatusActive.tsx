@@ -1,13 +1,14 @@
 import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label } from "@vtex/shoreline";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
-import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
 import { useSelector } from "react-redux";
-import { integratedAgents } from "../../store/projectSlice";
-import { RootState } from "../../interfaces/Store";
+import { agents } from "../../store/projectSlice";
+import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
 
 export function PreferencesOrderStatusActive() {
   const { formData = {}, setFormData } = useContext(SettingsContext) || {};
-  const currentNumber = useSelector((state: RootState) => integratedAgents(state).find((agent) => agent.code === 'order_status')?.phone_numbers?.[0]);
+  const agentsList = useSelector(agents);
+  const orderStatusAgent = agentsList.find(agent => agent.origin === 'commerce' && agent.code === 'order_status');
+  const currentNumber = orderStatusAgent?.restrictTestContact?.phoneNumber;
   const [hasTestContactNumber, setHasTestContactNumber] = useState(
     !!currentNumber
   );
