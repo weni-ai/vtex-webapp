@@ -51,6 +51,7 @@ export interface AgentsListResponse {
   gallery_agents: {
     uuid: string;
     name: string;
+    description: string;
     assigned: boolean;
     is_oficial: boolean;
     lambda_arn: string;
@@ -126,7 +127,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     origin: 'CLI' as const,
     uuid: agent.uuid,
     name: agent.name,
-    description: '',
+    description: agent.description,
     notificationType: 'active' as const,
     code: agent.name.toLowerCase().replace(/ /g, '_'),
     isAssigned: agent.assigned,
