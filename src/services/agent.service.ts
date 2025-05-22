@@ -117,7 +117,7 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
 
     const response = await integrateAgentRequest(data);
 
-    store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === feature_uuid ? true : item.isAssigned }))));
+    store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === feature_uuid || item.isAssigned }))));
     return { success: true, data: response };
   } catch (error) {
     store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === feature_uuid ? false : item.isAssigned }))))
