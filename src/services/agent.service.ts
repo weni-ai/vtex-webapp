@@ -120,7 +120,7 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
     store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === feature_uuid || item.isAssigned }))));
     return { success: true, data: response };
   } catch (error) {
-    store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === feature_uuid ? false : item.isAssigned }))))
+    store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid !== feature_uuid && item.isAssigned }))))
     return { success: false, error: error || 'unknown error' };
   } finally {
     store.dispatch(setAgentsLoading(agentsLoading.filter(loading => loading.agent_uuid !== feature_uuid)));
