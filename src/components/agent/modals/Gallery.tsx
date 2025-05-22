@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../interfaces/Store";
 import { AgentBox, AgentBoxContainer } from "../../AgentBox";
 
-export function AgentsGalleryModal({ open, onClose }: { open: boolean, onClose: () => void }) {
+export function AgentsGalleryModal({ open, onClose, onAssign }: { open: boolean, onClose: () => void, onAssign: (uuid: string) => void }) {
   const agentsList = useSelector((state: RootState) => state.project.agents).filter((agent) => !agent.isAssigned);
 
-  function assignAgent(uuid: string) {
-    console.log('assignAgent', uuid);
+  function handleAssign(uuid: string) {
+    onAssign(uuid);
     onClose();
   }
 
@@ -40,7 +40,7 @@ export function AgentsGalleryModal({ open, onClose }: { open: boolean, onClose: 
                 isInTest={item.isInTest}
                 isConfiguring={item.isConfiguring || false}
                 skills={item.skills || []}
-                onAssign={assignAgent}
+                onAssign={handleAssign}
               />
             ))}
           </AgentBoxContainer>
