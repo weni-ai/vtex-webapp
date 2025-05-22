@@ -3,12 +3,13 @@ import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageCon
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetails';
+import { AgentAssignModal } from '../components/agent/modals/Assign';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
 import { WhatsAppRequiredModal } from '../components/agent/modals/WhatsAppRequired';
 import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from '../components/AgentBox';
 import { AgentMetrics } from '../components/AgentMetrics';
 import { RootState } from "../interfaces/Store";
-import { disableAgent, integrateAgent, updateAgentsList } from '../services/agent.service';
+import { assignAgentCLI, disableAgent, integrateAgent, updateAgentsList } from '../services/agent.service';
 import { agents, hasTheFirstLoadOfTheAgentsHappened, selectProject, setAgents } from '../store/projectSlice';
 import store from '../store/provider.store';
 import { selectUser } from "../store/userSlice";
@@ -26,11 +27,13 @@ export function Dashboard() {
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
   const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
+  const [isAgentAssignModalOpen, setIsAgentAssignModalOpen] = useState(false);
   const isAgentGalleryModalAccessEnabled = useFeatureIsOn('agentGalleryModalAccess');
   const [agentName, setAgentName] = useState('');
   const [agentDescription, setAgentDescription] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
   const [agentUuid, setAgentUuid] = useState('');
+  const [isAssigningAgent, setIsAssigningAgent] = useState(false);
 
   const agentsList = useMemo(() => {
     return agentsListOriginal.filter((item) => {
@@ -114,8 +117,8 @@ export function Dashboard() {
     }
 
     if (agent.origin === 'CLI') {
-      console.log('vai abrir o processo de CLI', agent);
-      return;
+      setAgentUuid(uuid);
+      setIsAgentAssignModalOpen(true);
     }
 
     if (agent.origin === 'commerce' && agent.notificationType === 'active') {
@@ -150,6 +153,26 @@ export function Dashboard() {
         setSkills(agent.skills);
         setIsPassiveDetailsModalOpen(true);
       }
+    }
+  }
+
+  async function handleAssignCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
+    try {
+      setIsAssigningAgent(true);
+
+      await assignAgentCLI({
+        uuid: data.uuid,
+        templatesUuids: data.templatesUuids,
+        credentials: data.credentials,
+      });
+
+      setIsAgentAssignModalOpen(false);
+
+      toast.success(t('agent.actions.assign.success'));
+    } catch (error) {
+      toast.critical(t('agent.actions.assign.error'));
+    } finally {
+      setIsAssigningAgent(false);
     }
   }
 
@@ -279,6 +302,18 @@ export function Dashboard() {
           agentName={agentName}
           agentDescription={agentDescription}
           skills={skills}
+        />
+
+        <AgentAssignModal
+          open={isAgentAssignModalOpen}
+          agentUuid={agentUuid}
+          onClose={() => setIsAgentAssignModalOpen(false)}
+          onViewAgentsGallery={() => {
+            setIsAgentAssignModalOpen(false);
+            setIsGalleryModalOpen(true);
+          }}
+          onAssign={handleAssignCLI}
+          isAssigningAgent={isAssigningAgent}
         />
       </PageContent>
     </Page>

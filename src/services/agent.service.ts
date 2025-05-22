@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentsList, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
+import { agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -61,6 +61,17 @@ export async function updateAgentsList() {
   store.dispatch(setHasTheFirstLoadOfTheAgentsHappened(true));
 
   store.dispatch(setAgentsLoading(availableAgents.map(agent => ({ agent_uuid: agent.uuid, isLoading: false }))))
+}
+
+export async function assignAgentCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
+  await assignAgentCLIRequest({
+    agentUuid: data.uuid,
+    templatesUuids: data.templatesUuids,
+    credentials: data.credentials,
+  });
+
+  const agents = store.getState().project.agents;
+  store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === data.uuid ? true : item.isAssigned }))));
 }
 
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
