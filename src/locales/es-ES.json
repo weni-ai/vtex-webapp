@@ -39,6 +39,35 @@
                         "title": "No hay agentes asignados al equipo"
                     }
                 }
+            },
+            "assign": {
+                "buttons": {
+                    "back": "Atrás",
+                    "next": "Siguiente",
+                    "finish": "Finalizar"
+                },
+                "alerts": {
+                    "WhatsApp_required": "Canal WhatsApp necesario"
+                },
+                "title": "Asignar Agente {{name}}",
+                "steps": "Paso {{currentPage}} de {{totalPages}}",
+                "about": {
+                    "title": "Acerca de"
+                },
+                "templates_available": {
+                    "title": "Plantillas disponibles"
+                },
+                "select_templates": {
+                    "title": "Seleccionar plantillas",
+                    "description": "Puedes editar, eliminar y crear plantillas personalizadas más adelante"
+                },
+                "integrate_support_channel": {
+                    "title": "Integrar un canal de soporte"
+                },
+                "credentials": {
+                    "title": "Credenciales",
+                    "description": "Ingresa las credenciales para asignar el agente"
+                }
             }
         },
         "title": "Mi equipo de agentes",
@@ -156,6 +185,10 @@
             },
             "switch_to_test": {
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} pasado a modo de prueba"
+            },
+            "assign": {
+                "success": "Agente asignado con éxito. No olvides probar y personalizar antes de publicar",
+                "error": "Algo salió mal. Por favor, inténtalo de nuevo"
             }
         },
         "modals": {
