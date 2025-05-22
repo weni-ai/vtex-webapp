@@ -1,17 +1,17 @@
-import { Button, Flex, Grid, IconButton, IconCheck, IconCode, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text, toast } from "@vtex/shoreline";
-import { AboutAgent } from "./AboutAgent";
+import { useFeatureIsOn } from "@growthbook/growthbook-react";
+import { Button, Flex, Grid, IconButton, IconCheck, IconCode, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../interfaces/Store";
 import { agentsLoading } from "../store/projectSlice";
+import store from "../store/provider.store";
+import { AboutAgent } from "./AboutAgent";
+import { AddAbandonedCart } from "./AddAbandonedCart";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
-import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
-import { AddAbandonedCart } from "./AddAbandonedCart";
-import store from "../store/provider.store";
-import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { useNavigate } from "react-router-dom";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
-import { RootState } from "../interfaces/Store";
+import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 
 type codes = 'abandoned_cart' | 'order_status';
 
