@@ -7,11 +7,10 @@ import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
 import { updateAgentLoading } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/agent.service";
-import { Feature } from "../../../interfaces/Store";
 
 export interface SettingsContainerProps {
     open: boolean;
-    code: Feature['code'];
+    code: AgentCommerce['code'];
     agentUuid: string;
     toggleOpen: () => void;
 }
