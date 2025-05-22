@@ -1,9 +1,8 @@
 import { Button, Flex, Grid, IconButton, IconCheck, IconCode, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text, toast } from "@vtex/shoreline";
 import { AboutAgent } from "./AboutAgent";
 import { useMemo, useState } from "react";
-import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { agentsLoading, selectProject } from "../store/projectSlice";
+import { agentsLoading } from "../store/projectSlice";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
@@ -12,7 +11,6 @@ import store from "../store/provider.store";
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
 import { useNavigate } from "react-router-dom";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
-import { WhatsAppRequiredModal } from "./agent/modals/WhatsAppRequired";
 import { RootState } from "../interfaces/Store";
 
 type codes = 'abandoned_cart' | 'order_status';
@@ -89,7 +87,6 @@ function DescriptiveStatus({ status }: { status: 'test' | 'configuring' | 'integ
 
 export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
   const navigate = useNavigate();
-  const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
@@ -99,7 +96,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const isAgentDetailsPageAccessEnabled = useFeatureIsOn('agentDetailsPageAccess');
   const isAgentGalleryModalAccessEnabled = useFeatureIsOn('agentGalleryModalAccess');
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
-  const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
   const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
 
   const openDetailsModal = () => {
@@ -114,41 +110,12 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const integrateCurrentFeature = async () => {
-    if (isAgentGalleryModalAccessEnabled) {
-      onAssign(uuid);
-      return;
-    }
-
     if (origin === 'commerce' && code === 'abandoned_cart' && channel !== 'site_editor') {
       setOpenAbandonedCartModal(true);
       return;
     }
 
-    verifyIfWhatsAppIntegrationIsRequired();
-  }
-
-  async function verifyIfWhatsAppIntegrationIsRequired() {
-    if (isWppIntegrated || type === 'passive') {
-      integrateAgentInside();
-    } else {
-      setIsWhatsAppRequiredModalOpen(true);
-    }
-  }
-
-  async function integrateAgentInside() {
-    const result = await integrateAgent(uuid, projectUUID);
-    if (result.error) {
-      toast.critical(t('integration.error'));
-    } else {
-      toast.success(t('integration.success'));
-      afterIntegrateAgent();
-    }
-  }
-
-  function afterIntegrateAgent() {
-    if (type === 'passive' && !isWppIntegrated) {
-      setIsPassiveDetailsModalOpen(true);
-    }
+    onAssign(uuid);
   }
 
   const status = useMemo(() => {
@@ -190,8 +157,8 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       return false;
     }
 
-    if (type === 'passive' && !isWppIntegrated) {
-      return true;
+    if (type === 'passive') {
+      return !isWppIntegrated;
     }
 
     return isAgentDetailsPageAccessEnabled;
@@ -322,7 +289,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             'test',
             'configuring',
             'integrated',
-          ].includes(status) ?
+          ].includes(status) && !isUpdateAgentLoading ?
             (
               <DescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} />
             ) : (
@@ -360,7 +327,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
         confirm={() => {
-          verifyIfWhatsAppIntegrationIsRequired();
+          onAssign(uuid);
           setOpenAbandonedCartModal(false);
         }}
       />
@@ -371,16 +338,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         agentName={agentName}
         agentDescription={agentDescription}
         skills={skills}
-      />
-
-      <WhatsAppRequiredModal
-        open={isWhatsAppRequiredModalOpen}
-        onClose={() => setIsWhatsAppRequiredModalOpen(false)}
-        isLoading={isUpdateAgentLoading}
-        onConfirm={async () => {
-          await integrateAgentInside();
-          setIsWhatsAppRequiredModalOpen(false);
-        }}
       />
     </>
   );

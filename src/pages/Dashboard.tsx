@@ -2,11 +2,15 @@ import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetails';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
+import { WhatsAppRequiredModal } from '../components/agent/modals/WhatsAppRequired';
 import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from '../components/AgentBox';
 import { AgentMetrics } from '../components/AgentMetrics';
-import { disableAgent, updateAgentsList } from '../services/agent.service';
-import { agents, hasTheFirstLoadOfTheAgentsHappened, selectProject } from '../store/projectSlice';
+import { RootState } from "../interfaces/Store";
+import { disableAgent, integrateAgent, updateAgentsList } from '../services/agent.service';
+import { agents, hasTheFirstLoadOfTheAgentsHappened, selectProject, setAgents } from '../store/projectSlice';
+import store from '../store/provider.store';
 import { selectUser } from "../store/userSlice";
 import getEnv from '../utils/env';
 
@@ -15,10 +19,18 @@ export function Dashboard() {
   const agentsListOriginal = useSelector(agents)
   const project_uuid = useSelector(selectProject)
   const userData = useSelector(selectUser);
+  const projectUuid = useSelector((state: RootState) => state.project.project_uuid);
+  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
   const [agentsRemoving, setAgentsRemoving] = useState<string[]>([]);
   const [updateAgentsListTimeout, setUpdateAgentsListTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
+  const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
   const isAgentGalleryModalAccessEnabled = useFeatureIsOn('agentGalleryModalAccess');
+  const [agentName, setAgentName] = useState('');
+  const [agentDescription, setAgentDescription] = useState('');
+  const [skills, setSkills] = useState<string[]>([]);
+  const [agentUuid, setAgentUuid] = useState('');
 
   const agentsList = useMemo(() => {
     return agentsListOriginal.filter((item) => {
@@ -92,6 +104,69 @@ export function Dashboard() {
     setUpdateAgentsListTimeout(setTimeout(async () => {
       await updateAgentsList();
     }, 3000));
+  }
+
+  async function handleAssign(uuid: string) {
+    const agent = agentsListOriginal.find((item) => item.uuid === uuid);
+
+    if (!agent) {
+      return;
+    }
+
+    if (agent.origin === 'CLI') {
+      console.log('vai abrir o processo de CLI', agent);
+      return;
+    }
+
+    if (agent.origin === 'commerce' && agent.notificationType === 'active') {
+      if (isWppIntegrated) {
+        integrateAgentInside(uuid);
+      } else {
+        setAgentUuid(uuid);
+        setIsWhatsAppRequiredModalOpen(true);
+      }
+    }
+
+    if (agent.origin === 'nexus' && agent.notificationType === 'passive') {
+      await integrateAgentInside(uuid);
+
+      const agentAfterIntegration = store.getState().project.agents.find((item) => item.uuid === uuid);
+
+      if (agentAfterIntegration?.isAssigned && !isWppIntegrated) {
+        const agentKeyPrefix = `agents.categories.${agentAfterIntegration.notificationType}.${agentAfterIntegration.code}`;
+
+        const agentName =
+          t(`${agentKeyPrefix}.title`) === `${agentKeyPrefix}.title`
+            ? agent.name
+            : t(`${agentKeyPrefix}.title`);
+
+        const agentDescription =
+          t(`${agentKeyPrefix}.description`) === `${agentKeyPrefix}.description`
+            ? agent.description
+            : t(`${agentKeyPrefix}.description`);
+
+        setAgentName(agentName);
+        setAgentDescription(agentDescription);
+        setSkills(agent.skills);
+        setIsPassiveDetailsModalOpen(true);
+      }
+    }
+  }
+
+  async function integrateAgentInside(uuid: string) {
+    store.dispatch(setAgents(agentsListOriginal.map((item) => ({
+      ...item,
+      isAssigned: item.uuid === uuid ? true : item.isAssigned,
+      isConfiguring: item.origin === 'commerce' && item.uuid === uuid ? true : (item.isConfiguring || false),
+    }))));
+
+    const result = await integrateAgent(uuid, projectUuid);
+
+    if (result.error) {
+      toast.critical(t('integration.error'));
+    } else {
+      toast.success(t('integration.success'));
+    }
   }
 
   return (
@@ -175,14 +250,36 @@ export function Dashboard() {
                   isInTest={item.isInTest}
                   isConfiguring={item.isConfiguring || false}
                   skills={item.skills || []}
-                  onAssign={() => { }}
+                  onAssign={handleAssign}
                 />
               ))
             )}
           </AgentBoxContainer>
         </Flex>
 
-        <AgentsGalleryModal open={isGalleryModalOpen} onClose={() => setIsGalleryModalOpen(false)} />
+        <AgentsGalleryModal
+          open={isGalleryModalOpen}
+          onClose={() => setIsGalleryModalOpen(false)}
+          onAssign={handleAssign}
+        />
+
+        <WhatsAppRequiredModal
+          open={isWhatsAppRequiredModalOpen}
+          onClose={() => setIsWhatsAppRequiredModalOpen(false)}
+          isLoading={false}
+          onConfirm={() => {
+            integrateAgentInside(agentUuid);
+            setIsWhatsAppRequiredModalOpen(false);
+          }}
+        />
+
+        <ModalAgentPassiveDetails
+          open={isPassiveDetailsModalOpen}
+          onClose={() => setIsPassiveDetailsModalOpen(false)}
+          agentName={agentName}
+          agentDescription={agentDescription}
+          skills={skills}
+        />
       </PageContent>
     </Page>
   )
