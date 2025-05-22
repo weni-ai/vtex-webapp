@@ -51,6 +51,7 @@ export interface AgentsListResponse {
   gallery_agents: {
     uuid: string;
     name: string;
+    assigned: boolean;
     is_oficial: boolean;
     lambda_arn: string;
     templates: {
@@ -117,7 +118,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     description: '',
     notificationType: 'active' as const,
     code: agent.name.toLowerCase().replace(/ /g, '_'),
-    isAssigned: false,
+    isAssigned: agent.assigned,
     isInTest: false,
   })));
 
