@@ -90,10 +90,8 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
           [credential.name]: credential.value,
         }), {}),
       });
-    } else {
-      if (currentPage < pages.length - 1) {
-        setCurrentPage(currentPage + 1);
-      }
+    } else if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1);
     }
   }
 
