@@ -179,8 +179,8 @@ export function Dashboard() {
   async function integrateAgentInside(uuid: string) {
     store.dispatch(setAgents(agentsListOriginal.map((item) => ({
       ...item,
-      isAssigned: item.uuid === uuid ? true : item.isAssigned,
-      isConfiguring: item.origin === 'commerce' && item.uuid === uuid ? true : (item.isConfiguring || false),
+      isAssigned: item.uuid === uuid || item.isAssigned,
+      isConfiguring: (item.origin === 'commerce' && item.uuid === uuid) || !!item.isConfiguring,
     }))));
 
     const result = await integrateAgent(uuid, projectUuid);
