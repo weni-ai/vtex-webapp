@@ -39,6 +39,35 @@
                         "title": "No results founded"
                     }
                 }
+            },
+            "assign": {
+                "buttons": {
+                    "back": "Back",
+                    "next": "Next",
+                    "finish": "Finish"
+                },
+                "alerts": {
+                    "WhatsApp_required": "WhatsApp Channel required"
+                },
+                "title": "Assign {{name}} Agent",
+                "steps": "Step {{currentPage}} of {{totalPages}}",
+                "about": {
+                    "title": "About"
+                },
+                "templates_available": {
+                    "title": "Templates available"
+                },
+                "select_templates": {
+                    "title": "Select templates",
+                    "description": "You can edit, remove and even create custom templates later"
+                },
+                "integrate_support_channel": {
+                    "title": "Integrate a support channel"
+                },
+                "credentials": {
+                    "title": "Credentials",
+                    "description": "Enter the credentials to assign the agent"
+                }
             }
         },
         "title": "My agents team",
@@ -156,6 +185,10 @@
             },
             "switch_to_test": {
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} switched to test mode"
+            },
+            "assign": {
+                "success": "Agent successfully assigned! Don’t forget to test and customize before publishing",
+                "error": "Something went wrong. Please try again"
             }
         },
         "modals": {

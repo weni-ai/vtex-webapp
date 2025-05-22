@@ -109,6 +109,54 @@ export async function integrateAgentRequest(data: IntegrateAgentData) {
   return response;
 }
 
+export async function assignAgentCLIRequest(data: {
+  agentUuid: string;
+  templatesUuids: string[];
+  credentials: Record<string, string>;
+}): Promise<{
+  uuid: string;
+  webhook_url: string;
+  templates: {}[];
+  channel_uuid: string;
+}> {
+  const projectUuid = store.getState().project.project_uuid;
+  const flowsChannelUuid = store.getState().project.flows_channel_uuid;
+  const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
+
+  const response = await VTEXFetch<{
+    uuid: string;
+    webhook_url: string;
+    templates: {}[];
+    channel_uuid: string;
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method: 'POST',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/assign/`,
+      data: {
+        templates: data.templatesUuids,
+        credentials: data.credentials,
+      },
+      params: {
+        app_uuid: WhatsAppCloudAppUuid,
+        channel_uuid: flowsChannelUuid,
+      },
+      headers: {
+        'Project-Uuid': projectUuid,
+      },
+    }),
+  });
+
+  if ('webhook_url' in Object(response)) {
+    return response;
+  } else {
+    throw new Error('error assigning agent');
+  }
+};
+
 export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
   const adaptedData = adaptUpdateAgentSettingsRequest(store.getState().project.project_uuid, data);
 

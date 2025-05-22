@@ -51,15 +51,27 @@ export interface AgentsListResponse {
   gallery_agents: {
     uuid: string;
     name: string;
+    description: string;
     assigned: boolean;
     is_oficial: boolean;
     lambda_arn: string;
     templates: {
+      uuid: string;
       name: string;
+      display_name: string;
+      start_condition: string;
       content: string;
       is_valid: boolean;
       metadata: {};
     }[];
+    credentials: {
+      [key: string]: {
+        key: string;
+        label: string;
+        placeholder: string;
+        is_confidential: boolean;
+      };
+    };
   }[];
 };
 
@@ -115,11 +127,23 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     origin: 'CLI' as const,
     uuid: agent.uuid,
     name: agent.name,
-    description: '',
+    description: agent.description,
     notificationType: 'active' as const,
     code: agent.name.toLowerCase().replace(/ /g, '_'),
     isAssigned: agent.assigned,
     isInTest: false,
+    credentials: Object.values(agent.credentials).reduce((acc, value) => {
+      acc[value.key] = {
+        label: value.label,
+        placeholder: value.placeholder,
+      };
+      return acc;
+    }, {} as Record<string, { label: string; placeholder: string; }>),
+    templates: agent.templates.map((template) => ({
+      uuid: template.uuid,
+      name: template.display_name,
+      startCondition: template.start_condition,
+    })),
   })));
 
   return agents;
