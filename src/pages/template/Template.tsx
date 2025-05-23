@@ -1,14 +1,14 @@
 import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { TemplateStatusTag } from "../../components/TemplateCard";
+import { assignedAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import './Template.style.css';
-import { assignedAgentTemplate } from "../../services/agent.service";
-import { TemplateStatusTag } from "../../components/TemplateCard";
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -163,6 +163,7 @@ export function Template() {
               prefilledContent={prefilledContent}
               canAddElements={!isEditing}
               canRemoveElements={!isEditing}
+              canChangeHeaderType={!isEditing}
             />
 
             <MessagePreview
