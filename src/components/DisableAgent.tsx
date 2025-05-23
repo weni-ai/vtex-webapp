@@ -1,7 +1,9 @@
 import { Button, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Spinner, Text, toast } from "@vtex/shoreline";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import {  selectProject, disableAgentLoading } from "../store/projectSlice";
-import { disableAgent } from "../services/agent.service";
+import { disableAgent, unassignAgentCLI } from "../services/agent.service";
+import { selectProject } from "../store/projectSlice";
+import store from "../store/provider.store";
 export interface AboutAgentProps {
     open: boolean,
     agentUuid: string,
@@ -11,22 +13,37 @@ export interface AboutAgentProps {
 }
 
 export function DisableAgent({ open, agent, agentUuid, toggleModal, agentOrigin }: Readonly<AboutAgentProps>) {
-    const isDisabling = useSelector(disableAgentLoading)
+    const [isDisabling, setIsDisabling] = useState(false);
     const projectUuid = useSelector(selectProject);
 
-
     async function disable() {
-        const disableResponse = await disableAgent(projectUuid, agentUuid, agentOrigin)
+        setIsDisabling(true);
 
-        if(disableResponse?.error){
-            toast.critical(t('agents.common.disable.error'));
-            return
+        const agent = store.getState().project.agents.find(agent => agent.uuid === agentUuid);
+
+        if (agent?.origin === 'CLI') {
+            try {
+                await unassignAgentCLI({ agentUuid: agent.uuid, });
+                toast.success(t('agents.common.disable.success'));
+                toggleModal();
+            } catch (error) {
+                toast.critical(t('agents.common.disable.error'));
+            }
+        } else {
+            const disableResponse = await disableAgent(projectUuid, agentUuid, agentOrigin)
+
+            if (disableResponse?.error) {
+                toast.critical(t('agents.common.disable.error'));
+                return;
+            }
+
+            toast.success(t('agents.common.disable.success'));
+            toggleModal();
         }
 
-        toast.success(t('agents.common.disable.success'));
-        toggleModal();
+        setIsDisabling(false);
     }
-    
+
     return (
         <Modal open={open} onClose={toggleModal} style={{ width: '368px' }}>
             <ModalHeader>
@@ -37,7 +54,7 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal, agentOrigin 
             </ModalHeader>
             <ModalContent>
                 <Flex style={{ padding: 'var(--space-2, 8px) 0 var(--space-6, 24px) 0' }}>
-                    <Text variant='body'>{t('agents.common.disable.description', {agent})}</Text>
+                    <Text variant='body'>{t('agents.common.disable.description', { agent })}</Text>
                 </Flex>
                 <Flex style={{ width: '100%', justifyContent: 'center' }}>
                     <Button size="large" style={{ width: '100%' }} onClick={toggleModal}>{t('common.cancel')}</Button>
@@ -51,8 +68,8 @@ export function DisableAgent({ open, agent, agentUuid, toggleModal, agentOrigin 
                     >
                         {
                             isDisabling ?
-                            <Spinner description="loading" /> :
-                            t('common.disable')
+                                <Spinner description="loading" /> :
+                                t('common.disable')
                         }
                     </Button>
                 </Flex>
