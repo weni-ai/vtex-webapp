@@ -206,6 +206,9 @@
             "assign": {
                 "success": "Agente asignado con éxito. No olvides probar y personalizar antes de publicar",
                 "error": "Algo salió mal. Por favor, inténtalo de nuevo"
+            },
+            "edit_template": {
+                "success": "Cambios guardados! Puede que tarde hasta 24 horas en ser aprobados por Meta y tomar efecto"
             }
         },
         "modals": {

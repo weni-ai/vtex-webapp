@@ -89,7 +89,13 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
         </Text>
       </Flex>
 
-      <Button variant="primary" size="large" style={{ marginTop: 'auto' }} onClick={() => navigateToTemplate(uuid)}>
+      <Button
+        variant="primary"
+        size="large"
+        style={{ marginTop: 'auto' }}
+        onClick={() => navigateToTemplate(uuid)}
+        disabled={status !== 'active'}
+      >
         {t('template.card.buttons.edit')}
       </Button>
     </Flex>
