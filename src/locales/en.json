@@ -206,6 +206,9 @@
             "assign": {
                 "success": "Agent successfully assigned! Don’t forget to test and customize before publishing",
                 "error": "Something went wrong. Please try again"
+            },
+            "edit_template": {
+                "success": "Saved changes! It may take up to 24 hours to be approved by Meta and take effec"
             }
         },
         "modals": {
