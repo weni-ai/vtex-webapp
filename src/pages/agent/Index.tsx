@@ -1,11 +1,15 @@
-import { Bleed, Button, Flex, IconArrowLeft, IconButton, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from '@vtex/shoreline';
-import { useState } from 'react';
+import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconCopySimple, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Stack, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TemplateCard, TemplateCardContainer } from '../../components/TemplateCard';
+import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
 import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTestMode';
+import { agentCLI } from '../../services/agent.service';
+import store from '../../store/provider.store';
 
 export interface Template {
+  uuid: string;
   name: string;
   description: string;
   status: 'active' | 'rejected' | 'pending' | 'needs-editing';
@@ -35,41 +39,98 @@ function TemplateList({ navigateToCreateTemplate, templates }: { navigateToCreat
   )
 }
 
+function Settings({ isLoading, webhookUrl }: { isLoading: boolean, webhookUrl: string }) {
+  return (
+    <Flex direction="column" gap="$space-4">
+      <Field>
+        <Label>{t('agents.details.settings.fields.webhook_url.label')}</Label>
+
+        <Flex align="center" gap="$space-4">
+          {isLoading ? (
+            <Skeleton style={{ width: '100%', height: '44px' }} />
+          ) : (
+            <Input prefix="URL" value={webhookUrl} />
+          )}
+
+          <IconButton size="large" label={t('agents.details.settings.buttons.copy')} onClick={() => { navigator.clipboard.writeText(webhookUrl) }} disabled={isLoading}>
+            <IconCopySimple />
+          </IconButton>
+        </Flex>
+
+        <FieldDescription>
+          {t('agents.details.settings.fields.webhook_url.description')}
+        </FieldDescription>
+      </Field>
+    </Flex>
+  )
+}
+
 export function AgentIndex() {
   const navigate = useNavigate();
-  const { agentUuid } = useParams();
+  const { assignedAgentUuid } = useParams();
 
-  const agentName = 'Order Status';
+  const [agentName, setAgentName] = useState('');
+  const [agentDescription, setAgentDescription] = useState('');
   const [agentStatus, setAgentStatus] = useState<'test' | 'production'>('test');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [webhookUrl, setWebhookUrl] = useState('');
+  const [templates, setTemplates] = useState<Template[]>([]);
 
   const [isSwitchToTestModeModalOpen, setIsSwitchToTestModeModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
 
-  const templates: Template[] = [
-    {
-      name: 'Payment Approved',
-      description: 'Olá {{1}}, seu pagamento para o pedido #{{2}} foi aprovado! Em breve iniciaremos a separação do seu pedido.',
-      status: 'active',
-    },
-    {
-      name: 'Payment Cancelled',
-      description: 'Olá {{1}}, seu pagamento para o pedido #{{2}} foi aprovado! Em breve iniciaremos a separação do seu pedido.',
-      status: 'rejected',
-    },
-    {
-      name: 'Order Shipped',
-      description: 'Olá {{1}}, seu pagamento para o pedido #{{2}} foi aprovado! Em breve iniciaremos a separação do seu pedido.',
-      status: 'pending',
-    },
-    {
-      name: 'Order Invoiced',
-      description: 'Olá {{1}}, seu pagamento para o pedido #{{2}} foi aprovado! Em breve iniciaremos a separação do seu pedido.',
-      status: 'needs-editing',
-    },
-  ];
+
+  useEffect(() => {
+    index();
+  }, []);
+
+  async function index() {
+    if (!assignedAgentUuid) {
+      return;
+    }
+
+    const agent = store.getState().project.agents
+      .filter((agent) => agent.origin === 'CLI')
+      .find((agent) => agent.assignedAgentUuid === assignedAgentUuid);
+
+    if (!agent) {
+      return;
+    }
+
+    setAgentName(agent.name);
+    setAgentDescription(agent.description);
+
+    loadAgentDetails();
+  }
+
+  async function loadAgentDetails() {
+    if (!assignedAgentUuid) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await agentCLI({ agentUuid: assignedAgentUuid, });
+
+      setWebhookUrl(response.webhookUrl);
+
+      const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected'].includes(status));
+      setTemplates(templates.map(({ uuid, name, startCondition, status }) => ({
+        uuid,
+        name,
+        description: startCondition,
+        status: status as 'active' | 'pending' | 'rejected' | 'needs-editing',
+      })));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   function navigateToCreateTemplate() {
-    navigate(`/agents/${agentUuid}/templates/create`);
+    navigate(`/agents/${assignedAgentUuid}/templates/create`);
   }
 
   function handlePublish() {
@@ -129,7 +190,33 @@ export function AgentIndex() {
       </PageHeader>
 
       <PageContent>
-        <TemplateList navigateToCreateTemplate={navigateToCreateTemplate} templates={templates} />
+
+        <TabProvider>
+          <TabList>
+            <Tab>{t('agents.details.about.title')}</Tab>
+            <Tab>{t('agents.details.settings.title')}</Tab>
+          </TabList>
+
+          <TabPanel>
+            <Flex direction="column" gap="$space-8">
+              <Flex direction="column" gap="$space-5">
+                <Text variant="body">
+                  {agentDescription}
+                </Text>
+
+                <AgentDescriptiveStatus status={'integrated'} showLabel={true} />
+              </Flex>
+
+              <Divider />
+
+              <TemplateList navigateToCreateTemplate={navigateToCreateTemplate} templates={templates} />
+            </Flex>
+          </TabPanel>
+
+          <TabPanel>
+            <Settings isLoading={isLoading} webhookUrl={webhookUrl} />
+          </TabPanel>
+        </TabProvider>
 
         <SwitchToTestModeModal
           open={isSwitchToTestModeModalOpen}
