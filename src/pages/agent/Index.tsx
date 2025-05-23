@@ -1,7 +1,7 @@
 import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconCopySimple, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Stack, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TemplateCard, TemplateCardContainer } from '../../components/TemplateCard';
+import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../../components/TemplateCard';
 import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
 import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTestMode';
@@ -15,7 +15,7 @@ export interface Template {
   status: 'active' | 'rejected' | 'pending' | 'needs-editing';
 }
 
-function TemplateList({ navigateToCreateTemplate, templates }: { navigateToCreateTemplate: () => void, templates: Template[] }) {
+function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean }) {
   return (
     <Flex direction="column" gap="$space-5">
       <Flex gap="$space-5" align="center" justify="space-between">
@@ -31,6 +31,10 @@ function TemplateList({ navigateToCreateTemplate, templates }: { navigateToCreat
       </Flex>
 
       <TemplateCardContainer>
+        {isLoading && (
+          <TemplateCardSkeleton count={3} />
+        )}
+
         {templates.map((template, index) => (
           <TemplateCard key={index} {...template} />
         ))}
@@ -209,7 +213,11 @@ export function AgentIndex() {
 
               <Divider />
 
-              <TemplateList navigateToCreateTemplate={navigateToCreateTemplate} templates={templates} />
+              <TemplateList
+                navigateToCreateTemplate={navigateToCreateTemplate}
+                templates={templates}
+                isLoading={isLoading}
+              />
             </Flex>
           </TabPanel>
 
