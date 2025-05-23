@@ -2,10 +2,13 @@ import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButto
 import { SetStateAction, useEffect, useState } from "react";
 import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ content, setContent }: {
-    content: Content,
-    setContent: React.Dispatch<SetStateAction<Content>>
-  }) {
+export function FormContent({ content, setContent, prefilledContent, canAddElements = true, canRemoveElements = true }: {
+  content: Content,
+  setContent: React.Dispatch<SetStateAction<Content>>,
+  prefilledContent: Content,
+  canAddElements?: boolean;
+  canRemoveElements?: boolean;
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [headerType, setHeaderType] = useState<'text' | 'media'>('text');
@@ -51,6 +54,33 @@ export function FormContent({ content, setContent }: {
       button: elementsVisibility.button ? { text: buttonText, url: buttonUrl } : undefined,
     });
   }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl]);
+
+  useEffect(() => {
+    const visibility = elementsVisibility;
+
+    if (prefilledContent.header?.type === 'text') {
+      setHeaderType('text');
+      setHeaderText(prefilledContent.header.text);
+      visibility.header = true;
+    }
+
+    if (prefilledContent.content) {
+      setContentText(prefilledContent.content);
+    }
+
+    if (prefilledContent.button) {
+      setButtonText(prefilledContent.button.text);
+      setButtonUrl(prefilledContent.button.url);
+      visibility.button = true;
+    }
+
+    if (prefilledContent.footer) {
+      setFooterText(prefilledContent.footer);
+      visibility.footer = true;
+    }
+
+    setElementsVisibility(visibility);
+  }, [prefilledContent]);
 
   const elements = {
     header: {
@@ -164,7 +194,6 @@ export function FormContent({ content, setContent }: {
         <Label>{t('template.form.fields.content.label')}</Label>
 
         <Textarea
-          name="start-condition"
           className="content-textarea-full-width"
           value={contentText}
           onChange={setContentText}
@@ -187,7 +216,7 @@ export function FormContent({ content, setContent }: {
               <Flex align="center" gap="$space-2" justify="space-between">
                 <Text variant="emphasis" color="$fg-base">{t(`template.form.fields.content.${element}.title`)}</Text>
 
-                <IconButton variant="tertiary" label={t('template.form.areas.content.buttons.remove')} onClick={() => setElementVisibility(element as keyof typeof elements, false)}>
+                <IconButton variant="tertiary" label={t('template.form.areas.content.buttons.remove')} onClick={() => setElementVisibility(element as keyof typeof elements, false)} disabled={!canRemoveElements}>
                   <IconTrash />
                 </IconButton>
               </Flex>
@@ -203,7 +232,7 @@ export function FormContent({ content, setContent }: {
           ))
         }
 
-        <Button variant="tertiary" size="large" onClick={() => setIsMenuOpen(!isMenuOpen)} disabled={Object.values(elementsVisibility).every((value) => value)}>
+        <Button variant="tertiary" size="large" onClick={() => setIsMenuOpen(!isMenuOpen)} disabled={Object.values(elementsVisibility).every((value) => value) || !canAddElements}>
           <MenuProvider placement="bottom-start" open={isMenuOpen}>
             <MenuTrigger asChild>
               <Flex gap="$space-1" align="center">
