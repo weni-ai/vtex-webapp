@@ -121,7 +121,6 @@ export function Template() {
 
       toast.success(t('agent.actions.edit_template.success'));
     } catch (error) {
-      console.error(error);
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
       setIsSaving(false);
