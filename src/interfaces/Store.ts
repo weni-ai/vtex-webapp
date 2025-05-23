@@ -33,6 +33,27 @@ export interface ProjectState {
     storeType: string;
     initialLoading: boolean;
     WhatsAppURL: string;
+    assignedAgents: {
+        uuid: string;
+        webhookUrl: string;
+        templates: {
+            uuid: string;
+            name: string;
+            startCondition: string;
+            status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked";
+            metadata: {
+                body: string;
+                header: string;
+                footer: string;
+                buttons: {
+                    type: 'URL';
+                    text: string;
+                    url: string;
+                }[];
+            };
+        }[];
+        channelUuid: string;
+    }[];
 }
 
 export interface UserData {
