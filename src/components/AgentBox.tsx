@@ -187,11 +187,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         items.push('separator');
       }
 
-      items.push({
-        label: t('common.disable'),
-        icon: <IconPauseCircle />,
-        onClick: openDisableModal,
-      });
+      if (['commerce', 'nexus'].includes(origin)) {
+        items.push({
+          label: t('common.disable'),
+          icon: <IconPauseCircle />,
+          onClick: openDisableModal,
+        });
+      }
     }
 
     return items;
