@@ -120,10 +120,11 @@ export function AgentIndex() {
       setWebhookUrl(response.webhookUrl);
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected'].includes(status));
-      setTemplates(templates.map(({ uuid, name, startCondition, status }) => ({
+
+      setTemplates(templates.map(({ uuid, name, status, metadata }) => ({
         uuid,
         name,
-        description: startCondition,
+        description: metadata.body,
         status: status as 'active' | 'pending' | 'rejected' | 'needs-editing',
       })));
     } catch (error) {
