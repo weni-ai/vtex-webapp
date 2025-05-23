@@ -2,12 +2,13 @@ import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButto
 import { SetStateAction, useEffect, useState } from "react";
 import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ content, setContent, prefilledContent, canAddElements = true, canRemoveElements = true }: {
+export function FormContent({ content, setContent, prefilledContent, canAddElements = true, canRemoveElements = true, canChangeHeaderType = true }: {
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
   prefilledContent: Content,
   canAddElements?: boolean;
   canRemoveElements?: boolean;
+  canChangeHeaderType?: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -89,8 +90,8 @@ export function FormContent({ content, setContent, prefilledContent, canAddEleme
         <>
           <Bleed top="$space-7">
             <RadioGroup label="" horizontal state={headerTypeState}>
-              <Radio value="text">{t('template.form.fields.content.header.radio.text.label')}</Radio>
-              <Radio value="media">{t('template.form.fields.content.header.radio.media.label')}</Radio>
+              <Radio value="text" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
+              <Radio value="media" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
             </RadioGroup>
           </Bleed>
 
