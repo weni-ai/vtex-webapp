@@ -157,6 +157,32 @@ export async function assignAgentCLIRequest(data: {
   }
 };
 
+export async function unassignAgentCLIRequest(data: {
+  agentUuid: string;
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await VTEXFetch<{} | { error: string; }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method: 'POST',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/unassign/`,
+      data: {},
+      params: {},
+      headers: { 'Project-Uuid': projectUuid, },
+    }),
+  });
+
+  if ('error' in Object(response)) {
+    throw new Error('error unassigning agent');
+  } else {
+    return response;
+  }
+};
+
 export async function agentCLIRequest(data: { agentUuid: string, }) {
   const projectUuid = store.getState().project.project_uuid;
 
@@ -168,14 +194,14 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
       display_name: string;
       start_condition: string;
       status:
-        "APPROVED" |
-        "IN_APPEAL" |
-        "PENDING" |
-        "REJECTED" |
-        "PENDING_DELETION" |
-        "DELETED" |
-        "DISABLED" |
-        "LOCKED";
+      "APPROVED" |
+      "IN_APPEAL" |
+      "PENDING" |
+      "REJECTED" |
+      "PENDING_DELETION" |
+      "DELETED" |
+      "DISABLED" |
+      "LOCKED";
       metadata: {
         id: string;
         body: string;
