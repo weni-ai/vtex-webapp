@@ -1,8 +1,8 @@
-import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text } from "@vtex/shoreline";
+import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { assignedAgentTemplate } from "../../services/agent.service";
+import { assignedAgentTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
@@ -55,6 +55,8 @@ export function Template() {
   const [isAddingVariableModalOpen, setIsAddingVariableModalOpen] = useState(false);
   const [variables, setVariables] = useState<Variable[]>([]);
 
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
     if (templateUuid) {
       loadTemplate();
@@ -102,6 +104,30 @@ export function Template() {
     });
   }
 
+  async function handleSaveTemplate() {
+    try {
+      setIsSaving(true);
+
+      await updateAgentTemplate({
+        templateUuid: templateUuid as string,
+        template: {
+          header: content.header?.type === 'text' ? content.header.text : undefined,
+          content: content.content,
+          footer: content.footer,
+        },
+      });
+
+      navigate(-1);
+
+      toast.success(t('agent.actions.edit_template.success'));
+    } catch (error) {
+      console.error(error);
+      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   return (
     <Page>
       <PageHeader>
@@ -142,7 +168,7 @@ export function Template() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large">
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
