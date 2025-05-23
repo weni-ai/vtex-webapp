@@ -1,12 +1,14 @@
 import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text } from "@vtex/shoreline";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import './Template.style.css';
+import { assignedAgentTemplate } from "../../services/agent.service";
+import { TemplateStatusTag } from "../../components/TemplateCard";
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -30,6 +32,11 @@ export function SectionHeader({ title }: { title: string }) {
 
 export function Template() {
   const navigate = useNavigate();
+  const { templateUuid } = useParams();
+
+  const [templateName, setTemplateName] = useState('');
+  const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
+  const [startCondition, setStartCondition] = useState('');
 
   const [content, setContent] = useState<Content>({
     header: undefined,
@@ -38,8 +45,62 @@ export function Template() {
     button: undefined,
   });
 
+  const [prefilledContent, setPrefilledContent] = useState<Content>({
+    header: undefined,
+    content: '',
+    footer: undefined,
+    button: undefined,
+  });
+
   const [isAddingVariableModalOpen, setIsAddingVariableModalOpen] = useState(false);
   const [variables, setVariables] = useState<Variable[]>([]);
+
+  useEffect(() => {
+    if (templateUuid) {
+      loadTemplate();
+    }
+  }, [templateUuid]);
+
+  const isEditing = useMemo(() => {
+    return templateUuid !== undefined;
+  }, [templateUuid]);
+
+  async function loadTemplate() {
+    const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
+
+    let header: { type: 'text', text: string } | undefined;
+    let button: { text: string; url: string } | undefined;
+    let footer: string | undefined;
+
+    if (template.metadata.buttons?.[0]?.type === 'URL') {
+      button = {
+        text: template.metadata.buttons[0].text,
+        url: template.metadata.buttons[0].url,
+      }
+    }
+
+    if (template.metadata.header) {
+      header = {
+        type: 'text',
+        text: template.metadata.header,
+      }
+    }
+
+    if (template.metadata.footer) {
+      footer = template.metadata.footer;
+    }
+
+    setTemplateName(template.name);
+    setTemplateStatus(template.status as "active" | "pending" | "rejected" | "needs-editing");
+    setStartCondition(template.startCondition);
+
+    setPrefilledContent({
+      header,
+      content: template.metadata.body,
+      footer,
+      button,
+    });
+  }
 
   return (
     <Page>
@@ -58,7 +119,17 @@ export function Template() {
               </IconButton>
             </Bleed>
 
-            <PageHeading>{t('template.form.create.title')}</PageHeading>
+            {isEditing ? (
+              <PageHeading>
+                <Flex align="center" gap="$space-3">
+                  {templateName}
+
+                  <TemplateStatusTag status={templateStatus} size="large" />
+                </Flex>
+              </PageHeading>
+            ) : (
+              <PageHeading>{t('template.form.create.title')}</PageHeading>
+            )}
 
             {/* <Tag variant="secondary" color="yellow">Pending</Tag> */}
           </Flex>
@@ -81,12 +152,18 @@ export function Template() {
 
       <PageContent>
         <Flex direction="column" gap="$space-5">
-          <FormEssential />
+          <FormEssential startCondition={startCondition} isDisabled={isEditing} />
 
           <Divider />
 
           <Grid columns="1fr 1fr" gap="$space-5">
-            <FormContent content={content} setContent={setContent} />
+            <FormContent
+              content={content}
+              setContent={setContent}
+              prefilledContent={prefilledContent}
+              canAddElements={!isEditing}
+              canRemoveElements={!isEditing}
+            />
 
             <MessagePreview
               header={content.header}
@@ -96,21 +173,23 @@ export function Template() {
             />
           </Grid>
 
-          <Divider />
+          {!isEditing && (<>
+            <Divider />
 
-          <FormVariables
-            variables={variables}
-            setVariables={setVariables}
-            openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
-          />
+            <FormVariables
+              variables={variables}
+              setVariables={setVariables}
+              openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
+            />
 
-          <AddingVariableModal
-            open={isAddingVariableModalOpen}
-            onClose={() => setIsAddingVariableModalOpen(false)}
-            addVariable={(variable: Variable) => {
-              setVariables([...variables, variable]);
-            }}
-          />
+            <AddingVariableModal
+              open={isAddingVariableModalOpen}
+              onClose={() => setIsAddingVariableModalOpen(false)}
+              addVariable={(variable: Variable) => {
+                setVariables([...variables, variable]);
+              }}
+            />
+          </>)}
         </Flex>
       </PageContent>
     </Page>
