@@ -1,7 +1,7 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, unassignAgentCLIRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
-import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
+import { addAssignedAgent, setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -86,6 +86,12 @@ export async function assignAgentCLI(data: { uuid: string, templatesUuids: strin
 }
 
 export async function agentCLI(data: { agentUuid: string }) {
+  const agent = store.getState().project.assignedAgents.find(agent => agent.uuid === data.agentUuid);
+
+  if (agent) {
+    return agent;
+  }
+
   const response = await agentCLIRequest({
     agentUuid: data.agentUuid,
   });
@@ -103,7 +109,7 @@ export async function agentCLI(data: { agentUuid: string }) {
 
   const statusValues = Object.values(status);
 
-  return {
+  const assignedAgent = {
     ...response,
     templates: response.templates.map((template) => ({
       uuid: template.uuid,
@@ -112,7 +118,11 @@ export async function agentCLI(data: { agentUuid: string }) {
       status: status[template.status] as typeof statusValues[number],
       metadata: template.metadata,
     })),
-  };
+  }
+
+  store.dispatch(addAssignedAgent(assignedAgent));
+
+  return assignedAgent;
 }
 
 export async function unassignAgentCLI(data: { agentUuid: string }) {
@@ -263,4 +273,18 @@ export async function getWhatsAppURLService() {
 
   store.dispatch(setWhatsAppURL(redirectUrl));
   return redirectUrl;
+}
+
+export async function assignedAgentTemplate(data: { templateUuid: string }) {
+  const templates = store.getState().project.assignedAgents
+    .map((agent) => agent.templates)
+    .flat()
+
+  const template = templates.find((template) => template.uuid === data.templateUuid);
+
+  if (!template) {
+    throw new Error('Template not found');
+  }
+
+  return template;
 }

@@ -208,6 +208,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
         name: string;
         topic: string;
         header: string;
+        footer: string;
         buttons: {
           url: string;
           text: string;
