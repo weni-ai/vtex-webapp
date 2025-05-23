@@ -2,13 +2,14 @@ import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButto
 import { SetStateAction, useEffect, useState } from "react";
 import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ content, setContent, prefilledContent, canAddElements = true, canRemoveElements = true, canChangeHeaderType = true }: {
+export function FormContent({ content, setContent, prefilledContent, canAddElements = true, canRemoveElements = true, canChangeHeaderType = true, canChangeButton = true }: {
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
   prefilledContent: Content,
   canAddElements?: boolean;
   canRemoveElements?: boolean;
   canChangeHeaderType?: boolean;
+  canChangeButton?: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -167,13 +168,13 @@ export function FormContent({ content, setContent, prefilledContent, canAddEleme
           <Field>
             <Label>{t('template.form.fields.content.button.text.label')}</Label>
 
-            <Input value={buttonText} onChange={setButtonText} />
+            <Input value={buttonText} onChange={setButtonText} disabled={!canChangeButton} />
           </Field>
 
           <Field>
             <Label>{t('template.form.fields.content.button.url.label')}</Label>
 
-            <Input prefix="https://" value={buttonUrl} onChange={setButtonUrl} />
+            <Input prefix="https://" value={buttonUrl} onChange={setButtonUrl} disabled={!canChangeButton} />
           </Field>
         </>
       ),

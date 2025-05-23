@@ -164,6 +164,7 @@ export function Template() {
               canAddElements={!isEditing}
               canRemoveElements={!isEditing}
               canChangeHeaderType={!isEditing}
+              canChangeButton={!isEditing}
             />
 
             <MessagePreview
