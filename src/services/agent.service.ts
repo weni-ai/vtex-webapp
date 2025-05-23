@@ -64,14 +64,25 @@ export async function updateAgentsList() {
 }
 
 export async function assignAgentCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
-  await assignAgentCLIRequest({
+  const response = await assignAgentCLIRequest({
     agentUuid: data.uuid,
     templatesUuids: data.templatesUuids,
     credentials: data.credentials,
   });
 
   const agents = store.getState().project.agents;
-  store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === data.uuid ? true : item.isAssigned }))));
+
+  store.dispatch(setAgents(agents.map((item) => {
+    if (item.origin === 'CLI' && item.uuid === data.uuid) {
+      return {
+        ...item,
+        isAssigned: true,
+        assignedAgentUuid: response.uuid,
+      };
+    }
+
+    return item;
+  })));
 }
 
 export async function agentCLI(data: { agentUuid: string }) {
@@ -96,7 +107,7 @@ export async function agentCLI(data: { agentUuid: string }) {
     ...response,
     templates: response.templates.map((template) => ({
       uuid: template.uuid,
-      name: template.name,
+      name: template.display_name,
       startCondition: template.start_condition,
       status: status[template.status] as typeof statusValues[number],
       metadata: template.metadata,

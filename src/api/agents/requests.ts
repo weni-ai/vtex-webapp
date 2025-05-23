@@ -165,6 +165,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
     templates: {
       uuid: string;
       name: string;
+      display_name: string;
       start_condition: string;
       status:
         "APPROVED" |
@@ -175,7 +176,24 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
         "DELETED" |
         "DISABLED" |
         "LOCKED";
-      metadata: {};
+      metadata: {
+        id: string;
+        body: string;
+        name: string;
+        topic: string;
+        header: string;
+        buttons: {
+          url: string;
+          text: string;
+          type: 'URL';
+        }[];
+        usecase: string;
+        category: string;
+        industry: string[];
+        language: string;
+        body_params: string[];
+        body_param_types: string[];
+      };
     }[],
     channel_uuid: string;
     webhook_url: string;
@@ -199,7 +217,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
       webhookUrl: response.webhook_url,
     };
   } else {
-    throw new Error('error assigning agent');
+    throw new Error('error retrieving agent');
   }
 }
 
