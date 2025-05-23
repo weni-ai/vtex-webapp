@@ -76,6 +76,23 @@
                 "title": "Nenhum agente atribuído à equipe"
             }
         },
+        "details": {
+            "about": {
+                "title": "Sobre"
+            },
+            "settings": {
+                "title": "Configurações",
+                "fields": {
+                    "webhook_url": {
+                        "label": "URL de Webhook",
+                        "description": "Use esta URL para configurar seu sistema externo para enviar eventos a este agente"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar"
+                }
+            }
+        },
         "categories": {
             "passive": {
                 "title": "Notificação passiva"
@@ -222,8 +239,7 @@
                     "about": {
                         "title": "Sobre",
                         "status": {
-                            "title": "Status",
-                            "in_production": "Em produção"
+                            "title": "Status"
                         }
                     },
                     "preview": {

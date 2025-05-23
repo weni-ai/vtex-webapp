@@ -157,6 +157,70 @@ export async function assignAgentCLIRequest(data: {
   }
 };
 
+export async function agentCLIRequest(data: { agentUuid: string, }) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await VTEXFetch<{
+    uuid: string;
+    templates: {
+      uuid: string;
+      name: string;
+      display_name: string;
+      start_condition: string;
+      status:
+        "APPROVED" |
+        "IN_APPEAL" |
+        "PENDING" |
+        "REJECTED" |
+        "PENDING_DELETION" |
+        "DELETED" |
+        "DISABLED" |
+        "LOCKED";
+      metadata: {
+        id: string;
+        body: string;
+        name: string;
+        topic: string;
+        header: string;
+        buttons: {
+          url: string;
+          text: string;
+          type: 'URL';
+        }[];
+        usecase: string;
+        category: string;
+        industry: string[];
+        language: string;
+        body_params: string[];
+        body_param_types: string[];
+      };
+    }[],
+    channel_uuid: string;
+    webhook_url: string;
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: JSON.stringify({
+      method: 'GET',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
+      headers: { 'Project-Uuid': projectUuid, },
+      data: {},
+      params: {},
+    }),
+  });
+
+  if ('webhook_url' in Object(response)) {
+    return {
+      uuid: response.uuid,
+      templates: response.templates,
+      channelUuid: response.channel_uuid,
+      webhookUrl: response.webhook_url,
+    };
+  } else {
+    throw new Error('error retrieving agent');
+  }
+}
+
 export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
   const adaptedData = adaptUpdateAgentSettingsRequest(store.getState().project.project_uuid, data);
 

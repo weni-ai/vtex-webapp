@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
+import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -64,18 +64,58 @@ export async function updateAgentsList() {
 }
 
 export async function assignAgentCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
-  await assignAgentCLIRequest({
+  const response = await assignAgentCLIRequest({
     agentUuid: data.uuid,
     templatesUuids: data.templatesUuids,
     credentials: data.credentials,
   });
 
   const agents = store.getState().project.agents;
-  store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === data.uuid ? true : item.isAssigned }))));
+
+  store.dispatch(setAgents(agents.map((item) => {
+    if (item.origin === 'CLI' && item.uuid === data.uuid) {
+      return {
+        ...item,
+        isAssigned: true,
+        assignedAgentUuid: response.uuid,
+      };
+    }
+
+    return item;
+  })));
+}
+
+export async function agentCLI(data: { agentUuid: string }) {
+  const response = await agentCLIRequest({
+    agentUuid: data.agentUuid,
+  });
+
+  const status = {
+    "APPROVED": "active" as const,
+    "PENDING": "pending" as const,
+    "REJECTED": "rejected" as const,
+    "IN_APPEAL": "in_appeal" as const,
+    "PENDING_DELETION": "pending_deletion" as const,
+    "DELETED": "deleted" as const,
+    "DISABLED": "disabled" as const,
+    "LOCKED": "locked" as const,
+  }
+
+  const statusValues = Object.values(status);
+
+  return {
+    ...response,
+    templates: response.templates.map((template) => ({
+      uuid: template.uuid,
+      name: template.display_name,
+      startCondition: template.start_condition,
+      status: status[template.status] as typeof statusValues[number],
+      metadata: template.metadata,
+    })),
+  };
 }
 
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
-  const agents = store.getState().project.agents;
   const agentsLoading = store.getState().project.agentsLoading;
   const agentLoadingExists = agentsLoading.find(loading => loading.agent_uuid === feature_uuid);
 
@@ -117,9 +157,11 @@ export async function integrateAgent(feature_uuid: string, project_uuid: string)
 
     const response = await integrateAgentRequest(data);
 
+    const agents = store.getState().project.agents;
     store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid === feature_uuid || item.isAssigned }))));
     return { success: true, data: response };
   } catch (error) {
+    const agents = store.getState().project.agents;
     store.dispatch(setAgents(agents.map((item) => ({ ...item, isAssigned: item.uuid !== feature_uuid && item.isAssigned }))))
     return { success: false, error: error || 'unknown error' };
   } finally {

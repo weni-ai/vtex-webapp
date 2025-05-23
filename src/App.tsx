@@ -47,8 +47,8 @@ function App() {
             <Route path='/agent-builder' element={<AgentBuilder />}></Route>
             <Route path='/setup-error' element={<SetupError />}></Route>
             <Route path='/dash' element={<Dashboard />}></Route>
-            <Route path='/agents/:agentUuid' element={<AgentIndex />}></Route>
-            <Route path='/agents/:agentUuid/templates/create' element={<Template />}></Route>
+            <Route path='/agents/:assignedAgentUuid' element={<AgentIndex />}></Route>
+            <Route path='/agents/:assignedAgentUuid/templates/create' element={<Template />}></Route>
           </Routes>
         </Router>
       )}
