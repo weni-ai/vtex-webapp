@@ -62,6 +62,7 @@ interface AgentNexus extends AgentNext {
 
 interface AgentCLI extends AgentNext {
   origin: 'CLI';
+  assignedAgentUuid: string;
   notificationType: 'active';
   templates: {
     uuid: string;

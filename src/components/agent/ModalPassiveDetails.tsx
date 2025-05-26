@@ -1,7 +1,8 @@
-import { Divider, Field, FieldDescription, Flex, IconButton, IconCheck, IconCopySimple, Input, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Skeleton, Text, toast } from "@vtex/shoreline";
+import { Divider, Field, FieldDescription, Flex, IconButton, IconCopySimple, Input, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Skeleton, Text, toast } from "@vtex/shoreline";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { getWhatsAppURLService } from "../../services/agent.service";
+import { AgentDescriptiveStatus } from "./DescriptiveStatus";
 
 interface ModalAgentPassiveDetailsProps {
   open: boolean;
@@ -26,21 +27,6 @@ function About({ description, skills }: { description: string, skills: string[] 
           ))}
         </Flex>
       )}
-    </Flex>
-  )
-}
-
-function Status() {
-  return (
-    <Flex align="center" gap="$space-3">
-      <Text variant="emphasis" color="$fg-base">{t('agent.modals.details.sections.about.status.title')}:</Text>
-
-      <Text variant="action" color="$fg-success">
-        <Flex align="center" gap="$space-1">
-          <IconCheck />
-          {t('agent.modals.details.sections.about.status.in_production')}
-        </Flex>
-      </Text>
     </Flex>
   )
 }
@@ -113,7 +99,7 @@ export function ModalAgentPassiveDetails({ open, onClose, agentName, agentDescri
         <Flex direction="column" gap="$space-5">
           <Flex direction="column" gap="$space-4">
             <About description={agentDescription} skills={skills} />
-            <Status />
+            <AgentDescriptiveStatus status="integrated" showLabel={true} />
           </Flex>
 
           <Divider />

@@ -1,5 +1,5 @@
 import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { Button, Flex, Grid, IconButton, IconCheck, IconCode, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { AboutAgent } from "./AboutAgent";
 import { AddAbandonedCart } from "./AddAbandonedCart";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
+import { AgentDescriptiveStatus } from "./agent/DescriptiveStatus";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 
@@ -54,35 +55,6 @@ export function AgentBoxEmpty() {
       <Text variant="display3" color="$fg-base">{t('agents.list.empty.title')}</Text>
     </Flex>
   )
-}
-
-function DescriptiveStatus({ status }: { status: 'test' | 'configuring' | 'integrated' }) {
-  const { color, icon, text } = {
-    test: {
-      color: '$fg-base-disabled',
-      icon: <IconCode />,
-      text: t('agents.common.test'),
-    },
-    configuring: {
-      color: '$fg-informational',
-      icon: null,
-      text: t('agents.common.configuring'),
-    },
-    integrated: {
-      color: '$fg-success',
-      icon: <IconCheck />,
-      text: t('agents.common.added'),
-    },
-  }[status];
-
-  return (
-    <Text variant="action" color={color}>
-      <Flex align="center" gap="$space-2" style={{ padding: 'var(--sl-space-3)' }}>
-        {icon}
-        {text}
-      </Flex>
-    </Text>
-  );
 }
 
 export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
@@ -161,7 +133,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       return !isWppIntegrated;
     }
 
-    return isAgentDetailsPageAccessEnabled;
+    return origin === 'CLI' && isAgentDetailsPageAccessEnabled;
   }, [isAgentDetailsPageAccessEnabled, isIntegrated, type, isWppIntegrated]);
 
   const handleAgentClick = () => {
@@ -171,6 +143,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
 
     if (type === 'passive') {
       setIsPassiveDetailsModalOpen(true);
+      return;
+    }
+
+    const agent = store.getState().project.agents.find((agent) => agent.uuid === uuid);
+
+    if (agent?.origin === 'CLI') {
+      navigate(`/agents/${agent.assignedAgentUuid}`);
       return;
     }
 
@@ -208,11 +187,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         items.push('separator');
       }
 
-      items.push({
-        label: t('common.disable'),
-        icon: <IconPauseCircle />,
-        onClick: openDisableModal,
-      });
+      if (['commerce', 'nexus'].includes(origin)) {
+        items.push({
+          label: t('common.disable'),
+          icon: <IconPauseCircle />,
+          onClick: openDisableModal,
+        });
+      }
     }
 
     return items;
@@ -291,7 +272,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             'integrated',
           ].includes(status) && !isUpdateAgentLoading ?
             (
-              <DescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} />
+              <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
             ) : (
               <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
                 {isAgentGalleryModalAccessEnabled ? null : <IconPlus />}

@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconPauseCircle, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Tag, Text } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconPauseCircle, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Skeleton, Tag, Text } from "@vtex/shoreline";
 import { Template } from "../pages/agent/Index";
 
 export function TemplateCardContainer({ children }: { children: React.ReactNode }) {
@@ -26,6 +26,14 @@ function TemplateStatusTag({ status }: { status: Template['status'] }) {
 
   return (
     <Tag variant="secondary" color={color} style={{ border: 'none' }}>{statusText}</Tag>
+  )
+}
+
+export function TemplateCardSkeleton({ count }: { count: number }) {
+  return (
+    Array.from({ length: count }).map((_, index) => (
+      <Skeleton key={index} />
+    ))
   )
 }
 
