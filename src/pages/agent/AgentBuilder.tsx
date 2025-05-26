@@ -77,8 +77,9 @@ export function AgentBuilder() {
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
   const navigate = useNavigate()
-  useEffect(() => {
-    initializeUser();
+  
+  const initialize = async () => {
+    await initializeUser();
 
     const shouldUpdateAgentBuilder = agentBuilder.name !== form.name;
 
@@ -89,6 +90,10 @@ export function AgentBuilder() {
   
       buildAgent(payload, false);
     }
+  };
+  
+  useEffect(() => {
+    initialize();
   }, [initializeUser]);
 
   const isValidURL = (url: string) => {
