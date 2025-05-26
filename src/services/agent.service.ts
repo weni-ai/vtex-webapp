@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList } from "../api/agents/requests";
+import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, unassignAgentCLIRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -115,6 +115,30 @@ export async function agentCLI(data: { agentUuid: string }) {
   };
 }
 
+export async function unassignAgentCLI(data: { agentUuid: string }) {
+  store.dispatch(setDisableAgentLoading(true))
+
+  const response = await unassignAgentCLIRequest({
+    agentUuid: data.agentUuid,
+  });
+
+  const agents = store.getState().project.agents;
+
+  store.dispatch(setAgents(agents.map((item) => {
+    if (item.origin === 'CLI' && item.uuid === data.agentUuid) {
+      return {
+        ...item,
+        isAssigned: false,
+        assignedAgentUuid: '',
+      };
+    }
+
+    return item;
+  })));
+
+  return response;
+}
+
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
   const agentsLoading = store.getState().project.agentsLoading;
   const agentLoadingExists = agentsLoading.find(loading => loading.agent_uuid === feature_uuid);
@@ -189,8 +213,6 @@ export async function updateAgentSettings(code: AgentCommerce['code'], body: Upd
 }
 
 export async function disableAgent(project_uuid: string, feature_uuid: string, agentOrigin: string) {
-  store.dispatch(setDisableAgentLoading(true))
-
   try {
     const data =
       agentOrigin === 'nexus' ?
@@ -208,8 +230,6 @@ export async function disableAgent(project_uuid: string, feature_uuid: string, a
   } catch (error) {
     console.error('error updating agent:', error);
     return { success: false, error: error || 'unknown error' };
-  } finally {
-    store.dispatch(setDisableAgentLoading(false))
   }
 }
 
