@@ -49,6 +49,7 @@ function App() {
             <Route path='/dash' element={<Dashboard />}></Route>
             <Route path='/agents/:assignedAgentUuid' element={<AgentIndex />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/create' element={<Template />}></Route>
+            <Route path='/agents/templates/:templateUuid/edit' element={<Template />}></Route>
           </Routes>
         </Router>
       )}

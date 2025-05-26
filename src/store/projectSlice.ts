@@ -25,6 +25,29 @@ const initialState: ProjectState = {
   storeType: '',
   initialLoading: false,
   WhatsAppURL: '',
+  assignedAgents: [],
+}
+
+interface AssignedAgent {
+  uuid: string;
+  webhookUrl: string;
+  channelUuid: string;
+  templates: {
+    uuid: string;
+    name: string;
+    startCondition: string;
+    status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked";
+    metadata: {
+      body: string;
+      header: string;
+      footer: string;
+      buttons: {
+        type: 'URL';
+        text: string;
+        url: string;
+      }[];
+    };
+  }[];
 }
 
 const projectSlice = createSlice({
@@ -83,6 +106,12 @@ const projectSlice = createSlice({
     setAgents: (state, action: PayloadAction<(AgentCommerce | AgentNexus | AgentCLI)[]>) => {
       state.agents = action.payload;
     },
+    addAssignedAgent: (state, action: PayloadAction<AssignedAgent>) => {
+      state.assignedAgents = [...state.assignedAgents, action.payload];
+    },
+    setAssignedAgents: (state, action: PayloadAction<AssignedAgent[]>) => {
+      state.assignedAgents = action.payload;
+    },
   }
 })
 
@@ -103,6 +132,8 @@ export const {
   setStoreType,
   setInitialLoading,
   setWhatsAppURL,
+  addAssignedAgent,
+  setAssignedAgents,
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid

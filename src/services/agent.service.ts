@@ -1,7 +1,7 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, unassignAgentCLIRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, unassignAgentCLIRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
-import { setAgents, setAgentsLoading, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
+import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
@@ -85,25 +85,31 @@ export async function assignAgentCLI(data: { uuid: string, templatesUuids: strin
   })));
 }
 
+const status = {
+  "APPROVED": "active" as const,
+  "PENDING": "pending" as const,
+  "REJECTED": "rejected" as const,
+  "IN_APPEAL": "in_appeal" as const,
+  "PENDING_DELETION": "pending_deletion" as const,
+  "DELETED": "deleted" as const,
+  "DISABLED": "disabled" as const,
+  "LOCKED": "locked" as const,
+}
+
 export async function agentCLI(data: { agentUuid: string }) {
+  const agent = store.getState().project.assignedAgents.find(agent => agent.uuid === data.agentUuid);
+
+  if (agent) {
+    return agent;
+  }
+
   const response = await agentCLIRequest({
     agentUuid: data.agentUuid,
   });
 
-  const status = {
-    "APPROVED": "active" as const,
-    "PENDING": "pending" as const,
-    "REJECTED": "rejected" as const,
-    "IN_APPEAL": "in_appeal" as const,
-    "PENDING_DELETION": "pending_deletion" as const,
-    "DELETED": "deleted" as const,
-    "DISABLED": "disabled" as const,
-    "LOCKED": "locked" as const,
-  }
-
   const statusValues = Object.values(status);
 
-  return {
+  const assignedAgent = {
     ...response,
     templates: response.templates.map((template) => ({
       uuid: template.uuid,
@@ -112,7 +118,11 @@ export async function agentCLI(data: { agentUuid: string }) {
       status: status[template.status] as typeof statusValues[number],
       metadata: template.metadata,
     })),
-  };
+  }
+
+  store.dispatch(addAssignedAgent(assignedAgent));
+
+  return assignedAgent;
 }
 
 export async function unassignAgentCLI(data: { agentUuid: string }) {
@@ -263,4 +273,48 @@ export async function getWhatsAppURLService() {
 
   store.dispatch(setWhatsAppURL(redirectUrl));
   return redirectUrl;
+}
+
+export async function assignedAgentTemplate(data: { templateUuid: string }) {
+  const templates = store.getState().project.assignedAgents
+    .map((agent) => agent.templates)
+    .flat()
+
+  const template = templates.find((template) => template.uuid === data.templateUuid);
+
+  if (!template) {
+    throw new Error('Template not found');
+  }
+
+  return template;
+}
+
+export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, } }) {
+  const response = await updateAgentTemplateRequest(data);
+
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  const statusValues = Object.values(status);
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return {
+      ...agent,
+      templates: agent.templates.map((template) => {
+        if (template.uuid === response.uuid) {
+          return {
+            ...template,
+            status: status[response.status] as typeof statusValues[number],
+            metadata: {
+              ...template.metadata,
+              header: response.metadata.header,
+              body: response.metadata.body,
+              footer: response.metadata.footer,
+            }
+          };
+        }
+
+        return template;
+      })
+    }
+  })));
 }

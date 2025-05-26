@@ -208,6 +208,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
         name: string;
         topic: string;
         header: string;
+        footer: string;
         buttons: {
           url: string;
           text: string;
@@ -344,3 +345,46 @@ export async function getWhatsAppURLRequest(): Promise<{
 
   return response;
 }
+
+export async function updateAgentTemplateRequest(data: {
+  templateUuid: string;
+  template: { header?: string, content: string, footer?: string, }
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+  const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
+
+  const response = await VTEXFetch<{
+    uuid: string;
+    display_name: string;
+    status: "APPROVED" | "IN_APPEAL" | "PENDING" | "REJECTED" | "PENDING_DELETION" | "DELETED" | "DISABLED" | "LOCKED";
+    metadata: {
+      header: string;
+      body: string;
+      footer: string;
+    };
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method: 'PATCH',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`,
+      data: {
+        project_uuid: projectUuid,
+        app_uuid: WhatsAppCloudAppUuid,
+        template_header: data.template.header,
+        template_body: data.template.content,
+        template_footer: data.template.footer,
+      },
+      params: {},
+      headers: {},
+    }),
+  });
+
+  if ('display_name' in Object(response)) {
+    return response;
+  } else {
+    throw new Error('error updating template');
+  }
+};
