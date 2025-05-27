@@ -36,7 +36,7 @@ interface AssignedAgent {
     uuid: string;
     name: string;
     startCondition: string;
-    status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked";
+    status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked" | "needs-editing";
     metadata: {
       body: string;
       header: string;
