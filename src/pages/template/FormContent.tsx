@@ -2,7 +2,8 @@ import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButto
 import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+  status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
   prefilledContent: Content,
@@ -125,7 +126,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
             <Field>
               <Label>{t('template.form.fields.content.header.label')}</Label>
 
-              <Input value={headerText} onChange={setHeaderText} />
+              <Input value={headerText} onChange={setHeaderText} disabled={status === 'needs-editing'} />
             </Field>
           )}
 
@@ -181,7 +182,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
         <Field>
           <Label>{t('template.form.fields.content.footer.label')}</Label>
 
-          <Input value={footerText} onChange={setFooterText} />
+          <Input value={footerText} onChange={setFooterText} disabled={status === 'needs-editing'} />
         </Field>
       ),
     },
@@ -210,7 +211,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
               prefix="https://"
               value={buttonUrl}
               onChange={setButtonUrl}
-              disabled={!canChangeButton}
+              disabled={status !== 'needs-editing' && !canChangeButton}
               suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
             />
           </Field>
@@ -219,7 +220,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
             <Field>
               <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
 
-              <Input prefix="https://" value={buttonUrlExample} onChange={setButtonUrlExample} disabled={!canChangeButton} />
+              <Input prefix="https://" value={buttonUrlExample} onChange={setButtonUrlExample} disabled={status !== 'needs-editing' && !canChangeButton} />
 
               <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
             </Field>
@@ -256,6 +257,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
           className="content-textarea-full-width"
           value={contentText}
           onChange={setContentText}
+          disabled={status === 'needs-editing'}
         />
 
         <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
@@ -293,7 +295,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
           variant="tertiary"
           size="large"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          disabled={elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable)}
+          disabled={status === 'needs-editing' || (elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable))}
         >
           <MenuProvider placement="bottom-start" open={isMenuOpen}>
             <MenuTrigger asChild>
