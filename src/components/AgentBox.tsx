@@ -1,5 +1,4 @@
-import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -65,8 +64,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
   const channel = store.getState().project.storeType;
-  const isAgentDetailsPageAccessEnabled = useFeatureIsOn('agentDetailsPageAccess');
-  const isAgentGalleryModalAccessEnabled = useFeatureIsOn('agentGalleryModalAccess');
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
   const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
 
@@ -133,8 +130,8 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       return !isWppIntegrated;
     }
 
-    return origin === 'CLI' && isAgentDetailsPageAccessEnabled;
-  }, [isAgentDetailsPageAccessEnabled, isIntegrated, type, isWppIntegrated]);
+    return origin === 'CLI';
+  }, [isIntegrated, type, isWppIntegrated]);
 
   const handleAgentClick = () => {
     if (!isAgentClickable) {
@@ -273,7 +270,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
             ) : (
               <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
-                {isAgentGalleryModalAccessEnabled ? null : <IconPlus />}
                 <Text>{t('agents.common.add')}</Text>
               </Button>
             )
