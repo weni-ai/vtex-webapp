@@ -1,4 +1,3 @@
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -28,7 +27,6 @@ export function Dashboard() {
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
   const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
   const [isAgentAssignModalOpen, setIsAgentAssignModalOpen] = useState(false);
-  const isAgentGalleryModalAccessEnabled = useFeatureIsOn('agentGalleryModalAccess');
   const [agentName, setAgentName] = useState('');
   const [agentDescription, setAgentDescription] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
@@ -36,14 +34,8 @@ export function Dashboard() {
   const [isAssigningAgent, setIsAssigningAgent] = useState(false);
 
   const agentsList = useMemo(() => {
-    return agentsListOriginal.filter((item) => {
-      if (isAgentGalleryModalAccessEnabled) {
-        return item.isAssigned;
-      }
-
-      return ['commerce', 'nexus'].includes(item.origin);
-    });
-  }, [agentsListOriginal, isAgentGalleryModalAccessEnabled]);
+    return agentsListOriginal.filter((item) => item.isAssigned);
+  }, [agentsListOriginal]);
 
   function navigateToAgent() {
     const dash = new URL(`/projects/${project_uuid}`, getEnv("VITE_APP_DASH_URL"));
@@ -246,12 +238,10 @@ export function Dashboard() {
               {t('agents.title')}
             </Heading>
 
-            {isAgentGalleryModalAccessEnabled && (
-              <Button variant="secondary" size="large" onClick={() => setIsGalleryModalOpen(true)}>
-                <IconPlus />
-                {t('agents.buttons.gallery')}
-              </Button>
-            )}
+            <Button variant="secondary" size="large" onClick={() => setIsGalleryModalOpen(true)}>
+              <IconPlus />
+              {t('agents.buttons.gallery')}
+            </Button>
           </Flex>
 
           <AgentBoxContainer>
