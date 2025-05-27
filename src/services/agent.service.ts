@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, unassignAgentCLIRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -115,7 +115,7 @@ export async function agentCLI(data: { agentUuid: string }) {
       uuid: template.uuid,
       name: template.display_name,
       startCondition: template.start_condition,
-      status: status[template.status] as typeof statusValues[number],
+      status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as typeof statusValues[number],
       metadata: template.metadata,
     })),
   }
@@ -144,6 +144,44 @@ export async function unassignAgentCLI(data: { agentUuid: string }) {
     }
 
     return item;
+  })));
+
+  return response;
+}
+
+export async function saveAgentButtonTemplate(data: {
+  templateUuid: string,
+  template: {
+    button: {
+      url: string,
+      urlExample?: string,
+    }
+  }
+}) {
+  const response = await saveAgentButtonTemplateRequest(data);
+
+  const statusValues = Object.values(status);
+
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return {
+      ...agent,
+      templates: agent.templates.map((template) => {
+        if (template.uuid === data.templateUuid) {
+          return {
+            ...template,
+            status: response.needs_button_edit ? 'needs-editing' as const : status[response.status] as typeof statusValues[number],
+            metadata: {
+              ...template.metadata,
+              buttons: response.metadata.buttons,
+            }
+          };
+        }
+
+        return template;
+      })
+    }
   })));
 
   return response;
