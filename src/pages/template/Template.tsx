@@ -186,8 +186,9 @@ export function Template() {
               content={content}
               setContent={setContent}
               prefilledContent={prefilledContent}
-              canAddElements={!isEditing}
-              canRemoveElements={!isEditing}
+              isHeaderEditable={true}
+              isFooterEditable={true}
+              isButtonEditable={!isEditing}
               canChangeHeaderType={!isEditing}
               canChangeButton={!isEditing}
             />
