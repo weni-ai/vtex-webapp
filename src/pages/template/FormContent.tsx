@@ -1,13 +1,14 @@
 import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ content, setContent, prefilledContent, canAddElements = true, canRemoveElements = true, canChangeHeaderType = true, canChangeButton = true }: {
+export function FormContent({ content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
   prefilledContent: Content,
-  canAddElements?: boolean;
-  canRemoveElements?: boolean;
+  isHeaderEditable?: boolean;
+  isFooterEditable?: boolean;
+  isButtonEditable?: boolean;
   canChangeHeaderType?: boolean;
   canChangeButton?: boolean;
 }) {
@@ -83,6 +84,22 @@ export function FormContent({ content, setContent, prefilledContent, canAddEleme
 
     setElementsVisibility(visibility);
   }, [prefilledContent]);
+
+  const isElementsEditable = useMemo(() => {
+    return {
+      header: isHeaderEditable,
+      footer: isFooterEditable,
+      button: isButtonEditable,
+    };
+  }, [isHeaderEditable, isFooterEditable, isButtonEditable]);
+
+  const canRemoveElements = useMemo(() => {
+    return {
+      header: isHeaderEditable && prefilledContent.header === undefined,
+      footer: isFooterEditable && prefilledContent.footer === undefined,
+      button: isButtonEditable && prefilledContent.button === undefined,
+    };
+  }, [isHeaderEditable, isFooterEditable, isButtonEditable, prefilledContent]);
 
   const elements = {
     header: {
@@ -181,6 +198,15 @@ export function FormContent({ content, setContent, prefilledContent, canAddEleme
     }
   }
 
+  function isElementDisabled(element: keyof typeof elements) {
+    return elementsVisibility[element] || !isElementsEditable[element];
+  }
+
+  const elementsNotDisabled = useMemo(() => {
+    return (Object.keys(elements) as Array<keyof typeof elements>)
+      .filter((element) => !isElementDisabled(element));
+  }, [elements, elementsVisibility, isElementsEditable]);
+
   function setElementVisibility(element: keyof typeof elements, isVisible: boolean) {
     setElementsVisibility({
       ...elementsVisibility,
@@ -213,28 +239,31 @@ export function FormContent({ content, setContent, prefilledContent, canAddEleme
         }}
       >
         {
-          Object.keys(elements).filter((element) => elementsVisibility[element as keyof typeof elements]).map((element, index, { length }) => (
+          (Object.keys(elements) as Array<keyof typeof elements>).filter((element) => elementsVisibility[element]).map((element, index, { length }) => (
             <Flex direction="column" gap="$space-4" key={`element-${index}`}>
               <Flex align="center" gap="$space-2" justify="space-between">
                 <Text variant="emphasis" color="$fg-base">{t(`template.form.fields.content.${element}.title`)}</Text>
 
-                <IconButton variant="tertiary" label={t('template.form.areas.content.buttons.remove')} onClick={() => setElementVisibility(element as keyof typeof elements, false)} disabled={!canRemoveElements}>
+                <IconButton variant="tertiary" label={t('template.form.areas.content.buttons.remove')} onClick={() => setElementVisibility(element, false)} disabled={!canRemoveElements[element]}>
                   <IconTrash />
                 </IconButton>
               </Flex>
 
-              {elements[element as keyof typeof elements].component}
+              {elements[element].component}
 
-              {
-                index < length - 1 && (
-                  <Divider />
-                )
-              }
+              {index < length - 1 && (
+                <Divider />
+              )}
             </Flex>
           ))
         }
 
-        <Button variant="tertiary" size="large" onClick={() => setIsMenuOpen(!isMenuOpen)} disabled={Object.values(elementsVisibility).every((value) => value) || !canAddElements}>
+        <Button
+          variant="tertiary"
+          size="large"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          disabled={elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable)}
+        >
           <MenuProvider placement="bottom-start" open={isMenuOpen}>
             <MenuTrigger asChild>
               <Flex gap="$space-1" align="center">
@@ -245,11 +274,11 @@ export function FormContent({ content, setContent, prefilledContent, canAddEleme
 
             <MenuPopover>
               {
-                Object.keys(elements).map((element) => (
+                (Object.keys(elements) as Array<keyof typeof elements>).map((element) => (
                   <MenuItem
                     key={element}
-                    disabled={elementsVisibility[element as keyof typeof elements]}
-                    onClick={() => setElementVisibility(element as keyof typeof elements, true)}
+                    disabled={isElementDisabled(element)}
+                    onClick={() => setElementVisibility(element, true)}
                   >
                     {t(`template.form.areas.content.elements.${element}`)}
                   </MenuItem>
