@@ -20,11 +20,18 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
     setValue: setHeaderType as any,
   });
 
+  const [buttonType, setButtonType] = useState<'dynamic' | 'static'>('dynamic');
+  const buttonTypeState = useRadioState({
+    value: buttonType,
+    setValue: setButtonType as any,
+  });
+
   const [headerText, setHeaderText] = useState('');
   const [contentText, setContentText] = useState('');
   const [footerText, setFooterText] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
+  const [buttonUrlExample, setButtonUrlExample] = useState('');
 
   const [file, setFile] = useState<File | undefined>(undefined);
   const [filePreview, setFilePreview] = useState<string | undefined>(undefined);
@@ -48,15 +55,16 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
 
   useEffect(() => {
     const header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
+    const button = { text: buttonText, url: buttonUrl, urlExample: buttonType === 'dynamic' ? buttonUrlExample : undefined };
 
     setContent({
       ...content,
       header: elementsVisibility.header ? header : undefined,
       content: contentText || ' ',
       footer: elementsVisibility.footer ? footerText : undefined,
-      button: elementsVisibility.button ? { text: buttonText, url: buttonUrl } : undefined,
+      button: elementsVisibility.button ? button : undefined,
     });
-  }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl]);
+  }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl, buttonType, buttonUrlExample]);
 
   useEffect(() => {
     const visibility = elementsVisibility;
@@ -182,6 +190,13 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
       isVisible: false,
       component: (
         <>
+          <Bleed top="$space-7">
+            <RadioGroup label="" horizontal state={buttonTypeState}>
+              <Radio value="dynamic">{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
+              <Radio value="static">{t('template.form.fields.content.button.radio.static.label')}</Radio>
+            </RadioGroup>
+          </Bleed>
+
           <Field>
             <Label>{t('template.form.fields.content.button.text.label')}</Label>
 
@@ -191,8 +206,24 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
           <Field>
             <Label>{t('template.form.fields.content.button.url.label')}</Label>
 
-            <Input prefix="https://" value={buttonUrl} onChange={setButtonUrl} disabled={!canChangeButton} />
+            <Input
+              prefix="https://"
+              value={buttonUrl}
+              onChange={setButtonUrl}
+              disabled={!canChangeButton}
+              suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
+            />
           </Field>
+
+          {buttonType === 'dynamic' && (
+            <Field>
+              <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
+
+              <Input prefix="https://" value={buttonUrlExample} onChange={setButtonUrlExample} disabled={!canChangeButton} />
+
+              <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
+            </Field>
+          )}
         </>
       ),
     }
