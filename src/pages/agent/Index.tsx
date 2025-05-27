@@ -1,4 +1,4 @@
-import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconCopySimple, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Stack, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconCopySimple, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../../components/TemplateCard';
@@ -75,7 +75,7 @@ export function AgentIndex() {
 
   const [agentName, setAgentName] = useState('');
   const [agentDescription, setAgentDescription] = useState('');
-  const [agentStatus, setAgentStatus] = useState<'test' | 'production'>('test');
+  const [_agentStatus, setAgentStatus] = useState<'test' | 'production'>('test');
 
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
@@ -167,30 +167,6 @@ export function AgentIndex() {
 
             <PageHeading>{agentName}</PageHeading>
           </Flex>
-
-          <Stack space="$space-3" horizontal>
-            <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="secondary" size="large">
-                {t('agent.buttons.preview')}
-              </Button>
-            </Bleed>
-
-            {agentStatus === 'test' && (
-              <Bleed top="$space-2" bottom="$space-2">
-                <Button variant="primary" size="large" onClick={() => setIsPublishModalOpen(true)}>
-                  {t('agent.buttons.publish')}
-                </Button>
-              </Bleed>
-            )}
-
-            {agentStatus === 'production' && (
-              <Bleed top="$space-2" bottom="$space-2">
-                <Button variant="critical" size="large" onClick={() => setIsSwitchToTestModeModalOpen(true)}>
-                  {t('agent.buttons.switch_to_test')}
-                </Button>
-              </Bleed>
-            )}
-          </Stack>
         </PageHeaderRow>
       </PageHeader>
 
