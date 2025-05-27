@@ -14,7 +14,7 @@ export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
   content: string;
   footer?: string;
-  button?: { text: string; url: string };
+  button?: { text: string; url: string } | { text: string; url: string; urlExample: string };
 }
 
 export interface Variable {
@@ -155,8 +155,6 @@ export function Template() {
             ) : (
               <PageHeading>{t('template.form.create.title')}</PageHeading>
             )}
-
-            {/* <Tag variant="secondary" color="yellow">Pending</Tag> */}
           </Flex>
 
           <Stack space="$space-3" horizontal>
