@@ -96,10 +96,10 @@ const status = {
   "LOCKED": "locked" as const,
 }
 
-export async function agentCLI(data: { agentUuid: string }) {
+export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean }) {
   const agent = store.getState().project.assignedAgents.find(agent => agent.uuid === data.agentUuid);
 
-  if (agent) {
+  if (agent && !data.forceUpdate) {
     return agent;
   }
 
