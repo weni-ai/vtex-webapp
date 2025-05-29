@@ -49,6 +49,7 @@ export interface ProjectState {
                     type: 'URL';
                     text: string;
                     url: string;
+                    example?: string[];
                 }[];
             };
         }[];

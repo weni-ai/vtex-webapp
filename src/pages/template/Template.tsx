@@ -71,13 +71,14 @@ export function Template() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
 
     let header: { type: 'text', text: string } | undefined;
-    let button: { text: string; url: string } | undefined;
+    let button: { text: string; url: string, urlExample?: string } | undefined;
     let footer: string | undefined;
 
     if (template.metadata.buttons?.[0]?.type === 'URL') {
       button = {
         text: template.metadata.buttons[0].text,
         url: template.metadata.buttons[0].url,
+        urlExample: template.metadata.buttons[0].example?.[0],
       }
     }
 
