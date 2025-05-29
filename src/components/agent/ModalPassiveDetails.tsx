@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { getWhatsAppURLService } from "../../services/agent.service";
 import { AgentDescriptiveStatus } from "./DescriptiveStatus";
+import store from "../../store/provider.store";
 
 interface ModalAgentPassiveDetailsProps {
   open: boolean;
@@ -73,8 +74,15 @@ export function ModalAgentPassiveDetails({ open, onClose, agentName, agentDescri
   async function getWhatsAppURL() {
     try {
       setIsLoadingWhatsAppURL(true);
-      const url = await getWhatsAppURLService();
-      setWhatsAppURL(url);
+
+      const WhatsAppPhoneNumber = store.getState().user.WhatsAppPhoneNumber;
+
+      if (WhatsAppPhoneNumber) {
+        setWhatsAppURL(`https://wa.me/${WhatsAppPhoneNumber}`);
+      } else {
+        const url = await getWhatsAppURLService();
+        setWhatsAppURL(url);
+      }
     } catch (error) {
       toast.critical((error as Error).message);
     } finally {
