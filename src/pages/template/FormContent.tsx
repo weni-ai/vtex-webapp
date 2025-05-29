@@ -1,6 +1,7 @@
 import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Content, SectionHeader } from "./Template";
+import { cleanURL } from "../../utils";
 
 export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
@@ -82,7 +83,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
 
     if (prefilledContent.button) {
       setButtonText(prefilledContent.button.text);
-      setButtonUrl(prefilledContent.button.url);
+      setButtonUrl(cleanURL(prefilledContent.button.url));
       visibility.button = true;
     }
 
@@ -210,7 +211,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Input
               prefix="https://"
               value={buttonUrl}
-              onChange={setButtonUrl}
+              onChange={(value) => setButtonUrl(cleanURL(value))}
               disabled={status !== 'needs-editing' && !canChangeButton}
               suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
             />
@@ -220,7 +221,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Field>
               <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
 
-              <Input prefix="https://" value={buttonUrlExample} onChange={setButtonUrlExample} disabled={status !== 'needs-editing' && !canChangeButton} />
+              <Input prefix="https://" value={buttonUrlExample} onChange={(value) => setButtonUrlExample(cleanURL(value))} disabled={status !== 'needs-editing' && !canChangeButton} />
 
               <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
             </Field>
