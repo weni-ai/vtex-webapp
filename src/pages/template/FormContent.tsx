@@ -84,6 +84,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     if (prefilledContent.button) {
       setButtonText(prefilledContent.button.text);
       setButtonUrl(cleanURL(prefilledContent.button.url));
+      setButtonUrlExample(cleanURL(prefilledContent.button.urlExample || ''));
       visibility.button = true;
     }
 
@@ -194,8 +195,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
         <>
           <Bleed top="$space-7">
             <RadioGroup label="" horizontal state={buttonTypeState}>
-              <Radio value="dynamic">{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
-              <Radio value="static">{t('template.form.fields.content.button.radio.static.label')}</Radio>
+              <Radio value="dynamic" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
+              <Radio value="static" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.static.label')}</Radio>
             </RadioGroup>
           </Bleed>
 
