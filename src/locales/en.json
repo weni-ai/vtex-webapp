@@ -95,10 +95,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Passive notification"
+                "title": "Passive Support"
             },
             "active": {
-                "title": "Active notification",
+                "title": "Active Notification",
                 "order_status": {
                     "title": "Order status agent",
                     "description": "Keep customers updated on the order status in real time",
@@ -181,8 +181,8 @@
                 "error": "Error deactivating the agent. Try again later."
             },
             "add": "Assign",
-            "added": "Active agent",
-            "test": "Agent in test mode",
+            "added": "Agent in production",
+            "test": "Agent in test",
             "configuring": "Configuring agent"
         }
     },
