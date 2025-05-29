@@ -140,8 +140,8 @@ export function Template() {
         templateUuid: templateUuid as string,
         template: {
           button: {
-            url: content.button?.url as string,
-            urlExample: content.button?.urlExample,
+            url: content.button?.url ? `https://${content.button.url.trim()}` : '',
+            urlExample: content.button?.urlExample ? `https://${content.button.urlExample.trim()}` : undefined,
           },
         },
       });
@@ -188,7 +188,7 @@ export function Template() {
 
           <Stack space="$space-3" horizontal>
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="secondary" size="large">
+              <Button variant="secondary" size="large" onClick={() => navigate(-1)}>
                 {t('template.form.create.buttons.cancel')}
               </Button>
             </Bleed>
