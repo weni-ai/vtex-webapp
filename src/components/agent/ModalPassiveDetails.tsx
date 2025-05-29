@@ -1,9 +1,10 @@
-import { Divider, Field, FieldDescription, Flex, IconButton, IconCopySimple, Input, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Skeleton, Text, toast } from "@vtex/shoreline";
+import { Divider, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Skeleton, Text, toast } from "@vtex/shoreline";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { getWhatsAppURLService } from "../../services/agent.service";
-import { AgentDescriptiveStatus } from "./DescriptiveStatus";
 import store from "../../store/provider.store";
+import { InputCopyToClipboard } from "../InputCopyToClipboard";
+import { AgentDescriptiveStatus } from "./DescriptiveStatus";
 
 interface ModalAgentPassiveDetailsProps {
   open: boolean;
@@ -46,23 +47,12 @@ function Preview({ url, isLoading }: { url: string, isLoading: boolean }) {
         <QRCode size={100} value={url} />
       )}
 
-      <Field>
-        <Flex align="center" gap="$space-4">
-          {isLoading ? (
-            <Skeleton style={{ width: '100%', height: '44px' }} />
-          ) : (
-            <Input value={url} />
-          )}
-
-          <IconButton size="large" label={t('agent.modals.details.sections.preview.buttons.copy')} onClick={() => { navigator.clipboard.writeText(url) }} disabled={isLoading}>
-            <IconCopySimple />
-          </IconButton>
-        </Flex>
-
-        <FieldDescription>
-          {t('agent.modals.details.sections.preview.fields.url.description')}
-        </FieldDescription>
-      </Field>
+      <InputCopyToClipboard
+        isLoading={isLoading}
+        value={url}
+        description={t('agent.modals.details.sections.preview.fields.url.description')}
+        successMessage={t('common.url_copied')}
+      />
     </Flex>
   )
 }

@@ -1,6 +1,7 @@
-import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconCopySimple, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Divider, Flex, IconArrowLeft, IconButton, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { InputCopyToClipboard } from '../../components/InputCopyToClipboard';
 import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../../components/TemplateCard';
 import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
@@ -46,25 +47,14 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navi
 function Settings({ isLoading, webhookUrl }: { isLoading: boolean, webhookUrl: string }) {
   return (
     <Flex direction="column" gap="$space-4">
-      <Field>
-        <Label>{t('agents.details.settings.fields.webhook_url.label')}</Label>
-
-        <Flex align="center" gap="$space-4">
-          {isLoading ? (
-            <Skeleton style={{ width: '100%', height: '44px' }} />
-          ) : (
-            <Input prefix="URL" value={webhookUrl} />
-          )}
-
-          <IconButton size="large" label={t('agents.details.settings.buttons.copy')} onClick={() => { navigator.clipboard.writeText(webhookUrl) }} disabled={isLoading}>
-            <IconCopySimple />
-          </IconButton>
-        </Flex>
-
-        <FieldDescription>
-          {t('agents.details.settings.fields.webhook_url.description')}
-        </FieldDescription>
-      </Field>
+      <InputCopyToClipboard
+        isLoading={isLoading}
+        label={t('agents.details.settings.fields.webhook_url.label')}
+        prefix="URL"
+        value={webhookUrl}
+        description={t('agents.details.settings.fields.webhook_url.description')}
+        successMessage={t('common.url_copied')}
+      />
     </Flex>
   )
 }
