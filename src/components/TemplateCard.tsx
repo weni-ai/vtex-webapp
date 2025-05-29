@@ -26,7 +26,14 @@ export function TemplateStatusTag({ status, size = 'normal' }: { status: Templat
   const statusText = t(`template.card.status.${status.replace(/-/g, '_')}`);
 
   return (
-    <Tag variant="secondary" color={color} style={{ border: 'none' }} size={size}>{statusText}</Tag>
+    <Tag
+      variant="secondary"
+      color={color}
+      style={{ border: 'none', whiteSpace: 'nowrap', }}
+      size={size}
+    >
+      {statusText}
+    </Tag>
   )
 }
 
@@ -57,7 +64,7 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
           <TemplateStatusTag status={status} />
         </Flex>
 
-        <MenuProvider>
+        {false && (<MenuProvider>
           <MenuTrigger asChild>
             <IconButton variant="tertiary" label={t('template.card.actions.label')}>
               <IconDotsThreeVertical />
@@ -70,7 +77,7 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
               {t('template.card.actions.disable')}
             </MenuItem>
           </MenuPopover>
-        </MenuProvider>
+        </MenuProvider>)}
       </Flex>
 
       <Flex style={{ height: '60px' }}>
