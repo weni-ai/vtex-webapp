@@ -82,6 +82,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     }
 
     if (prefilledContent.button) {
+      setButtonType(prefilledContent.button.urlExample ? 'dynamic' : 'static');
       setButtonText(prefilledContent.button.text);
       setButtonUrl(cleanURL(prefilledContent.button.url));
       setButtonUrlExample(cleanURL(prefilledContent.button.urlExample || ''));
