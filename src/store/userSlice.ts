@@ -8,6 +8,7 @@ const initialState: UserState = {
   isWhatsAppIntegrated: false,
   isAgentBuilderIntegrated: false,
   whatsAppError: null,
+  WhatsAppPhoneNumber: null,
 };
 
 const userSlice = createSlice({
@@ -32,6 +33,9 @@ const userSlice = createSlice({
     setLoadingWhatsAppIntegration: (state, action: PayloadAction<boolean>) => {
       state.loadingWhatsAppIntegration = action.payload;
     },
+    setWhatsAppPhoneNumber: (state, action: PayloadAction<string | null>) => {
+      state.WhatsAppPhoneNumber = action.payload;
+    },
   },
 });
 
@@ -41,7 +45,8 @@ export const {
   setWhatsAppIntegrated, 
   setAgentBuilderIntegrated, 
   setWhatsAppError, 
-  setLoadingWhatsAppIntegration 
+  setLoadingWhatsAppIntegration,
+  setWhatsAppPhoneNumber,
 } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.userData

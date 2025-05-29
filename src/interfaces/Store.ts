@@ -79,6 +79,7 @@ export interface UserState {
     isWhatsAppIntegrated: boolean;
     isAgentBuilderIntegrated: boolean;
     whatsAppError: string | null;
+    WhatsAppPhoneNumber: string | null;
 }
 
 export interface RootState {
