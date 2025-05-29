@@ -24,10 +24,10 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navi
           <Text variant="body" color="$fg-base">{t('template.list.description')}</Text>
         </Flex>
 
-        {/* <Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
+        {false && (<Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
           <IconPlus />
           {t('template.buttons.add')}
-        </Button> */}
+        </Button>)}
       </Flex>
 
       <TemplateCardContainer>
