@@ -95,10 +95,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Notificación pasiva"
+                "title": "Agente pasivo"
             },
             "active": {
-                "title": "Notificación activa",
+                "title": "Agente activo",
                 "order_status": {
                     "title": "Agente de status de pedido",
                     "description": "Mantén a tus clientes actualizados en tiempo real sobre el status de sus pedidos",
