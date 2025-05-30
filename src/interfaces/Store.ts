@@ -36,6 +36,7 @@ export interface ProjectState {
     assignedAgents: {
         uuid: string;
         webhookUrl: string;
+        contactPercentage: number;
         templates: {
             uuid: string;
             name: string;

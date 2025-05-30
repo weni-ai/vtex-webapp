@@ -82,6 +82,12 @@
                 "title": "Acerca de"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Cambios guardados con éxito",
+                        "error": "Error al guardar, inténtalo de nuevo más tarde"
+                    }
+                },
                 "title": "Configuración",
                 "fields": {
                     "webhook_url": {
@@ -90,7 +96,8 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copiar"
+                    "copy": "Copiar",
+                    "save": "Guardar cambios"
                 }
             }
         },

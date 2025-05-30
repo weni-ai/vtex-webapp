@@ -32,6 +32,7 @@ interface AssignedAgent {
   uuid: string;
   webhookUrl: string;
   channelUuid: string;
+  contactPercentage: number;
   templates: {
     uuid: string;
     name: string;

@@ -188,6 +188,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
 
   const response = await VTEXFetch<{
     uuid: string;
+    contact_percentage: number;
     templates: {
       uuid: string;
       name: string;
@@ -242,6 +243,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
       uuid: response.uuid,
       templates: response.templates,
       channelUuid: response.channel_uuid,
+      contactPercentage: response.contact_percentage,
       webhookUrl: response.webhook_url,
     };
   } else {
@@ -440,6 +442,38 @@ export async function updateAgentTemplateRequest(data: {
   });
 
   if ('display_name' in Object(response)) {
+    return response;
+  } else {
+    throw new Error('error updating template');
+  }
+};
+
+export async function updateAssignedAgentSettingsRequest(data: {
+  agentUuid: string;
+  contactPercentage?: number;
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await VTEXFetch<{
+    uuid: string;
+    contact_percentage: number;
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method: 'PATCH',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
+      data: {
+        contact_percentage: data.contactPercentage,
+      },
+      params: {},
+      headers: { 'Project-Uuid': projectUuid, },
+    }),
+  });
+
+  if ('uuid' in Object(response)) {
     return response;
   } else {
     throw new Error('error updating template');

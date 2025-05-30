@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest, updateAssignedAgentSettingsRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -182,6 +182,26 @@ export async function saveAgentButtonTemplate(data: {
         return template;
       })
     }
+  })));
+
+  return response;
+}
+
+export async function updateAssignedAgentSettings(data: {
+  agentUuid: string;
+  contactPercentage?: number;
+}) {
+  const response = await updateAssignedAgentSettingsRequest(data);
+
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return agent.uuid === data.agentUuid ?
+      {
+        ...agent,
+        contactPercentage: response.contact_percentage,
+      }
+      : agent;
   })));
 
   return response;

@@ -82,6 +82,12 @@
                 "title": "About"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Changes saved successfully",
+                        "error": "Unable to save changes, please try again"
+                    }
+                },
                 "title": "Settings",
                 "fields": {
                     "webhook_url": {
@@ -90,7 +96,8 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copy"
+                    "copy": "Copy",
+                    "save": "Save changes"
                 }
             }
         },
