@@ -496,15 +496,28 @@ function proxy<T = unknown>(method: string, url: string, { headers = {}, data = 
   });
 }
 
+class AssignedAgentTemplate {
+  static disable(data: { templateUuid: string, projectUuid: string }) {
+    return proxy<{ text: string; }>(
+      'DELETE',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`,
+      {
+        headers: {
+          'Project-Uuid': data.projectUuid,
+        },
+      }
+    );
+  }
+}
+
 export async function disableAssignedAgentTemplateRequest(data: {
   templateUuid: string;
 }) {
   const projectUuid = store.getState().project.project_uuid;
 
-  const response = await proxy<{
-    text: string;
-  }>('DELETE', `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`, {
-    headers: { 'Project-Uuid': projectUuid, },
+  const response = await AssignedAgentTemplate.disable({
+    projectUuid,
+    templateUuid: data.templateUuid,
   });
 
   if ('text' in Object(response)) {
