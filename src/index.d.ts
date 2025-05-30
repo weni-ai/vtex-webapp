@@ -68,6 +68,7 @@ interface AgentCLI extends AgentNext {
     uuid: string;
     name: string;
     startCondition: string;
+    metadata: {};
   }[];
   credentials: {
     [key: string]: {

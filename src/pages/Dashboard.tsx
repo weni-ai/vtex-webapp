@@ -5,7 +5,7 @@ import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetail
 import { AgentAssignModal } from '../components/agent/modals/Assign';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
 import { WhatsAppRequiredModal } from '../components/agent/modals/WhatsAppRequired';
-import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from '../components/AgentBox';
+import { AgentBox, AgentBoxContainer, AgentBoxEmpty, AgentBoxSkeleton } from '../components/AgentBox';
 import { AgentMetrics } from '../components/AgentMetrics';
 import { RootState } from "../interfaces/Store";
 import { assignAgentCLI, disableAgent, integrateAgent, updateAgentsList } from '../services/agent.service';
@@ -243,6 +243,8 @@ export function Dashboard() {
               {t('agents.buttons.gallery')}
             </Button>
           </Flex>
+
+          {hasTheFirstLoadHappened && agentsList.length === 0 && <AgentBoxEmpty />}
 
           <AgentBoxContainer>
             {!hasTheFirstLoadHappened && (
