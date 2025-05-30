@@ -82,6 +82,12 @@
                 "title": "Sobre"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Configurações salvas com sucesso",
+                        "error": "Erro ao salvar, tente novamente mais tarde"
+                    }
+                },
                 "title": "Configurações",
                 "fields": {
                     "webhook_url": {
@@ -90,7 +96,8 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copiar"
+                    "copy": "Copiar",
+                    "save": "Salvar alterações"
                 }
             }
         },
