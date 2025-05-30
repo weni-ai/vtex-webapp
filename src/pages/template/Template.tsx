@@ -2,7 +2,7 @@ import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, Pa
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
+import { agentCLI, assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
@@ -32,7 +32,7 @@ export function SectionHeader({ title }: { title: string }) {
 
 export function Template() {
   const navigate = useNavigate();
-  const { templateUuid } = useParams();
+  const { assignedAgentUuid, templateUuid } = useParams();
 
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
@@ -122,10 +122,11 @@ export function Template() {
           footer: content.footer,
         },
       });
-
-      navigate(-1);
-
+      
       toast.success(t('agent.actions.edit_template.success'));
+
+      await updateTemplates();
+      navigateToAgent();
     } catch (error) {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
@@ -147,14 +148,27 @@ export function Template() {
         },
       });
 
-      navigate(-1);
-
       toast.success(t('agent.actions.edit_template.success'));
+
+      await updateTemplates();
+      navigateToAgent();
     } catch (error) {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
       setIsSaving(false);
     }
+  }
+
+  async function updateTemplates() {
+    try {
+      await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate: true });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function navigateToAgent() {
+    navigate(`/agents/${assignedAgentUuid}`);
   }
 
   return (
@@ -168,7 +182,7 @@ export function Template() {
                 asChild
                 variant="tertiary"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={navigateToAgent}
               >
                 <IconArrowLeft />
               </IconButton>
@@ -189,7 +203,7 @@ export function Template() {
 
           <Stack space="$space-3" horizontal>
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="secondary" size="large" onClick={() => navigate(-1)}>
+              <Button variant="secondary" size="large" onClick={navigateToAgent}>
                 {t('template.form.create.buttons.cancel')}
               </Button>
             </Bleed>
