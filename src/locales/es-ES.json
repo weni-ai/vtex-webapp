@@ -490,6 +490,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "Lo que está pasando en: Agente de carros abandonados",
                 "sent_messages": "Mensajes enviados",
                 "delivered_messages": "Mensajes entregados",
                 "read_messages": "Mensajes leídos",

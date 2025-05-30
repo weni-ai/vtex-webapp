@@ -490,6 +490,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "O que está acontecendo no: Agente de carrinho abandonado",
                 "sent_messages": "Mensagens enviadas",
                 "delivered_messages": "Mensagens entregues",
                 "read_messages": "Mensagens lidas",
