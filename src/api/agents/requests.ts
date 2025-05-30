@@ -408,7 +408,7 @@ export async function getWhatsAppURLRequest(): Promise<{
 
 export async function updateAgentTemplateRequest(data: {
   templateUuid: string;
-  template: { header?: string, content: string, footer?: string, }
+  template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } }
 }) {
   const projectUuid = store.getState().project.project_uuid;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
@@ -421,6 +421,12 @@ export async function updateAgentTemplateRequest(data: {
       header: string;
       body: string;
       footer: string;
+      buttons: {
+        url: string;
+        text: string;
+        type: 'URL';
+        example?: string[];
+      }[];
     };
   }>('/_v/proxy-request', {
     method: 'POST',
@@ -436,6 +442,14 @@ export async function updateAgentTemplateRequest(data: {
         template_header: data.template.header,
         template_body: data.template.content,
         template_footer: data.template.footer,
+        template_button: data.template.button ? [{
+          type: 'URL',
+          text: data.template.button.text,
+          url: {
+            base_url: data.template.button.url,
+            url_suffix_example: data.template.button.urlExample,
+          }
+        }] : [],
       },
       params: {},
       headers: {},

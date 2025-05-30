@@ -347,7 +347,7 @@ export async function assignedAgentTemplate(data: { templateUuid: string }) {
   return template;
 }
 
-export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, } }) {
+export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } } }) {
   const response = await updateAgentTemplateRequest(data);
 
   const assignedAgents = store.getState().project.assignedAgents;
@@ -367,6 +367,7 @@ export async function updateAgentTemplate(data: { templateUuid: string, template
               header: response.metadata.header,
               body: response.metadata.body,
               footer: response.metadata.footer,
+              buttons: response.metadata.buttons,
             }
           };
         }

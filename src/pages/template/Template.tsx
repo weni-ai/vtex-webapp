@@ -120,9 +120,10 @@ export function Template() {
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
           footer: content.footer,
+          button: content.button,
         },
       });
-      
+
       toast.success(t('agent.actions.edit_template.success'));
 
       await updateTemplates();
@@ -231,9 +232,9 @@ export function Template() {
               prefilledContent={prefilledContent}
               isHeaderEditable={true}
               isFooterEditable={true}
-              isButtonEditable={!isEditing}
+              isButtonEditable={true}
               canChangeHeaderType={!isEditing}
-              canChangeButton={!isEditing}
+              canChangeButton={true}
             />
 
             <MessagePreview
