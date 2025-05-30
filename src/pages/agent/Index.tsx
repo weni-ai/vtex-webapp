@@ -1,4 +1,4 @@
-import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InputCopyToClipboard } from '../../components/InputCopyToClipboard';
@@ -56,6 +56,14 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }
   }, [contactPercentage]);
 
   function handlePercentageChange(value: string) {
+    if (Number(value) > 100) {
+      setPercentage('100');
+    } else {
+      setPercentage(value.replace(/\D/g, ''));
+    }
+  }
+
+  function handlePercentageBlur(value: string) {
     let valueToSave = value;
 
     if (Number(value) > 100) {
@@ -100,7 +108,13 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }
 
       <Field>
         <Label>{t('agent.modals.publish.fields.percentage.title')}</Label>
-        <Input type="number" value={percentage} onChange={(value) => setPercentage(value)} onBlur={(e) => handlePercentageChange(e.target.value)} />
+
+        {isLoading ? (
+          <Skeleton style={{ width: '100%', height: '44px' }} />
+        ) : (
+          <Input type="number" value={percentage} onChange={handlePercentageChange} onBlur={(e) => handlePercentageBlur(e.target.value)} suffix="%" />
+        )}
+
         <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
       </Field>
 
