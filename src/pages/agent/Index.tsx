@@ -1,4 +1,4 @@
-import { Bleed, Button, Divider, Flex, IconArrowLeft, IconButton, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InputCopyToClipboard } from '../../components/InputCopyToClipboard';
@@ -6,7 +6,7 @@ import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../..
 import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
 import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTestMode';
-import { agentCLI } from '../../services/agent.service';
+import { agentCLI, updateAssignedAgentSettings } from '../../services/agent.service';
 import store from '../../store/provider.store';
 
 export interface Template {
@@ -44,9 +44,51 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navi
   )
 }
 
-function Settings({ isLoading, webhookUrl }: { isLoading: boolean, webhookUrl: string }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void }) {
+  const { assignedAgentUuid } = useParams();
+  const [percentage, setPercentage] = useState<string | undefined>(undefined);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (contactPercentage) {
+      setPercentage(contactPercentage.toString());
+    }
+  }, [contactPercentage]);
+
+  function handlePercentageChange(value: string) {
+    let valueToSave = value;
+
+    if (Number(value) > 100) {
+      valueToSave = '100';
+    } else if (Number(value) < 1) {
+      valueToSave = '1';
+    }
+
+    setPercentage(Number(valueToSave).toFixed());
+  }
+
+  async function handleSave() {
+    try {
+      setIsSaving(true);
+
+      await updateAssignedAgentSettings({
+        agentUuid: assignedAgentUuid as string,
+        contactPercentage: Number(percentage),
+      });
+
+      loadAgentDetails();
+
+      toast.success(t('agents.details.settings.actions.save.success'));
+    } catch (error) {
+      setPercentage(contactPercentage?.toString());
+      toast.critical(t('agents.details.settings.actions.save.error'));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   return (
-    <Flex direction="column" gap="$space-4">
+    <Flex direction="column" gap="$space-5">
       <InputCopyToClipboard
         isLoading={isLoading}
         label={t('agents.details.settings.fields.webhook_url.label')}
@@ -55,6 +97,24 @@ function Settings({ isLoading, webhookUrl }: { isLoading: boolean, webhookUrl: s
         description={t('agents.details.settings.fields.webhook_url.description')}
         successMessage={t('common.url_copied')}
       />
+
+      <Field>
+        <Label>{t('agent.modals.publish.fields.percentage.title')}</Label>
+        <Input type="number" value={percentage} onChange={(value) => setPercentage(value)} onBlur={(e) => handlePercentageChange(e.target.value)} />
+        <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
+      </Field>
+
+      <Flex justify="end">
+        <Button
+          variant="primary"
+          size="large"
+          disabled={contactPercentage === Number(percentage)}
+          onClick={handleSave}
+          loading={isSaving}
+        >
+          {t('agents.details.settings.buttons.save')}
+        </Button>
+      </Flex>
     </Flex>
   )
 }
@@ -69,6 +129,7 @@ export function AgentIndex() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
+  const [contactPercentage, setContactPercentage] = useState<number | undefined>(undefined);
   const [templates, setTemplates] = useState<Template[]>([]);
 
   const [isSwitchToTestModeModalOpen, setIsSwitchToTestModeModalOpen] = useState(false);
@@ -109,7 +170,6 @@ export function AgentIndex() {
 
     setAgentName(agent.name);
     setAgentDescription(agent.description);
-
     loadAgentDetails();
   }
 
@@ -126,6 +186,7 @@ export function AgentIndex() {
       const response = await agentCLI({ agentUuid: assignedAgentUuid, forceUpdate });
 
       setWebhookUrl(response.webhookUrl);
+      setContactPercentage(response.contactPercentage);
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 
@@ -215,7 +276,7 @@ export function AgentIndex() {
           </TabPanel>
 
           <TabPanel>
-            <Settings isLoading={isLoading} webhookUrl={webhookUrl} />
+            <Settings isLoading={isLoading} webhookUrl={webhookUrl} contactPercentage={contactPercentage} loadAgentDetails={loadAgentDetails} />
           </TabPanel>
         </TabProvider>
 
