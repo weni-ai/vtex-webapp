@@ -202,6 +202,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
       "DELETED" |
       "DISABLED" |
       "LOCKED";
+      needs_button_edit: boolean;
       metadata: {
         id: string;
         body: string;
@@ -245,6 +246,62 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
     };
   } else {
     throw new Error('error retrieving agent');
+  }
+}
+
+export async function saveAgentButtonTemplateRequest(data: {
+  templateUuid: string,
+  template: {
+    button: {
+      url: string,
+      urlExample?: string,
+    }
+  },
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+  const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
+
+  const response = await VTEXFetch<{
+    needs_button_edit: boolean;
+    status: 'PENDING' | 'APPROVED' | 'IN_APPEAL' | 'REJECTED' | 'PENDING_DELETION' | 'DELETED' | 'DISABLED' | 'LOCKED';
+    metadata: {
+      buttons: {
+        url: string;
+        text: string;
+        type: 'URL';
+        example?: string[];
+      }[];
+    };
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: JSON.stringify({
+      method: 'PATCH',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/library/${data.templateUuid}/`,
+      data: {
+        library_template_button_inputs: [{
+          type: 'URL',
+          url: {
+            base_url: data.template.button.url,
+            url_suffix_example: data.template.button.urlExample,
+          }
+        }],
+      },
+      params: {
+        project_uuid: projectUuid,
+        app_uuid: WhatsAppCloudAppUuid,
+      },
+    }),
+  });
+
+  if ('status' in Object(response)) {
+    return {
+      needs_button_edit: response.needs_button_edit,
+      status: response.status,
+      metadata: response.metadata,
+    };
+  } else {
+    throw new Error('error saving template');
   }
 }
 

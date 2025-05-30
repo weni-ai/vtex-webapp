@@ -2,7 +2,8 @@ import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButto
 import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+  status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
   prefilledContent: Content,
@@ -20,11 +21,18 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
     setValue: setHeaderType as any,
   });
 
+  const [buttonType, setButtonType] = useState<'dynamic' | 'static'>('dynamic');
+  const buttonTypeState = useRadioState({
+    value: buttonType,
+    setValue: setButtonType as any,
+  });
+
   const [headerText, setHeaderText] = useState('');
   const [contentText, setContentText] = useState('');
   const [footerText, setFooterText] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
+  const [buttonUrlExample, setButtonUrlExample] = useState('');
 
   const [file, setFile] = useState<File | undefined>(undefined);
   const [filePreview, setFilePreview] = useState<string | undefined>(undefined);
@@ -48,15 +56,16 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
 
   useEffect(() => {
     const header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
+    const button = { text: buttonText, url: buttonUrl, urlExample: buttonType === 'dynamic' ? buttonUrlExample : undefined };
 
     setContent({
       ...content,
       header: elementsVisibility.header ? header : undefined,
       content: contentText || ' ',
       footer: elementsVisibility.footer ? footerText : undefined,
-      button: elementsVisibility.button ? { text: buttonText, url: buttonUrl } : undefined,
+      button: elementsVisibility.button ? button : undefined,
     });
-  }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl]);
+  }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl, buttonType, buttonUrlExample]);
 
   useEffect(() => {
     const visibility = elementsVisibility;
@@ -117,7 +126,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
             <Field>
               <Label>{t('template.form.fields.content.header.label')}</Label>
 
-              <Input value={headerText} onChange={setHeaderText} />
+              <Input value={headerText} onChange={setHeaderText} disabled={status === 'needs-editing'} />
             </Field>
           )}
 
@@ -173,7 +182,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
         <Field>
           <Label>{t('template.form.fields.content.footer.label')}</Label>
 
-          <Input value={footerText} onChange={setFooterText} />
+          <Input value={footerText} onChange={setFooterText} disabled={status === 'needs-editing'} />
         </Field>
       ),
     },
@@ -182,6 +191,13 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
       isVisible: false,
       component: (
         <>
+          <Bleed top="$space-7">
+            <RadioGroup label="" horizontal state={buttonTypeState}>
+              <Radio value="dynamic">{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
+              <Radio value="static">{t('template.form.fields.content.button.radio.static.label')}</Radio>
+            </RadioGroup>
+          </Bleed>
+
           <Field>
             <Label>{t('template.form.fields.content.button.text.label')}</Label>
 
@@ -191,8 +207,24 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
           <Field>
             <Label>{t('template.form.fields.content.button.url.label')}</Label>
 
-            <Input prefix="https://" value={buttonUrl} onChange={setButtonUrl} disabled={!canChangeButton} />
+            <Input
+              prefix="https://"
+              value={buttonUrl}
+              onChange={setButtonUrl}
+              disabled={status !== 'needs-editing' && !canChangeButton}
+              suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
+            />
           </Field>
+
+          {buttonType === 'dynamic' && (
+            <Field>
+              <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
+
+              <Input prefix="https://" value={buttonUrlExample} onChange={setButtonUrlExample} disabled={status !== 'needs-editing' && !canChangeButton} />
+
+              <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
+            </Field>
+          )}
         </>
       ),
     }
@@ -225,6 +257,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
           className="content-textarea-full-width"
           value={contentText}
           onChange={setContentText}
+          disabled={status === 'needs-editing'}
         />
 
         <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
@@ -262,7 +295,7 @@ export function FormContent({ content, setContent, prefilledContent, canChangeHe
           variant="tertiary"
           size="large"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          disabled={elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable)}
+          disabled={status === 'needs-editing' || (elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable))}
         >
           <MenuProvider placement="bottom-start" open={isMenuOpen}>
             <MenuTrigger asChild>
