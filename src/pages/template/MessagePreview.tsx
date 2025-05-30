@@ -22,7 +22,7 @@ export function MessagePreview({ header, contentText, footer, buttonText }: {
         )}
 
         <Flex align="center" style={{ padding: '2.67px 5.35px', }}>
-          <Text variant="caption2" color="$fg-base" style={{ wordBreak: 'break-word', }}>{contentText}</Text>
+          <Text variant="caption2" color="$fg-base" style={{ wordBreak: 'break-word', whiteSpaceCollapse: 'preserve-breaks' }}>{contentText}</Text>
         </Flex>
 
         <Flex align="center" justify="space-between" style={{ paddingInline: '5.35px', }}>
