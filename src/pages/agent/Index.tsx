@@ -236,7 +236,7 @@ export function AgentIndex() {
                 asChild
                 variant="tertiary"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/dash')}
               >
                 <IconArrowLeft />
               </IconButton>
