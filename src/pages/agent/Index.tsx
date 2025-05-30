@@ -16,7 +16,7 @@ export interface Template {
   status: 'active' | 'rejected' | 'pending' | 'needs-editing';
 }
 
-function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean }) {
+function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgentDetails }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean, loadAgentDetails: () => void }) {
   return (
     <Flex direction="column" gap="$space-5">
       <Flex gap="$space-5" align="center" justify="space-between">
@@ -37,7 +37,7 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navi
         )}
 
         {templates.map((template, index) => (
-          <TemplateCard key={index} {...template} />
+          <TemplateCard key={index} {...template} loadAgentDetails={loadAgentDetails} />
         ))}
       </TemplateCardContainer>
     </Flex>
@@ -271,6 +271,7 @@ export function AgentIndex() {
                 navigateToCreateTemplate={navigateToCreateTemplate}
                 templates={templates}
                 isLoading={isLoading}
+                loadAgentDetails={loadAgentDetails}
               />
             </Flex>
           </TabPanel>

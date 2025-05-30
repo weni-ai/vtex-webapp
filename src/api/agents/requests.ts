@@ -476,6 +476,40 @@ export async function updateAssignedAgentSettingsRequest(data: {
   if ('uuid' in Object(response)) {
     return response;
   } else {
-    throw new Error('error updating template');
+    throw new Error('error updating agent settings');
+  }
+};
+
+function proxy<T = unknown>(method: string, url: string, { headers = {}, data = {}, params = {} }: { headers?: Record<string, string>, data?: Record<string, any>, params?: Record<string, string> }) {
+  return VTEXFetch<T>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method,
+      url,
+      data,
+      params,
+      headers,
+    }),
+  });
+}
+
+export async function disableAssignedAgentTemplateRequest(data: {
+  templateUuid: string;
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await proxy<{
+    text: string;
+  }>('DELETE', `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`, {
+    headers: { 'Project-Uuid': projectUuid, },
+  });
+
+  if ('text' in Object(response)) {
+    return response;
+  } else {
+    throw new Error('error disabling template');
   }
 };

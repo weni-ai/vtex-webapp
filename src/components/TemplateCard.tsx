@@ -1,6 +1,8 @@
-import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconPauseCircle, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Skeleton, Tag, Text } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconPauseCircle, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Skeleton, Spinner, Tag, Text } from "@vtex/shoreline";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Template } from "../pages/agent/Index";
+import { disableAssignedAgentTemplate } from "../services/agent.service";
 import store from "../store/provider.store";
 
 export function TemplateCardContainer({ children }: { children: React.ReactNode }) {
@@ -46,8 +48,9 @@ export function TemplateCardSkeleton({ count }: { count: number }) {
   )
 }
 
-export function TemplateCard({ uuid, name, description, status }: Template) {
+export function TemplateCard({ uuid, name, description, status, loadAgentDetails }: Template & { loadAgentDetails: () => void }) {
   const navigate = useNavigate();
+  const [isDisabling, setIsDisabling] = useState(false);
 
   function navigateToTemplate(templateUuid: string) {
     const assignedAgentUuid = store.getState().project.assignedAgents
@@ -58,6 +61,18 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
     }
 
     navigate(`/agents/${assignedAgentUuid}/templates/${templateUuid}/edit`);
+  }
+
+  async function disableTemplate() {
+    try {
+      setIsDisabling(true);
+      await disableAssignedAgentTemplate({ templateUuid: uuid });
+      loadAgentDetails();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDisabling(false);
+    }
   }
 
   return (
@@ -72,20 +87,26 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
           <TemplateStatusTag status={status} />
         </Flex>
 
-        {false && (<MenuProvider>
-          <MenuTrigger asChild>
-            <IconButton variant="tertiary" label={t('template.card.actions.label')}>
-              <IconDotsThreeVertical />
-            </IconButton>
-          </MenuTrigger>
+        {isDisabling ? (
+          <Flex style={{ padding: 'var(--sl-space-2)' }}>
+            <Spinner size={20} />
+          </Flex>
+        ) : (
+          <MenuProvider>
+            <MenuTrigger asChild>
+              <IconButton variant="tertiary" label={t('template.card.actions.label')}>
+                <IconDotsThreeVertical />
+              </IconButton>
+            </MenuTrigger>
 
-          <MenuPopover>
-            <MenuItem>
-              <IconPauseCircle />
-              {t('template.card.actions.disable')}
-            </MenuItem>
-          </MenuPopover>
-        </MenuProvider>)}
+            <MenuPopover>
+              <MenuItem onClick={disableTemplate}>
+                <IconPauseCircle />
+                {t('template.card.actions.disable')}
+              </MenuItem>
+            </MenuPopover>
+          </MenuProvider>
+        )}
       </Flex>
 
       <Flex style={{ height: '60px' }}>
