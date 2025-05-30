@@ -128,7 +128,7 @@ export async function assignAgentCLIRequest(data: {
     webhook_url: string;
     templates: {}[];
     channel_uuid: string;
-  }>('/_v/proxy-request', {
+  } & { error?: { agent: string } }>('/_v/proxy-request', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -153,7 +153,8 @@ export async function assignAgentCLIRequest(data: {
   if ('webhook_url' in Object(response)) {
     return response;
   } else {
-    throw new Error('error assigning agent');
+    const error = response?.error?.agent;
+    throw new Error(typeof error === 'string' ? error : t('agent.actions.assign.error'));
   }
 };
 
