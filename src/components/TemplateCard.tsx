@@ -130,7 +130,7 @@ export function TemplateCard({ uuid, name, description, status, loadAgentDetails
         size="large"
         style={{ marginTop: 'auto' }}
         onClick={() => navigateToTemplate(uuid)}
-        disabled={!['active', 'needs-editing'].includes(status)}
+        disabled={!['active', 'needs-editing', 'rejected'].includes(status)}
       >
         {t('template.card.buttons.edit')}
       </Button>
