@@ -95,10 +95,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Passive notification"
+                "title": "Passive agent"
             },
             "active": {
-                "title": "Active notification",
+                "title": "Active agent",
                 "order_status": {
                     "title": "Order status agent",
                     "description": "Keep customers updated on the order status in real time",
