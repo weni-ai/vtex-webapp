@@ -1,6 +1,7 @@
 import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconPauseCircle, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Skeleton, Tag, Text } from "@vtex/shoreline";
 import { useNavigate } from "react-router-dom";
 import { Template } from "../pages/agent/Index";
+import store from "../store/provider.store";
 
 export function TemplateCardContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -49,7 +50,14 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
   const navigate = useNavigate();
 
   function navigateToTemplate(templateUuid: string) {
-    navigate(`/agents/templates/${templateUuid}/edit`);
+    const assignedAgentUuid = store.getState().project.assignedAgents
+      .find((agent) => agent.templates.some((template) => template.uuid === templateUuid))?.uuid;
+
+    if (!assignedAgentUuid) {
+      return;
+    }
+
+    navigate(`/agents/${assignedAgentUuid}/templates/${templateUuid}/edit`);
   }
 
   return (
