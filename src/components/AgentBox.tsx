@@ -113,15 +113,11 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const isNexusAgent = origin === 'nexus';
   const isStatusBetweenIntegrated = ['test', 'configuring', 'integrated'].includes(status);
 
-  const stopPropagation = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-  }
-
   const navigateToAgentDetailsPage = () => {
     navigate(`/agents/${uuid}`);
   }
 
-  const isAgentClickable = useMemo(() => {
+  const canSeeAgent = useMemo(() => {
     if (!isIntegrated) {
       return false;
     }
@@ -129,8 +125,8 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
     return type === 'passive' || origin === 'CLI';
   }, [isIntegrated, type, isWppIntegrated]);
 
-  const handleAgentClick = () => {
-    if (!isAgentClickable) {
+  const handleSeeAgent = () => {
+    if (!canSeeAgent) {
       return;
     }
 
@@ -199,9 +195,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-2)',
           padding: '16px 16px 24px 16px',
-          cursor: isAgentClickable ? 'pointer' : 'default',
         }}
-        onClick={handleAgentClick}
       >
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-2">
@@ -221,13 +215,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           {
             options.length > 0 && (
               <MenuProvider>
-                <MenuTrigger asChild onClick={stopPropagation}>
+                <MenuTrigger asChild>
                   <IconButton variant="tertiary" label="Actions">
                     <IconDotsThreeVertical />
                   </IconButton>
                 </MenuTrigger>
 
-                <MenuPopover onClick={stopPropagation}>
+                <MenuPopover>
                   {options.map((option) => {
                     if (option === 'separator') {
                       return <MenuSeparator />;
@@ -269,7 +263,19 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             'integrated',
           ].includes(status) && !isUpdateAgentLoading ?
             (
-              <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
+              <Flex align="center" gap="$space-4" justify="space-between">
+                <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
+
+                {canSeeAgent && (
+                  <Button
+                    variant="primary"
+                    size="large"
+                    onClick={handleSeeAgent}
+                  >
+                    <Text>{t('agents.common.view')}</Text>
+                  </Button>
+                )}
+              </Flex>
             ) : (
               <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
                 <Text>{t('agents.common.add')}</Text>
