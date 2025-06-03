@@ -67,6 +67,18 @@ export function Template() {
     return templateUuid !== undefined;
   }, [templateUuid]);
 
+  const hasChanges = useMemo(() => {
+    return [
+      prefilledContent.content !== content.content,
+      prefilledContent.header?.type !== content.header?.type,
+      prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
+      prefilledContent.footer !== content.footer,
+      prefilledContent.button?.text !== content.button?.text,
+      prefilledContent.button?.url !== content.button?.url,
+      prefilledContent.button?.urlExample !== content.button?.urlExample,
+    ].some(Boolean);
+  }, [content, prefilledContent]);
+
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
 
@@ -210,7 +222,7 @@ export function Template() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving}>
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
