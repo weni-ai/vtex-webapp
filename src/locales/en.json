@@ -190,6 +190,7 @@
             },
             "add": "Assign",
             "added": "Agent in production",
+            "view": "View agent",
             "test": "Agent in test",
             "configuring": "Configuring agent"
         }
