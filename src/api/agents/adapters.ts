@@ -42,6 +42,7 @@ export interface AgentsListResponse {
   store_type: string;
   nexus_agents: {
     uuid: string;
+    is_official: boolean;
     name: string;
     description: string;
     assigned: boolean;
@@ -101,6 +102,7 @@ function isConfiguring(config?: AgentConfig) {
 export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce | AgentNexus | AgentCLI)[] {
   const agents: (AgentCommerce | AgentNexus | AgentCLI)[] = response.results.map((agent) => ({
     origin: 'commerce' as const,
+    isOfficial: true,
     uuid: agent.feature_uuid,
     name: agent.name,
     description: agent.description,
@@ -114,6 +116,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
 
   agents.push(...response.nexus_agents.map((agent) => ({
     origin: 'nexus' as const,
+    isOfficial: agent.is_official,
     uuid: agent.uuid,
     name: agent.name,
     description: agent.description,
@@ -126,6 +129,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
 
   agents.push(...response.gallery_agents.map((agent) => ({
     origin: 'CLI' as const,
+    isOfficial: agent.is_oficial,
     uuid: agent.uuid,
     assignedAgentUuid: agent.assigned_agent_uuid,
     name: agent.name,
@@ -170,6 +174,7 @@ export interface IntegratedAgentsListResponse {
 export function adapterIntegratedAgentsList(response: IntegratedAgentsListResponse) {
   return response.integratedFeatures.map((agent) => ({
       origin: 'commerce' as const,
+      isOfficial: true,
       uuid: agent.feature_uuid,
       name: agent.name,
       description: agent.description,

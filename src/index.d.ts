@@ -7,6 +7,7 @@ interface AgentNext {
   isAssigned: boolean;
   isInTest: boolean;
   origin: 'nexus' | 'commerce';
+  isOfficial: boolean;
   isConfiguring?: boolean;
   skills?: string[];
   templateSynchronizationStatus?: string;

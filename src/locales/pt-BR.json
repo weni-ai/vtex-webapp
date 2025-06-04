@@ -20,7 +20,9 @@
         "copy_code": "Copiar código",
         "return": "Voltar",
         "finish": "Finalizar",
-        "url_copied": "URL copiada"
+        "url_copied": "URL copiada",
+        "clear": "Limpar",
+        "apply": "Aplicar"
     },
     "title": "Weni Agentic IA",
     "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
@@ -35,6 +37,20 @@
         "modals": {
             "gallery": {
                 "title": "Galeria de Agentes",
+                "filters": {
+                    "categories": {
+                        "title": "Categoria",
+                        "none_selected": "Todos os agentes"
+                    },
+                    "agents": {
+                        "title": "Agentes",
+                        "none_selected": "Todos os agentes",
+                        "options": {
+                            "official": "Agentes oficiais",
+                            "custom": "Agentes personalizados"
+                        }
+                    }
+                },
                 "list": {
                     "empty": {
                         "title": "Nenhum agente atribuído à equipe"
