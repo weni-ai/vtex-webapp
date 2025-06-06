@@ -94,7 +94,7 @@ export function TemplateCard({ uuid, name, description, status }: Template) {
         size="large"
         style={{ marginTop: 'auto' }}
         onClick={() => navigateToTemplate(uuid)}
-        disabled={status !== 'active'}
+        disabled={!['active', 'needs-editing'].includes(status)}
       >
         {t('template.card.buttons.edit')}
       </Button>

@@ -84,10 +84,25 @@ export function AgentIndex() {
   const [isSwitchToTestModeModalOpen, setIsSwitchToTestModeModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
 
+  const [updateTemplatesTimeout, setUpdateTemplatesTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     index();
   }, []);
+
+  useEffect(() => {
+    if (updateTemplatesTimeout) {
+      clearTimeout(updateTemplatesTimeout);
+    }
+
+    const timeout = setTimeout(verifyPendingTemplates, 5000);
+
+    setUpdateTemplatesTimeout(timeout);
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [templates]);
 
   async function index() {
     if (!assignedAgentUuid) {
@@ -108,18 +123,21 @@ export function AgentIndex() {
     loadAgentDetails();
   }
 
-  async function loadAgentDetails() {
+  async function loadAgentDetails({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
     if (!assignedAgentUuid) {
       return;
     }
 
     try {
-      setIsLoading(true);
-      const response = await agentCLI({ agentUuid: assignedAgentUuid, });
+      if (!forceUpdate) {
+        setIsLoading(true);
+      }
+
+      const response = await agentCLI({ agentUuid: assignedAgentUuid, forceUpdate });
 
       setWebhookUrl(response.webhookUrl);
 
-      const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected'].includes(status));
+      const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 
       setTemplates(templates.map(({ uuid, name, status, metadata }) => ({
         uuid,
@@ -131,6 +149,14 @@ export function AgentIndex() {
       console.error(error);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function verifyPendingTemplates() {
+    const pendingTemplates = templates.filter(({ status }) => status === 'pending');
+
+    if (pendingTemplates.length > 0) {
+      await loadAgentDetails({ forceUpdate: true });
     }
   }
 
