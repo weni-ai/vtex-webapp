@@ -605,8 +605,20 @@
                         "text": {
                             "label": "Text"
                         },
+                        "radio": {
+                            "dynamic": {
+                                "label": "Dynamic URL"
+                            },
+                            "static": {
+                                "label": "Static URL"
+                            }
+                        },
                         "url": {
                             "label": "URL"
+                        },
+                        "url_example": {
+                            "label": "Example URL",
+                            "description": "Add an example website URL, do not use real customer information"
                         }
                     }
                 },

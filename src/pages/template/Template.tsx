@@ -2,7 +2,7 @@ import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, Pa
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { assignedAgentTemplate, updateAgentTemplate } from "../../services/agent.service";
+import { assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
@@ -14,7 +14,7 @@ export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
   content: string;
   footer?: string;
-  button?: { text: string; url: string };
+  button?: { text: string; url: string, urlExample?: string };
 }
 
 export interface Variable {
@@ -105,6 +105,11 @@ export function Template() {
   }
 
   async function handleSaveTemplate() {
+    if (templateStatus === 'needs-editing') {
+      handleSaveButton();
+      return;
+    }
+
     try {
       setIsSaving(true);
 
@@ -114,6 +119,30 @@ export function Template() {
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
           footer: content.footer,
+        },
+      });
+
+      navigate(-1);
+
+      toast.success(t('agent.actions.edit_template.success'));
+    } catch (error) {
+      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleSaveButton() {
+    try {
+      setIsSaving(true);
+
+      await saveAgentButtonTemplate({
+        templateUuid: templateUuid as string,
+        template: {
+          button: {
+            url: content.button?.url as string,
+            urlExample: content.button?.urlExample,
+          },
         },
       });
 
@@ -155,8 +184,6 @@ export function Template() {
             ) : (
               <PageHeading>{t('template.form.create.title')}</PageHeading>
             )}
-
-            {/* <Tag variant="secondary" color="yellow">Pending</Tag> */}
           </Flex>
 
           <Stack space="$space-3" horizontal>
@@ -183,6 +210,7 @@ export function Template() {
 
           <Grid columns="1fr 1fr" gap="$space-5">
             <FormContent
+              status={templateStatus}
               content={content}
               setContent={setContent}
               prefilledContent={prefilledContent}

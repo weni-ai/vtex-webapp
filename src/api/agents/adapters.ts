@@ -145,6 +145,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
       uuid: template.uuid,
       name: template.display_name,
       startCondition: template.start_condition,
+      metadata: template.metadata,
     })),
   })));
 
