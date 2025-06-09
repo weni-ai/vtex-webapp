@@ -295,7 +295,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                   variant="tertiary"
                   label={t('template.form.areas.content.buttons.remove')}
                   onClick={() => setElementVisibility(element, false)}
-                  disabled={!canRemoveElements[element] || initialElementsVisibility[element]}
+                  disabled={!canRemoveElements[element]}
                 >
                   <IconTrash />
                 </IconButton>
