@@ -19,7 +19,8 @@
         "new_agent": "Nuevo agente",
         "copy_code": "Copiar código",
         "return": "Volver",
-        "finish": "Finalizar"
+        "finish": "Finalizar",
+        "url_copied": "URL copiada"
     },
     "title": "Weni Agentic AI",
     "description": "Una solución empresarial de CX basada en IA para grandes marcas y retailers.",
@@ -81,6 +82,12 @@
                 "title": "Acerca de"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Cambios guardados con éxito",
+                        "error": "Error al guardar, inténtalo de nuevo más tarde"
+                    }
+                },
                 "title": "Configuración",
                 "fields": {
                     "webhook_url": {
@@ -89,7 +96,8 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copiar"
+                    "copy": "Copiar",
+                    "save": "Guardar cambios"
                 }
             }
         },
@@ -482,6 +490,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "Lo que está pasando en: Agente de carros abandonados",
                 "sent_messages": "Mensajes enviados",
                 "delivered_messages": "Mensajes entregados",
                 "read_messages": "Mensajes leídos",

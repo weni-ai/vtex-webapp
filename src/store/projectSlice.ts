@@ -32,6 +32,7 @@ interface AssignedAgent {
   uuid: string;
   webhookUrl: string;
   channelUuid: string;
+  contactPercentage: number;
   templates: {
     uuid: string;
     name: string;
@@ -107,7 +108,7 @@ const projectSlice = createSlice({
       state.agents = action.payload;
     },
     addAssignedAgent: (state, action: PayloadAction<AssignedAgent>) => {
-      state.assignedAgents = [...state.assignedAgents, action.payload];
+      state.assignedAgents = [...state.assignedAgents.filter((agent) => agent.uuid !== action.payload.uuid), action.payload];
     },
     setAssignedAgents: (state, action: PayloadAction<AssignedAgent[]>) => {
       state.assignedAgents = action.payload;

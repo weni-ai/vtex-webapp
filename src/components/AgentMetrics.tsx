@@ -49,13 +49,12 @@ export function AgentMetrics() {
 
   return (
     <>
-      {/* Temporarily hidden */}
-      <Flex style={{ display: 'none', }} align="center" gap="$space-1">
-        <Text variant="display2" color="$fg-base">
-          What's happening in:
+      <Flex style={{ display: data.length > 0 ? 'block' : 'none', }} align="center" gap="$space-1">
+        <Text variant="display2">
+          {t('insights.dashboard.abandoned_cart.title')}
         </Text>
 
-        <MenuProvider placement="bottom-start">
+        {/* Temporarily hidden */ false && (<MenuProvider placement="bottom-start">
           <MenuTrigger asChild>
             <Text variant="display2">
               <Flex align="center" gap="$space-1">
@@ -93,7 +92,7 @@ export function AgentMetrics() {
               </Button>
             </Flex>
           </MenuPopover>
-        </MenuProvider>
+        </MenuProvider>)}
       </Flex>
 
       <Flex
