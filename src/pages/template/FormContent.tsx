@@ -1,6 +1,7 @@
 import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Content, SectionHeader } from "./Template";
+import { cleanURL } from "../../utils";
 
 export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
@@ -21,7 +22,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     setValue: setHeaderType as any,
   });
 
-  const [buttonType, setButtonType] = useState<'dynamic' | 'static'>('dynamic');
+  const [buttonType, setButtonType] = useState<'dynamic' | 'static'>('static');
   const buttonTypeState = useRadioState({
     value: buttonType,
     setValue: setButtonType as any,
@@ -81,8 +82,10 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     }
 
     if (prefilledContent.button) {
+      setButtonType(prefilledContent.button.urlExample ? 'dynamic' : 'static');
       setButtonText(prefilledContent.button.text);
-      setButtonUrl(prefilledContent.button.url);
+      setButtonUrl(cleanURL(prefilledContent.button.url));
+      setButtonUrlExample(cleanURL(prefilledContent.button.urlExample || ''));
       visibility.button = true;
     }
 
@@ -104,23 +107,23 @@ export function FormContent({ status, content, setContent, prefilledContent, can
 
   const canRemoveElements = useMemo(() => {
     return {
-      header: isHeaderEditable && prefilledContent.header === undefined,
-      footer: isFooterEditable && prefilledContent.footer === undefined,
-      button: isButtonEditable && prefilledContent.button === undefined,
+      header: status !== 'needs-editing',
+      footer: status !== 'needs-editing',
+      button: status !== 'needs-editing',
     };
-  }, [isHeaderEditable, isFooterEditable, isButtonEditable, prefilledContent]);
+  }, [status]);
 
   const elements = {
     header: {
       isVisible: false,
       component: (
         <>
-          <Bleed top="$space-7">
+          {false && (<Bleed top="$space-7">
             <RadioGroup label="" horizontal state={headerTypeState}>
               <Radio value="text" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
               <Radio value="media" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
             </RadioGroup>
-          </Bleed>
+          </Bleed>)}
 
           {headerType === 'text' && (
             <Field>
@@ -191,17 +194,17 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       isVisible: false,
       component: (
         <>
-          <Bleed top="$space-7">
+          {false && (<Bleed top="$space-7">
             <RadioGroup label="" horizontal state={buttonTypeState}>
-              <Radio value="dynamic">{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
-              <Radio value="static">{t('template.form.fields.content.button.radio.static.label')}</Radio>
+              <Radio value="dynamic" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
+              <Radio value="static" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.static.label')}</Radio>
             </RadioGroup>
-          </Bleed>
+          </Bleed>)}
 
           <Field>
             <Label>{t('template.form.fields.content.button.text.label')}</Label>
 
-            <Input value={buttonText} onChange={setButtonText} disabled={!canChangeButton} />
+            <Input value={buttonText} onChange={setButtonText} disabled={!canChangeButton || status === 'needs-editing'} />
           </Field>
 
           <Field>
@@ -210,7 +213,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Input
               prefix="https://"
               value={buttonUrl}
-              onChange={setButtonUrl}
+              onChange={(value) => setButtonUrl(cleanURL(value))}
               disabled={status !== 'needs-editing' && !canChangeButton}
               suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
             />
@@ -220,7 +223,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Field>
               <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
 
-              <Input prefix="https://" value={buttonUrlExample} onChange={setButtonUrlExample} disabled={status !== 'needs-editing' && !canChangeButton} />
+              <Input prefix="https://" value={buttonUrlExample} onChange={(value) => setButtonUrlExample(cleanURL(value))} disabled={status !== 'needs-editing' && !canChangeButton} />
 
               <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
             </Field>

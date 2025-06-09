@@ -128,7 +128,7 @@ export async function assignAgentCLIRequest(data: {
     webhook_url: string;
     templates: {}[];
     channel_uuid: string;
-  }>('/_v/proxy-request', {
+  } & { error?: { agent: string } }>('/_v/proxy-request', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -153,7 +153,8 @@ export async function assignAgentCLIRequest(data: {
   if ('webhook_url' in Object(response)) {
     return response;
   } else {
-    throw new Error('error assigning agent');
+    const error = response?.error?.agent;
+    throw new Error(typeof error === 'string' ? error : t('agent.actions.assign.error'));
   }
 };
 
@@ -188,6 +189,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
 
   const response = await VTEXFetch<{
     uuid: string;
+    contact_percentage: number;
     templates: {
       uuid: string;
       name: string;
@@ -242,6 +244,7 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
       uuid: response.uuid,
       templates: response.templates,
       channelUuid: response.channel_uuid,
+      contactPercentage: response.contact_percentage,
       webhookUrl: response.webhook_url,
     };
   } else {
@@ -405,7 +408,7 @@ export async function getWhatsAppURLRequest(): Promise<{
 
 export async function updateAgentTemplateRequest(data: {
   templateUuid: string;
-  template: { header?: string, content: string, footer?: string, }
+  template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } }
 }) {
   const projectUuid = store.getState().project.project_uuid;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
@@ -418,6 +421,12 @@ export async function updateAgentTemplateRequest(data: {
       header: string;
       body: string;
       footer: string;
+      buttons: {
+        url: string;
+        text: string;
+        type: 'URL';
+        example?: string[];
+      }[];
     };
   }>('/_v/proxy-request', {
     method: 'POST',
@@ -433,6 +442,14 @@ export async function updateAgentTemplateRequest(data: {
         template_header: data.template.header,
         template_body: data.template.content,
         template_footer: data.template.footer,
+        template_button: data.template.button ? [{
+          type: 'URL',
+          text: data.template.button.text,
+          url: {
+            base_url: data.template.button.url,
+            url_suffix_example: data.template.button.urlExample,
+          }
+        }] : [],
       },
       params: {},
       headers: {},
@@ -443,5 +460,84 @@ export async function updateAgentTemplateRequest(data: {
     return response;
   } else {
     throw new Error('error updating template');
+  }
+};
+
+export async function updateAssignedAgentSettingsRequest(data: {
+  agentUuid: string;
+  contactPercentage?: number;
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await VTEXFetch<{
+    uuid: string;
+    contact_percentage: number;
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method: 'PATCH',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
+      data: {
+        contact_percentage: data.contactPercentage,
+      },
+      params: {},
+      headers: { 'Project-Uuid': projectUuid, },
+    }),
+  });
+
+  if ('uuid' in Object(response)) {
+    return response;
+  } else {
+    throw new Error('error updating agent settings');
+  }
+};
+
+function proxy<T = unknown>(method: string, url: string, { headers = {}, data = {}, params = {} }: { headers?: Record<string, string>, data?: Record<string, any>, params?: Record<string, string> }) {
+  return VTEXFetch<T>('/_v/proxy-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      method,
+      url,
+      data,
+      params,
+      headers,
+    }),
+  });
+}
+
+class AssignedAgentTemplate {
+  static disable(data: { templateUuid: string, projectUuid: string }) {
+    return proxy<{ text: string; }>(
+      'DELETE',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`,
+      {
+        headers: {
+          'Project-Uuid': data.projectUuid,
+        },
+      }
+    );
+  }
+}
+
+export async function disableAssignedAgentTemplateRequest(data: {
+  templateUuid: string;
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await AssignedAgentTemplate.disable({
+    projectUuid,
+    templateUuid: data.templateUuid,
+  });
+
+  if ('text' in Object(response)) {
+    return response;
+  } else {
+    throw new Error('error disabling template');
   }
 };

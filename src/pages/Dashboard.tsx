@@ -162,7 +162,7 @@ export function Dashboard() {
 
       toast.success(t('agent.actions.assign.success'));
     } catch (error) {
-      toast.critical(t('agent.actions.assign.error'));
+      toast.critical(error instanceof Error ? error.message : t('common.errors.unexpected_error'));
     } finally {
       setIsAssigningAgent(false);
     }

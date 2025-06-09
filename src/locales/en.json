@@ -19,7 +19,8 @@
         "new_agent": "New agent",
         "copy_code": "Copy code",
         "return": "Return",
-        "finish": "Finish"
+        "finish": "Finish",
+        "url_copied": "URL copied"
     },
     "title": "Weni Agentic IA",
     "description": "An AI-based CX business solution for brands and retailers.",
@@ -81,6 +82,12 @@
                 "title": "About"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Changes saved successfully",
+                        "error": "Unable to save changes, please try again"
+                    }
+                },
                 "title": "Settings",
                 "fields": {
                     "webhook_url": {
@@ -89,16 +96,17 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copy"
+                    "copy": "Copy",
+                    "save": "Save changes"
                 }
             }
         },
         "categories": {
             "passive": {
-                "title": "Passive notification"
+                "title": "Passive Agent"
             },
             "active": {
-                "title": "Active notification",
+                "title": "Active Agent",
                 "order_status": {
                     "title": "Order status agent",
                     "description": "Keep customers updated on the order status in real time",
@@ -181,8 +189,8 @@
                 "error": "Error deactivating the agent. Try again later."
             },
             "add": "Assign",
-            "added": "Active agent",
-            "test": "Agent in test mode",
+            "added": "Agent in production",
+            "test": "Agent in test",
             "configuring": "Configuring agent"
         }
     },
@@ -482,6 +490,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "What's happening in: Abandoned cart agent",
                 "sent_messages": "Sent messages",
                 "delivered_messages": "Delivered messages",
                 "read_messages": "Read messages",

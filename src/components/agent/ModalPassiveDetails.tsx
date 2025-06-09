@@ -1,7 +1,9 @@
-import { Divider, Field, FieldDescription, Flex, IconButton, IconCopySimple, Input, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Skeleton, Text, toast } from "@vtex/shoreline";
+import { Divider, Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Skeleton, Text, toast } from "@vtex/shoreline";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { getWhatsAppURLService } from "../../services/agent.service";
+import store from "../../store/provider.store";
+import { InputCopyToClipboard } from "../InputCopyToClipboard";
 import { AgentDescriptiveStatus } from "./DescriptiveStatus";
 
 interface ModalAgentPassiveDetailsProps {
@@ -45,23 +47,12 @@ function Preview({ url, isLoading }: { url: string, isLoading: boolean }) {
         <QRCode size={100} value={url} />
       )}
 
-      <Field>
-        <Flex align="center" gap="$space-4">
-          {isLoading ? (
-            <Skeleton style={{ width: '100%', height: '44px' }} />
-          ) : (
-            <Input value={url} />
-          )}
-
-          <IconButton size="large" label={t('agent.modals.details.sections.preview.buttons.copy')} onClick={() => { navigator.clipboard.writeText(url) }} disabled={isLoading}>
-            <IconCopySimple />
-          </IconButton>
-        </Flex>
-
-        <FieldDescription>
-          {t('agent.modals.details.sections.preview.fields.url.description')}
-        </FieldDescription>
-      </Field>
+      <InputCopyToClipboard
+        isLoading={isLoading}
+        value={url}
+        description={t('agent.modals.details.sections.preview.fields.url.description')}
+        successMessage={t('common.url_copied')}
+      />
     </Flex>
   )
 }
@@ -73,8 +64,15 @@ export function ModalAgentPassiveDetails({ open, onClose, agentName, agentDescri
   async function getWhatsAppURL() {
     try {
       setIsLoadingWhatsAppURL(true);
-      const url = await getWhatsAppURLService();
-      setWhatsAppURL(url);
+
+      const WhatsAppPhoneNumber = store.getState().user.WhatsAppPhoneNumber;
+
+      if (WhatsAppPhoneNumber) {
+        setWhatsAppURL(`https://wa.me/${WhatsAppPhoneNumber}`);
+      } else {
+        const url = await getWhatsAppURLService();
+        setWhatsAppURL(url);
+      }
     } catch (error) {
       toast.critical((error as Error).message);
     } finally {

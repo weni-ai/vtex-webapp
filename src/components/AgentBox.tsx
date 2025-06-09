@@ -126,11 +126,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       return false;
     }
 
-    if (type === 'passive') {
-      return !isWppIntegrated;
-    }
-
-    return origin === 'CLI';
+    return type === 'passive' || origin === 'CLI';
   }, [isIntegrated, type, isWppIntegrated]);
 
   const handleAgentClick = () => {
@@ -213,7 +209,13 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               {agentName}
             </Text>
 
-            <TagType type={type} />
+            <Flex align="center" gap="$space-2">
+              <TagType type={type} />
+
+              <Text variant="caption1" color="$fg-base-soft">
+                PT-BR
+              </Text>
+            </Flex>
           </Flex>
 
           {
