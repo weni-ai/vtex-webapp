@@ -14,6 +14,7 @@ import { initialLoading } from './store/projectSlice';
 import { TermsAndConditions } from './pages/TermsAndConditions';
 import { Template } from './pages/template/Template';
 import { AgentIndex } from './pages/agent/Index';
+import { Onboarding } from './pages/Onboarding';
 
 function App() {
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ function App() {
             <Route path='/agents/:assignedAgentUuid' element={<AgentIndex />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/create' element={<Template />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/:templateUuid/edit' element={<Template />}></Route>
+            <Route path='/onboarding' element={<Onboarding />}></Route>
           </Routes>
         </Router>
       )}
