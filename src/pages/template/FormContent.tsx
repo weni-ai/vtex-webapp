@@ -55,12 +55,6 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     button: false,
   });
 
-  const [initialElementsVisibility, setInitialElementsVisibility] = useState<Record<keyof typeof elements, boolean>>({
-    header: false,
-    footer: false,
-    button: false,
-  });
-
   useEffect(() => {
     const header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
     const button = { text: buttonText, url: buttonUrl, urlExample: buttonType === 'dynamic' ? buttonUrlExample : undefined };
@@ -105,7 +99,6 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     }
 
     setElementsVisibility(initialVisibility);
-    setInitialElementsVisibility(initialVisibility);
   }, [prefilledContent]);
 
   const isElementsEditable = useMemo(() => {
