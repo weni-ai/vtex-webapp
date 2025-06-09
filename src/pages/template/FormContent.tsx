@@ -55,6 +55,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     button: false,
   });
 
+  const [initialElementsVisibility, setInitialElementsVisibility] = useState<Record<keyof typeof elements, boolean>>({
+    header: false,
+    footer: false,
+    button: false,
+  });
+
   useEffect(() => {
     const header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
     const button = { text: buttonText, url: buttonUrl, urlExample: buttonType === 'dynamic' ? buttonUrlExample : undefined };
@@ -69,12 +75,16 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl, buttonType, buttonUrlExample]);
 
   useEffect(() => {
-    const visibility = elementsVisibility;
+    const initialVisibility = {
+      header: false,
+      footer: false,
+      button: false,
+    };
 
     if (prefilledContent.header?.type === 'text') {
       setHeaderType('text');
       setHeaderText(prefilledContent.header.text);
-      visibility.header = true;
+      initialVisibility.header = true;
     }
 
     if (prefilledContent.content) {
@@ -86,15 +96,16 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       setButtonText(prefilledContent.button.text);
       setButtonUrl(cleanURL(prefilledContent.button.url));
       setButtonUrlExample(cleanURL(prefilledContent.button.urlExample || ''));
-      visibility.button = true;
+      initialVisibility.button = true;
     }
 
     if (prefilledContent.footer) {
       setFooterText(prefilledContent.footer);
-      visibility.footer = true;
+      initialVisibility.footer = true;
     }
 
-    setElementsVisibility(visibility);
+    setElementsVisibility(initialVisibility);
+    setInitialElementsVisibility(initialVisibility);
   }, [prefilledContent]);
 
   const isElementsEditable = useMemo(() => {
@@ -280,7 +291,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               <Flex align="center" gap="$space-2" justify="space-between">
                 <Text variant="emphasis" color="$fg-base">{t(`template.form.fields.content.${element}.title`)}</Text>
 
-                <IconButton variant="tertiary" label={t('template.form.areas.content.buttons.remove')} onClick={() => setElementVisibility(element, false)} disabled={!canRemoveElements[element]}>
+                <IconButton
+                  variant="tertiary"
+                  label={t('template.form.areas.content.buttons.remove')}
+                  onClick={() => setElementVisibility(element, false)}
+                  disabled={!canRemoveElements[element] || initialElementsVisibility[element]}
+                >
                   <IconTrash />
                 </IconButton>
               </Flex>
