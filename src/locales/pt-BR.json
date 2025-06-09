@@ -190,6 +190,7 @@
             },
             "add": "Atribuir",
             "added": "Agente ativo",
+            "view": "Ver agente",
             "test": "Agente em teste",
             "configuring": "Configurando agente"
         }
