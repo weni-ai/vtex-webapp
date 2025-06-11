@@ -1,9 +1,9 @@
-import store from "../store/provider.store";
-import { VTEXFetch } from "../utils/VTEXFetch";
-import { setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setAgentBuilderIntegrated  } from "../store/userSlice";
 import { toast } from "@vtex/shoreline";
-import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
 import { VTEXWhatsAppAdapter } from "../api/channels/adapters";
+import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
+import store from "../store/provider.store";
+import { setAgentBuilderIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from "../store/userSlice";
+import { VTEXFetch } from "../utils/VTEXFetch";
 
 const whatsappAdapter = new VTEXWhatsAppAdapter();
 
@@ -21,7 +21,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
   };
 
   try {
-    const response = await VTEXFetch<{ flows_channel_uuid: string, wpp_cloud_app_uuid: string, error?: string, }>(`/_v/whatsapp-integration`, {
+    const response = await VTEXFetch<{ flows_channel_uuid: string, wpp_cloud_app_uuid: string, phone_number: string, error?: string, }>(`/_v/whatsapp-integration`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +38,19 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     store.dispatch(setAgentBuilderIntegrated(true));
     store.dispatch(setFlowsChannelUuid(response.flows_channel_uuid));
     store.dispatch(setWppCloudAppUuid(response.wpp_cloud_app_uuid));
-    toast.success(t('integration.channels.whatsapp.success'))
+    toast.success(t('integration.channels.whatsapp.success'));
+
+    checkWppIntegration(project_uuid).then((response) => {
+      const { phone_number = null } = response.data || {};
+
+      if (response?.error) {
+        throw new Error(JSON.stringify(response.error))
+      }
+
+      if (phone_number) {
+        store.dispatch(setWhatsAppPhoneNumber(phone_number ? phone_number.replace(/\D/g, '') : null));
+      }
+    });
 
     return { success: true };
   } catch (error) {

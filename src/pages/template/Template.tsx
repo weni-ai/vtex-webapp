@@ -2,7 +2,7 @@ import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, Pa
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
+import { agentCLI, assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
@@ -32,7 +32,7 @@ export function SectionHeader({ title }: { title: string }) {
 
 export function Template() {
   const navigate = useNavigate();
-  const { templateUuid } = useParams();
+  const { assignedAgentUuid, templateUuid } = useParams();
 
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
@@ -67,17 +67,30 @@ export function Template() {
     return templateUuid !== undefined;
   }, [templateUuid]);
 
+  const hasChanges = useMemo(() => {
+    return [
+      prefilledContent.content !== content.content,
+      prefilledContent.header?.type !== content.header?.type,
+      prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
+      prefilledContent.footer !== content.footer,
+      prefilledContent.button?.text !== content.button?.text,
+      prefilledContent.button?.url !== content.button?.url,
+      prefilledContent.button?.urlExample !== content.button?.urlExample,
+    ].some(Boolean);
+  }, [content, prefilledContent]);
+
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
 
     let header: { type: 'text', text: string } | undefined;
-    let button: { text: string; url: string } | undefined;
+    let button: { text: string; url: string, urlExample?: string } | undefined;
     let footer: string | undefined;
 
     if (template.metadata.buttons?.[0]?.type === 'URL') {
       button = {
         text: template.metadata.buttons[0].text,
         url: template.metadata.buttons[0].url,
+        urlExample: template.metadata.buttons[0].example?.[0],
       }
     }
 
@@ -119,12 +132,14 @@ export function Template() {
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
           footer: content.footer,
+          button: content.button,
         },
       });
 
-      navigate(-1);
-
       toast.success(t('agent.actions.edit_template.success'));
+
+      await updateTemplates();
+      navigateToAgent();
     } catch (error) {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
@@ -140,20 +155,33 @@ export function Template() {
         templateUuid: templateUuid as string,
         template: {
           button: {
-            url: content.button?.url as string,
-            urlExample: content.button?.urlExample,
+            url: content.button?.url ? `https://${content.button.url.trim()}` : '',
+            urlExample: content.button?.urlExample ? `https://${content.button.urlExample.trim()}` : undefined,
           },
         },
       });
 
-      navigate(-1);
-
       toast.success(t('agent.actions.edit_template.success'));
+
+      await updateTemplates();
+      navigateToAgent();
     } catch (error) {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
       setIsSaving(false);
     }
+  }
+
+  async function updateTemplates() {
+    try {
+      await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate: true });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function navigateToAgent() {
+    navigate(`/agents/${assignedAgentUuid}`);
   }
 
   return (
@@ -167,7 +195,7 @@ export function Template() {
                 asChild
                 variant="tertiary"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={navigateToAgent}
               >
                 <IconArrowLeft />
               </IconButton>
@@ -188,13 +216,13 @@ export function Template() {
 
           <Stack space="$space-3" horizontal>
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="secondary" size="large">
+              <Button variant="secondary" size="large" onClick={navigateToAgent}>
                 {t('template.form.create.buttons.cancel')}
               </Button>
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving}>
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
@@ -216,9 +244,9 @@ export function Template() {
               prefilledContent={prefilledContent}
               isHeaderEditable={true}
               isFooterEditable={true}
-              isButtonEditable={!isEditing}
+              isButtonEditable={true}
               canChangeHeaderType={!isEditing}
-              canChangeButton={!isEditing}
+              canChangeButton={true}
             />
 
             <MessagePreview

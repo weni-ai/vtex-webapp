@@ -7,6 +7,7 @@ export interface WhatsAppIntegrationResponse {
         has_whatsapp: boolean;
         wpp_cloud_app_uuid: string;
         flows_channel_uuid: string;
+        phone_number: string;
     };
 }
 

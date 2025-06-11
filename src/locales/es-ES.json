@@ -14,12 +14,16 @@
         "errors": {
             "unauthorized": "No tienes permiso para realizar esta acción",
             "internal_server_error": "Error interno del servidor",
-            "unexpected_error": "Se produjo un error inesperado"
+            "unexpected_error": "Se produjo un error inesperado",
+            "generic_error_with_support": "Algo salió mal. Contacta a soporte en"
         },
         "new_agent": "Nuevo agente",
         "copy_code": "Copiar código",
         "return": "Volver",
-        "finish": "Finalizar"
+        "finish": "Finalizar",
+        "url_copied": "URL copiada",
+        "clear": "Limpiar",
+        "apply": "Aplicar"
     },
     "title": "Weni Agentic AI",
     "description": "Una solución empresarial de CX basada en IA para grandes marcas y retailers.",
@@ -34,6 +38,20 @@
         "modals": {
             "gallery": {
                 "title": "Galería de Agentes",
+                "filters": {
+                    "categories": {
+                        "title": "Categoría",
+                        "none_selected": "Todos los agentes"
+                    },
+                    "agents": {
+                        "title": "Agentes",
+                        "none_selected": "Todos los agentes",
+                        "options": {
+                            "official": "Agentes oficiales",
+                            "custom": "Agentes personalizados"
+                        }
+                    }
+                },
                 "list": {
                     "empty": {
                         "title": "No hay agentes asignados al equipo"
@@ -81,6 +99,12 @@
                 "title": "Acerca de"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Cambios guardados con éxito",
+                        "error": "Error al guardar, inténtalo de nuevo más tarde"
+                    }
+                },
                 "title": "Configuración",
                 "fields": {
                     "webhook_url": {
@@ -89,7 +113,8 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copiar"
+                    "copy": "Copiar",
+                    "save": "Guardar cambios"
                 }
             }
         },
@@ -182,6 +207,7 @@
             },
             "add": "Asignar",
             "added": "Agente activo",
+            "view": "Ver agente",
             "test": "Agente en prueba",
             "configuring": "Configurando agente"
         }
@@ -482,6 +508,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "Lo que está pasando en: Agente de carros abandonados",
                 "sent_messages": "Mensajes enviados",
                 "delivered_messages": "Mensajes entregados",
                 "read_messages": "Mensajes leídos",

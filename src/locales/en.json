@@ -14,12 +14,16 @@
         "errors": {
             "unauthorized": "You don't have permission to perform this action",
             "internal_server_error": "Internal server error",
-            "unexpected_error": "An unexpected error occurred"
+            "unexpected_error": "An unexpected error occurred",
+            "generic_error_with_support": "Something went wrong. Contact us at"
         },
         "new_agent": "New agent",
         "copy_code": "Copy code",
         "return": "Return",
-        "finish": "Finish"
+        "finish": "Finish",
+        "url_copied": "URL copied",
+        "clear": "Clear",
+        "apply": "Apply"
     },
     "title": "Weni Agentic IA",
     "description": "An AI-based CX business solution for brands and retailers.",
@@ -34,6 +38,20 @@
         "modals": {
             "gallery": {
                 "title": "Agents Gallery",
+                "filters": {
+                    "categories": {
+                        "title": "Category",
+                        "none_selected": "All agents"
+                    },
+                    "agents": {
+                        "title": "Agents",
+                        "none_selected": "All agents",
+                        "options": {
+                            "official": "Official agents",
+                            "custom": "Custom agents"
+                        }
+                    }
+                },
                 "list": {
                     "empty": {
                         "title": "No results founded"
@@ -81,6 +99,12 @@
                 "title": "About"
             },
             "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Changes saved successfully",
+                        "error": "Unable to save changes, please try again"
+                    }
+                },
                 "title": "Settings",
                 "fields": {
                     "webhook_url": {
@@ -89,16 +113,17 @@
                     }
                 },
                 "buttons": {
-                    "copy": "Copy"
+                    "copy": "Copy",
+                    "save": "Save changes"
                 }
             }
         },
         "categories": {
             "passive": {
-                "title": "Passive agent"
+                "title": "Passive Agent"
             },
             "active": {
-                "title": "Active agent",
+                "title": "Active Agent",
                 "order_status": {
                     "title": "Order status agent",
                     "description": "Keep customers updated on the order status in real time",
@@ -181,8 +206,9 @@
                 "error": "Error deactivating the agent. Try again later."
             },
             "add": "Assign",
-            "added": "Active agent",
-            "test": "Agent in test mode",
+            "added": "Agent in production",
+            "view": "View agent",
+            "test": "Agent in test",
             "configuring": "Configuring agent"
         }
     },
@@ -482,6 +508,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "What's happening in: Abandoned cart agent",
                 "sent_messages": "Sent messages",
                 "delivered_messages": "Delivered messages",
                 "read_messages": "Read messages",
