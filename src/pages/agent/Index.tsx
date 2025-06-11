@@ -1,11 +1,12 @@
-import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconCopySimple, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { InputCopyToClipboard } from '../../components/InputCopyToClipboard';
 import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../../components/TemplateCard';
 import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
 import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTestMode';
-import { agentCLI } from '../../services/agent.service';
+import { agentCLI, updateAssignedAgentSettings } from '../../services/agent.service';
 import store from '../../store/provider.store';
 
 export interface Template {
@@ -15,7 +16,7 @@ export interface Template {
   status: 'active' | 'rejected' | 'pending' | 'needs-editing';
 }
 
-function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean }) {
+function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgentDetails }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean, loadAgentDetails: () => void }) {
   return (
     <Flex direction="column" gap="$space-5">
       <Flex gap="$space-5" align="center" justify="space-between">
@@ -24,10 +25,10 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navi
           <Text variant="body" color="$fg-base">{t('template.list.description')}</Text>
         </Flex>
 
-        <Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
+        {false && (<Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
           <IconPlus />
           {t('template.buttons.add')}
-        </Button>
+        </Button>)}
       </Flex>
 
       <TemplateCardContainer>
@@ -36,35 +37,98 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading }: { navi
         )}
 
         {templates.map((template, index) => (
-          <TemplateCard key={index} {...template} />
+          <TemplateCard key={index} {...template} loadAgentDetails={loadAgentDetails} />
         ))}
       </TemplateCardContainer>
     </Flex>
   )
 }
 
-function Settings({ isLoading, webhookUrl }: { isLoading: boolean, webhookUrl: string }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void }) {
+  const { assignedAgentUuid } = useParams();
+  const [percentage, setPercentage] = useState<string | undefined>(undefined);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (contactPercentage) {
+      setPercentage(contactPercentage.toString());
+    }
+  }, [contactPercentage]);
+
+  function handlePercentageChange(value: string) {
+    if (Number(value) > 100) {
+      setPercentage('100');
+    } else {
+      setPercentage(value.replace(/\D/g, ''));
+    }
+  }
+
+  function handlePercentageBlur(value: string) {
+    let valueToSave = value;
+
+    if (Number(value) > 100) {
+      valueToSave = '100';
+    } else if (Number(value) < 1) {
+      valueToSave = '1';
+    }
+
+    setPercentage(Number(valueToSave).toFixed());
+  }
+
+  async function handleSave() {
+    try {
+      setIsSaving(true);
+
+      await updateAssignedAgentSettings({
+        agentUuid: assignedAgentUuid as string,
+        contactPercentage: Number(percentage),
+      });
+
+      loadAgentDetails();
+
+      toast.success(t('agents.details.settings.actions.save.success'));
+    } catch (error) {
+      setPercentage(contactPercentage?.toString());
+      toast.critical(t('agents.details.settings.actions.save.error'));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   return (
-    <Flex direction="column" gap="$space-4">
+    <Flex direction="column" gap="$space-5">
+      <InputCopyToClipboard
+        isLoading={isLoading}
+        label={t('agents.details.settings.fields.webhook_url.label')}
+        prefix="URL"
+        value={webhookUrl}
+        description={t('agents.details.settings.fields.webhook_url.description')}
+        successMessage={t('common.url_copied')}
+      />
+
       <Field>
-        <Label>{t('agents.details.settings.fields.webhook_url.label')}</Label>
+        <Label>{t('agent.modals.publish.fields.percentage.title')}</Label>
 
-        <Flex align="center" gap="$space-4">
-          {isLoading ? (
-            <Skeleton style={{ width: '100%', height: '44px' }} />
-          ) : (
-            <Input prefix="URL" value={webhookUrl} />
-          )}
+        {isLoading ? (
+          <Skeleton style={{ width: '100%', height: '44px' }} />
+        ) : (
+          <Input type="number" value={percentage} onChange={handlePercentageChange} onBlur={(e) => handlePercentageBlur(e.target.value)} suffix="%" />
+        )}
 
-          <IconButton size="large" label={t('agents.details.settings.buttons.copy')} onClick={() => { navigator.clipboard.writeText(webhookUrl) }} disabled={isLoading}>
-            <IconCopySimple />
-          </IconButton>
-        </Flex>
-
-        <FieldDescription>
-          {t('agents.details.settings.fields.webhook_url.description')}
-        </FieldDescription>
+        <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
       </Field>
+
+      <Flex justify="end">
+        <Button
+          variant="primary"
+          size="large"
+          disabled={contactPercentage === Number(percentage)}
+          onClick={handleSave}
+          loading={isSaving}
+        >
+          {t('agents.details.settings.buttons.save')}
+        </Button>
+      </Flex>
     </Flex>
   )
 }
@@ -79,6 +143,7 @@ export function AgentIndex() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
+  const [contactPercentage, setContactPercentage] = useState<number | undefined>(undefined);
   const [templates, setTemplates] = useState<Template[]>([]);
 
   const [isSwitchToTestModeModalOpen, setIsSwitchToTestModeModalOpen] = useState(false);
@@ -119,7 +184,6 @@ export function AgentIndex() {
 
     setAgentName(agent.name);
     setAgentDescription(agent.description);
-
     loadAgentDetails();
   }
 
@@ -136,6 +200,7 @@ export function AgentIndex() {
       const response = await agentCLI({ agentUuid: assignedAgentUuid, forceUpdate });
 
       setWebhookUrl(response.webhookUrl);
+      setContactPercentage(response.contactPercentage);
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 
@@ -185,7 +250,7 @@ export function AgentIndex() {
                 asChild
                 variant="tertiary"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/dash')}
               >
                 <IconArrowLeft />
               </IconButton>
@@ -220,12 +285,13 @@ export function AgentIndex() {
                 navigateToCreateTemplate={navigateToCreateTemplate}
                 templates={templates}
                 isLoading={isLoading}
+                loadAgentDetails={loadAgentDetails}
               />
             </Flex>
           </TabPanel>
 
           <TabPanel>
-            <Settings isLoading={isLoading} webhookUrl={webhookUrl} />
+            <Settings isLoading={isLoading} webhookUrl={webhookUrl} contactPercentage={contactPercentage} loadAgentDetails={loadAgentDetails} />
           </TabPanel>
         </TabProvider>
 

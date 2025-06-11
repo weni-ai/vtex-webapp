@@ -36,6 +36,7 @@ export interface ProjectState {
     assignedAgents: {
         uuid: string;
         webhookUrl: string;
+        contactPercentage: number;
         templates: {
             uuid: string;
             name: string;
@@ -49,6 +50,7 @@ export interface ProjectState {
                     type: 'URL';
                     text: string;
                     url: string;
+                    example?: string[];
                 }[];
             };
         }[];
@@ -79,6 +81,7 @@ export interface UserState {
     isWhatsAppIntegrated: boolean;
     isAgentBuilderIntegrated: boolean;
     whatsAppError: string | null;
+    WhatsAppPhoneNumber: string | null;
 }
 
 export interface RootState {

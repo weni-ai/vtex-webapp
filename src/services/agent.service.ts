@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest, updateAssignedAgentSettingsRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -187,6 +187,26 @@ export async function saveAgentButtonTemplate(data: {
   return response;
 }
 
+export async function updateAssignedAgentSettings(data: {
+  agentUuid: string;
+  contactPercentage?: number;
+}) {
+  const response = await updateAssignedAgentSettingsRequest(data);
+
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return agent.uuid === data.agentUuid ?
+      {
+        ...agent,
+        contactPercentage: response.contact_percentage,
+      }
+      : agent;
+  })));
+
+  return response;
+}
+
 export async function integrateAgent(feature_uuid: string, project_uuid: string) {
   const agentsLoading = store.getState().project.agentsLoading;
   const agentLoadingExists = agentsLoading.find(loading => loading.agent_uuid === feature_uuid);
@@ -327,7 +347,7 @@ export async function assignedAgentTemplate(data: { templateUuid: string }) {
   return template;
 }
 
-export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, } }) {
+export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } } }) {
   const response = await updateAgentTemplateRequest(data);
 
   const assignedAgents = store.getState().project.assignedAgents;
@@ -347,6 +367,7 @@ export async function updateAgentTemplate(data: { templateUuid: string, template
               header: response.metadata.header,
               body: response.metadata.body,
               footer: response.metadata.footer,
+              buttons: response.metadata.buttons,
             }
           };
         }
@@ -355,4 +376,19 @@ export async function updateAgentTemplate(data: { templateUuid: string, template
       })
     }
   })));
+}
+
+export async function disableAssignedAgentTemplate(data: { templateUuid: string }) {
+  const response = await disableAssignedAgentTemplateRequest(data);
+
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return {
+      ...agent,
+      templates: agent.templates.filter((template) => template.uuid !== data.templateUuid),
+    }
+  })));
+
+  return response;
 }
