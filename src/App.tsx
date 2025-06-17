@@ -1,5 +1,4 @@
 import { SetupError } from './pages/agent/SettingUpError';
-import { AgentBuilder } from './pages/agent/AgentBuilder';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -45,7 +44,6 @@ function App() {
             <Route path='/' element={<Setup />}></Route>
             <Route path='/agent-details' element={<AgentDetails />}></Route>
             <Route path='/terms-and-conditions' element={<TermsAndConditions />}></Route>
-            <Route path='/agent-builder' element={<AgentBuilder />}></Route>
             <Route path='/setup-error' element={<SetupError />}></Route>
             <Route path='/dash' element={<Dashboard />}></Route>
             <Route path='/agents/:assignedAgentUuid' element={<AgentIndex />}></Route>
