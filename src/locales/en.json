@@ -20,9 +20,18 @@
         "copy_code": "Copy code",
         "return": "Return",
         "finish": "Finish",
+        "skip": "Skip",
         "url_copied": "URL copied",
         "clear": "Clear",
         "apply": "Apply"
+    },
+    "onboarding": {
+        "select_agent": {
+            "title": "Assign the first agent into your team"
+        },
+        "build_manager": {
+            "title": "Setup Manager profile"
+        }
     },
     "title": "Weni Agentic IA",
     "description": "An AI-based CX business solution for brands and retailers.",
@@ -175,8 +184,8 @@
                                 "step4": "Open `commonScripts` and paste the script below."
                             },
                             "site_editor": {
-                                "title": "Site Editor",
-                                "description": "No configuration steps are required for stores using 'Site Editor'. Once confirmed, the agent will be ready to use."
+                                "title": "VTEX IO",
+                                "description": "No configuration steps are required for stores using 'VTEX IO'. Once confirmed, the agent will be ready to use."
                             }
                         }
                     },
@@ -306,7 +315,7 @@
                     "title": "VTEX frontend technology",
                     "faststore": "FastStore",
                     "portal": "Portal/Layout",
-                    "site_editor": "Site Editor"
+                    "site_editor": "VTEX IO"
                 },
                 "occupation": {
                     "title": "Occupation (optional)",

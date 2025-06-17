@@ -25,7 +25,7 @@ export function TermsAndConditions() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={() => navigate('/agent-builder')}>{t("terms.agree")}</Button>
+              <Button variant="primary" size="large" onClick={() => navigate('/onboarding')}>{t("terms.agree")}</Button>
             </Bleed>
           </Stack>
         </PageHeaderRow>
