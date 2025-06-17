@@ -45,8 +45,9 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
       <MenuPopover>
         <Flex style={{ padding: '0 var(--sl-space-2) var(--sl-space-4)' }}>
           <CheckboxGroup label="">
-            {options.map((option) => (
+            {options.map((option, index) => (
               <Checkbox
+                key={index}
                 checked={localValue.includes(option.value)}
                 onChange={() => setLocalValue(
                   (localValue.includes(option.value) ?
