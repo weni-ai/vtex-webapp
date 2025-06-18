@@ -14,7 +14,8 @@
         "errors": {
             "unauthorized": "No tienes permiso para realizar esta acción",
             "internal_server_error": "Error interno del servidor",
-            "unexpected_error": "Se produjo un error inesperado"
+            "unexpected_error": "Se produjo un error inesperado",
+            "generic_error_with_support": "Algo salió mal. Contacta a soporte en"
         },
         "new_agent": "Nuevo agente",
         "copy_code": "Copiar código",
@@ -129,10 +130,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Notificación pasiva"
+                "title": "Agente pasivo"
             },
             "active": {
-                "title": "Notificación activa",
+                "title": "Agente activo",
                 "order_status": {
                     "title": "Agente de status de pedido",
                     "description": "Mantén a tus clientes actualizados en tiempo real sobre el status de sus pedidos",
