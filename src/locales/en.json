@@ -21,9 +21,19 @@
         "copy_code": "Copy code",
         "return": "Return",
         "finish": "Finish",
+        "skip": "Skip",
         "url_copied": "URL copied",
+        "script_copied": "Script copied",
         "clear": "Clear",
         "apply": "Apply"
+    },
+    "onboarding": {
+        "select_agent": {
+            "title": "Assign the first agent into your team"
+        },
+        "build_manager": {
+            "title": "Setup Manager profile"
+        }
     },
     "title": "Weni Agentic IA",
     "description": "An AI-based CX business solution for brands and retailers.",
@@ -159,27 +169,7 @@
                     "modal": {
                         "title": "Add abandoned cart",
                         "description": "Check the store type before following the steps below",
-                        "button": "Go to storefront",
-                        "steps": {
-                            "title": "Follow these steps to make the agent operational:",
-                            "faststore": {
-                                "title": "FastStore",
-                                "description": "Follow these steps to make the agent operational:",
-                                "step1": "Go to the GitHub repository and paste the code below into the `thirdpartyscripts.tsx` file"
-                            },
-                            "portal": {
-                                "title": "Portal/Layout",
-                                "description": "Follow these steps to make the agent operational:",
-                                "step1": "In the VTEX Admin, go to Storefront > Layout.",
-                                "step2": "Open the CMS folder.",
-                                "step3": "Click HTML Templates, then Sub Templates.",
-                                "step4": "Open `commonScripts` and paste the script below."
-                            },
-                            "site_editor": {
-                                "title": "Site Editor",
-                                "description": "No configuration steps are required for stores using 'Site Editor'. Once confirmed, the agent will be ready to use."
-                            }
-                        }
+                        "button": "Go to storefront"
                     },
                     "settings": {
                         "restriction": {
@@ -304,10 +294,11 @@
             "forms": {
                 "name": "Name",
                 "channel": {
-                    "title": "VTEX frontend technology",
-                    "faststore": "FastStore",
-                    "portal": "Portal/Layout",
-                    "site_editor": "Site Editor"
+                    "container_title": "Agent setup",
+                    "title": "Store type",
+                    "site_editor": "VTEX IO",
+                    "other": "Other",
+                    "description": "The agent will only be functional after following these steps:<0/><1/>Go to the GitHub repository and paste the code below into the <2>thirdpartyscripts.tsx</2> file."
                 },
                 "occupation": {
                     "title": "Occupation (optional)",

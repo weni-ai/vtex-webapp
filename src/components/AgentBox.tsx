@@ -63,7 +63,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
-  const channel = store.getState().project.storeType;
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
   const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
 
@@ -79,7 +78,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const integrateCurrentFeature = async () => {
-    if (origin === 'commerce' && code === 'abandoned_cart' && channel !== 'site_editor') {
+    if (origin === 'commerce' && code === 'abandoned_cart') {
       setOpenAbandonedCartModal(true);
       return;
     }

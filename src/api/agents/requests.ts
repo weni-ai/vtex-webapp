@@ -1,4 +1,3 @@
-import { setStoreType } from "../../store/projectSlice";
 import store from "../../store/provider.store";
 import getEnv from "../../utils/env";
 import { VTEXFetch } from "../../utils/VTEXFetch";
@@ -65,8 +64,6 @@ export async function agentsList() {
       },
     }),
   });
-
-  store.dispatch(setStoreType(response.store_type));
 
   return adapterAgentsList(response);
 }
