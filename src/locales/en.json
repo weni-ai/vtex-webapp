@@ -14,7 +14,8 @@
         "errors": {
             "unauthorized": "You don't have permission to perform this action",
             "internal_server_error": "Internal server error",
-            "unexpected_error": "An unexpected error occurred"
+            "unexpected_error": "An unexpected error occurred",
+            "generic_error_with_support": "Something went wrong. Contact us at"
         },
         "new_agent": "New agent",
         "copy_code": "Copy code",

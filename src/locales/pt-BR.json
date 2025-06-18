@@ -14,7 +14,8 @@
         "errors": {
             "unauthorized": "Você não tem permissão para realizar esta ação",
             "internal_server_error": "Erro interno do servidor",
-            "unexpected_error": "Ocorreu um erro inesperado"
+            "unexpected_error": "Ocorreu um erro inesperado",
+            "generic_error_with_support": "Algo deu errado. Nos contate em"
         },
         "new_agent": "Novo agente",
         "copy_code": "Copiar código",
@@ -129,10 +130,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Notificação passiva"
+                "title": "Agente passivo"
             },
             "active": {
-                "title": "Notificação ativa",
+                "title": "Agente ativo",
                 "order_status": {
                     "title": "Agente de status de pedidos",
                     "description": "Mantenha os clientes atualizados sobre o status do pedido em tempo real",

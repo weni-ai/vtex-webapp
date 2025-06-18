@@ -6,6 +6,7 @@ import { AgentAssignModal } from '../components/agent/modals/Assign';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
 import { WhatsAppRequiredModal } from '../components/agent/modals/WhatsAppRequired';
 import { AgentBox, AgentBoxContainer, AgentBoxEmpty, AgentBoxSkeleton } from '../components/AgentBox';
+import { GenericErrorToast } from '../components/GenericErrorToast';
 import { AgentMetrics } from '../components/AgentMetrics';
 import { RootState } from "../interfaces/Store";
 import { assignAgentCLI, disableAgent, integrateAgent, updateAgentsList } from '../services/agent.service';
@@ -161,8 +162,8 @@ export function Dashboard() {
       setIsAgentAssignModalOpen(false);
 
       toast.success(t('agent.actions.assign.success'));
-    } catch (error) {
-      toast.critical(error instanceof Error ? error.message : t('common.errors.unexpected_error'));
+    } catch {
+      toast.critical(<GenericErrorToast />);
     } finally {
       setIsAssigningAgent(false);
     }
