@@ -12,6 +12,7 @@ import question from '../../assets/icons/question.svg';
 import { loadingSetup } from '../../store/projectSlice';
 import { cleanURL } from '../../utils';
 import { AgentBuilderSkeleton } from './AgentBuilderSkeleton';
+import { isAgentBuilderIntegrated } from '../../store/userSlice';
 
 export interface FormState {
   name: string;
@@ -22,8 +23,7 @@ export interface FormState {
 
 export function AgentBuilder({ form, setForm, errors }: { form: FormState, setForm: (form: FormState) => void, errors: { [key in keyof FormState]?: string } }) {
   const isSetupLoading = useSelector(loadingSetup);
-  // const agentIntegrated = useSelector(isAgentBuilderIntegrated)
-  const agentIntegrated = false;
+  const agentIntegrated = useSelector(isAgentBuilderIntegrated)
 
   const handleInputChange = (field: keyof FormState, value: string) => {
     if (field === 'knowledge') {
