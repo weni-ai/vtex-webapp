@@ -22,6 +22,7 @@
         "finish": "Finalizar",
         "skip": "Omitir",
         "url_copied": "URL copiada",
+        "script_copied": "Script copiado",
         "clear": "Limpiar",
         "apply": "Aplicar"
     },
@@ -167,27 +168,7 @@
                     "modal": {
                         "title": "Agregar carrito abandonado",
                         "description": "Comprueba el tipo de tienda antes de seguir con los pasos a continuación",
-                        "button": "Ir al storefront",
-                        "steps": {
-                            "title": "Sigue estos pasos para configurar el agente:",
-                            "faststore": {
-                                "title": "FastStore",
-                                "description": "Sigue estos pasos para configurar el agente:",
-                                "step1": "Accede al repositorio de GitHub y pega el código a continuación en el archivo `thirdpartyscripts.tsx`"
-                            },
-                            "portal": {
-                                "title": "Portal/Layout",
-                                "description": "Sigue estos pasos para configurar el agente:",
-                                "step1": "En el Admin VTEX, accede a Storefront > Layout.",
-                                "step2": "Abre la carpeta CMS.",
-                                "step3": "Haz clic en HTML Templates, y luego en Sub Templates.",
-                                "step4": "Abre `commonScripts` y pega el script a continuación."
-                            },
-                            "site_editor": {
-                                "title": "VTEX IO",
-                                "description": "El tipo de tienda 'VTEX IO' no requiere configuración. Una vez confirmado, el agente está listo para activación."
-                            }
-                        }
+                        "button": "Ir al storefront"
                     },
                     "settings": {
                         "restriction": {
@@ -312,10 +293,11 @@
             "forms": {
                 "name": "Nombre",
                 "channel": {
-                    "title": "Tecnología de VTEX frontend",
-                    "faststore": "FastStore",
-                    "portal": "Portal/Layout",
-                    "site_editor": "VTEX IO"
+                    "container_title": "Configuración del agente",
+                    "title": "Tipo de tienda",
+                    "site_editor": "VTEX IO",
+                    "other": "Otro",
+                    "description": "El agente solo funcionará después de seguir estos pasos:<0/><1/>Ve al repositorio de GitHub y pega el código a continuación en el archivo <2>thirdpartyscripts.tsx</2>."
                 },
                 "occupation": {
                     "title": "Profesión (opcional)",
