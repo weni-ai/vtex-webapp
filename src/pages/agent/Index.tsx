@@ -262,7 +262,6 @@ export function AgentIndex() {
       </PageHeader>
 
       <PageContent>
-
         <TabProvider>
           <TabList>
             <Tab>{t('agents.details.about.title')}</Tab>
