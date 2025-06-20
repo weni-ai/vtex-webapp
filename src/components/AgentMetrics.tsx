@@ -6,42 +6,26 @@ import { agentCLI, agentMetrics, getSkillMetrics } from "../services/agent.servi
 import { DashboardItem } from "./DashboardItem";
 
 function getPeriodDates(period: 'today' | 'yesterday' | 'last 7 days' | 'last 28 days') {
-  let startDate = '';
-  let endDate = '';
-
   const toISODate = (date: Date) => date.toISOString().split('T')[0];
 
-  if (period === 'today') {
-    const today = new Date();
+  const getStartAndEndDates = (daysAgo: number, includeToday: boolean = true) => {
+    const end = new Date();
+    const start = new Date();
+    start.setDate(end.getDate() - daysAgo);
+    return {
+      startDate: toISODate(start),
+      endDate: toISODate(includeToday ? end : start),
+    };
+  };
 
-    startDate = toISODate(today);
-    endDate = toISODate(today);
-  } else if (period === 'yesterday') {
-    const yesterday = new Date();
+  const periodMap: Record<typeof period, () => { startDate: string; endDate: string }> = {
+    'today': () => getStartAndEndDates(0),
+    'yesterday': () => getStartAndEndDates(1, false),
+    'last 7 days': () => getStartAndEndDates(7),
+    'last 28 days': () => getStartAndEndDates(28),
+  };
 
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    startDate = toISODate(yesterday);
-    endDate = toISODate(yesterday);
-  } else if (period === 'last 7 days') {
-    const today = new Date();
-    const sevenDaysAgo = new Date();
-
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    startDate = toISODate(sevenDaysAgo);
-    endDate = toISODate(today);
-  } else if (period === 'last 28 days') {
-    const today = new Date();
-    const twentyEightDaysAgo = new Date();
-
-    twentyEightDaysAgo.setDate(twentyEightDaysAgo.getDate() - 28);
-
-    startDate = toISODate(twentyEightDaysAgo);
-    endDate = toISODate(today);
-  }
-
-  return { startDate, endDate };
+  return periodMap[period]();
 }
 
 function Menu({ value, setValue, options, trigger }: { value: string; setValue: (value: string) => void; options: { label: string; value: string }[]; trigger: (label: string) => React.ReactNode }) {
