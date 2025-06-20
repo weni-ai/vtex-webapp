@@ -21,9 +21,19 @@
         "copy_code": "Copiar código",
         "return": "Voltar",
         "finish": "Finalizar",
+        "skip": "Pular",
         "url_copied": "URL copiada",
+        "script_copied": "Script copiado",
         "clear": "Limpar",
         "apply": "Aplicar"
+    },
+    "onboarding": {
+        "select_agent": {
+            "title": "Atribuir o primeiro agente ao seu time"
+        },
+        "build_manager": {
+            "title": "Configurar o perfil do Manager"
+        }
     },
     "title": "Weni Agentic IA",
     "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
@@ -159,27 +169,7 @@
                     "modal": {
                         "title": "Adicionar carrinho abandonado",
                         "description": "Verifique o tipo de loja antes de seguir os passos abaixo",
-                        "button": "Ir para storefront",
-                        "steps": {
-                            "title": "Siga estas etapas para tornar o agente funcional:",
-                            "faststore": {
-                                "title": "FastStore",
-                                "description": "Siga estas etapas para tornar o agente funcional:",
-                                "step1": "Vá para o repositório do GitHub e cole o código abaixo no arquivo `thirdpartyscripts.tsx`"
-                            },
-                            "portal": {
-                                "title": "Portal/Layout",
-                                "description": "Siga estas etapas para tornar o agente funcional:",
-                                "step1": "No Admin VTEX, acesse Storefront > Layout.",
-                                "step2": "Abra a pasta CMS.",
-                                "step3": "Clique em HTML Templates, e depois em Sub Templates.",
-                                "step4": "Abra `commonScripts` e cole o script abaixo."
-                            },
-                            "site_editor": {
-                                "title": "Editor de Site",
-                                "description": "Não são necessárias etapas de configuração para o tipo de loja 'Site Editor'. Uma vez confirmado, o agente estará pronto para uso."
-                            }
-                        }
+                        "button": "Ir para storefront"
                     },
                     "settings": {
                         "restriction": {
@@ -304,10 +294,11 @@
             "forms": {
                 "name": "Nome",
                 "channel": {
-                    "title": "Tecnologia de VTEX frontend",
-                    "faststore": "FastStore",
-                    "portal": "Portal/Layout",
-                    "site_editor": "Editor de Site"
+                    "container_title": "Configuração do agente",
+                    "title": "Tipo de loja",
+                    "site_editor": "VTEX IO",
+                    "other": "Outro",
+                    "description": "O agente só funcionará após seguir estes passos:<0/><1/>Vá para o repositório de GitHub e cole o código abaixo no arquivo <2>thirdpartyscripts.tsx</2>."
                 },
                 "occupation": {
                     "title": "Ocupação (opcional)",

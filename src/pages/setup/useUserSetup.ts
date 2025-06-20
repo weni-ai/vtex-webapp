@@ -92,11 +92,11 @@ export function useUserSetup() {
 
         await updateAgentsList();
         
-        if (has_agent && store.getState().project.storeType) {
+        if (has_agent) {
           store.dispatch(setAgentBuilderIntegrated(true))
           navigate('/dash');
         } else {
-          navigate('/agent-builder');
+          navigate('/onboarding');
         }
       } else {
         navigate('/agent-details');

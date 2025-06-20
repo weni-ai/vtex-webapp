@@ -1,6 +1,6 @@
 import { Field, FieldDescription, Flex, IconButton, IconCopySimple, Input, Label, Skeleton, toast } from "@vtex/shoreline";
 
-export function InputCopyToClipboard({ value, label, description, isLoading = false, successMessage, prefix = '' }: { value: string, label?: string, description: string, isLoading?: boolean, successMessage: string, prefix?: string }) {
+export function InputCopyToClipboard({ value, label, description, isLoading = false, successMessage, prefix = '' }: { value: string, label?: string, description?: string, isLoading?: boolean, successMessage: string, prefix?: string }) {
   function handleCopy() {
     navigator.clipboard.writeText(value);
     toast.informational(successMessage);
@@ -22,9 +22,11 @@ export function InputCopyToClipboard({ value, label, description, isLoading = fa
         </IconButton>
       </Flex>
 
-      <FieldDescription>
-        {description}
-      </FieldDescription>
+      {description && (
+        <FieldDescription>
+          {description}
+        </FieldDescription>
+      )}
     </Field>
   )
 }
