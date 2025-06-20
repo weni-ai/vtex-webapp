@@ -174,7 +174,9 @@ export function AgentMetrics() {
       setDataRows(1);
       const response = await agentCLI({ agentUuid: assignedAgentUuid });
 
-      templates = response.templates;
+      templates = response.templates.filter((template) => {
+        return template.status !== 'needs-editing';
+      });
 
       setTemplates(templates);
 
