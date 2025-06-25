@@ -517,6 +517,34 @@
                     "cancel": "Cancelar",
                     "done": "Listo"
                 }
+            },
+            "create": {
+                "steps": {
+                    "processing": {
+                        "title": "Procesando",
+                        "description": "Un AI está analizando la plantilla para asegurarse de que todo funcione como se espera. Esto puede tomar unos minutos.",
+                        "items": {
+                            "analyzing_defined_requirements": "Analizando requisitos definidos",
+                            "reviewing_template_structure": "Revisando estructura de plantilla",
+                            "validating_inserted_content": "Validando contenido insertado",
+                            "adjusting_custom_variables": "Ajustando variables personalizadas",
+                            "optimizing_template_for_fast_delivery": "Optimizando plantilla para entrega rápida",
+                            "performing_final_security_checks": "Realizando últimos controles de seguridad"
+                        }
+                    },
+                    "completed": {
+                        "title": "Procesamiento completado"
+                    }
+                },
+                "buttons": {
+                    "cancel": "Cancelar",
+                    "proceed": "Continuar",
+                    "finish": "Finalizar",
+                    "return_and_fix": "Volver y corregir"
+                },
+                "errors": {
+                    "generic_error": "Ocurrió un error al procesar la plantilla. Por favor, inténtalo de nuevo."
+                }
             }
         },
         "buttons": {

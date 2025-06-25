@@ -1,14 +1,15 @@
-import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
+import { Alert, Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { agentCLI, assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
+import { agentCLI, assignedAgentTemplate, createAssignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import './Template.style.css';
+import { CreatingTemplateModal } from "./modals/CreatingTemplate";
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -56,6 +57,10 @@ export function Template() {
   const [variables, setVariables] = useState<Variable[]>([]);
 
   const [isSaving, setIsSaving] = useState(false);
+
+  const [isCreatingTemplateModalOpen, setIsCreatingTemplateModalOpen] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [successText, setSuccessText] = useState('');
 
   useEffect(() => {
     if (templateUuid) {
@@ -118,6 +123,11 @@ export function Template() {
   }
 
   async function handleSaveTemplate() {
+    if (templateUuid === undefined) {
+      createTemplate();
+      return;
+    }
+
     if (templateStatus === 'needs-editing') {
       handleSaveButton();
       return;
@@ -127,7 +137,7 @@ export function Template() {
       setIsSaving(true);
 
       await updateAgentTemplate({
-        templateUuid: templateUuid as string,
+        templateUuid: templateUuid,
         template: {
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
@@ -142,6 +152,42 @@ export function Template() {
       navigateToAgent();
     } catch (error) {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  const createCustomTemplatePayload = useMemo(() => {
+    return {
+      name: templateName,
+      header: content.header?.type === 'text' ? content.header.text : undefined,
+      body: content.content,
+      footer: content.footer,
+      button: content.button,
+      assignedAgentUuid: assignedAgentUuid as string,
+      startCondition: startCondition,
+      variables: variables.map((variable) => ({
+        definition: variable.definition,
+        fallback: variable.fallbackText,
+      })),
+    }
+  }, [templateName, content, startCondition, variables, assignedAgentUuid]);
+
+  async function createTemplate() {
+    try {
+      setErrorText('');
+      setSuccessText('');
+      setIsSaving(true);
+      setIsCreatingTemplateModalOpen(true);
+
+      const { text } = await createAssignedAgentTemplate(createCustomTemplatePayload);
+
+      setSuccessText(text);
+      await updateTemplates();
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorText(error.message);
+      }
     } finally {
       setIsSaving(false);
     }
@@ -231,8 +277,20 @@ export function Template() {
       </PageHeader>
 
       <PageContent>
+        {errorText && (
+          <Alert variant="critical" style={{ marginBottom: 'var(--sl-space-8)' }}>
+            <Text variant="body">{errorText}</Text>
+          </Alert>
+        )}
+
         <Flex direction="column" gap="$space-5">
-          <FormEssential startCondition={startCondition} isDisabled={isEditing} />
+          <FormEssential
+            name={templateName}
+            setName={setTemplateName}
+            startCondition={startCondition}
+            setStartCondition={setStartCondition}
+            isDisabled={isEditing}
+          />
 
           <Divider />
 
@@ -275,6 +333,19 @@ export function Template() {
             />
           </>)}
         </Flex>
+
+        <CreatingTemplateModal
+          errorText={errorText}
+          successText={successText}
+          open={isCreatingTemplateModalOpen}
+          onClose={() => {
+            setIsCreatingTemplateModalOpen(false);
+
+            if (successText) {
+              navigateToAgent();
+            }
+          }}
+        />
       </PageContent>
     </Page>
   )

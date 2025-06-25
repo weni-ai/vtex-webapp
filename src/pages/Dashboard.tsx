@@ -189,7 +189,7 @@ export function Dashboard() {
     <Page>
       <PageHeader>
         <PageHeaderRow style={{ height: '44px' }}>
-          <PageHeading >
+          <PageHeading>
             {t('title')}
           </PageHeading>
         </PageHeaderRow>
