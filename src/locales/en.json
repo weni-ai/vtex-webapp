@@ -517,6 +517,34 @@
                     "cancel": "Cancel",
                     "done": "Done"
                 }
+            },
+            "create": {
+                "steps": {
+                    "processing": {
+                        "title": "Processing",
+                        "description": "An AI is analyzing the template to ensure everything works as expected. This may take a few minutes.",
+                        "items": {
+                            "analyzing_defined_requirements": "Analyzing defined requirements",
+                            "reviewing_template_structure": "Reviewing template structure",
+                            "validating_inserted_content": "Validating inserted content",
+                            "adjusting_custom_variables": "Adjusting custom variables",
+                            "optimizing_template_for_fast_delivery": "Optimizing template for fast delivery",
+                            "performing_final_security_checks": "Performing final security checks"
+                        }
+                    },
+                    "completed": {
+                        "title": "Processing completed"
+                    }
+                },
+                "buttons": {
+                    "cancel": "Cancel",
+                    "proceed": "Proceed",
+                    "finish": "Finish",
+                    "return_and_fix": "Return and fix"
+                },
+                "errors": {
+                    "generic_error": "An error occurred while processing the template. Please try again."
+                }
             }
         },
         "buttons": {

@@ -505,6 +505,77 @@ function proxy<T = unknown>(method: string, url: string, { headers = {}, data = 
 }
 
 class AssignedAgentTemplate {
+  static create(data: {
+    projectUuid: string,
+    name: string,
+    header?: string,
+    body: string,
+    footer?: string,
+    button?: { text: string, url: string },
+    WhatsAppCloudAppUuid: string,
+    assignedAgentUuid: string,
+    variables: { definition: string, fallback: string }[],
+    startCondition: string,
+  }) {
+    const button = data.button ? [{
+      type: 'URL',
+      text: data.button.text,
+      url: {
+        base_url: data.button.url,
+      }
+    }] : [];
+
+    return proxy<{ text: string; }>(
+      'DELETE',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/custom/`,
+      {
+        headers: {
+          'Project-Uuid': data.projectUuid,
+        },
+        data: {
+          "template_translation": {
+            "template_header": data.header,
+            "template_body": data.body,
+            "template_footer": data.footer,
+            "template_button": button,
+          },
+          "category": "UTILITY",
+          "project_uuid": data.projectUuid,
+          "app_uuid": data.WhatsAppCloudAppUuid,
+          "integrated_agent_uuid": data.assignedAgentUuid,
+          "display_name": data.name,
+          "parameters": [
+            {
+              "name": "variables",
+              "value": data.variables
+            },
+            {
+              "name": "start_condition",
+              "value": data.startCondition
+            },
+            /* {
+              "name": "exemples",
+              "value": [
+                {
+                  "phone_number": "1234",
+                  "data": { "status": 47, "name": "Joe", "numero_pedido": "12341234" }
+                },
+                {
+                  "phone_number": "1234",
+                  "data": { "status": 10, "name": "Joe", "numero_pedido": "656469" }
+                }
+              ]
+            },
+            {
+              "name": "status_pedido",
+              "value": "Olá, {{1}}. obrigado por comprar conosco\n esse é o número do seu pedido {{2}}"
+            } */
+          ]
+        },
+      }
+    );
+  }
+
   static disable(data: { templateUuid: string, projectUuid: string }) {
     return proxy<{ text: string; }>(
       'DELETE',
@@ -576,5 +647,38 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
     return response.data.status_count;
   } else {
     throw new Error('error retrieving agent');
+  }
+}
+
+export async function createAssignedAgentTemplateRequest(data: {
+  name: string,
+  header?: string,
+  body: string,
+  footer?: string,
+  button?: { text: string, url: string },
+  assignedAgentUuid: string,
+  variables: { definition: string, fallback: string }[],
+  startCondition: string,
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+  const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
+
+  const response = await AssignedAgentTemplate.create({
+    projectUuid,
+    WhatsAppCloudAppUuid,
+    name: data.name,
+    header: data.header,
+    body: data.body,
+    footer: data.footer,
+    button: data.button,
+    assignedAgentUuid: data.assignedAgentUuid,
+    variables: data.variables,
+    startCondition: data.startCondition,
+  });
+
+  if ('text' in Object(response)) {
+    return response;
+  } else {
+    throw new Error(t('template.modals.create.errors.generic_error'));
   }
 }
