@@ -542,6 +542,7 @@
                     "finish": "Finalizar",
                     "return_and_fix": "Volver y corregir"
                 },
+                "success": "La plantilla entera ha sido validada y está lista para usar!",
                 "errors": {
                     "generic_error": "Ocurrió un error al procesar la plantilla. Por favor, inténtalo de nuevo."
                 }

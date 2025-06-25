@@ -525,8 +525,16 @@ class AssignedAgentTemplate {
       }
     }] : [];
 
-    return proxy<{ text: string; }>(
-      'DELETE',
+    type error =
+      {
+        errors: string[],
+        error: { body: { message: string } },
+        correction_needed: string,
+        message: string,
+      }
+
+    return proxy<{ uuid: string; error?: error }>(
+      'POST',
       `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/custom/`,
       {
         headers: {
@@ -553,6 +561,10 @@ class AssignedAgentTemplate {
               "name": "start_condition",
               "value": data.startCondition
             },
+            {
+              name: 'exemples',
+              value: [],
+            }
             /* {
               "name": "exemples",
               "value": [
@@ -676,9 +688,17 @@ export async function createAssignedAgentTemplateRequest(data: {
     startCondition: data.startCondition,
   });
 
-  if ('text' in Object(response)) {
+  if ('uuid' in Object(response)) {
     return response;
   } else {
-    throw new Error(t('template.modals.create.errors.generic_error'));
+    let errorText = '';
+
+    if ('error' in Object(response.error)) {
+      errorText = response.error?.error?.body?.message || response.error?.correction_needed || response.error?.message || '';
+    } else if ('errors' in Object(response.error)) {
+      errorText = response.error?.errors?.join?.(' ') || '';
+    }
+
+    throw new Error(errorText || t('template.modals.create.errors.generic_error'));
   }
 }

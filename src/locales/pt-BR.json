@@ -542,6 +542,7 @@
                     "finish": "Finalizar",
                     "return_and_fix": "Voltar e corrigir"
                 },
+                "success": "O modelo inteiro foi validado e está pronto para ser usado!",
                 "errors": {
                     "generic_error": "Ocorreu um erro ao processar o modelo. Por favor, tente novamente."
                 }
