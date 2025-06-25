@@ -2,7 +2,7 @@ import { Flex, Button, MenuProvider, MenuTrigger, MenuPopover, MenuSeparator, Ch
 import { useState, useMemo, useEffect } from "react";
 import { RootState } from "../../interfaces/Store";
 import { useSelector } from "react-redux";
-import { AgentBox, AgentBoxContainer } from "../AgentBox";
+import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from "../AgentBox";
 
 function DropdownMenu({ label, noneSelected, value, setValue, options }: {
   label: string,
@@ -91,6 +91,7 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
 
 export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
   const unassignedAgents = useSelector((state: RootState) => state.project.agents).filter((agent) => !agent.isAssigned);
+  const hasTheFirstLoadOfTheAgentsHappened = useSelector((state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened);
   const [categories, setCategories] = useState<('active' | 'passive')[]>([]);
   const [agents, setAgents] = useState<('official' | 'custom')[]>([]);
 
@@ -166,7 +167,13 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
         />
       </Flex>
 
-      {agentsList.length === 0 && (
+      {!hasTheFirstLoadOfTheAgentsHappened && (
+        <AgentBoxContainer>
+          <AgentBoxSkeleton count={2} />
+        </AgentBoxContainer>
+      )}
+
+      {agentsList.length === 0 && hasTheFirstLoadOfTheAgentsHappened && (
         <Flex justify="center" align="center" style={{ height: '400px' }}>
           <Heading variant="display3">{t('agents.modals.gallery.list.empty.title')}</Heading>
         </Flex>
