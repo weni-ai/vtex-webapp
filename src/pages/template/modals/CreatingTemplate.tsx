@@ -1,5 +1,6 @@
 import { Alert, Button, Flex, IconCheck, Modal, ModalContent, ModalDismiss, ModalFooter, ModalHeader, ModalHeading, Spinner, Text } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
+import Markdown from "react-markdown";
 
 let stepsLocal: { status: 'completed' | 'loading' | 'pending', description: string }[] = [{
   status: 'completed',
@@ -48,7 +49,9 @@ function ProcessingStep({ steps }: { steps: { status: 'completed' | 'loading' | 
 function CompletedStep({ variant, description }: { variant: 'success' | 'critical', description: string }) {
   return (
     <Alert variant={variant}>
-      <Text variant="body">{description}</Text>
+      <Text variant="body">
+        <Markdown>{description}</Markdown>
+      </Text>
     </Alert>
   )
 }

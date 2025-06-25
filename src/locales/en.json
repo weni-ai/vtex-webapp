@@ -542,6 +542,7 @@
                     "finish": "Finish",
                     "return_and_fix": "Return and fix"
                 },
+                "success": "The whole template has been validated and is ready to use!",
                 "errors": {
                     "generic_error": "An error occurred while processing the template. Please try again."
                 }
