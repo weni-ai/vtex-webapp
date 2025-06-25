@@ -499,7 +499,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
-                "title": "What's happening in: Abandoned cart agent",
+                "title": "What's happening in:",
                 "sent_messages": "Sent messages",
                 "delivered_messages": "Delivered messages",
                 "read_messages": "Read messages",
@@ -647,6 +647,22 @@
                     "fallback_text": {
                         "label": "Fallback text if variable is missing"
                     }
+                }
+            }
+        }
+    },
+    "metrics": {
+        "fields": {
+            "template": {
+                "label": "Template"
+            },
+            "period": {
+                "label": "Period",
+                "options": {
+                    "today": "Today",
+                    "yesterday": "Yesterday",
+                    "last_7_days": "Last 7 days",
+                    "last_28_days": "Last 28 days"
                 }
             }
         }

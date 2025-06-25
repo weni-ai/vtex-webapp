@@ -29,6 +29,7 @@ interface CreateAgentBuilderData {
   };
   links: string[];
 }
+
 export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
   const projectUuid = store.getState().project.project_uuid;
   const url = `/_v/create-agent-builder?projectUUID=${projectUuid}`;
@@ -338,19 +339,14 @@ export async function disableFeatureRequest(data: {
   });
 }
 
-export async function getSkillMetricsRequest() {
+export async function getSkillMetricsRequest(data: { startDate: string, endDate: string }) {
   const projectUuid = store.getState().project.project_uuid;
-
-  const sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
-
-  const [startDate] = sevenDaysAgo.toISOString().split('T');
-  const [endDate] = new Date().toISOString().split('T');
 
   const queryParams = new URLSearchParams({
     projectUUID: projectUuid,
     skill: 'abandoned_cart',
-    start_date: startDate,
-    end_date: endDate,
+    start_date: data.startDate,
+    end_date: data.endDate,
   });
 
   const url = `/_v/get-skill-metrics?${queryParams.toString()}`;
@@ -538,3 +534,47 @@ export async function disableAssignedAgentTemplateRequest(data: {
     throw new Error('error disabling template');
   }
 };
+
+export async function agentMetricsRequest(data: { templateUuid: string, startDate: string, endDate: string }) {
+  const response = await VTEXFetch<{
+    data: {
+      status_count: {
+        sent: {
+          value: number;
+        },
+        delivered: {
+          value: number;
+          percentage: number;
+        },
+        read: {
+          value: number;
+          percentage: number;
+        },
+        clicked: {
+          value: number;
+          percentage: number;
+        }
+      }
+    }
+  }>('/_v/proxy-request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: JSON.stringify({
+      method: 'POST',
+      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/template-metrics/`,
+      headers: {},
+      data: {
+        template_uuid: data.templateUuid,
+        start: data.startDate,
+        end: data.endDate,
+      },
+      params: {},
+    }),
+  });
+
+  if ('data' in Object(response) && 'status_count' in Object(response.data)) {
+    return response.data.status_count;
+  } else {
+    throw new Error('error retrieving agent');
+  }
+}
