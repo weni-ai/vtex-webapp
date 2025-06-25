@@ -499,7 +499,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
-                "title": "O que está acontecendo no: Agente de carrinho abandonado",
+                "title": "O que está acontecendo no:",
                 "sent_messages": "Mensagens enviadas",
                 "delivered_messages": "Mensagens entregues",
                 "read_messages": "Mensagens lidas",
@@ -647,6 +647,22 @@
                     "fallback_text": {
                         "label": "Texto de fallback se a variável estiver ausente"
                     }
+                }
+            }
+        }
+    },
+    "metrics": {
+        "fields": {
+            "template": {
+                "label": "Template"
+            },
+            "period": {
+                "label": "Período",
+                "options": {
+                    "today": "Hoje",
+                    "yesterday": "Ontem",
+                    "last_7_days": "Últimos 7 dias",
+                    "last_28_days": "Últimos 28 dias"
                 }
             }
         }
