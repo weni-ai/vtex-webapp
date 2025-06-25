@@ -129,6 +129,22 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
     });
   }, [unassignedAgents, categories]);
 
+  const isOfficialValues = useMemo(() => {
+    const uniqueValues = new Set<boolean>();
+
+    agentsList.forEach((agent) => {
+      uniqueValues.add(agent.isOfficial);
+    });
+
+    return Array.from(uniqueValues);
+  }, [agentsList]);
+
+  useEffect(() => {
+    if (isOfficialValues.length >= 1) {
+      setAgents([isOfficialValues[0] ? 'official' : 'custom']);
+    }
+  }, [isOfficialValues]);
+
   return (
     <Flex direction="column">
       <Flex align="center">
@@ -149,22 +165,24 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
           ]}
         />
 
-        <DropdownMenu
-          label={t('agents.modals.gallery.filters.agents.title')}
-          noneSelected={t('agents.modals.gallery.filters.agents.none_selected')}
-          value={agents}
-          setValue={(value) => setAgents(value as ('official' | 'custom')[])}
-          options={[
+        {isOfficialValues.length > 1 && (
+          <DropdownMenu
+            label={t('agents.modals.gallery.filters.agents.title')}
+            noneSelected={t('agents.modals.gallery.filters.agents.none_selected')}
+            value={agents}
+            setValue={(value) => setAgents(value as ('official' | 'custom')[])}
+            options={[
             {
               value: 'official',
               label: t('agents.modals.gallery.filters.agents.options.official')
             },
             {
               value: 'custom',
-              label: t('agents.modals.gallery.filters.agents.options.custom')
-            }
-          ]}
-        />
+                label: t('agents.modals.gallery.filters.agents.options.custom')
+              }
+            ]}
+          />
+        )}
       </Flex>
 
       {!hasTheFirstLoadOfTheAgentsHappened && (
