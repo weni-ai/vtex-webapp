@@ -2,7 +2,7 @@ import { Flex, Button, MenuProvider, MenuTrigger, MenuPopover, MenuSeparator, Ch
 import { useState, useMemo, useEffect } from "react";
 import { RootState } from "../../interfaces/Store";
 import { useSelector } from "react-redux";
-import { AgentBox, AgentBoxContainer } from "../AgentBox";
+import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from "../AgentBox";
 
 function DropdownMenu({ label, noneSelected, value, setValue, options }: {
   label: string,
@@ -91,6 +91,7 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
 
 export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
   const unassignedAgents = useSelector((state: RootState) => state.project.agents).filter((agent) => !agent.isAssigned);
+  const hasTheFirstLoadOfTheAgentsHappened = useSelector((state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened);
   const [categories, setCategories] = useState<('active' | 'passive')[]>([]);
   const [agents, setAgents] = useState<('official' | 'custom')[]>([]);
 
@@ -128,6 +129,16 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
     });
   }, [unassignedAgents, categories]);
 
+  const isOfficialValues = useMemo(() => {
+    const uniqueValues = new Set<boolean>();
+
+    agentsList.forEach((agent) => {
+      uniqueValues.add(agent.isOfficial);
+    });
+
+    return Array.from(uniqueValues);
+  }, [agentsList]);
+
   return (
     <Flex direction="column">
       <Flex align="center">
@@ -148,25 +159,33 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
           ]}
         />
 
-        <DropdownMenu
-          label={t('agents.modals.gallery.filters.agents.title')}
-          noneSelected={t('agents.modals.gallery.filters.agents.none_selected')}
-          value={agents}
-          setValue={(value) => setAgents(value as ('official' | 'custom')[])}
-          options={[
+        {isOfficialValues.length > 1 && (
+          <DropdownMenu
+            label={t('agents.modals.gallery.filters.agents.title')}
+            noneSelected={t('agents.modals.gallery.filters.agents.none_selected')}
+            value={agents}
+            setValue={(value) => setAgents(value as ('official' | 'custom')[])}
+            options={[
             {
               value: 'official',
               label: t('agents.modals.gallery.filters.agents.options.official')
             },
             {
               value: 'custom',
-              label: t('agents.modals.gallery.filters.agents.options.custom')
-            }
-          ]}
-        />
+                label: t('agents.modals.gallery.filters.agents.options.custom')
+              }
+            ]}
+          />
+        )}
       </Flex>
 
-      {agentsList.length === 0 && (
+      {!hasTheFirstLoadOfTheAgentsHappened && (
+        <AgentBoxContainer>
+          <AgentBoxSkeleton count={2} />
+        </AgentBoxContainer>
+      )}
+
+      {agentsList.length === 0 && hasTheFirstLoadOfTheAgentsHappened && (
         <Flex justify="center" align="center" style={{ height: '400px' }}>
           <Heading variant="display3">{t('agents.modals.gallery.list.empty.title')}</Heading>
         </Flex>
