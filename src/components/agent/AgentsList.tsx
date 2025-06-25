@@ -139,12 +139,6 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
     return Array.from(uniqueValues);
   }, [agentsList]);
 
-  useEffect(() => {
-    if (isOfficialValues.length >= 1) {
-      setAgents([isOfficialValues[0] ? 'official' : 'custom']);
-    }
-  }, [isOfficialValues]);
-
   return (
     <Flex direction="column">
       <Flex align="center">
