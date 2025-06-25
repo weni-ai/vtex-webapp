@@ -22,8 +22,8 @@ function About({ description, skills }: { description: string, skills: string[] 
 
       {skills.length > 0 && (
         <Flex gap="$space-1">
-          {skills.map((skill) => (
-            <Flex direction="column" gap="$space-2" style={{ border: 'var(--sl-border-base)', borderRadius: 'var(--sl-radius-1)', padding: 'var(--sl-space-1) var(--sl-space-2)' }}>
+          {skills.map((skill, index) => (
+            <Flex key={index} direction="column" gap="$space-2" style={{ border: 'var(--sl-border-base)', borderRadius: 'var(--sl-radius-1)', padding: 'var(--sl-space-1) var(--sl-space-2)' }}>
               <Text variant="caption2" color="$fg-base-soft">{skill}</Text>
             </Flex>
           ))}

@@ -45,7 +45,7 @@ export function Onboarding() {
         Object.entries(form).filter(([, value]) => value.trim())
       ) as FormState;
 
-      buildAgent(payload, false);
+      buildAgent(payload, false, '');
     }
   };
 
