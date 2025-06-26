@@ -1,14 +1,16 @@
-import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
+import { Alert, Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { agentCLI, assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
+import { agentCLI, assignedAgentTemplate, createAssignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import './Template.style.css';
+import { CreatingTemplateModal } from "./modals/CreatingTemplate";
+import Markdown from "react-markdown";
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -56,6 +58,13 @@ export function Template() {
   const [variables, setVariables] = useState<Variable[]>([]);
 
   const [isSaving, setIsSaving] = useState(false);
+
+  const [isCreatingTemplateModalOpen, setIsCreatingTemplateModalOpen] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [successText, setSuccessText] = useState('');
+
+  const [templateNameError, setTemplateNameError] = useState('');
+  const [startConditionError, setStartConditionError] = useState('');
 
   useEffect(() => {
     if (templateUuid) {
@@ -118,6 +127,11 @@ export function Template() {
   }
 
   async function handleSaveTemplate() {
+    if (templateUuid === undefined) {
+      createTemplate();
+      return;
+    }
+
     if (templateStatus === 'needs-editing') {
       handleSaveButton();
       return;
@@ -127,7 +141,7 @@ export function Template() {
       setIsSaving(true);
 
       await updateAgentTemplate({
-        templateUuid: templateUuid as string,
+        templateUuid: templateUuid,
         template: {
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
@@ -145,6 +159,63 @@ export function Template() {
     } finally {
       setIsSaving(false);
     }
+  }
+
+  const createCustomTemplatePayload = useMemo(() => {
+    return {
+      name: templateName,
+      header: content.header?.type === 'text' ? content.header.text : undefined,
+      body: content.content,
+      footer: content.footer,
+      button: content.button,
+      assignedAgentUuid: assignedAgentUuid as string,
+      startCondition: startCondition,
+      variables: variables.map((variable) => ({
+        definition: variable.definition,
+        fallback: variable.fallbackText,
+      })),
+    }
+  }, [templateName, content, startCondition, variables, assignedAgentUuid]);
+
+  async function createTemplate() {
+    try {
+      setErrorText('');
+      setSuccessText('');
+
+      if (validateTemplate() === false) {
+        return;
+      }
+
+      setIsSaving(true);
+      setIsCreatingTemplateModalOpen(true);
+
+      await createAssignedAgentTemplate(createCustomTemplatePayload);
+
+      setSuccessText(t('template.modals.create.success'));
+      await updateTemplates();
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorText(error.message);
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  function validateTemplate() {
+    let isValid = true;
+
+    if (templateName.trim().length === 0) {
+      setTemplateNameError(t('agent.setup.forms.error.empty_input'));
+      isValid = false;
+    }
+
+    if (startCondition.trim().length === 0) {
+      setStartConditionError(t('agent.setup.forms.error.empty_input'));
+      isValid = false;
+    }
+
+    return isValid;
   }
 
   async function handleSaveButton() {
@@ -184,6 +255,18 @@ export function Template() {
     navigate(`/agents/${assignedAgentUuid}`);
   }
 
+  useEffect(() => {
+    if (templateNameError) {
+      setTemplateNameError('');
+    }
+  }, [templateName]);
+
+  useEffect(() => {
+    if (startConditionError) {
+      setStartConditionError('');
+    }
+  }, [startCondition]);
+
   return (
     <Page>
       <PageHeader>
@@ -222,7 +305,7 @@ export function Template() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges}>
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges || !!templateNameError || !!startConditionError}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
@@ -231,8 +314,24 @@ export function Template() {
       </PageHeader>
 
       <PageContent>
+        {errorText && (
+          <Alert variant="critical" style={{ marginBottom: 'var(--sl-space-8)' }}>
+            <Text variant="body">
+              <Markdown>{errorText}</Markdown>
+            </Text>
+          </Alert>
+        )}
+
         <Flex direction="column" gap="$space-5">
-          <FormEssential startCondition={startCondition} isDisabled={isEditing} />
+          <FormEssential
+            name={templateName}
+            setName={setTemplateName}
+            nameError={templateNameError}
+            startCondition={startCondition}
+            setStartCondition={setStartCondition}
+            startConditionError={startConditionError}
+            isDisabled={isEditing}
+          />
 
           <Divider />
 
@@ -275,6 +374,19 @@ export function Template() {
             />
           </>)}
         </Flex>
+
+        <CreatingTemplateModal
+          errorText={errorText}
+          successText={successText}
+          open={isCreatingTemplateModalOpen}
+          onClose={() => {
+            setIsCreatingTemplateModalOpen(false);
+
+            if (successText) {
+              navigateToAgent();
+            }
+          }}
+        />
       </PageContent>
     </Page>
   )

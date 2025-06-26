@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest, updateAssignedAgentSettingsRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest, updateAssignedAgentSettingsRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -376,6 +376,11 @@ export async function updateAgentTemplate(data: { templateUuid: string, template
       })
     }
   })));
+}
+
+export async function createAssignedAgentTemplate(data: { name: string, header?: string, body: string, footer?: string, button?: { text: string, url: string }, assignedAgentUuid: string, variables: { definition: string, fallback: string }[], startCondition: string }) {
+  const response = await createAssignedAgentTemplateRequest(data);
+  return response;
 }
 
 export async function disableAssignedAgentTemplate(data: { templateUuid: string }) {
