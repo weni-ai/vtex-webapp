@@ -58,6 +58,7 @@ export async function agentsList() {
     body: JSON.stringify({
       method: 'GET',
       url: `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
+      headers: { 'Project-Uuid': projectUuid, },
       params: {
         category: 'ACTIVE',
         can_vtex_integrate: true,
@@ -279,6 +280,7 @@ export async function saveAgentButtonTemplateRequest(data: {
     body: JSON.stringify({
       method: 'PATCH',
       url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/library/${data.templateUuid}/`,
+      headers: { 'Project-Uuid': projectUuid, },
       data: {
         library_template_button_inputs: [{
           type: 'URL',
@@ -390,6 +392,7 @@ export async function getWhatsAppURLRequest(): Promise<{
     body: JSON.stringify({
       method: 'POST',
       url: `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-demo/apps/get-or-create/`,
+      headers: { 'Project-Uuid': projectUuid, },
       data: {
         project_uuid: projectUuid,
       }
@@ -445,7 +448,7 @@ export async function updateAgentTemplateRequest(data: {
         }] : [],
       },
       params: {},
-      headers: {},
+      headers: { 'Project-Uuid': projectUuid, },
     }),
   });
 
