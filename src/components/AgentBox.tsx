@@ -250,6 +250,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               overflow: 'hidden',
               textOverflow: 'ellipsis',
             }}
+            title={agentDescription}
           >
             {agentDescription}
           </Text>
