@@ -610,6 +610,11 @@
                         "button": "Button"
                     }
                 },
+                "preview": {
+                    "content": {
+                        "placeholder": "Template preview"
+                    }
+                },
                 "variables": {
                     "title": "Variables",
                     "empty": {
