@@ -11,35 +11,6 @@ export interface Agent {
     channel: string;
 }
 
-export interface Feature {
-    uuid: string;
-    category: 'ACTIVE' | 'PASSIVE';
-    code: 'order_status' | 'abandoned_cart';
-    name: string;
-    description: string;
-    isInTest: boolean;
-    isConfiguring: boolean;
-    templateSynchronizationStatus?: 'pending' | 'rejected' | 'approved';
-    phone_numbers?: string[];
-    message_time_restrictions?: {
-        is_active: boolean;
-        periods: {
-            weekdays: {
-                from: string;
-                to: string;
-            };
-            saturdays: {
-                from: string;
-                to: string;
-            };
-        };
-    };
-    origin?: 'commerce' | 'nexus';
-    integrated?: boolean;
-    agent_uuid?: string;
-    skills?: string[];
-}
-
 export interface Loading {
     agent_uuid: string,
     isLoading: boolean
@@ -58,11 +29,33 @@ export interface ProjectState {
     setupError: boolean;
     wppLoading: boolean;
     hasTheFirstLoadOfTheAgentsHappened: boolean;
-    agents: Feature[];
-    integratedAgents: Feature[];
+    agents: (AgentCommerce | AgentNexus | AgentCLI)[];
     storeType: string;
     initialLoading: boolean;
     WhatsAppURL: string;
+    assignedAgents: {
+        uuid: string;
+        webhookUrl: string;
+        contactPercentage: number;
+        templates: {
+            uuid: string;
+            name: string;
+            startCondition: string;
+            status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked" | "needs-editing";
+            metadata: {
+                body: string;
+                header: string;
+                footer: string;
+                buttons: {
+                    type: 'URL';
+                    text: string;
+                    url: string;
+                    example?: string[];
+                }[];
+            };
+        }[];
+        channelUuid: string;
+    }[];
 }
 
 export interface UserData {
@@ -88,6 +81,7 @@ export interface UserState {
     isWhatsAppIntegrated: boolean;
     isAgentBuilderIntegrated: boolean;
     whatsAppError: string | null;
+    WhatsAppPhoneNumber: string | null;
 }
 
 export interface RootState {

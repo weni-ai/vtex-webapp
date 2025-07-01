@@ -16,13 +16,16 @@ Object.assign(globalThis, {
   }
 });
 
+/* disable language change and use only English
 const query = decodeURIComponent(window.location.search);
 const params = new URLSearchParams(query);
 const locale = params.get('locale');
 
+
 if (locale) {
   i18n.changeLanguage(locale).catch(err => console.error('language change error:', err));
 }
+*/
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

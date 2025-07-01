@@ -1,11 +1,19 @@
 import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Content, SectionHeader } from "./Template";
+import { cleanURL } from "../../utils";
 
-export function FormContent({ content, setContent }: {
-    content: Content,
-    setContent: React.Dispatch<SetStateAction<Content>>
-  }) {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+  status: 'active' | 'pending' | 'rejected' | 'needs-editing',
+  content: Content,
+  setContent: React.Dispatch<SetStateAction<Content>>,
+  prefilledContent: Content,
+  isHeaderEditable?: boolean;
+  isFooterEditable?: boolean;
+  isButtonEditable?: boolean;
+  canChangeHeaderType?: boolean;
+  canChangeButton?: boolean;
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [headerType, setHeaderType] = useState<'text' | 'media'>('text');
@@ -14,11 +22,18 @@ export function FormContent({ content, setContent }: {
     setValue: setHeaderType as any,
   });
 
+  const [buttonType, setButtonType] = useState<'dynamic' | 'static'>('static');
+  const buttonTypeState = useRadioState({
+    value: buttonType,
+    setValue: setButtonType as any,
+  });
+
   const [headerText, setHeaderText] = useState('');
   const [contentText, setContentText] = useState('');
   const [footerText, setFooterText] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
+  const [buttonUrlExample, setButtonUrlExample] = useState('');
 
   const [file, setFile] = useState<File | undefined>(undefined);
   const [filePreview, setFilePreview] = useState<string | undefined>(undefined);
@@ -42,33 +57,83 @@ export function FormContent({ content, setContent }: {
 
   useEffect(() => {
     const header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
+    const button = { text: buttonText, url: buttonUrl, urlExample: buttonType === 'dynamic' ? buttonUrlExample : undefined };
 
     setContent({
       ...content,
       header: elementsVisibility.header ? header : undefined,
       content: contentText || ' ',
       footer: elementsVisibility.footer ? footerText : undefined,
-      button: elementsVisibility.button ? { text: buttonText, url: buttonUrl } : undefined,
+      button: elementsVisibility.button ? button : undefined,
     });
-  }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl]);
+  }, [elementsVisibility, headerType, headerText, filePreview, contentText, footerText, buttonText, buttonUrl, buttonType, buttonUrlExample]);
+
+  useEffect(() => {
+    const initialVisibility = {
+      header: false,
+      footer: false,
+      button: false,
+    };
+
+    if (prefilledContent.header?.type === 'text') {
+      setHeaderType('text');
+      setHeaderText(prefilledContent.header.text);
+      initialVisibility.header = true;
+    }
+
+    if (prefilledContent.content) {
+      setContentText(prefilledContent.content);
+    }
+
+    if (prefilledContent.button) {
+      setButtonType(prefilledContent.button.urlExample ? 'dynamic' : 'static');
+      setButtonText(prefilledContent.button.text);
+      setButtonUrl(cleanURL(prefilledContent.button.url));
+      setButtonUrlExample(cleanURL(prefilledContent.button.urlExample || ''));
+      initialVisibility.button = true;
+    }
+
+    if (prefilledContent.footer) {
+      setFooterText(prefilledContent.footer);
+      initialVisibility.footer = true;
+    }
+
+    setElementsVisibility(initialVisibility);
+  }, [prefilledContent]);
+
+  const isElementsEditable = useMemo(() => {
+    return {
+      header: isHeaderEditable,
+      footer: isFooterEditable,
+      button: isButtonEditable,
+    };
+  }, [isHeaderEditable, isFooterEditable, isButtonEditable]);
+
+  const canRemoveElements = useMemo(() => {
+    return {
+      header: status !== 'needs-editing',
+      footer: status !== 'needs-editing',
+      button: status !== 'needs-editing',
+    };
+  }, [status]);
 
   const elements = {
     header: {
       isVisible: false,
       component: (
         <>
-          <Bleed top="$space-7">
+          {false && (<Bleed top="$space-7">
             <RadioGroup label="" horizontal state={headerTypeState}>
-              <Radio value="text">{t('template.form.fields.content.header.radio.text.label')}</Radio>
-              <Radio value="media">{t('template.form.fields.content.header.radio.media.label')}</Radio>
+              <Radio value="text" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
+              <Radio value="media" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
             </RadioGroup>
-          </Bleed>
+          </Bleed>)}
 
           {headerType === 'text' && (
             <Field>
               <Label>{t('template.form.fields.content.header.label')}</Label>
 
-              <Input value={headerText} onChange={setHeaderText} />
+              <Input value={headerText} onChange={setHeaderText} disabled={status === 'needs-editing'} />
             </Field>
           )}
 
@@ -124,7 +189,7 @@ export function FormContent({ content, setContent }: {
         <Field>
           <Label>{t('template.form.fields.content.footer.label')}</Label>
 
-          <Input value={footerText} onChange={setFooterText} />
+          <Input value={footerText} onChange={setFooterText} disabled={status === 'needs-editing'} />
         </Field>
       ),
     },
@@ -133,21 +198,53 @@ export function FormContent({ content, setContent }: {
       isVisible: false,
       component: (
         <>
+          {false && (<Bleed top="$space-7">
+            <RadioGroup label="" horizontal state={buttonTypeState}>
+              <Radio value="dynamic" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
+              <Radio value="static" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.static.label')}</Radio>
+            </RadioGroup>
+          </Bleed>)}
+
           <Field>
             <Label>{t('template.form.fields.content.button.text.label')}</Label>
 
-            <Input value={buttonText} onChange={setButtonText} />
+            <Input value={buttonText} onChange={setButtonText} disabled={!canChangeButton || status === 'needs-editing'} />
           </Field>
 
           <Field>
             <Label>{t('template.form.fields.content.button.url.label')}</Label>
 
-            <Input prefix="https://" value={buttonUrl} onChange={setButtonUrl} />
+            <Input
+              prefix="https://"
+              value={buttonUrl}
+              onChange={(value) => setButtonUrl(cleanURL(value))}
+              disabled={status !== 'needs-editing' && !canChangeButton}
+              suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
+            />
           </Field>
+
+          {buttonType === 'dynamic' && (
+            <Field>
+              <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
+
+              <Input prefix="https://" value={buttonUrlExample} onChange={(value) => setButtonUrlExample(cleanURL(value))} disabled={status !== 'needs-editing' && !canChangeButton} />
+
+              <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
+            </Field>
+          )}
         </>
       ),
     }
   }
+
+  function isElementDisabled(element: keyof typeof elements) {
+    return elementsVisibility[element] || !isElementsEditable[element];
+  }
+
+  const elementsNotDisabled = useMemo(() => {
+    return (Object.keys(elements) as Array<keyof typeof elements>)
+      .filter((element) => !isElementDisabled(element));
+  }, [elements, elementsVisibility, isElementsEditable]);
 
   function setElementVisibility(element: keyof typeof elements, isVisible: boolean) {
     setElementsVisibility({
@@ -164,10 +261,10 @@ export function FormContent({ content, setContent }: {
         <Label>{t('template.form.fields.content.label')}</Label>
 
         <Textarea
-          name="start-condition"
           className="content-textarea-full-width"
           value={contentText}
           onChange={setContentText}
+          disabled={status === 'needs-editing'}
         />
 
         <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
@@ -182,28 +279,36 @@ export function FormContent({ content, setContent }: {
         }}
       >
         {
-          Object.keys(elements).filter((element) => elementsVisibility[element as keyof typeof elements]).map((element, index, { length }) => (
+          (Object.keys(elements) as Array<keyof typeof elements>).filter((element) => elementsVisibility[element]).map((element, index, { length }) => (
             <Flex direction="column" gap="$space-4" key={`element-${index}`}>
               <Flex align="center" gap="$space-2" justify="space-between">
                 <Text variant="emphasis" color="$fg-base">{t(`template.form.fields.content.${element}.title`)}</Text>
 
-                <IconButton variant="tertiary" label={t('template.form.areas.content.buttons.remove')} onClick={() => setElementVisibility(element as keyof typeof elements, false)}>
+                <IconButton
+                  variant="tertiary"
+                  label={t('template.form.areas.content.buttons.remove')}
+                  onClick={() => setElementVisibility(element, false)}
+                  disabled={!canRemoveElements[element]}
+                >
                   <IconTrash />
                 </IconButton>
               </Flex>
 
-              {elements[element as keyof typeof elements].component}
+              {elements[element].component}
 
-              {
-                index < length - 1 && (
-                  <Divider />
-                )
-              }
+              {index < length - 1 && (
+                <Divider />
+              )}
             </Flex>
           ))
         }
 
-        <Button variant="tertiary" size="large" onClick={() => setIsMenuOpen(!isMenuOpen)} disabled={Object.values(elementsVisibility).every((value) => value)}>
+        <Button
+          variant="tertiary"
+          size="large"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          disabled={status === 'needs-editing' || (elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable))}
+        >
           <MenuProvider placement="bottom-start" open={isMenuOpen}>
             <MenuTrigger asChild>
               <Flex gap="$space-1" align="center">
@@ -214,11 +319,11 @@ export function FormContent({ content, setContent }: {
 
             <MenuPopover>
               {
-                Object.keys(elements).map((element) => (
+                (Object.keys(elements) as Array<keyof typeof elements>).map((element) => (
                   <MenuItem
                     key={element}
-                    disabled={elementsVisibility[element as keyof typeof elements]}
-                    onClick={() => setElementVisibility(element as keyof typeof elements, true)}
+                    disabled={isElementDisabled(element)}
+                    onClick={() => setElementVisibility(element, true)}
                   >
                     {t(`template.form.areas.content.elements.${element}`)}
                   </MenuItem>

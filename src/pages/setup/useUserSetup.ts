@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated } from '../../store/userSlice';
+import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from '../../store/userSlice';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setBaseAddress } from '../../store/authSlice';
 import store from '../../store/provider.store';
@@ -58,7 +58,7 @@ export function useUserSetup() {
         await updateAgentsList();
 
         const response = await checkWppIntegration(project_uuid);
-        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null } = response.data || {};
+        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null, phone_number = null } = response.data || {};
 
         if (response?.error) {
           throw new Error(JSON.stringify(response.error))
@@ -87,17 +87,16 @@ export function useUserSetup() {
           store.dispatch(setWhatsAppIntegrated(true));
           store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
           store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
+          store.dispatch(setWhatsAppPhoneNumber(phone_number ? phone_number.replace(/\D/g, '') : null));
+        }
 
-          await updateAgentsList();
-          
-          if (has_agent && store.getState().project.storeType) {
-            store.dispatch(setAgentBuilderIntegrated(true))
-            navigate('/dash');
-          } else {
-            navigate('/agent-builder');
-          }
+        await updateAgentsList();
+        
+        if (has_agent) {
+          store.dispatch(setAgentBuilderIntegrated(true))
+          navigate('/dash');
         } else {
-          navigate('/agent-builder');
+          navigate('/onboarding');
         }
       } else {
         navigate('/agent-details');
