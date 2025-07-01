@@ -32,6 +32,16 @@ export function SectionHeader({ title }: { title: string }) {
   )
 }
 
+function TemplateAlert({ variant, message }: { variant: "warning" | "critical", message: string }) {
+  return (
+    <Alert variant={variant} style={{ marginBottom: 'var(--sl-space-8)' }}>
+      <Text variant="body">
+        <Markdown>{message}</Markdown>
+      </Text>
+    </Alert>
+  )
+}
+
 export function Template() {
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid } = useParams();
@@ -314,12 +324,18 @@ export function Template() {
       </PageHeader>
 
       <PageContent>
-        {errorText && (
-          <Alert variant="critical" style={{ marginBottom: 'var(--sl-space-8)' }}>
-            <Text variant="body">
-              <Markdown>{errorText}</Markdown>
-            </Text>
-          </Alert>
+        {(errorText || templateStatus === 'needs-editing') && (
+          <TemplateAlert
+            {...(
+              templateStatus === 'needs-editing' ? {
+                variant: 'warning',
+                message: t('template.form.alerts.needs_editing.description')
+              } : {
+                variant: 'critical',
+                message: errorText
+              }
+            )}
+          />
         )}
 
         <Flex direction="column" gap="$space-5">
