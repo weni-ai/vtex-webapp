@@ -566,7 +566,7 @@
                 "disable": "Desactivar plantilla"
             },
             "status": {
-                "active": "Activo",
+                "active": "Aprobado",
                 "rejected": "Rechazado",
                 "pending": "Pendiente",
                 "needs_editing": "Necesita edición"
