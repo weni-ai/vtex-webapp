@@ -14,11 +14,26 @@
         "errors": {
             "unauthorized": "Você não tem permissão para realizar esta ação",
             "internal_server_error": "Erro interno do servidor",
-            "unexpected_error": "Ocorreu um erro inesperado"
+            "unexpected_error": "Ocorreu um erro inesperado",
+            "generic_error_with_support": "Algo deu errado. Nos contate em"
         },
         "new_agent": "Novo agente",
         "copy_code": "Copiar código",
-        "return": "Voltar"
+        "return": "Voltar",
+        "finish": "Finalizar",
+        "skip": "Pular",
+        "url_copied": "URL copiada",
+        "script_copied": "Script copiado",
+        "clear": "Limpar",
+        "apply": "Aplicar"
+    },
+    "onboarding": {
+        "select_agent": {
+            "title": "Atribuir o primeiro agente ao seu time"
+        },
+        "build_manager": {
+            "title": "Configurar o perfil do Manager"
+        }
     },
     "title": "Weni Agentic IA",
     "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
@@ -27,18 +42,98 @@
         "button": "Conectar à Weni"
     },
     "agents": {
-        "title": "Galeria de agentes",
+        "buttons": {
+            "gallery": "Atribuir agentes"
+        },
+        "modals": {
+            "gallery": {
+                "title": "Galeria de Agentes",
+                "filters": {
+                    "categories": {
+                        "title": "Categoria",
+                        "none_selected": "Todos os agentes"
+                    },
+                    "agents": {
+                        "title": "Agentes",
+                        "none_selected": "Todos os agentes",
+                        "options": {
+                            "official": "Agentes oficiais",
+                            "custom": "Agentes personalizados"
+                        }
+                    }
+                },
+                "list": {
+                    "empty": {
+                        "title": "Nenhum agente atribuído à equipe"
+                    }
+                }
+            },
+            "assign": {
+                "buttons": {
+                    "back": "Voltar",
+                    "next": "Avançar",
+                    "finish": "Finalizar"
+                },
+                "alerts": {
+                    "WhatsApp_required": "Canal WhatsApp necessário"
+                },
+                "title": "Atribuir Agente {{name}}",
+                "steps": "Passo {{currentPage}} de {{totalPages}}",
+                "about": {
+                    "title": "Sobre"
+                },
+                "templates_available": {
+                    "title": "Templates disponíveis"
+                },
+                "select_templates": {
+                    "title": "Selecionar templates",
+                    "description": "Você pode editar, remover e até criar templates personalizados mais tarde"
+                },
+                "integrate_support_channel": {
+                    "title": "Integrar um canal de suporte"
+                },
+                "credentials": {
+                    "title": "Credenciais",
+                    "description": "Insira as credenciais para atribuir o agente"
+                }
+            }
+        },
+        "title": "Meu time de agentes",
         "list": {
             "empty": {
                 "title": "Nenhum agente atribuído à equipe"
             }
         },
+        "details": {
+            "about": {
+                "title": "Sobre"
+            },
+            "settings": {
+                "actions": {
+                    "save": {
+                        "success": "Configurações salvas com sucesso",
+                        "error": "Erro ao salvar, tente novamente mais tarde"
+                    }
+                },
+                "title": "Configurações",
+                "fields": {
+                    "webhook_url": {
+                        "label": "URL de Webhook",
+                        "description": "Use esta URL para configurar seu sistema externo para enviar eventos a este agente"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar",
+                    "save": "Salvar alterações"
+                }
+            }
+        },
         "categories": {
             "passive": {
-                "title": "Notificação passiva"
+                "title": "Agente passivo"
             },
             "active": {
-                "title": "Notificação ativa",
+                "title": "Agente ativo",
                 "order_status": {
                     "title": "Agente de status de pedidos",
                     "description": "Mantenha os clientes atualizados sobre o status do pedido em tempo real",
@@ -74,27 +169,7 @@
                     "modal": {
                         "title": "Adicionar carrinho abandonado",
                         "description": "Verifique o tipo de loja antes de seguir os passos abaixo",
-                        "button": "Ir para storefront",
-                        "steps": {
-                            "title": "Siga estas etapas para tornar o agente funcional:",
-                            "faststore": {
-                                "title": "FastStore",
-                                "description": "Siga estas etapas para tornar o agente funcional:",
-                                "step1": "Vá para o repositório do GitHub e cole o código abaixo no arquivo `thirdpartyscripts.tsx`"
-                            },
-                            "portal": {
-                                "title": "Portal/Layout",
-                                "description": "Siga estas etapas para tornar o agente funcional:",
-                                "step1": "No Admin VTEX, acesse Storefront > Layout.",
-                                "step2": "Abra a pasta CMS.",
-                                "step3": "Clique em HTML Templates, e depois em Sub Templates.",
-                                "step4": "Abra `commonScripts` e cole o script abaixo."
-                            },
-                            "site_editor": {
-                                "title": "Editor de Site",
-                                "description": "Não são necessárias etapas de configuração para o tipo de loja 'Site Editor'. Uma vez confirmado, o agente estará pronto para uso."
-                            }
-                        }
+                        "button": "Ir para storefront"
                     },
                     "settings": {
                         "restriction": {
@@ -120,8 +195,9 @@
                 "success": "Agente desativado com sucesso",
                 "error": "Erro ao desativar o agente. Tente novamente mais tarde."
             },
-            "add": "Novo agente",
+            "add": "Atribuir",
             "added": "Agente ativo",
+            "view": "Ver agente",
             "test": "Agente em teste",
             "configuring": "Configurando agente"
         }
@@ -142,9 +218,19 @@
             },
             "switch_to_test": {
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} passado para o modo de teste"
+            },
+            "assign": {
+                "success": "Agente atribuído com sucesso. Não se esqueça de testar e personalizar antes de publicar",
+                "error": "Algo saiu errado. Por favor, tente novamente"
+            },
+            "edit_template": {
+                "success": "Alterações salvas! Pode levar até 24 horas para serem aprovadas pelo Meta e entrar em vigor"
             }
         },
         "modals": {
+            "integrate_whatsapp": {
+                "title": "Integrar WhatsApp"
+            },
             "publish": {
                 "title": "Publicar e ir para o vivo",
                 "description": "Confirmar esta ação publicará o agente para produção, onde ele começará a lidar com interações em tempo real.",
@@ -172,8 +258,7 @@
                     "about": {
                         "title": "Sobre",
                         "status": {
-                            "title": "Status",
-                            "in_production": "Em produção"
+                            "title": "Status"
                         }
                     },
                     "preview": {
@@ -209,10 +294,11 @@
             "forms": {
                 "name": "Nome",
                 "channel": {
-                    "title": "Tecnologia de VTEX frontend",
-                    "faststore": "FastStore",
-                    "portal": "Portal/Layout",
-                    "site_editor": "Editor de Site"
+                    "container_title": "Configuração do agente",
+                    "title": "Tipo de loja",
+                    "site_editor": "VTEX IO",
+                    "other": "Outro",
+                    "description": "O agente só funcionará após seguir estes passos:<0/><1/>Vá para o repositório de GitHub e cole o código abaixo no arquivo <2>thirdpartyscripts.tsx</2>."
                 },
                 "occupation": {
                     "title": "Ocupação (opcional)",
@@ -246,7 +332,8 @@
                 "title": "WhatsApp",
                 "description": "Use uma conta empresarial do WhatsApp para melhorar a comunicação com seus contatos",
                 "error": "Erro ao conectar com o WhatsApp. Verifique suas credenciais ou tente novamente mais tarde.",
-                "success": "WhatsApp integrado com sucesso"
+                "success": "WhatsApp integrado com sucesso",
+                "skip_disclaimer": "Você pode pular este passo e integrar o canal WhatsApp mais tarde"
             }
         },
         "buttons": {
@@ -412,6 +499,7 @@
     "insights": {
         "dashboard": {
             "abandoned_cart": {
+                "title": "O que está acontecendo no:",
                 "sent_messages": "Mensagens enviadas",
                 "delivered_messages": "Mensagens entregues",
                 "read_messages": "Mensagens lidas",
@@ -535,8 +623,20 @@
                         "text": {
                             "label": "Texto"
                         },
+                        "radio": {
+                            "dynamic": {
+                                "label": "URL Dinâmica"
+                            },
+                            "static": {
+                                "label": "URL Estática"
+                            }
+                        },
                         "url": {
                             "label": "URL"
+                        },
+                        "url_example": {
+                            "label": "URL de Exemplo",
+                            "description": "Adicione uma URL de exemplo de um site da web, não use informações de clientes reais"
                         }
                     }
                 },
@@ -547,6 +647,22 @@
                     "fallback_text": {
                         "label": "Texto de fallback se a variável estiver ausente"
                     }
+                }
+            }
+        }
+    },
+    "metrics": {
+        "fields": {
+            "template": {
+                "label": "Template"
+            },
+            "period": {
+                "label": "Período",
+                "options": {
+                    "today": "Hoje",
+                    "yesterday": "Ontem",
+                    "last_7_days": "Últimos 7 dias",
+                    "last_28_days": "Últimos 28 dias"
                 }
             }
         }

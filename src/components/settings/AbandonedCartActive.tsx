@@ -1,16 +1,17 @@
-import { DrawerContent, Flex, TimeInput, Divider, Text, Grid, GridCell, Checkbox } from "@vtex/shoreline";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
-import { SettingsContext } from "./SettingsContainer/SettingsContext";
-import { integratedAgents } from "../../store/projectSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "src/interfaces/Store";
-import { convertStringToTimeValue, convertTimeValueToString } from "../../utils/timeConversor";
 import { TimeValue } from '@react-aria/datepicker';
+import { Checkbox, Divider, DrawerContent, Flex, Grid, GridCell, Text, TimeInput } from "@vtex/shoreline";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { agents } from "../../store/projectSlice";
+import { convertStringToTimeValue, convertTimeValueToString } from "../../utils/timeConversor";
+import { SettingsContext } from "./SettingsContainer/SettingsContext";
 
 export function PreferencesAbandonedCartActive() {
   const context = useContext(SettingsContext);
-  const currentMessageTimeRestrictions = useSelector((state: RootState) => integratedAgents(state).find((agent) => agent.code === 'abandoned_cart')?.message_time_restrictions);
-  const [restriction, setRestriction] = useState<boolean>(currentMessageTimeRestrictions?.is_active ?? false);
+  const agentsList = useSelector(agents);
+  const abandonedCartAgent = agentsList.find(agent => agent.origin === 'commerce' && agent.code === 'abandoned_cart');
+  const currentMessageTimeRestrictions = abandonedCartAgent?.restrictMessageTime;
+  const [restriction, setRestriction] = useState<boolean>(currentMessageTimeRestrictions?.isActive ?? false);
   const setRestrictionValue = (event: ChangeEvent<HTMLInputElement>) => {
     setRestriction(event.target.checked)
   }

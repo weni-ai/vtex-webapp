@@ -1,6 +1,8 @@
-import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text } from "@vtex/shoreline";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { TemplateStatusTag } from "../../components/TemplateCard";
+import { agentCLI, assignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
@@ -12,7 +14,7 @@ export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
   content: string;
   footer?: string;
-  button?: { text: string; url: string };
+  button?: { text: string; url: string, urlExample?: string };
 }
 
 export interface Variable {
@@ -30,6 +32,11 @@ export function SectionHeader({ title }: { title: string }) {
 
 export function Template() {
   const navigate = useNavigate();
+  const { assignedAgentUuid, templateUuid } = useParams();
+
+  const [templateName, setTemplateName] = useState('');
+  const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
+  const [startCondition, setStartCondition] = useState('');
 
   const [content, setContent] = useState<Content>({
     header: undefined,
@@ -38,8 +45,144 @@ export function Template() {
     button: undefined,
   });
 
+  const [prefilledContent, setPrefilledContent] = useState<Content>({
+    header: undefined,
+    content: '',
+    footer: undefined,
+    button: undefined,
+  });
+
   const [isAddingVariableModalOpen, setIsAddingVariableModalOpen] = useState(false);
   const [variables, setVariables] = useState<Variable[]>([]);
+
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (templateUuid) {
+      loadTemplate();
+    }
+  }, [templateUuid]);
+
+  const isEditing = useMemo(() => {
+    return templateUuid !== undefined;
+  }, [templateUuid]);
+
+  const hasChanges = useMemo(() => {
+    return [
+      prefilledContent.content !== content.content,
+      prefilledContent.header?.type !== content.header?.type,
+      prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
+      prefilledContent.footer !== content.footer,
+      prefilledContent.button?.text !== content.button?.text,
+      prefilledContent.button?.url !== content.button?.url,
+      prefilledContent.button?.urlExample !== content.button?.urlExample,
+    ].some(Boolean);
+  }, [content, prefilledContent]);
+
+  async function loadTemplate() {
+    const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
+
+    let header: { type: 'text', text: string } | undefined;
+    let button: { text: string; url: string, urlExample?: string } | undefined;
+    let footer: string | undefined;
+
+    if (template.metadata.buttons?.[0]?.type === 'URL') {
+      button = {
+        text: template.metadata.buttons[0].text,
+        url: template.metadata.buttons[0].url,
+        urlExample: template.metadata.buttons[0].example?.[0],
+      }
+    }
+
+    if (template.metadata.header) {
+      header = {
+        type: 'text',
+        text: template.metadata.header,
+      }
+    }
+
+    if (template.metadata.footer) {
+      footer = template.metadata.footer;
+    }
+
+    setTemplateName(template.name);
+    setTemplateStatus(template.status as "active" | "pending" | "rejected" | "needs-editing");
+    setStartCondition(template.startCondition);
+
+    setPrefilledContent({
+      header,
+      content: template.metadata.body,
+      footer,
+      button,
+    });
+  }
+
+  async function handleSaveTemplate() {
+    if (templateStatus === 'needs-editing') {
+      handleSaveButton();
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      await updateAgentTemplate({
+        templateUuid: templateUuid as string,
+        template: {
+          header: content.header?.type === 'text' ? content.header.text : undefined,
+          content: content.content,
+          footer: content.footer,
+          button: content.button,
+        },
+      });
+
+      toast.success(t('agent.actions.edit_template.success'));
+
+      await updateTemplates();
+      navigateToAgent();
+    } catch (error) {
+      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleSaveButton() {
+    try {
+      setIsSaving(true);
+
+      await saveAgentButtonTemplate({
+        templateUuid: templateUuid as string,
+        template: {
+          button: {
+            url: content.button?.url ? `https://${content.button.url.trim()}` : '',
+            urlExample: content.button?.urlExample ? `https://${content.button.urlExample.trim()}` : undefined,
+          },
+        },
+      });
+
+      toast.success(t('agent.actions.edit_template.success'));
+
+      await updateTemplates();
+      navigateToAgent();
+    } catch (error) {
+      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function updateTemplates() {
+    try {
+      await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate: true });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function navigateToAgent() {
+    navigate(`/agents/${assignedAgentUuid}`);
+  }
 
   return (
     <Page>
@@ -52,26 +195,34 @@ export function Template() {
                 asChild
                 variant="tertiary"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={navigateToAgent}
               >
                 <IconArrowLeft />
               </IconButton>
             </Bleed>
 
-            <PageHeading>{t('template.form.create.title')}</PageHeading>
+            {isEditing ? (
+              <PageHeading>
+                <Flex align="center" gap="$space-3">
+                  {templateName}
 
-            {/* <Tag variant="secondary" color="yellow">Pending</Tag> */}
+                  <TemplateStatusTag status={templateStatus} size="large" />
+                </Flex>
+              </PageHeading>
+            ) : (
+              <PageHeading>{t('template.form.create.title')}</PageHeading>
+            )}
           </Flex>
 
           <Stack space="$space-3" horizontal>
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="secondary" size="large">
+              <Button variant="secondary" size="large" onClick={navigateToAgent}>
                 {t('template.form.create.buttons.cancel')}
               </Button>
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large">
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
@@ -81,12 +232,22 @@ export function Template() {
 
       <PageContent>
         <Flex direction="column" gap="$space-5">
-          <FormEssential />
+          <FormEssential startCondition={startCondition} isDisabled={isEditing} />
 
           <Divider />
 
           <Grid columns="1fr 1fr" gap="$space-5">
-            <FormContent content={content} setContent={setContent} />
+            <FormContent
+              status={templateStatus}
+              content={content}
+              setContent={setContent}
+              prefilledContent={prefilledContent}
+              isHeaderEditable={true}
+              isFooterEditable={true}
+              isButtonEditable={true}
+              canChangeHeaderType={!isEditing}
+              canChangeButton={true}
+            />
 
             <MessagePreview
               header={content.header}
@@ -96,21 +257,23 @@ export function Template() {
             />
           </Grid>
 
-          <Divider />
+          {!isEditing && (<>
+            <Divider />
 
-          <FormVariables
-            variables={variables}
-            setVariables={setVariables}
-            openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
-          />
+            <FormVariables
+              variables={variables}
+              setVariables={setVariables}
+              openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
+            />
 
-          <AddingVariableModal
-            open={isAddingVariableModalOpen}
-            onClose={() => setIsAddingVariableModalOpen(false)}
-            addVariable={(variable: Variable) => {
-              setVariables([...variables, variable]);
-            }}
-          />
+            <AddingVariableModal
+              open={isAddingVariableModalOpen}
+              onClose={() => setIsAddingVariableModalOpen(false)}
+              addVariable={(variable: Variable) => {
+                setVariables([...variables, variable]);
+              }}
+            />
+          </>)}
         </Flex>
       </PageContent>
     </Page>

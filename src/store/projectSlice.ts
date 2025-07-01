@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Feature, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Loading, ProjectState, RootState } from 'src/interfaces/Store';
 import { cleanURL } from '../utils';
 
 const initialState: ProjectState = {
@@ -22,10 +22,33 @@ const initialState: ProjectState = {
   },
   hasTheFirstLoadOfTheAgentsHappened: false,
   agents: [],
-  integratedAgents: [],
   storeType: '',
   initialLoading: false,
   WhatsAppURL: '',
+  assignedAgents: [],
+}
+
+interface AssignedAgent {
+  uuid: string;
+  webhookUrl: string;
+  channelUuid: string;
+  contactPercentage: number;
+  templates: {
+    uuid: string;
+    name: string;
+    startCondition: string;
+    status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked" | "needs-editing";
+    metadata: {
+      body: string;
+      header: string;
+      footer: string;
+      buttons: {
+        type: 'URL';
+        text: string;
+        url: string;
+      }[];
+    };
+  }[];
 }
 
 const projectSlice = createSlice({
@@ -65,12 +88,6 @@ const projectSlice = createSlice({
     setHasTheFirstLoadOfTheAgentsHappened: (state, action: PayloadAction<boolean>) => {
       state.hasTheFirstLoadOfTheAgentsHappened = action.payload;
     },
-    setAgents: (state, action: PayloadAction<Feature[]>) => {
-      state.agents = action.payload;
-    },
-    setIntegratedAgents: (state, action: PayloadAction<Feature[]>) => {
-      state.integratedAgents = action.payload;
-    },
     setUpdateAgentLoading: (state, action: PayloadAction<boolean>) => {
       state.updateAgentLoading = action.payload;
     },
@@ -87,6 +104,15 @@ const projectSlice = createSlice({
     setWhatsAppURL: (state, action: PayloadAction<string>) => {
       state.WhatsAppURL = action.payload;
     },
+    setAgents: (state, action: PayloadAction<(AgentCommerce | AgentNexus | AgentCLI)[]>) => {
+      state.agents = action.payload;
+    },
+    addAssignedAgent: (state, action: PayloadAction<AssignedAgent>) => {
+      state.assignedAgents = [...state.assignedAgents.filter((agent) => agent.uuid !== action.payload.uuid), action.payload];
+    },
+    setAssignedAgents: (state, action: PayloadAction<AssignedAgent[]>) => {
+      state.assignedAgents = action.payload;
+    },
   }
 })
 
@@ -101,13 +127,14 @@ export const {
   setHasTheFirstLoadOfTheAgentsHappened,
   setAgents,
   setAgentsLoading,
-  setIntegratedAgents,
   setUpdateAgentLoading,
   setDisableAgentLoading,
   setWppLoading,
   setStoreType,
   setInitialLoading,
   setWhatsAppURL,
+  addAssignedAgent,
+  setAssignedAgents,
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
@@ -120,7 +147,6 @@ export const getAgentBuilder = (state: RootState) => state.project.agentBuilder
 export const getAgentChannel = (state: RootState) => state.project.agentBuilder.channel
 export const hasTheFirstLoadOfTheAgentsHappened = (state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened
 export const agents = (state: RootState) => state.project.agents
-export const integratedAgents = (state: RootState) => state.project.integratedAgents
 export const wppLoading = (state: RootState) => state.project.wppLoading
 export const agentsLoading = (state: RootState) => state.project.agentsLoading
 export const updateAgentLoading = (state: RootState) => state.project.updateAgentLoading

@@ -1,32 +1,10 @@
-import { ContextualHelp, Field, FieldDescription, Flex, Grid, Input, Label, Radio, RadioGroup, useRadioState } from "@vtex/shoreline";
-import { useState } from "react";
+import { ContextualHelp, Field, FieldDescription, Flex, Input, Label } from "@vtex/shoreline";
 import { SectionHeader } from "./Template";
 
-export function FormEssential() {
-  const [language, setLanguage] = useState<'PT-BR' | 'ES'>('PT-BR');
-  const languageState = useRadioState({
-    value: language,
-    setValue: setLanguage as any,
-  });
-
+export function FormEssential({ startCondition, isDisabled }: { startCondition: string, isDisabled: boolean }) {
   return (
     <Flex direction="column" gap="$space-4">
       <SectionHeader title={t('template.form.areas.basic.title')} />
-
-      <Grid columns="1fr 1fr" gap="$space-5">
-        <Field>
-          <Label>{t('template.form.fields.name.label')}</Label>
-
-          <Input
-            name="template-name"
-          />
-        </Field>
-
-        <RadioGroup label={t('template.form.fields.language.label')} horizontal state={languageState}>
-          <Radio value="PT-BR">PT-BR</Radio>
-          <Radio value="ES">ES</Radio>
-        </RadioGroup>
-      </Grid>
 
       <Field>
         <Label>
@@ -39,9 +17,7 @@ export function FormEssential() {
           </Flex>
         </Label>
 
-        <Input
-          name="start-condition"
-        />
+        <Input value={startCondition} disabled={isDisabled} />
 
         <FieldDescription>{t('template.form.fields.start_condition.description')}</FieldDescription>
       </Field>

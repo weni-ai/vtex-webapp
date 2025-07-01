@@ -1,17 +1,17 @@
-import { Button, Flex, Grid, IconButton, IconCheck, IconCode, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconPlus, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text, toast } from "@vtex/shoreline";
-import { AboutAgent } from "./AboutAgent";
+import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
 import { useMemo, useState } from "react";
-import { integrateAgent } from "../services/agent.service";
 import { useSelector } from "react-redux";
-import { agentsLoading, selectProject } from "../store/projectSlice";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../interfaces/Store";
+import { agentsLoading } from "../store/projectSlice";
+import store from "../store/provider.store";
+import { AboutAgent } from "./AboutAgent";
+import { AddAbandonedCart } from "./AddAbandonedCart";
 import { DisableAgent } from "./DisableAgent";
 import { TagType } from "./TagType";
-import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
-import { AddAbandonedCart } from "./AddAbandonedCart";
-import store from "../store/provider.store";
-import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { useNavigate } from "react-router-dom";
+import { AgentDescriptiveStatus } from "./agent/DescriptiveStatus";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
+import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -56,46 +56,15 @@ export function AgentBoxEmpty() {
   )
 }
 
-function DescriptiveStatus({ status }: { status: 'test' | 'configuring' | 'integrated' }) {
-  const { color, icon, text } = {
-    test: {
-      color: '$fg-base-disabled',
-      icon: <IconCode />,
-      text: t('agents.common.test'),
-    },
-    configuring: {
-      color: '$fg-informational',
-      icon: null,
-      text: t('agents.common.configuring'),
-    },
-    integrated: {
-      color: '$fg-success',
-      icon: <IconCheck />,
-      text: t('agents.common.added'),
-    },
-  }[status];
-
-  return (
-    <Text variant="action" color={color}>
-      <Flex align="center" gap="$space-2" style={{ padding: 'var(--sl-space-3)' }}>
-        {icon}
-        {text}
-      </Flex>
-    </Text>
-  );
-}
-
-export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills }: { origin: 'commerce' | 'nexus', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[] }) {
+export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
   const navigate = useNavigate();
-  const projectUUID = useSelector(selectProject)
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [openDisable, setOpenDisable] = useState(false)
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
-  const channel = store.getState().project.storeType;
-  const isAgentDetailsPageAccessEnabled = useFeatureIsOn('agentDetailsPageAccess');
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
+  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
 
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
@@ -109,16 +78,12 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const integrateCurrentFeature = async () => {
-    if (origin === 'commerce' && code === 'abandoned_cart' && channel !== 'site_editor') {
-      setOpenAbandonedCartModal(true)
+    if (origin === 'commerce' && code === 'abandoned_cart') {
+      setOpenAbandonedCartModal(true);
       return;
     }
-    const result = await integrateAgent(uuid, projectUUID);
-    if (result.error) {
-      toast.critical(t('integration.error'));
-    } else {
-      toast.success(t('integration.success'));
-    }
+
+    onAssign(uuid);
   }
 
   const status = useMemo(() => {
@@ -143,29 +108,82 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       ? description
       : t(`agents.categories.${type}.${code}.description`);
 
+  const isCommerceAgent = origin === 'commerce';
   const isNexusAgent = origin === 'nexus';
   const isStatusBetweenIntegrated = ['test', 'configuring', 'integrated'].includes(status);
-
-  const stopPropagation = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-  }
 
   const navigateToAgentDetailsPage = () => {
     navigate(`/agents/${uuid}`);
   }
 
-  const handleAgentClick = () => {
-    if (!isAgentDetailsPageAccessEnabled) {
+  const canSeeAgent = useMemo(() => {
+    if (!isIntegrated) {
+      return false;
+    }
+
+    return type === 'passive' || origin === 'CLI';
+  }, [isIntegrated, type, isWppIntegrated]);
+
+  const handleSeeAgent = () => {
+    if (!canSeeAgent) {
       return;
     }
 
-    if (origin === 'nexus' && type === 'passive') {
+    if (type === 'passive') {
       setIsPassiveDetailsModalOpen(true);
+      return;
+    }
+
+    const agent = store.getState().project.agents.find((agent) => agent.uuid === uuid);
+
+    if (agent?.origin === 'CLI') {
+      navigate(`/agents/${agent.assignedAgentUuid}`);
       return;
     }
 
     navigateToAgentDetailsPage();
   }
+
+  const options = useMemo(() => {
+    const items: (
+      'separator' |
+      {
+        label: string;
+        icon: React.ReactNode;
+        onClick: () => void;
+      }
+    )[] = [];
+
+    if (isCommerceAgent) {
+      items.push({
+        label: t('common.details'),
+        icon: <IconInfo />,
+        onClick: openDetailsModal,
+      });
+
+      if (isStatusBetweenIntegrated) {
+        items.push({
+          label: t('common.manage_settings'),
+          icon: <IconGearSix />,
+          onClick: toggleIsPreferencesOpen,
+        });
+      }
+    }
+
+    if (isStatusBetweenIntegrated) {
+      if (items.length > 0) {
+        items.push('separator');
+      }
+
+      items.push({
+        label: t('common.disable'),
+        icon: <IconPauseCircle />,
+        onClick: openDisableModal,
+      });
+    }
+
+    return items;
+  }, [isCommerceAgent, isStatusBetweenIntegrated, isNexusAgent]);
 
   return (
     <>
@@ -176,9 +194,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           border: 'var(--sl-border-base)',
           borderRadius: 'var(--sl-radius-2)',
           padding: '16px 16px 24px 16px',
-          cursor: isAgentDetailsPageAccessEnabled ? 'pointer' : 'default',
         }}
-        onClick={handleAgentClick}
       >
         <Flex gap="$space-1" justify="space-between">
           <Flex direction="column" gap="$space-2">
@@ -186,51 +202,37 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               {agentName}
             </Text>
 
-            <TagType type={type} />
+            <Flex align="center" gap="$space-2">
+              <TagType type={type} />
+
+              <Text variant="caption1" color="$fg-base-soft">
+                PT-BR
+              </Text>
+            </Flex>
           </Flex>
 
           {
-            (!isNexusAgent || isStatusBetweenIntegrated) && (
+            options.length > 0 && (
               <MenuProvider>
-                <MenuTrigger asChild onClick={stopPropagation}>
+                <MenuTrigger asChild>
                   <IconButton variant="tertiary" label="Actions">
                     <IconDotsThreeVertical />
                   </IconButton>
                 </MenuTrigger>
 
-                <MenuPopover onClick={stopPropagation}>
-                  {
-                    !isNexusAgent && (
-                      <MenuItem onClick={openDetailsModal}>
-                        <IconInfo />
-                        {t('common.details')}
+                <MenuPopover>
+                  {options.map((option) => {
+                    if (option === 'separator') {
+                      return <MenuSeparator />;
+                    }
+
+                    return (
+                      <MenuItem key={option.label} onClick={option.onClick}>
+                        {option.icon}
+                        {option.label}
                       </MenuItem>
-                    )
-                  }
-
-                  {
-                    isStatusBetweenIntegrated && (
-                      <>
-                        {
-                          !isNexusAgent && (
-                            <>
-                              <MenuItem onClick={toggleIsPreferencesOpen}>
-                                <IconGearSix />
-                                {t('common.manage_settings')}
-                              </MenuItem>
-
-                              <MenuSeparator />
-                            </>
-                          )
-                        }
-
-                        <MenuItem onClick={openDisableModal}>
-                          <IconPauseCircle />
-                          {t('common.disable')}
-                        </MenuItem>
-                      </>
-                    )
-                  }
+                    );
+                  })}
                 </MenuPopover>
               </MenuProvider>
             )
@@ -258,12 +260,23 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             'test',
             'configuring',
             'integrated',
-          ].includes(status) ?
+          ].includes(status) && !isUpdateAgentLoading ?
             (
-              <DescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} />
+              <Flex align="center" gap="$space-4" justify="space-between">
+                <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
+
+                {canSeeAgent && (
+                  <Button
+                    variant="primary"
+                    size="large"
+                    onClick={handleSeeAgent}
+                  >
+                    <Text>{t('agents.common.view')}</Text>
+                  </Button>
+                )}
+              </Flex>
             ) : (
-              <Button variant="secondary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
-                <IconPlus />
+              <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
                 <Text>{t('agents.common.add')}</Text>
               </Button>
             )
@@ -296,7 +309,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         open={openAbandonedCartModal}
         toggleModal={() => setOpenAbandonedCartModal((o) => !o)}
         confirm={() => {
-          integrateAgent(uuid, projectUUID);
+          onAssign(uuid);
           setOpenAbandonedCartModal(false);
         }}
       />
