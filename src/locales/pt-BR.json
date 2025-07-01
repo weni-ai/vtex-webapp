@@ -566,7 +566,7 @@
                 "disable": "Desativar template"
             },
             "status": {
-                "active": "Ativo",
+                "active": "Aprovado",
                 "rejected": "Rejeitado",
                 "pending": "Pendente",
                 "needs_editing": "Precisa de edição"
