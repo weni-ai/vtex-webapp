@@ -196,7 +196,7 @@ export function Dashboard() {
       </PageHeader>
 
       <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
-        <Flex direction='column' style={{ width: '100%' }}>
+        <Flex direction="column" style={{ width: '100%' }} gap="$space-8">
           <Alert
             variant="informational"
             style={{
@@ -232,45 +232,47 @@ export function Dashboard() {
 
           <AgentMetrics />
 
-          <Flex gap="$space-4" align="center" justify="space-between">
-            <Heading
-              variant="display2"
-            >
-              {t('agents.title')}
-            </Heading>
+          <Flex direction="column" gap="$space-4">
+            <Flex gap="$space-4" align="center" justify="space-between">
+              <Heading
+                variant="display2"
+              >
+                {t('agents.title')}
+              </Heading>
 
-            <Button variant="secondary" size="large" onClick={() => setIsGalleryModalOpen(true)}>
-              <IconPlus />
-              {t('agents.buttons.gallery')}
-            </Button>
+              <Button variant="secondary" size="large" onClick={() => setIsGalleryModalOpen(true)}>
+                <IconPlus />
+                {t('agents.buttons.gallery')}
+              </Button>
+            </Flex>
+
+            {hasTheFirstLoadHappened && agentsList.length === 0 && <AgentBoxEmpty />}
+
+            <AgentBoxContainer>
+              {!hasTheFirstLoadHappened && (
+                <AgentBoxSkeleton count={2} />
+              )}
+
+              {hasTheFirstLoadHappened && (
+                agentsList.map((item) => (
+                  <AgentBox
+                    key={item.uuid}
+                    name={item.name || ''}
+                    description={item.description || ''}
+                    uuid={item.uuid}
+                    code={item.code as 'order_status' | 'abandoned_cart'}
+                    type={item.notificationType}
+                    isIntegrated={item.isAssigned}
+                    origin={item.origin || 'commerce'}
+                    isInTest={item.isInTest}
+                    isConfiguring={item.isConfiguring || false}
+                    skills={item.skills || []}
+                    onAssign={handleAssign}
+                  />
+                ))
+              )}
+            </AgentBoxContainer>
           </Flex>
-
-          {hasTheFirstLoadHappened && agentsList.length === 0 && <AgentBoxEmpty />}
-
-          <AgentBoxContainer>
-            {!hasTheFirstLoadHappened && (
-              <AgentBoxSkeleton count={2} />
-            )}
-
-            {hasTheFirstLoadHappened && (
-              agentsList.map((item) => (
-                <AgentBox
-                  key={item.uuid}
-                  name={item.name || ''}
-                  description={item.description || ''}
-                  uuid={item.uuid}
-                  code={item.code as 'order_status' | 'abandoned_cart'}
-                  type={item.notificationType}
-                  isIntegrated={item.isAssigned}
-                  origin={item.origin || 'commerce'}
-                  isInTest={item.isInTest}
-                  isConfiguring={item.isConfiguring || false}
-                  skills={item.skills || []}
-                  onAssign={handleAssign}
-                />
-              ))
-            )}
-          </AgentBoxContainer>
         </Flex>
 
         <AgentsGalleryModal
