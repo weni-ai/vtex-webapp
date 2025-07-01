@@ -610,6 +610,11 @@
                         "button": "Botão"
                     }
                 },
+                "preview": {
+                    "content": {
+                        "placeholder": "Visualização do template"
+                    }
+                },
                 "variables": {
                     "title": "Variáveis",
                     "empty": {
