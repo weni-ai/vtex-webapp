@@ -346,6 +346,19 @@ export function Template() {
               isButtonEditable={true}
               canChangeHeaderType={!isEditing}
               canChangeButton={true}
+              totalVariables={variables.length}
+              addEmptyVariables={(count: number) => {
+                const newVariables: Variable[] = [];
+
+                for (let i = 0; i < count; i++) {
+                  newVariables.push({
+                    definition: '',
+                    fallbackText: '',
+                  });
+                }
+
+                setVariables([...variables, ...newVariables]);
+              }}
             />
 
             <MessagePreview

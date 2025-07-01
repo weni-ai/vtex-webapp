@@ -1,9 +1,9 @@
 import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
-import { SetStateAction, useEffect, useMemo, useState } from "react";
-import { Content, SectionHeader } from "./Template";
+import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
+import { Content, SectionHeader } from "./Template";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -13,6 +13,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   isButtonEditable?: boolean;
   canChangeHeaderType?: boolean;
   canChangeButton?: boolean;
+  totalVariables: number;
+  addEmptyVariables: (count: number) => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,12 +30,41 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     setValue: setButtonType as any,
   });
 
+  const contentTextRef = useRef<HTMLTextAreaElement>(null);
+
   const [headerText, setHeaderText] = useState('');
   const [contentText, setContentText] = useState('');
   const [footerText, setFooterText] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
+
+  function handleContentTextChange(value: string) {
+    let newContentText = value;
+    let lastVariableNumber = totalVariables;
+
+    newContentText = newContentText.replace(/{{(\d+)}}/g, (_, number) => {
+      if (Number(number) > lastVariableNumber) {
+        lastVariableNumber += 1;
+        return `{{${lastVariableNumber}}}`;
+      }
+
+      return `{{${number}}}`;
+    });
+
+    addEmptyVariables(lastVariableNumber - totalVariables);
+    setContentText(newContentText);
+
+    if (contentTextRef.current) {
+      const selectionStart = contentTextRef.current.selectionStart;
+
+      setTimeout(() => {
+        if (contentTextRef.current) {
+          contentTextRef.current.selectionStart = contentTextRef.current.selectionEnd = selectionStart;
+        }
+      }, 0);
+    }
+  }
 
   const [file, setFile] = useState<File | undefined>(undefined);
   const [filePreview, setFilePreview] = useState<string | undefined>(undefined);
@@ -263,8 +294,9 @@ export function FormContent({ status, content, setContent, prefilledContent, can
         <Textarea
           className="content-textarea-full-width"
           value={contentText}
-          onChange={setContentText}
+          onChange={handleContentTextChange}
           disabled={status === 'needs-editing'}
+          ref={contentTextRef}
         />
 
         <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
