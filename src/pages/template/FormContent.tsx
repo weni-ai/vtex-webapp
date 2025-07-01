@@ -341,7 +341,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           disabled={status === 'needs-editing' || (elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable))}
         >
-          <MenuProvider placement="bottom-start" open={isMenuOpen}>
+          <MenuProvider
+            placement="bottom-start"
+            open={isMenuOpen}
+            setOpen={setIsMenuOpen}
+          >
             <MenuTrigger asChild>
               <Flex gap="$space-1" align="center">
                 <IconPlus />
