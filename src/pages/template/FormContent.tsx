@@ -39,6 +39,18 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
 
+  function adjustContentTextHeight() {
+    if (contentTextRef.current) {
+      const borderWidth = 1;
+      contentTextRef.current.style.height = 'auto';
+      contentTextRef.current.style.height = contentTextRef.current.scrollHeight + (borderWidth * 2) + 'px';
+    }
+  }
+
+  useEffect(() => {
+    adjustContentTextHeight();
+  }, [contentText]);
+
   function handleContentTextChange(value: string) {
     let newContentText = value;
     let lastVariableNumber = totalVariables;
