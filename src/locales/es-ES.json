@@ -571,6 +571,11 @@
             }
         },
         "form": {
+            "alerts": {
+                "needs_editing": {
+                    "description": "La URL del botón necesita ser editada"
+                }
+            },
             "create": {
                 "title": "Crear plantilla personalizada",
                 "buttons": {
