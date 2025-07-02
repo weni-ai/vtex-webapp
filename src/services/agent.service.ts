@@ -96,15 +96,16 @@ const status = {
   "LOCKED": "locked" as const,
 }
 
-export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean }) {
+export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean, dontSave?: boolean, params?: { showAll?: boolean } }) {
   const agent = store.getState().project.assignedAgents.find(agent => agent.uuid === data.agentUuid);
 
-  if (agent && !data.forceUpdate) {
+  if (agent && !data.forceUpdate && !data.dontSave) {
     return agent;
   }
 
   const response = await agentCLIRequest({
     agentUuid: data.agentUuid,
+    params: data.params,
   });
 
   const statusValues = Object.values(status);
@@ -120,7 +121,9 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean 
     })),
   }
 
-  store.dispatch(addAssignedAgent(assignedAgent));
+  if (!data.dontSave) {
+    store.dispatch(addAssignedAgent(assignedAgent));
+  }
 
   return assignedAgent;
 }
