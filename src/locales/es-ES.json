@@ -43,7 +43,8 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Asignar agentes"
+            "gallery": "Asignar agentes",
+            "remove": "Eliminar agente"
         },
         "modals": {
             "gallery": {
@@ -190,10 +191,14 @@
                 "error": "Error al guardar. Vuelve a intentarlo más tarde."
             },
             "disable": {
-                "title": "Desactivar agente",
-                "description": "¿Deseas desactivar el agente '{{agent}}'? Al desactivarlo, este agente dejará de estar activo en tu proyecto.",
-                "success": "Agente desactivado con éxito",
-                "error": "Error al desactivar agente. Inténtalo de nuevo más tarde."
+                "title": "Eliminar agente",
+                "description": "Esta acción es irreversible. ¿Estás seguro de querer eliminar este agente de tu equipo?",
+                "success": "{{agent}} eliminado de tu equipo de agentes",
+                "error": "Error eliminando el agente. Inténtalo de nuevo más tarde.",
+                "buttons": {
+                    "remove": "Eliminar",
+                    "cancel": "Cancelar"
+                }
             },
             "add": "Asignar",
             "added": "Agente activo",
@@ -561,7 +566,7 @@
                 "disable": "Desactivar plantilla"
             },
             "status": {
-                "active": "Activo",
+                "active": "Aprobado",
                 "rejected": "Rechazado",
                 "pending": "Pendiente",
                 "needs_editing": "Necesita edición"
@@ -608,6 +613,11 @@
                         "header": "Encabezado",
                         "footer": "Pie de página",
                         "button": "Botón"
+                    }
+                },
+                "preview": {
+                    "content": {
+                        "placeholder": "Vista previa del template"
                     }
                 },
                 "variables": {

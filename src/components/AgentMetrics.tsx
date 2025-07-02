@@ -293,7 +293,7 @@ export function AgentMetrics() {
   }
 
   return (
-    <>
+    <Flex direction="column" gap="$space-4">
       <Flex
         style={{
           display: assignedAgents.length > 0 ? 'flex' : 'none',
@@ -395,6 +395,6 @@ export function AgentMetrics() {
           </Grid>
         ))}
       </Flex>
-    </>
+    </Flex>
   )
 }

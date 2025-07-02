@@ -43,7 +43,8 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Assign agents"
+            "gallery": "Assign agents",
+            "remove": "Remove agent"
         },
         "modals": {
             "gallery": {
@@ -190,10 +191,14 @@
                 "error": "Error while saving. Try again later."
             },
             "disable": {
-                "title": "Deactivate agent",
-                "description": "Do you want to deactivate the agent '{{agent}}'? Once deactivated, this agent will no longer be active in your project.",
-                "success": "Agent deactivated successfully",
-                "error": "Error deactivating the agent. Try again later."
+                "title": "Remove agent",
+                "description": "This action is irreversible. Are you sure you want to remove this agent from your team?",
+                "success": "{{agent}} removed from your agents team",
+                "error": "Error removing the agent. Try again later.",
+                "buttons": {
+                    "remove": "Remove",
+                    "cancel": "Cancel"
+                }
             },
             "add": "Assign",
             "added": "Agent in production",
@@ -561,7 +566,7 @@
                 "disable": "Disable template"
             },
             "status": {
-                "active": "Active",
+                "active": "Approved",
                 "rejected": "Rejected",
                 "pending": "Pending",
                 "needs_editing": "Needs editing"
@@ -608,6 +613,11 @@
                         "header": "Header",
                         "footer": "Footer",
                         "button": "Button"
+                    }
+                },
+                "preview": {
+                    "content": {
+                        "placeholder": "Template preview"
                     }
                 },
                 "variables": {
