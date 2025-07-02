@@ -576,6 +576,11 @@
             }
         },
         "form": {
+            "alerts": {
+                "needs_editing": {
+                    "description": "URL do botão precisa ser editada"
+                }
+            },
             "create": {
                 "title": "Criar template personalizado",
                 "buttons": {

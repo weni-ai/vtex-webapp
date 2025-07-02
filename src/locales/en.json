@@ -576,6 +576,11 @@
             }
         },
         "form": {
+            "alerts": {
+                "needs_editing": {
+                    "description": "Button URL needs to be edited"
+                }
+            },
             "create": {
                 "title": "Create custom template",
                 "buttons": {
