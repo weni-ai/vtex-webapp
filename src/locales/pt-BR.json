@@ -43,7 +43,8 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Atribuir agentes"
+            "gallery": "Atribuir agentes",
+            "remove": "Remover agente"
         },
         "modals": {
             "gallery": {
@@ -190,10 +191,14 @@
                 "error": "Erro ao salvar. Tente novamente mais tarde."
             },
             "disable": {
-                "title": "Desativar agente",
-                "description": "Deseja desativar o agente '{{agent}}'? Ao desativar, este agente não estará mais ativo no seu projeto.",
-                "success": "Agente desativado com sucesso",
-                "error": "Erro ao desativar o agente. Tente novamente mais tarde."
+                "title": "Remover agente",
+                "description": "Esta ação é irreversível. Tem certeza que deseja remover este agente do seu time?",
+                "success": "{{agent}} removido do seu time de agentes",
+                "error": "Erro ao remover o agente. Tente novamente mais tarde.",
+                "buttons": {
+                    "remove": "Remover",
+                    "cancel": "Cancelar"
+                }
             },
             "add": "Atribuir",
             "added": "Agente ativo",
@@ -561,7 +566,7 @@
                 "disable": "Desativar template"
             },
             "status": {
-                "active": "Ativo",
+                "active": "Aprovado",
                 "rejected": "Rejeitado",
                 "pending": "Pendente",
                 "needs_editing": "Precisa de edição"
@@ -608,6 +613,11 @@
                         "header": "Cabeçalho",
                         "footer": "Rodapé",
                         "button": "Botão"
+                    }
+                },
+                "preview": {
+                    "content": {
+                        "placeholder": "Visualização do template"
                     }
                 },
                 "variables": {

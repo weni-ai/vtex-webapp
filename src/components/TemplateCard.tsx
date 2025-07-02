@@ -81,32 +81,33 @@ export function TemplateCard({ uuid, name, description, status, loadAgentDetails
       borderRadius: 'var(--sl-radius-2)',
       padding: 'var(--sl-space-4)',
     }}>
-      <Flex gap="$space-1" justify="space-between">
-        <Flex align="center" gap="$space-2">
-          <Text variant="display3" color="$fg-base">{name}</Text>
-          <TemplateStatusTag status={status} />
+      <Flex gap="$space-2" align="center">
+        <Text variant="display3" color="$fg-base">{name}</Text>
+
+        <TemplateStatusTag status={status} />
+
+        <Flex style={{ marginLeft: 'auto', alignSelf: 'flex-start' }}>
+          {isDisabling ? (
+            <Flex style={{ padding: 'var(--sl-space-2)' }}>
+              <Spinner size={20} />
+            </Flex>
+          ) : (
+            <MenuProvider>
+              <MenuTrigger asChild>
+                <IconButton variant="tertiary" label={t('template.card.actions.label')}>
+                  <IconDotsThreeVertical />
+                </IconButton>
+              </MenuTrigger>
+
+              <MenuPopover>
+                <MenuItem onClick={disableTemplate}>
+                  <IconPauseCircle />
+                  {t('template.card.actions.disable')}
+                </MenuItem>
+              </MenuPopover>
+            </MenuProvider>
+          )}
         </Flex>
-
-        {isDisabling ? (
-          <Flex style={{ padding: 'var(--sl-space-2)' }}>
-            <Spinner size={20} />
-          </Flex>
-        ) : (
-          <MenuProvider>
-            <MenuTrigger asChild>
-              <IconButton variant="tertiary" label={t('template.card.actions.label')}>
-                <IconDotsThreeVertical />
-              </IconButton>
-            </MenuTrigger>
-
-            <MenuPopover>
-              <MenuItem onClick={disableTemplate}>
-                <IconPauseCircle />
-                {t('template.card.actions.disable')}
-              </MenuItem>
-            </MenuPopover>
-          </MenuProvider>
-        )}
       </Flex>
 
       <Flex style={{ height: '60px' }}>

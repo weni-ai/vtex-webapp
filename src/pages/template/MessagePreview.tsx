@@ -1,6 +1,12 @@
 import { Flex, Text } from "@vtex/shoreline";
 import { IconWhatsappOpenInNewTab } from "../../assets/icons/WhatsappOpenInNewTab";
 
+function PreviewContent({ contentText }: { contentText: string }) {
+  return contentText === ' ' || contentText.trim() === '' ?
+    <Text variant="caption2" color="$fg-base-disabled" style={{ fontStyle: 'italic', }}>{t('template.form.areas.preview.content.placeholder')}</Text> :
+    <Text variant="caption2" color="$fg-base" style={{ wordBreak: 'break-word', whiteSpaceCollapse: 'preserve-breaks' }}>{contentText}</Text>
+}
+
 export function MessagePreview({ header, contentText, footer, buttonText }: {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
   contentText: string;
@@ -22,7 +28,7 @@ export function MessagePreview({ header, contentText, footer, buttonText }: {
         )}
 
         <Flex align="center" style={{ padding: '2.67px 5.35px', }}>
-          <Text variant="caption2" color="$fg-base" style={{ wordBreak: 'break-word', whiteSpaceCollapse: 'preserve-breaks' }}>{contentText}</Text>
+          <PreviewContent contentText={contentText} />
         </Flex>
 
         <Flex align="center" justify="space-between" style={{ paddingInline: '5.35px', }}>
