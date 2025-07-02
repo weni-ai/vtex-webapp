@@ -517,6 +517,35 @@
                     "cancel": "Cancelar",
                     "done": "Concluir"
                 }
+            },
+            "create": {
+                "steps": {
+                    "processing": {
+                        "title": "Processando",
+                        "description": "Um AI está analisando a modelo para garantir que tudo funcione como esperado. Isso pode levar alguns minutos.",
+                        "items": {
+                            "analyzing_defined_requirements": "Analisando requisitos definidos",
+                            "reviewing_template_structure": "Revisando estrutura de modelo",
+                            "validating_inserted_content": "Validando conteúdo inserido",
+                            "adjusting_custom_variables": "Ajustando variáveis personalizadas",
+                            "optimizing_template_for_fast_delivery": "Otimizando modelo para entrega rápida",
+                            "performing_final_security_checks": "Realizando últimos controles de segurança"
+                        }
+                    },
+                    "completed": {
+                        "title": "Processamento concluído"
+                    }
+                },
+                "buttons": {
+                    "cancel": "Cancelar",
+                    "proceed": "Continuar",
+                    "finish": "Finalizar",
+                    "return_and_fix": "Voltar e corrigir"
+                },
+                "success": "O modelo inteiro foi validado e está pronto para ser usado!",
+                "errors": {
+                    "generic_error": "Ocorreu um erro ao processar o modelo. Por favor, tente novamente."
+                }
             }
         },
         "buttons": {
