@@ -679,7 +679,7 @@ export async function createAssignedAgentTemplateRequest(data: {
   } else {
     let errorText = '';
 
-    if ('error' in Object(response.error)) {
+    if ('error' in Object(response)) {
       errorText = response.error?.error?.body?.message || response.error?.correction_needed || response.error?.message || '';
     } else if ('errors' in Object(response.error)) {
       errorText = response.error?.errors?.join?.(' ') || '';
