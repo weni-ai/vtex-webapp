@@ -8,7 +8,7 @@ import { PublishModal } from '../../components/agent/modals/Publish';
 import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTestMode';
 import { agentCLI, updateAssignedAgentSettings } from '../../services/agent.service';
 import store from '../../store/provider.store';
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
+
 export interface Template {
   uuid: string;
   name: string;
@@ -17,8 +17,6 @@ export interface Template {
 }
 
 function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgentDetails }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean, loadAgentDetails: () => void }) {
-  const canCreateCustomTemplate = useFeatureIsOn('createTemplateCustom');
-
   return (
     <Flex direction="column" gap="$space-5">
       <Flex gap="$space-5" align="center" justify="space-between">
@@ -27,10 +25,10 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
           <Text variant="body" color="$fg-base">{t('template.list.description')}</Text>
         </Flex>
 
-        {canCreateCustomTemplate && <Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
+        <Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
           <IconPlus />
           {t('template.buttons.add')}
-        </Button>}
+        </Button>
       </Flex>
 
       <TemplateCardContainer>
