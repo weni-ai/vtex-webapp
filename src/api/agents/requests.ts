@@ -567,24 +567,7 @@ class AssignedAgentTemplate {
             {
               name: 'exemples',
               value: [],
-            }
-            /* {
-              "name": "exemples",
-              "value": [
-                {
-                  "phone_number": "1234",
-                  "data": { "status": 47, "name": "Joe", "numero_pedido": "12341234" }
-                },
-                {
-                  "phone_number": "1234",
-                  "data": { "status": 10, "name": "Joe", "numero_pedido": "656469" }
-                }
-              ]
             },
-            {
-              "name": "status_pedido",
-              "value": "Olá, {{1}}. obrigado por comprar conosco\n esse é o número do seu pedido {{2}}"
-            } */
           ]
         },
       }
@@ -696,7 +679,7 @@ export async function createAssignedAgentTemplateRequest(data: {
   } else {
     let errorText = '';
 
-    if ('error' in Object(response.error)) {
+    if ('error' in Object(response)) {
       errorText = response.error?.error?.body?.message || response.error?.correction_needed || response.error?.message || '';
     } else if ('errors' in Object(response.error)) {
       errorText = response.error?.errors?.join?.(' ') || '';
