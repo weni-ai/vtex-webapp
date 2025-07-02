@@ -567,24 +567,7 @@ class AssignedAgentTemplate {
             {
               name: 'exemples',
               value: [],
-            }
-            /* {
-              "name": "exemples",
-              "value": [
-                {
-                  "phone_number": "1234",
-                  "data": { "status": 47, "name": "Joe", "numero_pedido": "12341234" }
-                },
-                {
-                  "phone_number": "1234",
-                  "data": { "status": 10, "name": "Joe", "numero_pedido": "656469" }
-                }
-              ]
             },
-            {
-              "name": "status_pedido",
-              "value": "Olá, {{1}}. obrigado por comprar conosco\n esse é o número do seu pedido {{2}}"
-            } */
           ]
         },
       }
