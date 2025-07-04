@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-export function calculateCursorPosition(originalElement: HTMLTextAreaElement, cloneElement: HTMLTextAreaElement, contentText: string) {
+export function calculateCursorPosition(originalElement: HTMLTextAreaElement, cloneElement: HTMLElement, contentText: string) {
   const style = originalElement.computedStyleMap();
 
   ['padding', 'border', 'font', 'white-space-collapse'].forEach((attribute) => {
