@@ -50,6 +50,8 @@ export function Template() {
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
   const [startCondition, setStartCondition] = useState('');
 
+  const [temporaryContentText, setTemporaryContentText] = useState('');
+
   const [content, setContent] = useState<Content>({
     header: undefined,
     content: '',
@@ -375,6 +377,11 @@ export function Template() {
 
                 setVariables([...variables, ...newVariables]);
               }}
+              openNewVariableModal={(text: string) => {
+                setIsAddingVariableModalOpen(true);
+                setTemporaryContentText(text);
+              }}
+              variables={variables.map((variable) => variable.definition)}
             />
 
             <MessagePreview
@@ -396,8 +403,18 @@ export function Template() {
 
             <AddingVariableModal
               open={isAddingVariableModalOpen}
-              onClose={() => setIsAddingVariableModalOpen(false)}
+              onClose={() => {
+                setIsAddingVariableModalOpen(false);
+                setTemporaryContentText('');
+              }}
               addVariable={(variable: Variable) => {
+                if (temporaryContentText) {
+                  setPrefilledContent({
+                    ...prefilledContent,
+                    content: temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${variables.length + 1}}}`),
+                  });
+                }
+
                 setVariables([...variables, variable]);
               }}
             />
