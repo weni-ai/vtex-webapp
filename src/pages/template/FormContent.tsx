@@ -1,9 +1,10 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
+import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -15,6 +16,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   canChangeButton?: boolean;
   totalVariables: number;
   addEmptyVariables: (count: number) => void;
+  openNewVariableModal: (text: string) => void;
+  variables: string[];
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -31,6 +34,10 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   });
 
   const contentTextRef = useRef<HTMLTextAreaElement>(null);
+  const contentTextCloneRef = useRef<HTMLDivElement>(null);
+  const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  const [shouldSuggestNewVariable, setShouldSuggestNewVariable] = useState(false);
+  const [temporaryContentText, setTemporaryContentText] = useState('');
 
   const [headerText, setHeaderText] = useState('');
   const [contentText, setContentText] = useState('');
@@ -47,8 +54,22 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     }
   }
 
+  function calculateIfShouldSuggestAVariable() {
+    if (contentTextRef.current && contentTextCloneRef.current) {
+      const { x, y } = calculateCursorPosition(contentTextRef.current, contentTextCloneRef.current, contentText);
+      setCursorPosition({ x, y });
+
+      const isBegginingAVariable = contentText.slice(0, contentTextRef.current.selectionStart).endsWith('{{');
+      const isThereANumberAfterVariable = contentText.slice(contentTextRef.current.selectionStart).match(/^\d/);
+
+      setShouldSuggestNewVariable(isBegginingAVariable && !isThereANumberAfterVariable);
+      setTemporaryContentText(contentText.slice(0, contentTextRef.current.selectionStart) + 'toBeReplaced' + contentText.slice(contentTextRef.current.selectionStart));
+    }
+  }
+
   useEffect(() => {
     adjustContentTextHeight();
+    calculateIfShouldSuggestAVariable();
   }, [contentText]);
 
   function handleContentTextChange(value: string) {
@@ -303,13 +324,45 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       <Field>
         <Label>{t('template.form.fields.content.label')}</Label>
 
-        <Textarea
-          className="content-textarea-full-width"
-          value={contentText}
-          onChange={handleContentTextChange}
-          disabled={status === 'needs-editing'}
-          ref={contentTextRef}
-        />
+        <Flex style={{ position: 'relative' }}>
+          <TextareaClone ref={contentTextCloneRef} />
+
+          <Textarea
+            className="content-textarea-full-width"
+            value={contentText}
+            onChange={handleContentTextChange}
+            disabled={status === 'needs-editing'}
+            ref={contentTextRef}
+            onKeyUp={calculateIfShouldSuggestAVariable}
+          />
+
+          <MenuProvider
+            placement="bottom-start"
+            open={shouldSuggestNewVariable}
+            setOpen={setShouldSuggestNewVariable}
+          >
+            <MenuTrigger asChild>
+              <Flex style={{ position: 'absolute', top: cursorPosition.y + 20, left: cursorPosition.x }}></Flex>
+            </MenuTrigger>
+
+            <MenuPopover>
+              {variables.map((variable, index) => (
+                <MenuItem key={index} onClick={() => {
+                  setContentText(temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${index + 1}}}`));
+                }}>
+                  {`{{${index + 1}}} ${variable}`}
+                </MenuItem>
+              ))}
+
+              {variables.length > 0 && <MenuSeparator />}
+
+              <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
+                <IconPencil />
+                {t('template.form.areas.variables.buttons.add')}
+              </MenuItem>
+            </MenuPopover>
+          </MenuProvider>
+        </Flex>
 
         <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
       </Field>
