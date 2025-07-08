@@ -183,7 +183,7 @@ export async function unassignAgentCLIRequest(data: {
   }
 };
 
-export async function agentCLIRequest(data: { agentUuid: string, }) {
+export async function agentCLIRequest(data: { agentUuid: string, params?: { showAll?: boolean } }) {
   const projectUuid = store.getState().project.project_uuid;
 
   const response = await VTEXFetch<{
@@ -234,7 +234,9 @@ export async function agentCLIRequest(data: { agentUuid: string, }) {
       url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
       headers: { 'Project-Uuid': projectUuid, },
       data: {},
-      params: {},
+      params: {
+        show_all: !!data.params?.showAll,
+      },
     }),
   });
 
