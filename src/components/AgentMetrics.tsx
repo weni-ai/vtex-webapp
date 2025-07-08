@@ -172,7 +172,12 @@ export function AgentMetrics() {
     try {
       setIsDataLoading(true);
       setDataRows(1);
-      const response = await agentCLI({ agentUuid: assignedAgentUuid });
+
+      const response = await agentCLI({
+        agentUuid: assignedAgentUuid,
+        dontSave: true,
+        params: { showAll: true }
+      });
 
       templates = response.templates.filter((template) => {
         return template.status !== 'needs-editing';
