@@ -641,7 +641,7 @@
                 "start_condition": {
                     "label": "Start condition",
                     "description": "Defines the condition that starts the agent.",
-                    "help": "Visits to the store which can include a series of user interactions and end after 30 minutes of inactivity."
+                    "help": "Start condicition example: “When a webhook is received with status = approved”"
                 },
                 "content": {
                     "label": "Text content",
