@@ -641,7 +641,7 @@
                 "start_condition": {
                     "label": "Condição de início",
                     "description": "Define a condição que inicia o agente.",
-                    "help": "Visitas ao loja que podem incluir uma série de interações do usuário e terminam após 30 minutos de inatividade."
+                    "help": "Exemplo de condição de início: “Quando um webhook é recebido com status = aprovado”"
                 },
                 "content": {
                     "label": "Conteúdo de texto",
