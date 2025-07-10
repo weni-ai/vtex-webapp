@@ -121,6 +121,10 @@
                     "webhook_url": {
                         "label": "URL de Webhook",
                         "description": "Use esta URL para configurar seu sistema externo para enviar eventos a este agente"
+                    },
+                    "global_rule": {
+                        "label": "Prompt global (opcional)",
+                        "description": "Use esta área para definir regras e diretrizes globais para o agente"
                     }
                 },
                 "buttons": {
@@ -534,7 +538,9 @@
                             "validating_inserted_content": "Validando conteúdo inserido",
                             "adjusting_custom_variables": "Ajustando variáveis personalizadas",
                             "optimizing_template_for_fast_delivery": "Otimizando modelo para entrega rápida",
-                            "performing_final_security_checks": "Realizando últimos controles de segurança"
+                            "performing_final_security_checks": "Realizando últimos controles de segurança",
+                            "reviewing_rule_structure": "Revisando estrutura de regra",
+                            "optimizing_rule_for_fast_delivery": "Otimizando regra para entrega rápida"
                         }
                     },
                     "completed": {
