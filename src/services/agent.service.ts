@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest, updateAssignedAgentSettingsRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -110,6 +110,18 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean,
 
   const statusValues = Object.values(status);
 
+  function getTemplateHeader(metadata: { header: { header_type: 'TEXT' | 'IMAGE', text: string } }) {    
+    if (typeof metadata.header === 'string') {
+      return metadata.header;
+    }
+
+    if (!metadata?.header?.header_type) {
+      return '';
+    }
+
+    return metadata.header.header_type === 'TEXT' ? metadata.header.text : metadata.header.text;
+  }
+
   const assignedAgent = {
     ...response,
     templates: response.templates.map((template) => ({
@@ -117,7 +129,10 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean,
       name: template.display_name,
       startCondition: template.start_condition,
       status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as typeof statusValues[number],
-      metadata: template.metadata,
+      metadata: {
+        ...template.metadata,
+        header: getTemplateHeader(template.metadata),
+      },
     })),
   }
 
@@ -185,26 +200,6 @@ export async function saveAgentButtonTemplate(data: {
         return template;
       })
     }
-  })));
-
-  return response;
-}
-
-export async function updateAssignedAgentSettings(data: {
-  agentUuid: string;
-  contactPercentage?: number;
-}) {
-  const response = await updateAssignedAgentSettingsRequest(data);
-
-  const assignedAgents = store.getState().project.assignedAgents;
-
-  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
-    return agent.uuid === data.agentUuid ?
-      {
-        ...agent,
-        contactPercentage: response.contact_percentage,
-      }
-      : agent;
   })));
 
   return response;
@@ -406,6 +401,34 @@ export async function agentMetrics(data: { templateUuid: string, startDate: stri
     templateUuid: data.templateUuid,
     startDate: data.startDate,
     endDate: data.endDate,
+  });
+
+  return response;
+}
+
+function updateAssignedAgentProperty(agentUuid: string, replace: Record<string, string | number>) {
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return agent.uuid === agentUuid ?
+      {
+        ...agent,
+        ...replace,
+      }
+      : agent;
+  })));
+}
+
+export async function updateAgentGlobalRule(data: {
+  agentUuid: string;
+  contactPercentage?: number;
+  globalRule?: string;
+}) {
+  const response = await updateAgentGlobalRuleRequest(data);
+
+  updateAssignedAgentProperty(data.agentUuid, {
+    globalRule: response.globalRule,
+    contactPercentage: response.contactPercentage,
   });
 
   return response;

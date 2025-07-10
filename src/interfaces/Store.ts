@@ -55,6 +55,7 @@ export interface ProjectState {
             };
         }[];
         channelUuid: string;
+        globalRule: string;
     }[];
 }
 
