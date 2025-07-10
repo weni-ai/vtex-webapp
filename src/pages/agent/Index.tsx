@@ -1,13 +1,15 @@
-import { Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, toast } from '@vtex/shoreline';
-import { useEffect, useState } from 'react';
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast } from '@vtex/shoreline';
+import { useEffect, useMemo, useState } from 'react';
+import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InputCopyToClipboard } from '../../components/InputCopyToClipboard';
 import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../../components/TemplateCard';
 import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
 import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTestMode';
-import { agentCLI, updateAssignedAgentSettings } from '../../services/agent.service';
+import { agentCLI, updateAgentGlobalRule } from '../../services/agent.service';
 import store from '../../store/provider.store';
+import { ProcessModal } from '../template/modals/Process';
 
 export interface Template {
   uuid: string;
@@ -44,16 +46,25 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
   )
 }
 
-function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string }) {
   const { assignedAgentUuid } = useParams();
   const [percentage, setPercentage] = useState<string | undefined>(undefined);
+  const [globalRule, setGlobalRule] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
+  const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
+
+  const [successText, setSuccessText] = useState('');
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     if (contactPercentage) {
       setPercentage(contactPercentage.toString());
     }
-  }, [contactPercentage]);
+
+    if (previousGlobalRule) {
+      setGlobalRule(previousGlobalRule);
+    }
+  }, [contactPercentage, previousGlobalRule]);
 
   function handlePercentageChange(value: string) {
     if (Number(value) > 100) {
@@ -75,21 +86,46 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }
     setPercentage(Number(valueToSave).toFixed());
   }
 
+  const hasPercentageChanged = useMemo(() => {
+    return contactPercentage !== Number(percentage);
+  }, [contactPercentage, percentage]);
+
+  const hasGlobalRuleChanged = useMemo(() => {
+    return previousGlobalRule !== globalRule;
+  }, [previousGlobalRule, globalRule]);
+
   async function handleSave() {
+    setSuccessText('');
+    setErrorText('');
+
     try {
       setIsSaving(true);
 
-      await updateAssignedAgentSettings({
+      if (hasGlobalRuleChanged) {
+        setIsProcessModalOpen(true);
+      }
+
+      await updateAgentGlobalRule({
         agentUuid: assignedAgentUuid as string,
-        contactPercentage: Number(percentage),
+        globalRule: hasGlobalRuleChanged ? globalRule : undefined,
+        contactPercentage: hasPercentageChanged ? Number(percentage) : undefined,
       });
 
-      loadAgentDetails();
+      if (hasGlobalRuleChanged) {
+        setSuccessText(t('agents.details.settings.actions.save.success'));
+      } else {
+        toast.success(t('agents.details.settings.actions.save.success'));
+      }
 
-      toast.success(t('agents.details.settings.actions.save.success'));
+      loadAgentDetails();
     } catch (error) {
       setPercentage(contactPercentage?.toString());
-      toast.critical(t('agents.details.settings.actions.save.error'));
+
+      if (hasGlobalRuleChanged) {
+        setErrorText((error as Error).message);
+      } else {
+        toast.critical((error as Error).message);
+      }
     } finally {
       setIsSaving(false);
     }
@@ -97,6 +133,12 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }
 
   return (
     <Flex direction="column" gap="$space-5">
+      {errorText && <Alert variant="critical">
+        <Text variant="body">
+          <Markdown>{errorText}</Markdown>
+        </Text>
+      </Alert>}
+
       <InputCopyToClipboard
         isLoading={isLoading}
         label={t('agents.details.settings.fields.webhook_url.label')}
@@ -118,17 +160,48 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails }
         <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
       </Field>
 
+      <Field>
+        <Label>{t('agents.details.settings.fields.global_rule.label')}</Label>
+
+        {isLoading ? (
+          <Skeleton style={{ width: '100%', height: '68px' }} />
+        ) : (
+          <Textarea
+            className="content-textarea-full-width"
+            value={globalRule}
+            onChange={setGlobalRule}
+          />
+        )}
+
+        <FieldDescription>{t('agents.details.settings.fields.global_rule.description')}</FieldDescription>
+      </Field>
+
       <Flex justify="end">
         <Button
           variant="primary"
           size="large"
-          disabled={contactPercentage === Number(percentage)}
+          disabled={!hasPercentageChanged && !hasGlobalRuleChanged}
           onClick={handleSave}
           loading={isSaving}
         >
           {t('agents.details.settings.buttons.save')}
         </Button>
       </Flex>
+
+      <ProcessModal
+        open={isProcessModalOpen}
+        onClose={() => setIsProcessModalOpen(false)}
+        processingText={t('agents.details.settings.steps.processing.description')}
+        steps={[
+          'analyzing_defined_requirements',
+          'reviewing_rule_structure',
+          'validating_inserted_content',
+          'optimizing_rule_for_fast_delivery',
+          'performing_final_security_checks',
+        ]}
+        errorText={errorText}
+        successText={successText}
+      />
     </Flex>
   )
 }
@@ -144,6 +217,7 @@ export function AgentIndex() {
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
   const [contactPercentage, setContactPercentage] = useState<number | undefined>(undefined);
+  const [agentGlobalRule, setAgentGlobalRule] = useState('');
   const [templates, setTemplates] = useState<Template[]>([]);
 
   const [isSwitchToTestModeModalOpen, setIsSwitchToTestModeModalOpen] = useState(false);
@@ -201,6 +275,7 @@ export function AgentIndex() {
 
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
+      setAgentGlobalRule(response.globalRule);
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 
@@ -290,7 +365,13 @@ export function AgentIndex() {
           </TabPanel>
 
           <TabPanel>
-            <Settings isLoading={isLoading} webhookUrl={webhookUrl} contactPercentage={contactPercentage} loadAgentDetails={loadAgentDetails} />
+            <Settings
+              isLoading={isLoading}
+              webhookUrl={webhookUrl}
+              contactPercentage={contactPercentage}
+              loadAgentDetails={loadAgentDetails}
+              previousGlobalRule={agentGlobalRule}
+            />
           </TabPanel>
         </TabProvider>
 

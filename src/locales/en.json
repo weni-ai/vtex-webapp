@@ -116,11 +116,20 @@
                         "error": "Unable to save changes, please try again"
                     }
                 },
+                "steps": {
+                    "processing": {
+                        "description": "An AI is analyzing the rule to ensure everything works as expected. This may take a few minutes."
+                    }
+                },
                 "title": "Settings",
                 "fields": {
                     "webhook_url": {
                         "label": "Webhook URL",
                         "description": "Use this URL to configure your external system to send events to this agent"
+                    },
+                    "global_rule": {
+                        "label": "Global prompt (optional)",
+                        "description": "Use this area to define global rules and guidelines for the agent"
                     }
                 },
                 "buttons": {
@@ -534,7 +543,9 @@
                             "validating_inserted_content": "Validating inserted content",
                             "adjusting_custom_variables": "Adjusting custom variables",
                             "optimizing_template_for_fast_delivery": "Optimizing template for fast delivery",
-                            "performing_final_security_checks": "Performing final security checks"
+                            "performing_final_security_checks": "Performing final security checks",
+                            "reviewing_rule_structure": "Reviewing template structure",
+                            "optimizing_rule_for_fast_delivery": "Optimizing rule for fast delivery"
                         }
                     },
                     "completed": {
