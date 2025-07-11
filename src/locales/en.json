@@ -643,6 +643,13 @@
                 }
             },
             "fields": {
+                "errors": {
+                    "required": "required field",
+                    "missing_variable_one": "missing {{variables}} variable",
+                    "missing_variable_other": "missing {{variables}} variables",
+                    "undefined_variable_one": "variable {{variables}} is not defined",
+                    "undefined_variable_other": "variables {{variables}} are not defined"
+                },
                 "name": {
                     "label": "Template name"
                 },
