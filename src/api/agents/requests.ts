@@ -626,7 +626,7 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
 
 export async function createAssignedAgentTemplateRequest(data: {
   name: string,
-  header?: string,
+  header?: { type: 'text', text: string } | { type: 'media', src: string },
   body: string,
   footer?: string,
   button?: { text: string, url: string },
@@ -637,11 +637,23 @@ export async function createAssignedAgentTemplateRequest(data: {
   const projectUuid = store.getState().project.project_uuid;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
 
+  function getHeader(header: { type: 'text', text: string } | { type: 'media', src: string }) {
+    if (header.type === 'text') {
+      return header.text;
+    } else if (header.type === 'media') {
+      return header.src;
+    } else {
+      return undefined;
+    }
+  }
+
+  const header = data.header ? getHeader(data.header) : undefined;
+
   const response = await AssignedAgentTemplate.create({
     projectUuid,
     WhatsAppCloudAppUuid,
     name: data.name,
-    header: data.header,
+    header,
     body: data.body,
     footer: data.footer,
     button: data.button,
