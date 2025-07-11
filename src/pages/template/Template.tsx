@@ -1,5 +1,7 @@
 import { Alert, Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Markdown from "react-markdown";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
 import { agentCLI, assignedAgentTemplate, createAssignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
@@ -8,9 +10,16 @@ import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
-import './Template.style.css';
-import Markdown from "react-markdown";
 import { ProcessModal } from "./modals/Process";
+import './Template.style.css';
+
+function normalizeItems(language: string, items: string[]) {
+  return new Intl.ListFormat(language, { style: 'long', type: 'conjunction' }).format(items);
+}
+
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -45,6 +54,7 @@ function TemplateAlert({ variant, message }: { variant: "warning" | "critical", 
 export function Template() {
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid } = useParams();
+  const { i18n } = useTranslation();
 
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
@@ -77,6 +87,11 @@ export function Template() {
 
   const [templateNameError, setTemplateNameError] = useState('');
   const [startConditionError, setStartConditionError] = useState('');
+
+  const [variablesError, setVariablesError] = useState<{
+    field: string,
+    message: string,
+  }[]>([]);
 
   useEffect(() => {
     if (templateUuid) {
@@ -279,6 +294,73 @@ export function Template() {
     }
   }, [startCondition]);
 
+  useEffect(() => {
+    const errors: typeof variablesError = [];
+
+    variables.forEach((variable, index) => {
+      const fields = ['definition', 'fallbackText'] as const;
+
+      fields.forEach((field) => {
+        if (variable[field].trim().length === 0) {
+          errors.push({
+            field: `variable-${index + 1}-${field}`,
+            message: t('template.form.fields.errors.required'),
+          });
+        }
+      });
+    });
+
+    const missingVariables: string[] = [];
+
+    variables.forEach((_variable, index) => {
+      const variableNumber = index + 1;
+
+      if (!content.content.includes(`{{${variableNumber}}}`)) {
+        missingVariables.push(`{{${variableNumber}}}`);
+      }
+    });
+
+    if (missingVariables.length > 0) {
+      errors.push({
+        field: 'content',
+        message: t('template.form.fields.errors.missing_variable', {
+          count: missingVariables.length,
+          variables: normalizeItems(i18n.language, missingVariables),
+        }),
+      });
+    }
+
+    const variablesNumbers =
+      content.content
+        .match(/{{(\d+)}}/g)
+        ?.filter((value, index, array) => array.indexOf(value) === index)
+        .map((value) => Number(value.replace('{{', '').replace('}}', '')))
+      || [];
+
+    const variablesNotDefined = variablesNumbers.filter(variableNumber => variableNumber > variables.length);
+
+    if (variablesNotDefined.length > 0) {
+      errors.push({
+        field: 'content',
+        message: t('template.form.fields.errors.undefined_variable', {
+          count: variablesNotDefined.length,
+          variables: normalizeItems(i18n.language, variablesNotDefined.map(variableNumber => `{{${variableNumber}}}`)),
+        }),
+      });
+    }
+
+    const groupedMessagesByField = errors.map(error => ({
+      ...error,
+      message: capitalize(normalizeItems(i18n.language, errors.filter(e => e.field === error.field).map(e => e.message))),
+    }));
+
+    const uniqueErrorsByField = groupedMessagesByField.filter((error, index, self) =>
+      index === self.findIndex((t) => t.field === error.field)
+    );
+
+    setVariablesError(uniqueErrorsByField);
+  }, [variables, content.content]);
+
   return (
     <Page>
       <PageHeader>
@@ -317,7 +399,7 @@ export function Template() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges || !!templateNameError || !!startConditionError}>
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
@@ -382,6 +464,7 @@ export function Template() {
                 setTemporaryContentText(text);
               }}
               variables={variables.map((variable) => variable.definition)}
+              contentError={variablesError.find(error => error.field === 'content')?.message}
             />
 
             <MessagePreview
@@ -399,6 +482,7 @@ export function Template() {
               variables={variables}
               setVariables={setVariables}
               openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
+              variablesError={variablesError}
             />
 
             <AddingVariableModal

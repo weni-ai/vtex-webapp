@@ -1,10 +1,10 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
 import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -18,6 +18,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   addEmptyVariables: (count: number) => void;
   openNewVariableModal: (text: string) => void;
   variables: string[];
+  contentError?: string;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -321,7 +322,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     <Flex direction="column" gap="$space-4">
       <SectionHeader title={t('template.form.areas.content.title')} />
 
-      <Field>
+      <Field error={!!contentError}>
         <Label>{t('template.form.fields.content.label')}</Label>
 
         <Flex style={{ position: 'relative' }}>
@@ -364,7 +365,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
           </MenuProvider>
         </Flex>
 
-        <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+        {contentError ? (
+          <FieldError>{contentError}</FieldError>
+        ) : (
+          <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+        )}
       </Field>
 
       <Flex
