@@ -527,6 +527,13 @@
                     "done": "Concluir"
                 }
             },
+            "edit": {
+                "steps": {
+                    "processing": {
+                        "description": "Um AI está analisando a condição de início para garantir que tudo funcione como esperado. Isso pode levar alguns minutos."
+                    }
+                }
+            },
             "create": {
                 "steps": {
                     "processing": {
@@ -540,7 +547,9 @@
                             "optimizing_template_for_fast_delivery": "Otimizando modelo para entrega rápida",
                             "performing_final_security_checks": "Realizando últimos controles de segurança",
                             "reviewing_rule_structure": "Revisando estrutura de regra",
-                            "optimizing_rule_for_fast_delivery": "Otimizando regra para entrega rápida"
+                            "optimizing_rule_for_fast_delivery": "Otimizando regra para entrega rápida",
+                            "reviewing_start_condition_structure": "Revisando estrutura de condição de início",
+                            "optimizing_start_condition_for_fast_delivery": "Otimizando condição de início para entrega rápida"
                         }
                     },
                     "completed": {

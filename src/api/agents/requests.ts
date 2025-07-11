@@ -204,6 +204,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       "DISABLED" |
       "LOCKED";
       needs_button_edit: boolean;
+      is_custom: boolean;
       metadata: {
         id: string;
         body: string;
@@ -411,10 +412,39 @@ export async function getWhatsAppURLRequest(): Promise<{
 
 export async function updateAgentTemplateRequest(data: {
   templateUuid: string;
-  template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } }
+  template: {
+    header?: string,
+    content: string,
+    footer?: string,
+    button?: { text: string, url: string, urlExample?: string },
+    startCondition?: string,
+  }
 }) {
   const projectUuid = store.getState().project.project_uuid;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
+
+  const parameters: { name: string, value: string | string[] }[] = [{
+    name: 'variables',
+    value: [],
+  }, {
+    name: 'examples',
+    value: [],
+  }];
+
+  if (data.template.startCondition) {
+    parameters.push({
+      name: 'start_condition',
+      value: data.template.startCondition,
+    });
+  }
+
+  type error =
+    {
+      errors: string[],
+      error: { body: { message: string } },
+      correction_needed: string,
+      message: string,
+    };
 
   const response = await VTEXFetch<{
     uuid: string;
@@ -431,6 +461,7 @@ export async function updateAgentTemplateRequest(data: {
         example?: string[];
       }[];
     };
+    error?: error,
   }>('/_v/proxy-request', {
     method: 'POST',
     headers: {
@@ -453,6 +484,7 @@ export async function updateAgentTemplateRequest(data: {
             url_suffix_example: data.template.button.urlExample,
           }
         }] : [],
+        parameters,
       },
       params: {},
       headers: { 'Project-Uuid': projectUuid, },
@@ -462,7 +494,13 @@ export async function updateAgentTemplateRequest(data: {
   if ('display_name' in Object(response)) {
     return response;
   } else {
-    throw new Error('error updating template');
+    let errorText = '';
+
+    if ('error' in Object(response)) {
+      errorText = response.error?.correction_needed || '';
+    }
+
+    throw new Error(errorText || `${t('error.title')}! ${t('error.description')}`);
   }
 };
 
