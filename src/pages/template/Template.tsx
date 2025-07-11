@@ -176,7 +176,13 @@ export function Template() {
   const createCustomTemplatePayload = useMemo(() => {
     return {
       name: templateName,
-      header: content.header?.type === 'text' ? content.header.text : undefined,
+      header: content.header?.type === 'media' ? {
+        type: 'media',
+        src: content.header.previewSrc,
+      } : content.header?.type === 'text' ? {
+        type: 'text',
+        text: content.header.text,
+      } : undefined,
       body: content.content,
       footer: content.footer,
       button: content.button,

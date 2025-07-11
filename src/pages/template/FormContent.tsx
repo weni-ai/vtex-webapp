@@ -4,7 +4,24 @@ import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
 import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables }: {
+async function fileToBase64(file: File) {
+  try {
+    return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        reject(error as unknown as Error);
+      };
+      reader.readAsDataURL(file);
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -12,7 +29,6 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   isHeaderEditable?: boolean;
   isFooterEditable?: boolean;
   isButtonEditable?: boolean;
-  canChangeHeaderType?: boolean;
   canChangeButton?: boolean;
   totalVariables: number;
   addEmptyVariables: (count: number) => void;
@@ -102,12 +118,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [file, setFile] = useState<File | undefined>(undefined);
   const [filePreview, setFilePreview] = useState<string | undefined>(undefined);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
     if (file) {
       setFile(file);
-      setFilePreview(URL.createObjectURL(file));
+      setFilePreview(await fileToBase64(file));
     }
 
     e.target.value = '';
@@ -186,12 +202,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       isVisible: false,
       component: (
         <>
-          {false && (<Bleed top="$space-7">
+          <Bleed top="$space-7">
             <RadioGroup label="" horizontal state={headerTypeState}>
-              <Radio value="text" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
-              <Radio value="media" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
+              <Radio value="text" disabled={status === 'needs-editing'}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
+              <Radio value="media" disabled={status === 'needs-editing'}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
             </RadioGroup>
-          </Bleed>)}
+          </Bleed>
 
           {headerType === 'text' && (
             <Field>
