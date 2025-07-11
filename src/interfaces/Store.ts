@@ -40,6 +40,7 @@ export interface ProjectState {
         templates: {
             uuid: string;
             name: string;
+            isCustom: boolean;
             startCondition: string;
             status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked" | "needs-editing";
             metadata: {

@@ -48,7 +48,9 @@ export function Template() {
 
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
+  const [previousStartCondition, setPreviousStartCondition] = useState('');
   const [startCondition, setStartCondition] = useState('');
+  const [templateIsCustom, setTemplateIsCustom] = useState(false);
 
   const [temporaryContentText, setTemporaryContentText] = useState('');
 
@@ -78,6 +80,11 @@ export function Template() {
   const [templateNameError, setTemplateNameError] = useState('');
   const [startConditionError, setStartConditionError] = useState('');
 
+  const [processModalSpecificProps, setProcessModalSpecificProps] = useState<{ processingText: string, steps: string[] }>({
+    processingText: '',
+    steps: [],
+  });
+
   useEffect(() => {
     if (templateUuid) {
       loadTemplate();
@@ -90,6 +97,7 @@ export function Template() {
 
   const hasChanges = useMemo(() => {
     return [
+      previousStartCondition !== startCondition,
       prefilledContent.content !== content.content,
       prefilledContent.header?.type !== content.header?.type,
       prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
@@ -98,7 +106,7 @@ export function Template() {
       prefilledContent.button?.url !== content.button?.url,
       prefilledContent.button?.urlExample !== content.button?.urlExample,
     ].some(Boolean);
-  }, [content, prefilledContent]);
+  }, [content, prefilledContent, previousStartCondition, startCondition]);
 
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
@@ -128,6 +136,9 @@ export function Template() {
 
     setTemplateName(template.name);
     setTemplateStatus(template.status as "active" | "pending" | "rejected" | "needs-editing");
+    setTemplateIsCustom(template.isCustom);
+
+    setPreviousStartCondition(template.startCondition);
     setStartCondition(template.startCondition);
 
     setPrefilledContent({
@@ -149,12 +160,31 @@ export function Template() {
       return;
     }
 
+    const hasStartConditionChanged = previousStartCondition !== startCondition;
+
     try {
+      setErrorText('');
+      setSuccessText('');
       setIsSaving(true);
+
+      if (hasStartConditionChanged) {  
+        setIsCreatingTemplateModalOpen(true);
+        setProcessModalSpecificProps({
+          processingText: t('template.modals.edit.steps.processing.description'),
+          steps: [
+            'analyzing_defined_requirements',
+            'reviewing_start_condition_structure',
+            'validating_inserted_content',
+            'optimizing_start_condition_for_fast_delivery',
+            'performing_final_security_checks',
+          ],
+        });
+      }
 
       await updateAgentTemplate({
         templateUuid: templateUuid,
         template: {
+          startCondition: hasStartConditionChanged ? startCondition : undefined,
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
           footer: content.footer,
@@ -162,12 +192,23 @@ export function Template() {
         },
       });
 
-      toast.success(t('agent.actions.edit_template.success'));
-
       await updateTemplates();
+
+      if (hasStartConditionChanged) {
+        setSuccessText(t('agent.actions.edit_template.success'));
+      } else {
+        toast.success(t('agent.actions.edit_template.success'));
       navigateToAgent();
+      }
+
     } catch (error) {
-      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+      if (error instanceof Error) {
+        if (hasStartConditionChanged) {
+          setErrorText(error.message);
+        } else {
+          toast.critical(error.message);
+        }
+      }
     } finally {
       setIsSaving(false);
     }
@@ -200,6 +241,17 @@ export function Template() {
 
       setIsSaving(true);
       setIsCreatingTemplateModalOpen(true);
+      setProcessModalSpecificProps({
+        processingText: t('template.modals.create.steps.processing.description'),
+        steps: [
+          'analyzing_defined_requirements',
+          'reviewing_template_structure',
+          'validating_inserted_content',
+          'adjusting_custom_variables',
+          'optimizing_template_for_fast_delivery',
+          'performing_final_security_checks',
+        ],
+      });
 
       await createAssignedAgentTemplate(createCustomTemplatePayload);
 
@@ -345,10 +397,11 @@ export function Template() {
             name={templateName}
             setName={setTemplateName}
             nameError={templateNameError}
+            isNameEditable={!isEditing}
             startCondition={startCondition}
             setStartCondition={setStartCondition}
             startConditionError={startConditionError}
-            isDisabled={isEditing}
+            isStartConditionEditable={!isEditing || templateIsCustom}
           />
 
           <Divider />
@@ -432,15 +485,7 @@ export function Template() {
               navigateToAgent();
             }
           }}
-          processingText={t('template.modals.create.steps.processing.description')}
-          steps={[
-            'analyzing_defined_requirements',
-            'reviewing_template_structure',
-            'validating_inserted_content',
-            'adjusting_custom_variables',
-            'optimizing_template_for_fast_delivery',
-            'performing_final_security_checks',
-          ]}
+          {...processModalSpecificProps}
         />
       </PageContent>
     </Page>

@@ -129,6 +129,7 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean,
       name: template.display_name,
       startCondition: template.start_condition,
       status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as typeof statusValues[number],
+      isCustom: template.is_custom,
       metadata: {
         ...template.metadata,
         header: getTemplateHeader(template.metadata),
@@ -345,7 +346,16 @@ export async function assignedAgentTemplate(data: { templateUuid: string }) {
   return template;
 }
 
-export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } } }) {
+export async function updateAgentTemplate(data: {
+  templateUuid: string,
+  template: {
+    header?: string,
+    content: string,
+    footer?: string,
+    button?: { text: string, url: string, urlExample?: string },
+    startCondition?: string,
+  }
+}) {
   const response = await updateAgentTemplateRequest(data);
 
   const assignedAgents = store.getState().project.assignedAgents;
