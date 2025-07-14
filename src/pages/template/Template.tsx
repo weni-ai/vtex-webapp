@@ -9,8 +9,8 @@ import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import './Template.style.css';
-import { CreatingTemplateModal } from "./modals/CreatingTemplate";
 import Markdown from "react-markdown";
+import { ProcessModal } from "./modals/Process";
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -421,7 +421,7 @@ export function Template() {
           </>)}
         </Flex>
 
-        <CreatingTemplateModal
+        <ProcessModal
           errorText={errorText}
           successText={successText}
           open={isCreatingTemplateModalOpen}
@@ -432,6 +432,15 @@ export function Template() {
               navigateToAgent();
             }
           }}
+          processingText={t('template.modals.create.steps.processing.description')}
+          steps={[
+            'analyzing_defined_requirements',
+            'reviewing_template_structure',
+            'validating_inserted_content',
+            'adjusting_custom_variables',
+            'optimizing_template_for_fast_delivery',
+            'performing_final_security_checks',
+          ]}
         />
       </PageContent>
     </Page>
