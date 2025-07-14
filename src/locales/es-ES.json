@@ -116,11 +116,20 @@
                         "error": "Error al guardar, inténtalo de nuevo más tarde"
                     }
                 },
+                "steps": {
+                    "processing": {
+                        "description": "Un AI está analizando la regla para asegurarse de que todo funcione como se esperaba. Esto puede tomar unos minutos."
+                    }
+                },
                 "title": "Configuración",
                 "fields": {
                     "webhook_url": {
                         "label": "URL de Webhook",
                         "description": "Usa esta URL para configurar tu sistema externo para enviar eventos a este agente"
+                    },
+                    "global_rule": {
+                        "label": "Prompt global (opcional)",
+                        "description": "Usa esta área para definir reglas y directrices globales para el agente"
                     }
                 },
                 "buttons": {
@@ -534,7 +543,9 @@
                             "validating_inserted_content": "Validando contenido insertado",
                             "adjusting_custom_variables": "Ajustando variables personalizadas",
                             "optimizing_template_for_fast_delivery": "Optimizando plantilla para entrega rápida",
-                            "performing_final_security_checks": "Realizando últimos controles de seguridad"
+                            "performing_final_security_checks": "Realizando últimos controles de seguridad",
+                            "reviewing_rule_structure": "Revisando estructura de regla",
+                            "optimizing_rule_for_fast_delivery": "Optimizando regla para entrega rápida"
                         }
                     },
                     "completed": {

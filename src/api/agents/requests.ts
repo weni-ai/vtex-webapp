@@ -209,7 +209,10 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
         body: string;
         name: string;
         topic: string;
-        header: string;
+        header: {
+          header_type: 'TEXT' | 'IMAGE';
+          text: string;
+        };
         footer: string;
         buttons: {
           url: string;
@@ -226,6 +229,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
     }[],
     channel_uuid: string;
     webhook_url: string;
+    global_rule_prompt: string;
   }>('/_v/proxy-request', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', },
@@ -247,6 +251,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       channelUuid: response.channel_uuid,
       contactPercentage: response.contact_percentage,
       webhookUrl: response.webhook_url,
+      globalRule: response.global_rule_prompt,
     };
   } else {
     throw new Error('error retrieving agent');
@@ -461,38 +466,6 @@ export async function updateAgentTemplateRequest(data: {
   }
 };
 
-export async function updateAssignedAgentSettingsRequest(data: {
-  agentUuid: string;
-  contactPercentage?: number;
-}) {
-  const projectUuid = store.getState().project.project_uuid;
-
-  const response = await VTEXFetch<{
-    uuid: string;
-    contact_percentage: number;
-  }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      method: 'PATCH',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
-      data: {
-        contact_percentage: data.contactPercentage,
-      },
-      params: {},
-      headers: { 'Project-Uuid': projectUuid, },
-    }),
-  });
-
-  if ('uuid' in Object(response)) {
-    return response;
-  } else {
-    throw new Error('error updating agent settings');
-  }
-};
-
 function proxy<T = unknown>(method: string, url: string, { headers = {}, data = {}, params = {} }: { headers?: Record<string, string>, data?: Record<string, any>, params?: Record<string, string> }) {
   return VTEXFetch<T>('/_v/proxy-request', {
     method: 'POST',
@@ -551,6 +524,7 @@ class AssignedAgentTemplate {
             "template_body": data.body,
             "template_footer": data.footer,
             "template_button": button,
+            "template_body_params": data.variables.map((variable) => variable.definition),
           },
           "category": "UTILITY",
           "project_uuid": data.projectUuid,
@@ -570,7 +544,7 @@ class AssignedAgentTemplate {
               name: 'exemples',
               value: [],
             },
-          ]
+          ],
         },
       }
     );
@@ -688,5 +662,73 @@ export async function createAssignedAgentTemplateRequest(data: {
     }
 
     throw new Error(errorText || t('template.modals.create.errors.generic_error'));
+  }
+}
+
+class AssignedAgent {
+  static update(data: {
+    projectUuid: string,
+    agentUuid: string,
+    contactPercentage?: number,
+    globalRule?: string,
+  }) {
+    type error =
+      {
+        error?: {
+          status?: 'invalid',
+          correction_needed?: string,
+          message?: string,
+        }
+      }
+
+    return proxy<{
+      uuid: string;
+      contact_percentage: number;
+      global_rule_prompt: string;
+    } & error>(
+      'PATCH',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
+      {
+        headers: {
+          'Project-Uuid': data.projectUuid,
+        },
+        data: {
+          global_rule: data.globalRule,
+          contact_percentage: data.contactPercentage,
+        },
+      }
+    );
+  }
+}
+
+
+export async function updateAgentGlobalRuleRequest(data: {
+  agentUuid: string,
+  contactPercentage?: number,
+  globalRule?: string,
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await AssignedAgent.update({
+    projectUuid,
+    agentUuid: data.agentUuid,
+    contactPercentage: data.contactPercentage,
+    globalRule: data.globalRule,
+  });
+
+  if ('uuid' in Object(response)) {
+    return {
+      uuid: response.uuid,
+      contactPercentage: response.contact_percentage,
+      globalRule: response.global_rule_prompt,
+    };
+  } else {
+    let errorText = '';
+
+    if ('error' in Object(response)) {
+      errorText = response.error?.correction_needed || '';
+    }
+
+    throw new Error(errorText || t('agents.details.settings.actions.save.error'));
   }
 }
