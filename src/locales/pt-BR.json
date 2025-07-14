@@ -116,6 +116,11 @@
                         "error": "Erro ao salvar, tente novamente mais tarde"
                     }
                 },
+                "steps": {
+                    "processing": {
+                        "description": "Uma AI está analisando a regra para garantir que tudo funcione como esperado. Isso pode levar alguns minutos."
+                    }
+                },
                 "title": "Configurações",
                 "fields": {
                     "webhook_url": {
@@ -538,7 +543,7 @@
                 "steps": {
                     "processing": {
                         "title": "Processando",
-                        "description": "Um AI está analisando a modelo para garantir que tudo funcione como esperado. Isso pode levar alguns minutos.",
+                        "description": "Uma AI está analisando o modelo para garantir que tudo funcione como esperado. Isso pode levar alguns minutos.",
                         "items": {
                             "analyzing_defined_requirements": "Analisando requisitos definidos",
                             "reviewing_template_structure": "Revisando estrutura de modelo",
