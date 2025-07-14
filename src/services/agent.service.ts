@@ -130,6 +130,7 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean,
       startCondition: template.start_condition,
       status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as typeof statusValues[number],
       isCustom: template.is_custom,
+      variables: template.variables,
       metadata: {
         ...template.metadata,
         header: getTemplateHeader(template.metadata),
@@ -354,6 +355,7 @@ export async function updateAgentTemplate(data: {
     footer?: string,
     button?: { text: string, url: string, urlExample?: string },
     startCondition?: string,
+    variables?: { definition: string; fallback: string; }[],
   }
 }) {
   const response = await updateAgentTemplateRequest(data);
