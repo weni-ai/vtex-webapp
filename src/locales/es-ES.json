@@ -116,6 +116,11 @@
                         "error": "Error al guardar, inténtalo de nuevo más tarde"
                     }
                 },
+                "steps": {
+                    "processing": {
+                        "description": "Un AI está analizando la regla para asegurarse de que todo funcione como se esperaba. Esto puede tomar unos minutos."
+                    }
+                },
                 "title": "Configuración",
                 "fields": {
                     "webhook_url": {
