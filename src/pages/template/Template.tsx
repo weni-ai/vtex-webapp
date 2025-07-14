@@ -69,6 +69,7 @@ export function Template() {
   });
 
   const [isAddingVariableModalOpen, setIsAddingVariableModalOpen] = useState(false);
+  const [previousVariables, setPreviousVariables] = useState<Variable[]>([]);
   const [variables, setVariables] = useState<Variable[]>([]);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -91,12 +92,25 @@ export function Template() {
     }
   }, [templateUuid]);
 
+  const hasVariablesChanged = useMemo(() => {
+    if (previousVariables.length !== variables.length) {
+      return true;
+    }
+
+    return previousVariables.some(
+      (variable, index) =>
+        variable.definition !== variables[index].definition ||
+        variable.fallbackText !== variables[index].fallbackText
+    )
+  }, [previousVariables, variables]);
+
   const isEditing = useMemo(() => {
     return templateUuid !== undefined;
   }, [templateUuid]);
 
   const hasChanges = useMemo(() => {
     return [
+      hasVariablesChanged,
       previousStartCondition !== startCondition,
       prefilledContent.content !== content.content,
       prefilledContent.header?.type !== content.header?.type,
@@ -106,7 +120,7 @@ export function Template() {
       prefilledContent.button?.url !== content.button?.url,
       prefilledContent.button?.urlExample !== content.button?.urlExample,
     ].some(Boolean);
-  }, [content, prefilledContent, previousStartCondition, startCondition]);
+  }, [content, prefilledContent, previousStartCondition, startCondition, hasVariablesChanged]);
 
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
@@ -141,6 +155,16 @@ export function Template() {
     setPreviousStartCondition(template.startCondition);
     setStartCondition(template.startCondition);
 
+    if (template.variables) {
+      const variables = template.variables.map((variable) => ({
+        definition: variable.definition,
+        fallbackText: variable.fallback,
+      }))
+
+      setPreviousVariables(variables);
+      setVariables(variables);
+    }
+
     setPrefilledContent({
       header,
       content: template.metadata.body,
@@ -161,13 +185,14 @@ export function Template() {
     }
 
     const hasStartConditionChanged = previousStartCondition !== startCondition;
+    const mustBeProcessedByAI = hasStartConditionChanged || hasVariablesChanged;
 
     try {
       setErrorText('');
       setSuccessText('');
       setIsSaving(true);
 
-      if (hasStartConditionChanged) {  
+      if (mustBeProcessedByAI) {
         setIsCreatingTemplateModalOpen(true);
         setProcessModalSpecificProps({
           processingText: t('template.modals.edit.steps.processing.description'),
@@ -184,26 +209,32 @@ export function Template() {
       await updateAgentTemplate({
         templateUuid: templateUuid,
         template: {
-          startCondition: hasStartConditionChanged ? startCondition : undefined,
           header: content.header?.type === 'text' ? content.header.text : undefined,
           content: content.content,
           footer: content.footer,
           button: content.button,
+          ...(mustBeProcessedByAI ? {
+            startCondition: startCondition,
+            variables: variables.map((variable) => ({
+              definition: variable.definition,
+              fallback: variable.fallbackText,
+            })),
+          } : {}),
         },
       });
 
       await updateTemplates();
 
-      if (hasStartConditionChanged) {
+      if (mustBeProcessedByAI) {
         setSuccessText(t('agent.actions.edit_template.success'));
       } else {
         toast.success(t('agent.actions.edit_template.success'));
-      navigateToAgent();
+        navigateToAgent();
       }
 
     } catch (error) {
       if (error instanceof Error) {
-        if (hasStartConditionChanged) {
+        if (mustBeProcessedByAI) {
           setErrorText(error.message);
         } else {
           toast.critical(error.message);
@@ -445,7 +476,7 @@ export function Template() {
             />
           </Grid>
 
-          {!isEditing && (<>
+          {templateStatus !== 'needs-editing' && (<>
             <Divider />
 
             <FormVariables

@@ -12,6 +12,13 @@ import {
   adapterIntegratedAgentsList,
 } from "./adapters";
 
+interface Template {
+  variables: {
+    definition: string;
+    fallback: string;
+  }[];
+}
+
 interface IntegrateAgentData {
   feature_uuid: string;
   project_uuid: string;
@@ -205,6 +212,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       "LOCKED";
       needs_button_edit: boolean;
       is_custom: boolean;
+      variables: Template["variables"];
       metadata: {
         id: string;
         body: string;
@@ -418,24 +426,25 @@ export async function updateAgentTemplateRequest(data: {
     footer?: string,
     button?: { text: string, url: string, urlExample?: string },
     startCondition?: string,
+    variables?: Template["variables"],
   }
 }) {
   const projectUuid = store.getState().project.project_uuid;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
 
-  const parameters: { name: string, value: string | string[] }[] = [{
-    name: 'variables',
-    value: [],
-  }, {
-    name: 'examples',
-    value: [],
-  }];
+  const parameters: { name: string, value: string | Template["variables"] }[] = [];
 
-  if (data.template.startCondition) {
-    parameters.push({
+  if (data.template.startCondition && data.template.variables) {
+    parameters.push(...[{
       name: 'start_condition',
       value: data.template.startCondition,
-    });
+    }, {
+      name: 'variables',
+      value: data.template.variables,
+    }, {
+      name: 'examples',
+      value: [],
+    }]);
   }
 
   type error =
@@ -443,6 +452,7 @@ export async function updateAgentTemplateRequest(data: {
       errors: string[],
       error: { body: { message: string } },
       correction_needed: string,
+      template_method: string,
       message: string,
     };
 
@@ -475,6 +485,7 @@ export async function updateAgentTemplateRequest(data: {
         app_uuid: WhatsAppCloudAppUuid,
         template_header: data.template.header,
         template_body: data.template.content,
+        template_body_params: data.template.variables?.map((variable) => variable.fallback),
         template_footer: data.template.footer,
         template_button: data.template.button ? [{
           type: 'URL',
@@ -497,7 +508,7 @@ export async function updateAgentTemplateRequest(data: {
     let errorText = '';
 
     if ('error' in Object(response)) {
-      errorText = response.error?.correction_needed || '';
+      errorText = response.error?.correction_needed || response.error?.template_method || '';
     }
 
     throw new Error(errorText || `${t('error.title')}! ${t('error.description')}`);
@@ -530,7 +541,7 @@ class AssignedAgentTemplate {
     button?: { text: string, url: string },
     WhatsAppCloudAppUuid: string,
     assignedAgentUuid: string,
-    variables: { definition: string, fallback: string }[],
+    variables: Template["variables"],
     startCondition: string,
   }) {
     const button = data.button ? [{
@@ -546,6 +557,7 @@ class AssignedAgentTemplate {
         errors: string[],
         error: { body: { message: string } },
         correction_needed: string,
+        template_method: string,
         message: string,
       }
 
@@ -562,7 +574,7 @@ class AssignedAgentTemplate {
             "template_body": data.body,
             "template_footer": data.footer,
             "template_button": button,
-            "template_body_params": data.variables.map((variable) => variable.definition),
+            "template_body_params": data.variables.map((variable) => variable.fallback),
           },
           "category": "UTILITY",
           "project_uuid": data.projectUuid,
@@ -669,7 +681,7 @@ export async function createAssignedAgentTemplateRequest(data: {
   footer?: string,
   button?: { text: string, url: string },
   assignedAgentUuid: string,
-  variables: { definition: string, fallback: string }[],
+  variables: Template["variables"],
   startCondition: string,
 }) {
   const projectUuid = store.getState().project.project_uuid;
@@ -694,7 +706,7 @@ export async function createAssignedAgentTemplateRequest(data: {
     let errorText = '';
 
     if ('error' in Object(response)) {
-      errorText = response.error?.error?.body?.message || response.error?.correction_needed || response.error?.message || '';
+      errorText = response.error?.error?.body?.message || response.error?.correction_needed || response.error?.template_method || response.error?.message || '';
     } else if ('errors' in Object(response.error)) {
       errorText = response.error?.errors?.join?.(' ') || '';
     }
@@ -715,6 +727,7 @@ class AssignedAgent {
         error?: {
           status?: 'invalid',
           correction_needed?: string,
+          template_method?: string,
           message?: string,
         }
       }
@@ -764,7 +777,7 @@ export async function updateAgentGlobalRuleRequest(data: {
     let errorText = '';
 
     if ('error' in Object(response)) {
-      errorText = response.error?.correction_needed || '';
+      errorText = response.error?.correction_needed || response.error?.template_method || '';
     }
 
     throw new Error(errorText || t('agents.details.settings.actions.save.error'));

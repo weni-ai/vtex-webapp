@@ -43,6 +43,7 @@ export interface ProjectState {
             isCustom: boolean;
             startCondition: string;
             status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked" | "needs-editing";
+            variables: { definition: string; fallback: string; }[];
             metadata: {
                 body: string;
                 header: string;
