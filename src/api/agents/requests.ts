@@ -744,7 +744,7 @@ class AssignedAgent {
           'Project-Uuid': data.projectUuid,
         },
         data: {
-          global_rule: data.globalRule,
+          global_rule: data.globalRule || null,
           contact_percentage: data.contactPercentage,
         },
       }
