@@ -4,7 +4,7 @@ import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
 import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -19,6 +19,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   openNewVariableModal: (text: string) => void;
   variables: string[];
   contentError?: string;
+  canCreateVariable: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -74,6 +75,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   }, [contentText]);
 
   function handleContentTextChange(value: string) {
+    if (!canCreateVariable) {
+      setContentText(value);
+      return;
+    }
+
     let newContentText = value;
     let lastVariableNumber = totalVariables;
 
@@ -351,16 +357,18 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                 <MenuItem key={index} onClick={() => {
                   setContentText(temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${index + 1}}}`));
                 }}>
-                  {`{{${index + 1}}} ${variable}`}
+                  {canCreateVariable ? `{{${index + 1}}} ${variable}` : variable}
                 </MenuItem>
               ))}
 
-              {variables.length > 0 && <MenuSeparator />}
+              {variables.length > 0 && canCreateVariable && <MenuSeparator />}
 
-              <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
-                <IconPencil />
-                {t('template.form.areas.variables.buttons.add')}
-              </MenuItem>
+              {canCreateVariable && (
+                <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
+                  <IconPencil />
+                  {t('template.form.areas.variables.buttons.add')}
+                </MenuItem>
+              )}
             </MenuPopover>
           </MenuProvider>
         </Flex>
@@ -368,7 +376,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
         {contentError ? (
           <FieldError>{contentError}</FieldError>
         ) : (
-          <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+          canCreateVariable && <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
         )}
       </Field>
 

@@ -642,6 +642,7 @@
                 },
                 "variables": {
                     "title": "Variáveis",
+                    "variable_name": "Variável {{variableName}}",
                     "empty": {
                         "title": "Nenhuma variável adicionada",
                         "description": "Use variáveis para personalizar e dinamizar a mensagem para seu contato"
