@@ -12,12 +12,12 @@ function VariableEmptyState() {
   )
 }
 
-export function VariableItem({ definition, fallbackText, setDefinition, setFallbackText, variableErrors }: {
+export function VariableItem({ definition, fallbackText, setDefinition, setFallbackText, variableErrors = [] }: {
   definition: string;
   fallbackText: string;
   setDefinition: (value: string) => void;
   setFallbackText: (value: string) => void;
-  variableErrors: { field: string; message: string }[];
+  variableErrors?: { field: string; message: string }[];
 }) {
   const definitionError = useMemo(() => variableErrors?.find((error) => error.field.endsWith('-definition'))?.message, [variableErrors]);
   const fallbackTextError = useMemo(() => variableErrors?.find((error) => error.field.endsWith('-fallbackText'))?.message, [variableErrors]);
