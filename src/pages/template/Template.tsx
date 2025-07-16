@@ -174,18 +174,18 @@ export function Template() {
     setPreviousStartCondition(template.startCondition);
     setStartCondition(template.startCondition);
 
-    if (template.variables) {
-      const variables = template.variables.map((variable) => ({
-        definition: variable.definition,
-        fallbackText: variable.fallback,
+    if (!template.isCustom) {      
+      const variables = (template.metadata.body_params || []).map((fallback, index) => ({
+        definition: t('template.form.areas.variables.variable_name', { variableName: `{{${index + 1}}}`, }),
+        fallbackText: fallback,
       }));
 
       setPreviousVariables(variables);
       setVariables(variables);
-    } else if (!template.isCustom) {      
-      const variables = (template.metadata.body_params || []).map((fallback, index) => ({
-        definition: t('template.form.areas.variables.variable_name', { variableName: `{{${index + 1}}}`, }),
-        fallbackText: fallback,
+    } else if (template.variables) {
+      const variables = template.variables.map((variable) => ({
+        definition: variable.definition,
+        fallbackText: variable.fallback,
       }));
 
       setPreviousVariables(variables);
