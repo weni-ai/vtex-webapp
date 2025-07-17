@@ -12,12 +12,12 @@ function VariableEmptyState() {
   )
 }
 
-export function VariableItem({ definition, fallbackText, setDefinition, setFallbackText, variableErrors }: {
+export function VariableItem({ definition, fallbackText, setDefinition, setFallbackText, variableErrors = [] }: {
   definition: string;
   fallbackText: string;
   setDefinition: (value: string) => void;
   setFallbackText: (value: string) => void;
-  variableErrors: { field: string; message: string }[];
+  variableErrors?: { field: string; message: string }[];
 }) {
   const definitionError = useMemo(() => variableErrors?.find((error) => error.field.endsWith('-definition'))?.message, [variableErrors]);
   const fallbackTextError = useMemo(() => variableErrors?.find((error) => error.field.endsWith('-fallbackText'))?.message, [variableErrors]);
@@ -63,7 +63,9 @@ export function FormVariables({ variables, setVariables, openAddingVariableModal
         {variables.map((variable, index) => (
           <Flex key={index} direction="column" gap="$space-4" style={{ padding: 'var(--sl-space-4)', border: 'var(--sl-border-base)', borderRadius: 'var(--sl-radius-2)', }}>
             <Flex align="center" gap="$space-2" justify="space-between">
-              <Text variant="emphasis" color="$fg-base">Variable {`{{${index + 1}}}`}</Text>
+              <Text variant="emphasis" color="$fg-base">
+                {t('template.form.areas.variables.variable_name', { variableName: `{{${index + 1}}}`, })}
+              </Text>
 
               <IconButton variant="tertiary" label="Remove element" onClick={() => setVariables(variables.filter((_, i) => i !== index))}>
                 <IconTrash />

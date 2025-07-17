@@ -119,6 +119,10 @@ export function Template() {
     )
   }, [previousVariables, variables]);
 
+  const isCreating = useMemo(() => {
+    return templateUuid === undefined;
+  }, [templateUuid]);
+
   const isEditing = useMemo(() => {
     return templateUuid !== undefined;
   }, [templateUuid]);
@@ -170,11 +174,19 @@ export function Template() {
     setPreviousStartCondition(template.startCondition);
     setStartCondition(template.startCondition);
 
-    if (template.variables) {
+    if (!template.isCustom) {      
+      const variables = (template.metadata.body_params || []).map((fallback, index) => ({
+        definition: t('template.form.areas.variables.variable_name', { variableName: `{{${index + 1}}}`, }),
+        fallbackText: fallback,
+      }));
+
+      setPreviousVariables(variables);
+      setVariables(variables);
+    } else if (template.variables) {
       const variables = template.variables.map((variable) => ({
         definition: variable.definition,
         fallbackText: variable.fallback,
-      }))
+      }));
 
       setPreviousVariables(variables);
       setVariables(variables);
@@ -549,6 +561,7 @@ export function Template() {
               }}
               variables={variables.map((variable) => variable.definition)}
               contentError={variablesError.find(error => error.field === 'content')?.message}
+              canCreateVariable={isCreating || templateIsCustom}
             />
 
             <MessagePreview
@@ -559,7 +572,7 @@ export function Template() {
             />
           </Grid>
 
-          {templateStatus !== 'needs-editing' && (<>
+          {(isCreating || templateIsCustom) && (<>
             <Divider />
 
             <FormVariables
