@@ -46,6 +46,7 @@ export interface ProjectState {
             variables: { definition: string; fallback: string; }[];
             metadata: {
                 body: string;
+                body_params: string[];
                 header: string;
                 footer: string;
                 buttons: {
