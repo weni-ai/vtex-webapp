@@ -166,6 +166,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       setHeaderType('text');
       setHeaderText(prefilledContent.header.text);
       initialVisibility.header = true;
+    } else if (prefilledContent.header?.type === 'media') {
+      setHeaderType('media');
+      setFile(prefilledContent.header.file);
+      setFilePreview(prefilledContent.header.previewSrc);
+      initialVisibility.header = true;
     }
 
     if (prefilledContent.content) {
@@ -242,7 +247,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                     {file.name}
                   </Text>
 
-                  <IconButton variant="secondary" label={t('template.form.areas.content.header.media.buttons.remove')} onClick={() => { setFile(undefined); setFilePreview(undefined); }}>
+                  <IconButton variant="secondary" label={t('template.form.areas.content.header.media.buttons.remove')} onClick={() => { setFile(undefined); setFilePreview(undefined); }} disabled={status === 'needs-editing'}>
                     <IconX />
                   </IconButton>
                 </Flex>
