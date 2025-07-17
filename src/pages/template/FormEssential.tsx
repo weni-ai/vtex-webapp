@@ -1,7 +1,25 @@
 import { ContextualHelp, Field, FieldDescription, FieldError, Flex, Input, Label } from "@vtex/shoreline";
 import { SectionHeader } from "./Template";
 
-export function FormEssential({ name, setName, nameError, startCondition, setStartCondition, startConditionError, isDisabled }: { name: string, setName: (name: string) => void, nameError: string, startCondition: string, setStartCondition: (startCondition: string) => void, startConditionError: string, isDisabled: boolean }) {
+export function FormEssential({
+  name,
+  setName,
+  nameError,
+  startCondition,
+  setStartCondition,
+  startConditionError,
+  isStartConditionEditable,
+  isNameEditable,
+}: {
+  name: string,
+  setName: (name: string) => void,
+  nameError: string,
+  startCondition: string,
+  setStartCondition: (startCondition: string) => void,
+  startConditionError: string,
+  isStartConditionEditable: boolean,
+  isNameEditable: boolean,
+}) {
   return (
     <Flex direction="column" gap="$space-4">
       <SectionHeader title={t('template.form.areas.basic.title')} />
@@ -13,7 +31,7 @@ export function FormEssential({ name, setName, nameError, startCondition, setSta
           </Flex>
         </Label>
 
-        <Input value={name} disabled={isDisabled} onChange={(value) => setName(value)} />
+        <Input value={name} disabled={!isNameEditable} onChange={(value) => setName(value)} />
 
         <FieldError>{nameError}</FieldError>
       </Field>
@@ -29,7 +47,7 @@ export function FormEssential({ name, setName, nameError, startCondition, setSta
           </Flex>
         </Label>
 
-        <Input value={startCondition} disabled={isDisabled} onChange={(value) => setStartCondition(value)} />
+        <Input value={startCondition} disabled={!isStartConditionEditable} onChange={(value) => setStartCondition(value)} />
 
         {startConditionError ?
           <FieldError>{startConditionError}</FieldError>

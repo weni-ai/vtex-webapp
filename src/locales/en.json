@@ -532,6 +532,13 @@
                     "done": "Done"
                 }
             },
+            "edit": {
+                "steps": {
+                    "processing": {
+                        "description": "An AI is analyzing the start condition to ensure everything works as expected. This may take a few minutes."
+                    }
+                }
+            },
             "create": {
                 "steps": {
                     "processing": {
@@ -544,8 +551,10 @@
                             "adjusting_custom_variables": "Adjusting custom variables",
                             "optimizing_template_for_fast_delivery": "Optimizing template for fast delivery",
                             "performing_final_security_checks": "Performing final security checks",
-                            "reviewing_rule_structure": "Reviewing template structure",
-                            "optimizing_rule_for_fast_delivery": "Optimizing rule for fast delivery"
+                            "reviewing_rule_structure": "Reviewing rule structure",
+                            "optimizing_rule_for_fast_delivery": "Optimizing rule for fast delivery",
+                            "reviewing_start_condition_structure": "Reviewing start condition structure",
+                            "optimizing_start_condition_for_fast_delivery": "Optimizing start condition for fast delivery"
                         }
                     },
                     "completed": {
@@ -633,6 +642,7 @@
                 },
                 "variables": {
                     "title": "Variables",
+                    "variable_name": "Variable {{variableName}}",
                     "empty": {
                         "title": "No variables added",
                         "description": "Use variables to personalize and dynamically customize the message for your contact"
@@ -643,6 +653,13 @@
                 }
             },
             "fields": {
+                "errors": {
+                    "required": "required field",
+                    "missing_variable_one": "missing {{variables}} variable",
+                    "missing_variable_other": "missing {{variables}} variables",
+                    "undefined_variable_one": "variable {{variables}} is not defined",
+                    "undefined_variable_other": "variables {{variables}} are not defined"
+                },
                 "name": {
                     "label": "Template name"
                 },
