@@ -267,7 +267,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               )}
 
               <VisuallyHidden>
-                <input id="file-input" type="file" onChange={handleFileChange} />
+                <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" />
               </VisuallyHidden>
             </>
           )}
