@@ -134,6 +134,7 @@ export function Template() {
       prefilledContent.content !== content.content,
       prefilledContent.header?.type !== content.header?.type,
       prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
+      prefilledContent.header?.type === 'media' && content.header?.type === 'media' && prefilledContent.header?.previewSrc !== content.header?.previewSrc,
       prefilledContent.footer !== content.footer,
       prefilledContent.button?.text !== content.button?.text,
       prefilledContent.button?.url !== content.button?.url,
@@ -144,7 +145,7 @@ export function Template() {
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
 
-    let header: { type: 'text', text: string } | undefined;
+    let header: { type: 'text', text: string } | { type: 'media', file: File, previewSrc: string } | undefined;
     let button: { text: string; url: string, urlExample?: string } | undefined;
     let footer: string | undefined;
 
@@ -157,9 +158,19 @@ export function Template() {
     }
 
     if (template.metadata.header) {
-      header = {
-        type: 'text',
-        text: template.metadata.header,
+      if (template.metadata.header.startsWith('https://')) {
+        const fileName = template.metadata.header.split('/').pop() || 'header.jpg';
+
+        header = {
+          type: 'media',
+          file: new File([], fileName),
+          previewSrc: template.metadata.header,
+        }
+      } else {
+        header = {
+          type: 'text',
+          text: template.metadata.header,
+        }
       }
     }
 
@@ -174,7 +185,7 @@ export function Template() {
     setPreviousStartCondition(template.startCondition);
     setStartCondition(template.startCondition);
 
-    if (!template.isCustom) {      
+    if (!template.isCustom) {
       const variables = (template.metadata.body_params || []).map((fallback, index) => ({
         definition: t('template.form.areas.variables.variable_name', { variableName: `{{${index + 1}}}`, }),
         fallbackText: fallback,
@@ -199,6 +210,24 @@ export function Template() {
       button,
     });
   }
+
+  const templateHeaderAsFinalObject = useMemo(() => {
+    let header: { type: 'media', src: string } | { type: 'text', text: string } | undefined;
+
+    if (content.header?.type === 'media' && content.header.previewSrc) {
+      header = {
+        type: 'media' as const,
+        src: content.header.previewSrc,
+      }
+    } else if (content.header?.type === 'text' && content.header.text) {
+      header = {
+        type: 'text' as const,
+        text: content.header.text,
+      }
+    }
+
+    return header;
+  }, [content.header]);
 
   async function handleSaveTemplate() {
     if (templateUuid === undefined) {
@@ -233,10 +262,17 @@ export function Template() {
         });
       }
 
+      const templateHeaderAsString =
+        templateHeaderAsFinalObject?.type === 'text' ?
+          templateHeaderAsFinalObject.text :
+          templateHeaderAsFinalObject?.type === 'media' ?
+            templateHeaderAsFinalObject.src :
+            undefined;
+
       await updateAgentTemplate({
         templateUuid: templateUuid,
         template: {
-          header: content.header?.type === 'text' ? content.header.text : undefined,
+          header: templateHeaderAsString,
           content: content.content,
           footer: content.footer,
           button: content.button,
@@ -275,13 +311,7 @@ export function Template() {
   const createCustomTemplatePayload = useMemo(() => {
     return {
       name: templateName,
-      header: content.header?.type === 'media' ? {
-        type: 'media',
-        src: content.header.previewSrc,
-      } : content.header?.type === 'text' ? {
-        type: 'text',
-        text: content.header.text,
-      } : undefined,
+      header: templateHeaderAsFinalObject,
       body: content.content,
       footer: content.footer,
       button: content.button,
@@ -546,7 +576,6 @@ export function Template() {
               isHeaderEditable={true}
               isFooterEditable={true}
               isButtonEditable={true}
-              canChangeHeaderType={!isEditing}
               canChangeButton={true}
               totalVariables={variables.length}
               addEmptyVariables={(count: number) => {
