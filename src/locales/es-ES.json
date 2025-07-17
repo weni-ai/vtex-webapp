@@ -652,6 +652,13 @@
                 }
             },
             "fields": {
+                "errors": {
+                    "required": "campo requerido",
+                    "missing_variable_one": "faltando {{variables}} variable",
+                    "missing_variable_other": "faltando {{variables}} variables",
+                    "undefined_variable_one": "variable {{variables}} no definida",
+                    "undefined_variable_other": "variables {{variables}} no definidas"
+                },
                 "name": {
                     "label": "Nombre de la plantilla"
                 },
