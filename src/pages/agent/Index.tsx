@@ -275,7 +275,7 @@ export function AgentIndex() {
 
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
-      setAgentGlobalRule(response.globalRule);
+      setAgentGlobalRule(response.globalRule || '');
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 

@@ -1,4 +1,4 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
@@ -21,7 +21,7 @@ async function fileToBase64(file: File) {
   }
 }
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -34,6 +34,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   addEmptyVariables: (count: number) => void;
   openNewVariableModal: (text: string) => void;
   variables: string[];
+  contentError?: string;
+  canCreateVariable: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -89,6 +91,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   }, [contentText]);
 
   function handleContentTextChange(value: string) {
+    if (!canCreateVariable) {
+      setContentText(value);
+      return;
+    }
+
     let newContentText = value;
     let lastVariableNumber = totalVariables;
 
@@ -337,7 +344,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     <Flex direction="column" gap="$space-4">
       <SectionHeader title={t('template.form.areas.content.title')} />
 
-      <Field>
+      <Field error={!!contentError}>
         <Label>{t('template.form.fields.content.label')}</Label>
 
         <Flex style={{ position: 'relative' }}>
@@ -366,21 +373,27 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                 <MenuItem key={index} onClick={() => {
                   setContentText(temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${index + 1}}}`));
                 }}>
-                  {`{{${index + 1}}} ${variable}`}
+                  {canCreateVariable ? `{{${index + 1}}} ${variable}` : variable}
                 </MenuItem>
               ))}
 
-              {variables.length > 0 && <MenuSeparator />}
+              {variables.length > 0 && canCreateVariable && <MenuSeparator />}
 
-              <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
-                <IconPencil />
-                {t('template.form.areas.variables.buttons.add')}
-              </MenuItem>
+              {canCreateVariable && (
+                <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
+                  <IconPencil />
+                  {t('template.form.areas.variables.buttons.add')}
+                </MenuItem>
+              )}
             </MenuPopover>
           </MenuProvider>
         </Flex>
 
-        <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+        {contentError ? (
+          <FieldError>{contentError}</FieldError>
+        ) : (
+          canCreateVariable && <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+        )}
       </Field>
 
       <Flex

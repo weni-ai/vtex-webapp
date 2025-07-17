@@ -1,5 +1,7 @@
 import { Alert, Bleed, Button, Divider, Flex, Grid, IconArrowLeft, IconButton, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Stack, Text, toast } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Markdown from "react-markdown";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
 import { agentCLI, assignedAgentTemplate, createAssignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
@@ -8,9 +10,16 @@ import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
-import './Template.style.css';
-import Markdown from "react-markdown";
 import { ProcessModal } from "./modals/Process";
+import './Template.style.css';
+
+function normalizeItems(language: string, items: string[]) {
+  return new Intl.ListFormat(language, { style: 'long', type: 'conjunction' }).format(items);
+}
+
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 export interface Content {
   header?: { type: 'text', text: string } | { type: 'media', file?: File, previewSrc?: string };
@@ -45,10 +54,13 @@ function TemplateAlert({ variant, message }: { variant: "warning" | "critical", 
 export function Template() {
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid } = useParams();
+  const { i18n } = useTranslation();
 
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
+  const [previousStartCondition, setPreviousStartCondition] = useState('');
   const [startCondition, setStartCondition] = useState('');
+  const [templateIsCustom, setTemplateIsCustom] = useState(false);
 
   const [temporaryContentText, setTemporaryContentText] = useState('');
 
@@ -67,6 +79,7 @@ export function Template() {
   });
 
   const [isAddingVariableModalOpen, setIsAddingVariableModalOpen] = useState(false);
+  const [previousVariables, setPreviousVariables] = useState<Variable[]>([]);
   const [variables, setVariables] = useState<Variable[]>([]);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -78,10 +91,36 @@ export function Template() {
   const [templateNameError, setTemplateNameError] = useState('');
   const [startConditionError, setStartConditionError] = useState('');
 
+  const [variablesError, setVariablesError] = useState<{
+    field: string,
+    message: string,
+  }[]>([]);
+
+  const [processModalSpecificProps, setProcessModalSpecificProps] = useState<{ processingText: string, steps: string[] }>({
+    processingText: '',
+    steps: [],
+  });
+
   useEffect(() => {
     if (templateUuid) {
       loadTemplate();
     }
+  }, [templateUuid]);
+
+  const hasVariablesChanged = useMemo(() => {
+    if (previousVariables.length !== variables.length) {
+      return true;
+    }
+
+    return previousVariables.some(
+      (variable, index) =>
+        variable.definition !== variables[index].definition ||
+        variable.fallbackText !== variables[index].fallbackText
+    )
+  }, [previousVariables, variables]);
+
+  const isCreating = useMemo(() => {
+    return templateUuid === undefined;
   }, [templateUuid]);
 
   const isEditing = useMemo(() => {
@@ -90,6 +129,8 @@ export function Template() {
 
   const hasChanges = useMemo(() => {
     return [
+      hasVariablesChanged,
+      previousStartCondition !== startCondition,
       prefilledContent.content !== content.content,
       prefilledContent.header?.type !== content.header?.type,
       prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
@@ -98,7 +139,7 @@ export function Template() {
       prefilledContent.button?.url !== content.button?.url,
       prefilledContent.button?.urlExample !== content.button?.urlExample,
     ].some(Boolean);
-  }, [content, prefilledContent]);
+  }, [content, prefilledContent, previousStartCondition, startCondition, hasVariablesChanged]);
 
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
@@ -128,7 +169,28 @@ export function Template() {
 
     setTemplateName(template.name);
     setTemplateStatus(template.status as "active" | "pending" | "rejected" | "needs-editing");
+    setTemplateIsCustom(template.isCustom);
+
+    setPreviousStartCondition(template.startCondition);
     setStartCondition(template.startCondition);
+
+    if (!template.isCustom) {      
+      const variables = (template.metadata.body_params || []).map((fallback, index) => ({
+        definition: t('template.form.areas.variables.variable_name', { variableName: `{{${index + 1}}}`, }),
+        fallbackText: fallback,
+      }));
+
+      setPreviousVariables(variables);
+      setVariables(variables);
+    } else if (template.variables) {
+      const variables = template.variables.map((variable) => ({
+        definition: variable.definition,
+        fallbackText: variable.fallback,
+      }));
+
+      setPreviousVariables(variables);
+      setVariables(variables);
+    }
 
     setPrefilledContent({
       header,
@@ -149,8 +211,27 @@ export function Template() {
       return;
     }
 
+    const hasStartConditionChanged = previousStartCondition !== startCondition;
+    const mustBeProcessedByAI = hasStartConditionChanged || hasVariablesChanged;
+
     try {
+      setErrorText('');
+      setSuccessText('');
       setIsSaving(true);
+
+      if (mustBeProcessedByAI) {
+        setIsCreatingTemplateModalOpen(true);
+        setProcessModalSpecificProps({
+          processingText: t('template.modals.edit.steps.processing.description'),
+          steps: [
+            'analyzing_defined_requirements',
+            'reviewing_start_condition_structure',
+            'validating_inserted_content',
+            'optimizing_start_condition_for_fast_delivery',
+            'performing_final_security_checks',
+          ],
+        });
+      }
 
       await updateAgentTemplate({
         templateUuid: templateUuid,
@@ -159,15 +240,33 @@ export function Template() {
           content: content.content,
           footer: content.footer,
           button: content.button,
+          ...(mustBeProcessedByAI ? {
+            startCondition: startCondition,
+            variables: variables.map((variable) => ({
+              definition: variable.definition,
+              fallback: variable.fallbackText,
+            })),
+          } : {}),
         },
       });
 
-      toast.success(t('agent.actions.edit_template.success'));
-
       await updateTemplates();
-      navigateToAgent();
+
+      if (mustBeProcessedByAI) {
+        setSuccessText(t('agent.actions.edit_template.success'));
+      } else {
+        toast.success(t('agent.actions.edit_template.success'));
+        navigateToAgent();
+      }
+
     } catch (error) {
-      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+      if (error instanceof Error) {
+        if (mustBeProcessedByAI) {
+          setErrorText(error.message);
+        } else {
+          toast.critical(error.message);
+        }
+      }
     } finally {
       setIsSaving(false);
     }
@@ -206,6 +305,17 @@ export function Template() {
 
       setIsSaving(true);
       setIsCreatingTemplateModalOpen(true);
+      setProcessModalSpecificProps({
+        processingText: t('template.modals.create.steps.processing.description'),
+        steps: [
+          'analyzing_defined_requirements',
+          'reviewing_template_structure',
+          'validating_inserted_content',
+          'adjusting_custom_variables',
+          'optimizing_template_for_fast_delivery',
+          'performing_final_security_checks',
+        ],
+      });
 
       await createAssignedAgentTemplate(createCustomTemplatePayload);
 
@@ -285,6 +395,73 @@ export function Template() {
     }
   }, [startCondition]);
 
+  useEffect(() => {
+    const errors: typeof variablesError = [];
+
+    variables.forEach((variable, index) => {
+      const fields = ['definition', 'fallbackText'] as const;
+
+      fields.forEach((field) => {
+        if (variable[field].trim().length === 0) {
+          errors.push({
+            field: `variable-${index + 1}-${field}`,
+            message: t('template.form.fields.errors.required'),
+          });
+        }
+      });
+    });
+
+    const missingVariables: string[] = [];
+
+    variables.forEach((_variable, index) => {
+      const variableNumber = index + 1;
+
+      if (!content.content.includes(`{{${variableNumber}}}`)) {
+        missingVariables.push(`{{${variableNumber}}}`);
+      }
+    });
+
+    if (missingVariables.length > 0) {
+      errors.push({
+        field: 'content',
+        message: t('template.form.fields.errors.missing_variable', {
+          count: missingVariables.length,
+          variables: normalizeItems(i18n.language, missingVariables),
+        }),
+      });
+    }
+
+    const variablesNumbers =
+      content.content
+        .match(/{{(\d+)}}/g)
+        ?.filter((value, index, array) => array.indexOf(value) === index)
+        .map((value) => Number(value.replace('{{', '').replace('}}', '')))
+      || [];
+
+    const variablesNotDefined = variablesNumbers.filter(variableNumber => variableNumber > variables.length);
+
+    if (variablesNotDefined.length > 0) {
+      errors.push({
+        field: 'content',
+        message: t('template.form.fields.errors.undefined_variable', {
+          count: variablesNotDefined.length,
+          variables: normalizeItems(i18n.language, variablesNotDefined.map(variableNumber => `{{${variableNumber}}}`)),
+        }),
+      });
+    }
+
+    const groupedMessagesByField = errors.map(error => ({
+      ...error,
+      message: capitalize(normalizeItems(i18n.language, errors.filter(e => e.field === error.field).map(e => e.message))),
+    }));
+
+    const uniqueErrorsByField = groupedMessagesByField.filter((error, index, self) =>
+      index === self.findIndex((t) => t.field === error.field)
+    );
+
+    setVariablesError(uniqueErrorsByField);
+  }, [variables, content.content]);
+
   return (
     <Page>
       <PageHeader>
@@ -323,7 +500,7 @@ export function Template() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges || !!templateNameError || !!startConditionError}>
+              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0}>
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
@@ -351,10 +528,11 @@ export function Template() {
             name={templateName}
             setName={setTemplateName}
             nameError={templateNameError}
+            isNameEditable={!isEditing}
             startCondition={startCondition}
             setStartCondition={setStartCondition}
             startConditionError={startConditionError}
-            isDisabled={isEditing}
+            isStartConditionEditable={!isEditing || templateIsCustom}
           />
 
           <Divider />
@@ -388,6 +566,8 @@ export function Template() {
                 setTemporaryContentText(text);
               }}
               variables={variables.map((variable) => variable.definition)}
+              contentError={variablesError.find(error => error.field === 'content')?.message}
+              canCreateVariable={isCreating || templateIsCustom}
             />
 
             <MessagePreview
@@ -398,13 +578,14 @@ export function Template() {
             />
           </Grid>
 
-          {!isEditing && (<>
+          {(isCreating || templateIsCustom) && (<>
             <Divider />
 
             <FormVariables
               variables={variables}
               setVariables={setVariables}
               openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
+              variablesError={variablesError}
             />
 
             <AddingVariableModal
@@ -438,15 +619,7 @@ export function Template() {
               navigateToAgent();
             }
           }}
-          processingText={t('template.modals.create.steps.processing.description')}
-          steps={[
-            'analyzing_defined_requirements',
-            'reviewing_template_structure',
-            'validating_inserted_content',
-            'adjusting_custom_variables',
-            'optimizing_template_for_fast_delivery',
-            'performing_final_security_checks',
-          ]}
+          {...processModalSpecificProps}
         />
       </PageContent>
     </Page>
