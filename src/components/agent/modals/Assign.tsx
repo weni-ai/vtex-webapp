@@ -6,8 +6,9 @@ import { AssignAbout } from "./AssignAbout";
 import { AssignCredentials } from "./AssignCredentials";
 import { AssignSelectTemplate } from "./AssignSelectTemplate";
 import { AssignWhatsAppRequired } from "./AssignWhatsAppRequired";
+import { AgentPassiveAbout } from "../ModalPassiveDetails";
 
-export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery, onAssign, isAssigningAgent }: { open: boolean, onClose: () => void, agentUuid: string, onViewAgentsGallery: () => void, onAssign: (data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) => void, isAssigningAgent: boolean }) {
+export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery, onAssign, isAssigningAgent, changeNextButtonTextOnLastPage = true }: { open: boolean, onClose: () => void, agentUuid: string, onViewAgentsGallery: () => void, onAssign: (data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) => void, isAssigningAgent: boolean, changeNextButtonTextOnLastPage?: boolean }) {
   const agent = useSelector((state: RootState) => state.project.agents.find((agent) => agent.uuid === agentUuid));
 
   const [selectedTemplatesUuids, setSelectedTemplatesUuids] = useState<string[]>([]);
@@ -26,6 +27,8 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
         name: key,
         value: '',
       })));
+    } else if (open && agent?.origin === 'nexus') {
+      setCurrentPage(0);
     }
   }, [open]);
 
@@ -43,6 +46,8 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
       if (Object.keys(agent.credentials).length > 0) {
         pages.push('credentials');
       }
+    } else if (agent?.origin === 'nexus' && agent.notificationType === 'passive') {
+      pages.push('about');
     }
 
     return pages;
@@ -84,6 +89,7 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
     if (isLastPage) {
       onAssign({
         uuid: agentUuid,
+        type: agent?.notificationType as 'active' | 'passive',
         templatesUuids: selectedTemplatesUuids,
         credentials: credentials.reduce((acc, credential) => ({
           ...acc,
@@ -102,9 +108,11 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
           <Flex gap="$space-3" align="center">
             {t('agents.modals.assign.title', { name: agent?.name })}
 
-            <Tag size="normal" variant="secondary" color="gray">
-              {t('agents.modals.assign.steps', { currentPage: currentPage + 1, totalPages: pages.length })}
-            </Tag>
+            {pages.length !== 1 &&
+              <Tag size="normal" variant="secondary" color="gray">
+                {t('agents.modals.assign.steps', { currentPage: currentPage + 1, totalPages: pages.length })}
+              </Tag>
+            }
           </Flex>
         </ModalHeading>
 
@@ -147,6 +155,18 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
             )}
           </>
         )}
+
+        {agent?.origin === 'nexus' && (
+          <>
+            {pages[currentPage] === 'about' && (
+              <AgentPassiveAbout
+                description={agent.description}
+                skills={agent.skills}
+                type={agent.notificationType}
+              />
+            )}
+          </>
+        )}
       </ModalContent>
 
       <ModalFooter>
@@ -162,7 +182,7 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
           loading={isAssigningAgent}
         >
           {
-            isLastPage ?
+            isLastPage && changeNextButtonTextOnLastPage ?
               t('agents.modals.assign.buttons.finish') :
               t('agents.modals.assign.buttons.next')
           }
