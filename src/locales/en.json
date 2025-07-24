@@ -43,7 +43,8 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Assign agents"
+            "gallery": "Assign agents",
+            "remove": "Remove agent"
         },
         "modals": {
             "gallery": {
@@ -115,11 +116,20 @@
                         "error": "Unable to save changes, please try again"
                     }
                 },
+                "steps": {
+                    "processing": {
+                        "description": "An AI is analyzing the rule to ensure everything works as expected. This may take a few minutes."
+                    }
+                },
                 "title": "Settings",
                 "fields": {
                     "webhook_url": {
                         "label": "Webhook URL",
                         "description": "Use this URL to configure your external system to send events to this agent"
+                    },
+                    "global_rule": {
+                        "label": "Global prompt (optional)",
+                        "description": "Use this area to define global rules and guidelines for the agent"
                     }
                 },
                 "buttons": {
@@ -190,10 +200,14 @@
                 "error": "Error while saving. Try again later."
             },
             "disable": {
-                "title": "Deactivate agent",
-                "description": "Do you want to deactivate the agent '{{agent}}'? Once deactivated, this agent will no longer be active in your project.",
-                "success": "Agent deactivated successfully",
-                "error": "Error deactivating the agent. Try again later."
+                "title": "Remove agent",
+                "description": "This action is irreversible. Are you sure you want to remove this agent from your team?",
+                "success": "{{agent}} removed from your agents team",
+                "error": "Error removing the agent. Try again later.",
+                "buttons": {
+                    "remove": "Remove",
+                    "cancel": "Cancel"
+                }
             },
             "add": "Assign",
             "added": "Agent in production",
@@ -517,6 +531,46 @@
                     "cancel": "Cancel",
                     "done": "Done"
                 }
+            },
+            "edit": {
+                "steps": {
+                    "processing": {
+                        "description": "An AI is analyzing the start condition to ensure everything works as expected. This may take a few minutes."
+                    }
+                }
+            },
+            "create": {
+                "steps": {
+                    "processing": {
+                        "title": "Processing",
+                        "description": "An AI is analyzing the template to ensure everything works as expected. This may take a few minutes.",
+                        "items": {
+                            "analyzing_defined_requirements": "Analyzing defined requirements",
+                            "reviewing_template_structure": "Reviewing template structure",
+                            "validating_inserted_content": "Validating inserted content",
+                            "adjusting_custom_variables": "Adjusting custom variables",
+                            "optimizing_template_for_fast_delivery": "Optimizing template for fast delivery",
+                            "performing_final_security_checks": "Performing final security checks",
+                            "reviewing_rule_structure": "Reviewing rule structure",
+                            "optimizing_rule_for_fast_delivery": "Optimizing rule for fast delivery",
+                            "reviewing_start_condition_structure": "Reviewing start condition structure",
+                            "optimizing_start_condition_for_fast_delivery": "Optimizing start condition for fast delivery"
+                        }
+                    },
+                    "completed": {
+                        "title": "Processing completed"
+                    }
+                },
+                "buttons": {
+                    "cancel": "Cancel",
+                    "proceed": "Proceed",
+                    "finish": "Finish",
+                    "return_and_fix": "Return and fix"
+                },
+                "success": "The whole template has been validated and is ready to use!",
+                "errors": {
+                    "generic_error": "An error occurred while processing the template. Please try again."
+                }
             }
         },
         "buttons": {
@@ -532,7 +586,7 @@
                 "disable": "Disable template"
             },
             "status": {
-                "active": "Active",
+                "active": "Approved",
                 "rejected": "Rejected",
                 "pending": "Pending",
                 "needs_editing": "Needs editing"
@@ -542,6 +596,11 @@
             }
         },
         "form": {
+            "alerts": {
+                "needs_editing": {
+                    "description": "Button URL needs to be edited"
+                }
+            },
             "create": {
                 "title": "Create custom template",
                 "buttons": {
@@ -576,8 +635,14 @@
                         "button": "Button"
                     }
                 },
+                "preview": {
+                    "content": {
+                        "placeholder": "Template preview"
+                    }
+                },
                 "variables": {
                     "title": "Variables",
+                    "variable_name": "Variable {{variableName}}",
                     "empty": {
                         "title": "No variables added",
                         "description": "Use variables to personalize and dynamically customize the message for your contact"
@@ -588,6 +653,13 @@
                 }
             },
             "fields": {
+                "errors": {
+                    "required": "required field",
+                    "missing_variable_one": "missing {{variables}} variable",
+                    "missing_variable_other": "missing {{variables}} variables",
+                    "undefined_variable_one": "variable {{variables}} is not defined",
+                    "undefined_variable_other": "variables {{variables}} are not defined"
+                },
                 "name": {
                     "label": "Template name"
                 },
@@ -597,7 +669,7 @@
                 "start_condition": {
                     "label": "Start condition",
                     "description": "Defines the condition that starts the agent.",
-                    "help": "Visits to the store which can include a series of user interactions and end after 30 minutes of inactivity."
+                    "help": "Start condicition example: “When a webhook is received with status = approved”"
                 },
                 "content": {
                     "label": "Text content",
