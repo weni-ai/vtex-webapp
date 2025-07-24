@@ -13,6 +13,7 @@
   "dependencies": {
     "@growthbook/growthbook-react": "^1.5.1",
     "@reduxjs/toolkit": "^2.5.0",
+    "@sentry/react": "^9.19.0",
     "@vtex/shoreline": "^1.11.12",
     "axios": "^1.7.9",
     "i18next": "^24.2.1",

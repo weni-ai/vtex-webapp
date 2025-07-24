@@ -1,3 +1,4 @@
+import './plugins/sentry';
 import { createRoot } from 'react-dom/client';
 import '@vtex/shoreline/css';
 import App from './App.tsx';
