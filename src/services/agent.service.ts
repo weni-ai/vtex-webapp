@@ -388,7 +388,7 @@ export async function updateAgentTemplate(data: {
   })));
 }
 
-export async function createAssignedAgentTemplate(data: { name: string, header?: string, body: string, footer?: string, button?: { text: string, url: string }, assignedAgentUuid: string, variables: { definition: string, fallback: string }[], startCondition: string }) {
+export async function createAssignedAgentTemplate(data: { name: string, header?: { type: 'text', text: string } | { type: 'media', src: string }, body: string, footer?: string, button?: { text: string, url: string }, assignedAgentUuid: string, variables: { definition: string, fallback: string }[], startCondition: string }) {
   const response = await createAssignedAgentTemplateRequest(data);
   return response;
 }
