@@ -209,6 +209,22 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     };
   }, [status]);
 
+  function treatFileName(fileName: string, maxFileNameLength = 52) {
+    const [removedQueryParams] = fileName.split('?');
+    const extension = removedQueryParams.includes('.') ? removedQueryParams.split('.').pop() as string : '';
+    const nameWithoutExtension = extension.length > 0 ? removedQueryParams.slice(0, -extension.length - 1) : removedQueryParams;
+
+    let treatedFileName = extension.length > 0 ? `${nameWithoutExtension}.${extension}` : nameWithoutExtension;
+
+    if (treatedFileName.length > maxFileNameLength) {
+      const suffix = `...${extension}`;
+
+      treatedFileName = `${treatedFileName.slice(0, maxFileNameLength - suffix.length)}${suffix}`;
+    }
+
+    return treatedFileName;
+  }
+
   const elements = {
     header: {
       isVisible: false,
@@ -240,11 +256,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                       flex: 1,
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
-                      whiteSpace: 'nowrap',
+                      wordBreak: 'break-word',
                       textDecoration: 'underline',
                     }}
                   >
-                    {file.name}
+                    {treatFileName(file.name)}
                   </Text>
 
                   <IconButton variant="secondary" label={t('template.form.areas.content.header.media.buttons.remove')} onClick={() => { setFile(undefined); setFilePreview(undefined); }} disabled={status === 'needs-editing'}>

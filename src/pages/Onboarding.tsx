@@ -32,6 +32,8 @@ export function Onboarding() {
   const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
   const [isAssigningAgent, setIsAssigningAgent] = useState(false);
 
+  const [changeNextButtonTextOnLastPage, setChangeNextButtonTextOnLastPage] = useState(true);
+
   const { buildAgent } = useAgentBuilderSetup();
   const { initializeUser } = useUserSetup();
 
@@ -102,7 +104,7 @@ export function Onboarding() {
         Object.entries(form).filter(([, value]) => value.trim())
       ) as FormState;
 
-      await buildAgent(payload);
+      await buildAgent(payload, true, t('agent.actions.assign.success'));
     }
   };
 
@@ -116,6 +118,11 @@ export function Onboarding() {
     if (agent.origin === 'CLI') {
       setAgentUuid(uuid);
       setIsAgentAssignModalOpen(true);
+      setChangeNextButtonTextOnLastPage(true);
+    } else if (agent.origin === 'nexus') {
+      setAgentUuid(uuid);
+      setIsAgentAssignModalOpen(true);
+      setChangeNextButtonTextOnLastPage(false);
     }
 
     if (agent.origin === 'commerce' && agent.notificationType === 'active') {
@@ -126,13 +133,26 @@ export function Onboarding() {
         setIsWhatsAppRequiredModalOpen(true);
       }
     }
-
-    if (agent.origin === 'nexus' && agent.notificationType === 'passive') {
-      await integrateAgentInside(uuid);
-    }
   }
 
-  async function handleAssignCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
+  async function assignPassiveAgent(data: { uuid: string, }) {
+    await integrateAgentInside(data.uuid);
+  }
+
+  async function handleAssignCLI(data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) {
+    if (data.type === 'passive') {      
+      setIsAssigningAgent(true);
+
+      await assignPassiveAgent({
+        uuid: data.uuid,
+      });
+      
+      setIsAgentAssignModalOpen(false);
+      setIsAssigningAgent(false);
+
+      return;
+    }
+
     try {
       setIsAssigningAgent(true);
 
@@ -143,9 +163,6 @@ export function Onboarding() {
       });
 
       setIsAgentAssignModalOpen(false);
-
-      toast.success(t('agent.actions.assign.success'));
-
       handleNextPage();
     } catch (error) {
       toast.critical(error instanceof Error ? error.message : t('common.errors.unexpected_error'));
@@ -168,7 +185,6 @@ export function Onboarding() {
     if (result.error) {
       toast.critical(t('integration.error'));
     } else {
-      toast.success(t('integration.success'));
       handleNextPage();
     }
   }
@@ -221,6 +237,7 @@ export function Onboarding() {
           }}
           onAssign={handleAssignCLI}
           isAssigningAgent={isAssigningAgent}
+          changeNextButtonTextOnLastPage={changeNextButtonTextOnLastPage}
         />
 
         <WhatsAppRequiredModal

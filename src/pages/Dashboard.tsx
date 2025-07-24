@@ -124,32 +124,56 @@ export function Dashboard() {
     }
 
     if (agent.origin === 'nexus' && agent.notificationType === 'passive') {
-      await integrateAgentInside(uuid);
-
-      const agentAfterIntegration = store.getState().project.agents.find((item) => item.uuid === uuid);
-
-      if (agentAfterIntegration?.isAssigned && !isWppIntegrated) {
-        const agentKeyPrefix = `agents.categories.${agentAfterIntegration.notificationType}.${agentAfterIntegration.code}`;
-
-        const agentName =
-          t(`${agentKeyPrefix}.title`) === `${agentKeyPrefix}.title`
-            ? agent.name
-            : t(`${agentKeyPrefix}.title`);
-
-        const agentDescription =
-          t(`${agentKeyPrefix}.description`) === `${agentKeyPrefix}.description`
-            ? agent.description
-            : t(`${agentKeyPrefix}.description`);
-
-        setAgentName(agentName);
-        setAgentDescription(agentDescription);
-        setSkills(agent.skills);
-        setIsPassiveDetailsModalOpen(true);
-      }
+      setAgentUuid(uuid);
+      setIsAgentAssignModalOpen(true);
     }
   }
 
-  async function handleAssignCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
+  async function assignPassiveAgent(data: { uuid: string, }) {
+    const agent = agentsListOriginal.find((item) => item.uuid === data.uuid);
+
+    if (!agent) {
+      return;
+    }
+
+    await integrateAgentInside(data.uuid);
+
+    const agentAfterIntegration = store.getState().project.agents.find((item) => item.uuid === data.uuid);
+
+    if (agentAfterIntegration?.isAssigned && !isWppIntegrated) {
+      const agentKeyPrefix = `agents.categories.${agentAfterIntegration.notificationType}.${agentAfterIntegration.code}`;
+
+      const agentName =
+        t(`${agentKeyPrefix}.title`) === `${agentKeyPrefix}.title`
+          ? agent.name
+          : t(`${agentKeyPrefix}.title`);
+
+      const agentDescription =
+        t(`${agentKeyPrefix}.description`) === `${agentKeyPrefix}.description`
+          ? agent.description
+          : t(`${agentKeyPrefix}.description`);
+
+      setAgentName(agentName);
+      setAgentDescription(agentDescription);
+      setSkills(agent.skills || []);
+      setIsPassiveDetailsModalOpen(true);
+    }
+  }
+
+  async function handleAssignCLI(data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) {
+    if (data.type === 'passive') {      
+      setIsAssigningAgent(true);
+
+      await assignPassiveAgent({
+        uuid: data.uuid,
+      });
+      
+      setIsAgentAssignModalOpen(false);
+      setIsAssigningAgent(false);
+
+      return;
+    }
+    
     try {
       setIsAssigningAgent(true);
 
