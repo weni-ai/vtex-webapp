@@ -172,7 +172,12 @@ export function AgentMetrics() {
     try {
       setIsDataLoading(true);
       setDataRows(1);
-      const response = await agentCLI({ agentUuid: assignedAgentUuid });
+
+      const response = await agentCLI({
+        agentUuid: assignedAgentUuid,
+        dontSave: true,
+        params: { showAll: true }
+      });
 
       templates = response.templates.filter((template) => {
         return template.status !== 'needs-editing';
@@ -293,7 +298,7 @@ export function AgentMetrics() {
   }
 
   return (
-    <>
+    <Flex direction="column" gap="$space-4">
       <Flex
         style={{
           display: assignedAgents.length > 0 ? 'flex' : 'none',
@@ -395,6 +400,6 @@ export function AgentMetrics() {
           </Grid>
         ))}
       </Flex>
-    </>
+    </Flex>
   )
 }

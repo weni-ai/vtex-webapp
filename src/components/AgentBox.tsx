@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconPauseCircle, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconTrash, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -176,8 +176,8 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       }
 
       items.push({
-        label: t('common.disable'),
-        icon: <IconPauseCircle />,
+        label: t('agents.buttons.remove'),
+        icon: <IconTrash />,
         onClick: openDisableModal,
       });
     }
@@ -250,6 +250,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               overflow: 'hidden',
               textOverflow: 'ellipsis',
             }}
+            title={agentDescription}
           >
             {agentDescription}
           </Text>

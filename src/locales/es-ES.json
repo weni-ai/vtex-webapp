@@ -43,7 +43,8 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Asignar agentes"
+            "gallery": "Asignar agentes",
+            "remove": "Eliminar agente"
         },
         "modals": {
             "gallery": {
@@ -115,11 +116,20 @@
                         "error": "Error al guardar, inténtalo de nuevo más tarde"
                     }
                 },
+                "steps": {
+                    "processing": {
+                        "description": "Un AI está analizando la regla para asegurarse de que todo funcione como se esperaba. Esto puede tomar unos minutos."
+                    }
+                },
                 "title": "Configuración",
                 "fields": {
                     "webhook_url": {
                         "label": "URL de Webhook",
                         "description": "Usa esta URL para configurar tu sistema externo para enviar eventos a este agente"
+                    },
+                    "global_rule": {
+                        "label": "Prompt global (opcional)",
+                        "description": "Usa esta área para definir reglas y directrices globales para el agente"
                     }
                 },
                 "buttons": {
@@ -190,10 +200,14 @@
                 "error": "Error al guardar. Vuelve a intentarlo más tarde."
             },
             "disable": {
-                "title": "Desactivar agente",
-                "description": "¿Deseas desactivar el agente '{{agent}}'? Al desactivarlo, este agente dejará de estar activo en tu proyecto.",
-                "success": "Agente desactivado con éxito",
-                "error": "Error al desactivar agente. Inténtalo de nuevo más tarde."
+                "title": "Eliminar agente",
+                "description": "Esta acción es irreversible. ¿Estás seguro de querer eliminar este agente de tu equipo?",
+                "success": "{{agent}} eliminado de tu equipo de agentes",
+                "error": "Error eliminando el agente. Inténtalo de nuevo más tarde.",
+                "buttons": {
+                    "remove": "Eliminar",
+                    "cancel": "Cancelar"
+                }
             },
             "add": "Asignar",
             "added": "Agente activo",
@@ -517,6 +531,46 @@
                     "cancel": "Cancelar",
                     "done": "Listo"
                 }
+            },
+            "edit": {
+                "steps": {
+                    "processing": {
+                        "description": "Un AI está analizando la condición de inicio para asegurarse de que todo funcione como se espera. Esto puede tomar unos minutos."
+                    }
+                }
+            },
+            "create": {
+                "steps": {
+                    "processing": {
+                        "title": "Procesando",
+                        "description": "Un AI está analizando la plantilla para asegurarse de que todo funcione como se espera. Esto puede tomar unos minutos.",
+                        "items": {
+                            "analyzing_defined_requirements": "Analizando requisitos definidos",
+                            "reviewing_template_structure": "Revisando estructura de plantilla",
+                            "validating_inserted_content": "Validando contenido insertado",
+                            "adjusting_custom_variables": "Ajustando variables personalizadas",
+                            "optimizing_template_for_fast_delivery": "Optimizando plantilla para entrega rápida",
+                            "performing_final_security_checks": "Realizando últimos controles de seguridad",
+                            "reviewing_rule_structure": "Revisando estructura de regla",
+                            "optimizing_rule_for_fast_delivery": "Optimizando regla para entrega rápida",
+                            "reviewing_start_condition_structure": "Revisando estructura de condición de inicio",
+                            "optimizing_start_condition_for_fast_delivery": "Optimizando condición de inicio para entrega rápida"
+                        }
+                    },
+                    "completed": {
+                        "title": "Procesamiento completado"
+                    }
+                },
+                "buttons": {
+                    "cancel": "Cancelar",
+                    "proceed": "Continuar",
+                    "finish": "Finalizar",
+                    "return_and_fix": "Volver y corregir"
+                },
+                "success": "La plantilla entera ha sido validada y está lista para usar!",
+                "errors": {
+                    "generic_error": "Ocurrió un error al procesar la plantilla. Por favor, inténtalo de nuevo."
+                }
             }
         },
         "buttons": {
@@ -532,7 +586,7 @@
                 "disable": "Desactivar plantilla"
             },
             "status": {
-                "active": "Activo",
+                "active": "Aprobado",
                 "rejected": "Rechazado",
                 "pending": "Pendiente",
                 "needs_editing": "Necesita edición"
@@ -542,6 +596,11 @@
             }
         },
         "form": {
+            "alerts": {
+                "needs_editing": {
+                    "description": "La URL del botón necesita ser editada"
+                }
+            },
             "create": {
                 "title": "Crear plantilla personalizada",
                 "buttons": {
@@ -576,8 +635,14 @@
                         "button": "Botón"
                     }
                 },
+                "preview": {
+                    "content": {
+                        "placeholder": "Vista previa del template"
+                    }
+                },
                 "variables": {
                     "title": "Variables",
+                    "variable_name": "Variable {{variableName}}",
                     "empty": {
                         "title": "No se han agregado variables",
                         "description": "Usa variables para personalizar y adaptar dinámicamente el mensaje para tu contacto"
@@ -588,6 +653,13 @@
                 }
             },
             "fields": {
+                "errors": {
+                    "required": "campo requerido",
+                    "missing_variable_one": "faltando {{variables}} variable",
+                    "missing_variable_other": "faltando {{variables}} variables",
+                    "undefined_variable_one": "variable {{variables}} no definida",
+                    "undefined_variable_other": "variables {{variables}} no definidas"
+                },
                 "name": {
                     "label": "Nombre de la plantilla"
                 },
@@ -597,7 +669,7 @@
                 "start_condition": {
                     "label": "Condición de inicio",
                     "description": "Define la condición que inicia el agente.",
-                    "help": "Visitas al almacén que pueden incluir una serie de interacciones del usuario y finalizan después de 30 minutos de inactividad."
+                    "help": "Ejemplo de condición de inicio: “Cuando se recibe un webhook con status = aprobado”"
                 },
                 "content": {
                     "label": "Contenido de texto",

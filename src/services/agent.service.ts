@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentTemplateRequest, updateAssignedAgentSettingsRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -96,18 +96,31 @@ const status = {
   "LOCKED": "locked" as const,
 }
 
-export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean }) {
+export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean, dontSave?: boolean, params?: { showAll?: boolean } }) {
   const agent = store.getState().project.assignedAgents.find(agent => agent.uuid === data.agentUuid);
 
-  if (agent && !data.forceUpdate) {
+  if (agent && !data.forceUpdate && !data.dontSave) {
     return agent;
   }
 
   const response = await agentCLIRequest({
     agentUuid: data.agentUuid,
+    params: data.params,
   });
 
   const statusValues = Object.values(status);
+
+  function getTemplateHeader(metadata: { header: { header_type: 'TEXT' | 'IMAGE', text: string } }) {    
+    if (typeof metadata.header === 'string') {
+      return metadata.header;
+    }
+
+    if (!metadata?.header?.header_type) {
+      return '';
+    }
+
+    return metadata.header.header_type === 'TEXT' ? metadata.header.text : metadata.header.text;
+  }
 
   const assignedAgent = {
     ...response,
@@ -116,11 +129,18 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean 
       name: template.display_name,
       startCondition: template.start_condition,
       status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as typeof statusValues[number],
-      metadata: template.metadata,
+      isCustom: template.is_custom,
+      variables: template.variables,
+      metadata: {
+        ...template.metadata,
+        header: getTemplateHeader(template.metadata),
+      },
     })),
   }
 
-  store.dispatch(addAssignedAgent(assignedAgent));
+  if (!data.dontSave) {
+    store.dispatch(addAssignedAgent(assignedAgent));
+  }
 
   return assignedAgent;
 }
@@ -182,26 +202,6 @@ export async function saveAgentButtonTemplate(data: {
         return template;
       })
     }
-  })));
-
-  return response;
-}
-
-export async function updateAssignedAgentSettings(data: {
-  agentUuid: string;
-  contactPercentage?: number;
-}) {
-  const response = await updateAssignedAgentSettingsRequest(data);
-
-  const assignedAgents = store.getState().project.assignedAgents;
-
-  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
-    return agent.uuid === data.agentUuid ?
-      {
-        ...agent,
-        contactPercentage: response.contact_percentage,
-      }
-      : agent;
   })));
 
   return response;
@@ -347,7 +347,17 @@ export async function assignedAgentTemplate(data: { templateUuid: string }) {
   return template;
 }
 
-export async function updateAgentTemplate(data: { templateUuid: string, template: { header?: string, content: string, footer?: string, button?: { text: string, url: string, urlExample?: string } } }) {
+export async function updateAgentTemplate(data: {
+  templateUuid: string,
+  template: {
+    header?: string,
+    content: string,
+    footer?: string,
+    button?: { text: string, url: string, urlExample?: string },
+    startCondition?: string,
+    variables?: { definition: string; fallback: string; }[],
+  }
+}) {
   const response = await updateAgentTemplateRequest(data);
 
   const assignedAgents = store.getState().project.assignedAgents;
@@ -378,6 +388,11 @@ export async function updateAgentTemplate(data: { templateUuid: string, template
   })));
 }
 
+export async function createAssignedAgentTemplate(data: { name: string, header?: { type: 'text', text: string } | { type: 'media', src: string }, body: string, footer?: string, button?: { text: string, url: string }, assignedAgentUuid: string, variables: { definition: string, fallback: string }[], startCondition: string }) {
+  const response = await createAssignedAgentTemplateRequest(data);
+  return response;
+}
+
 export async function disableAssignedAgentTemplate(data: { templateUuid: string }) {
   const response = await disableAssignedAgentTemplateRequest(data);
 
@@ -398,6 +413,34 @@ export async function agentMetrics(data: { templateUuid: string, startDate: stri
     templateUuid: data.templateUuid,
     startDate: data.startDate,
     endDate: data.endDate,
+  });
+
+  return response;
+}
+
+function updateAssignedAgentProperty(agentUuid: string, replace: Record<string, string | number>) {
+  const assignedAgents = store.getState().project.assignedAgents;
+
+  store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
+    return agent.uuid === agentUuid ?
+      {
+        ...agent,
+        ...replace,
+      }
+      : agent;
+  })));
+}
+
+export async function updateAgentGlobalRule(data: {
+  agentUuid: string;
+  contactPercentage?: number;
+  globalRule?: string;
+}) {
+  const response = await updateAgentGlobalRuleRequest(data);
+
+  updateAssignedAgentProperty(data.agentUuid, {
+    globalRule: response.globalRule,
+    contactPercentage: response.contactPercentage,
   });
 
   return response;

@@ -40,10 +40,13 @@ export interface ProjectState {
         templates: {
             uuid: string;
             name: string;
+            isCustom: boolean;
             startCondition: string;
             status: "active" | "pending" | "rejected" | "in_appeal" | "pending_deletion" | "deleted" | "disabled" | "locked" | "needs-editing";
+            variables: { definition: string; fallback: string; }[];
             metadata: {
                 body: string;
+                body_params: string[];
                 header: string;
                 footer: string;
                 buttons: {
@@ -55,6 +58,7 @@ export interface ProjectState {
             };
         }[];
         channelUuid: string;
+        globalRule: string;
     }[];
 }
 

@@ -1,9 +1,27 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconButton, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
-import { SetStateAction, useEffect, useMemo, useState } from "react";
-import { Content, SectionHeader } from "./Template";
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
+import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
+import { Content, SectionHeader } from "./Template";
+import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeHeaderType = true, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true }: {
+async function fileToBase64(file: File) {
+  try {
+    return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        reject(error as unknown as Error);
+      };
+      reader.readAsDataURL(file);
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -11,8 +29,13 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   isHeaderEditable?: boolean;
   isFooterEditable?: boolean;
   isButtonEditable?: boolean;
-  canChangeHeaderType?: boolean;
   canChangeButton?: boolean;
+  totalVariables: number;
+  addEmptyVariables: (count: number) => void;
+  openNewVariableModal: (text: string) => void;
+  variables: string[];
+  contentError?: string;
+  canCreateVariable: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,6 +51,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     setValue: setButtonType as any,
   });
 
+  const contentTextRef = useRef<HTMLTextAreaElement>(null);
+  const contentTextCloneRef = useRef<HTMLDivElement>(null);
+  const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  const [shouldSuggestNewVariable, setShouldSuggestNewVariable] = useState(false);
+  const [temporaryContentText, setTemporaryContentText] = useState('');
+
   const [headerText, setHeaderText] = useState('');
   const [contentText, setContentText] = useState('');
   const [footerText, setFooterText] = useState('');
@@ -35,15 +64,73 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
 
+  function adjustContentTextHeight() {
+    if (contentTextRef.current) {
+      const borderWidth = 1;
+      contentTextRef.current.style.height = 'auto';
+      contentTextRef.current.style.height = contentTextRef.current.scrollHeight + (borderWidth * 2) + 'px';
+    }
+  }
+
+  function calculateIfShouldSuggestAVariable() {
+    if (contentTextRef.current && contentTextCloneRef.current) {
+      const { x, y } = calculateCursorPosition(contentTextRef.current, contentTextCloneRef.current, contentText);
+      setCursorPosition({ x, y });
+
+      const isBegginingAVariable = contentText.slice(0, contentTextRef.current.selectionStart).endsWith('{{');
+      const isThereANumberAfterVariable = contentText.slice(contentTextRef.current.selectionStart).match(/^\d/);
+
+      setShouldSuggestNewVariable(isBegginingAVariable && !isThereANumberAfterVariable);
+      setTemporaryContentText(contentText.slice(0, contentTextRef.current.selectionStart) + 'toBeReplaced' + contentText.slice(contentTextRef.current.selectionStart));
+    }
+  }
+
+  useEffect(() => {
+    adjustContentTextHeight();
+    calculateIfShouldSuggestAVariable();
+  }, [contentText]);
+
+  function handleContentTextChange(value: string) {
+    if (!canCreateVariable) {
+      setContentText(value);
+      return;
+    }
+
+    let newContentText = value;
+    let lastVariableNumber = totalVariables;
+
+    newContentText = newContentText.replace(/{{(\d+)}}/g, (_, number) => {
+      if (Number(number) > lastVariableNumber) {
+        lastVariableNumber += 1;
+        return `{{${lastVariableNumber}}}`;
+      }
+
+      return `{{${number}}}`;
+    });
+
+    addEmptyVariables(lastVariableNumber - totalVariables);
+    setContentText(newContentText);
+
+    if (contentTextRef.current) {
+      const selectionStart = contentTextRef.current.selectionStart;
+
+      setTimeout(() => {
+        if (contentTextRef.current) {
+          contentTextRef.current.selectionStart = contentTextRef.current.selectionEnd = selectionStart;
+        }
+      }, 0);
+    }
+  }
+
   const [file, setFile] = useState<File | undefined>(undefined);
   const [filePreview, setFilePreview] = useState<string | undefined>(undefined);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
     if (file) {
       setFile(file);
-      setFilePreview(URL.createObjectURL(file));
+      setFilePreview(await fileToBase64(file));
     }
 
     e.target.value = '';
@@ -78,6 +165,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     if (prefilledContent.header?.type === 'text') {
       setHeaderType('text');
       setHeaderText(prefilledContent.header.text);
+      initialVisibility.header = true;
+    } else if (prefilledContent.header?.type === 'media') {
+      setHeaderType('media');
+      setFile(prefilledContent.header.file);
+      setFilePreview(prefilledContent.header.previewSrc);
       initialVisibility.header = true;
     }
 
@@ -122,12 +214,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       isVisible: false,
       component: (
         <>
-          {false && (<Bleed top="$space-7">
+          <Bleed top="$space-7">
             <RadioGroup label="" horizontal state={headerTypeState}>
-              <Radio value="text" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
-              <Radio value="media" disabled={!canChangeHeaderType}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
+              <Radio value="text" disabled={status === 'needs-editing'}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
+              <Radio value="media" disabled={status === 'needs-editing'}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
             </RadioGroup>
-          </Bleed>)}
+          </Bleed>
 
           {headerType === 'text' && (
             <Field>
@@ -155,7 +247,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                     {file.name}
                   </Text>
 
-                  <IconButton variant="secondary" label={t('template.form.areas.content.header.media.buttons.remove')} onClick={() => { setFile(undefined); setFilePreview(undefined); }}>
+                  <IconButton variant="secondary" label={t('template.form.areas.content.header.media.buttons.remove')} onClick={() => { setFile(undefined); setFilePreview(undefined); }} disabled={status === 'needs-editing'}>
                     <IconX />
                   </IconButton>
                 </Flex>
@@ -175,7 +267,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               )}
 
               <VisuallyHidden>
-                <input id="file-input" type="file" onChange={handleFileChange} />
+                <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" />
               </VisuallyHidden>
             </>
           )}
@@ -257,17 +349,56 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     <Flex direction="column" gap="$space-4">
       <SectionHeader title={t('template.form.areas.content.title')} />
 
-      <Field>
+      <Field error={!!contentError}>
         <Label>{t('template.form.fields.content.label')}</Label>
 
-        <Textarea
-          className="content-textarea-full-width"
-          value={contentText}
-          onChange={setContentText}
-          disabled={status === 'needs-editing'}
-        />
+        <Flex style={{ position: 'relative' }}>
+          <TextareaClone ref={contentTextCloneRef} />
 
-        <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+          <Textarea
+            className="content-textarea-full-width"
+            value={contentText}
+            onChange={handleContentTextChange}
+            disabled={status === 'needs-editing'}
+            ref={contentTextRef}
+            onKeyUp={calculateIfShouldSuggestAVariable}
+          />
+
+          <MenuProvider
+            placement="bottom-start"
+            open={shouldSuggestNewVariable}
+            setOpen={setShouldSuggestNewVariable}
+          >
+            <MenuTrigger asChild>
+              <Flex style={{ position: 'absolute', top: cursorPosition.y + 20, left: cursorPosition.x }}></Flex>
+            </MenuTrigger>
+
+            <MenuPopover>
+              {variables.map((variable, index) => (
+                <MenuItem key={index} onClick={() => {
+                  setContentText(temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${index + 1}}}`));
+                }}>
+                  {canCreateVariable ? `{{${index + 1}}} ${variable}` : variable}
+                </MenuItem>
+              ))}
+
+              {variables.length > 0 && canCreateVariable && <MenuSeparator />}
+
+              {canCreateVariable && (
+                <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
+                  <IconPencil />
+                  {t('template.form.areas.variables.buttons.add')}
+                </MenuItem>
+              )}
+            </MenuPopover>
+          </MenuProvider>
+        </Flex>
+
+        {contentError ? (
+          <FieldError>{contentError}</FieldError>
+        ) : (
+          canCreateVariable && <FieldDescription>{t('template.form.fields.content.description')}</FieldDescription>
+        )}
       </Field>
 
       <Flex
@@ -309,7 +440,11 @@ export function FormContent({ status, content, setContent, prefilledContent, can
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           disabled={status === 'needs-editing' || (elementsNotDisabled.every((element) => elementsVisibility[element]) || !(isHeaderEditable || isFooterEditable || isButtonEditable))}
         >
-          <MenuProvider placement="bottom-start" open={isMenuOpen}>
+          <MenuProvider
+            placement="bottom-start"
+            open={isMenuOpen}
+            setOpen={setIsMenuOpen}
+          >
             <MenuTrigger asChild>
               <Flex gap="$space-1" align="center">
                 <IconPlus />
