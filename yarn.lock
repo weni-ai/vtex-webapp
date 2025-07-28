@@ -1530,6 +1530,61 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.36.0.tgz#88b23fe29d28fa647030b36e912c1b5b50831b1d"
   integrity sha512-aRXd7tRZkWLqGbChgcMMDEHjOKudo1kChb1Jt1IfR8cY/KIpgNviLeJy5FUb9IpSuQj8dU2fAYNMPW/hLKOSTw==
 
+"@sentry-internal/browser-utils@9.42.1":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/browser-utils/-/browser-utils-9.42.1.tgz#821f2238cdfeb3caea0f48f9fed608f6ad02b545"
+  integrity sha512-RWLpPDApHKWo5m4ig6M27b0vx3bLyPPU9Ra6FbwBhIdyb0ihd4wSddtNFA2VgLOePpurN+HU1Thcq+D3776GIA==
+  dependencies:
+    "@sentry/core" "9.42.1"
+
+"@sentry-internal/feedback@9.42.1":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-9.42.1.tgz#2d3e4876e90f58366c0407b707c04dfe687b3f1b"
+  integrity sha512-ocyN85ndnWRHMtS6kJpYbQiovvXT09UJLIzZfsyj/cIl/kBYaljDVoPHhSWMaMVUWQrP/Ut2Zuse9wnowDvXWg==
+  dependencies:
+    "@sentry/core" "9.42.1"
+
+"@sentry-internal/replay-canvas@9.42.1":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay-canvas/-/replay-canvas-9.42.1.tgz#4c2e743ae97ed2aa787cf144ac571a5d0d3001aa"
+  integrity sha512-z2Pm7vl5SaK1k/MhYV/CRkDYT32Y6q/CLlV3toKphAK1gZFmJ8FGjYE6DU2Zju2upb9ulgyoU8bLU5DLLZCsZA==
+  dependencies:
+    "@sentry-internal/replay" "9.42.1"
+    "@sentry/core" "9.42.1"
+
+"@sentry-internal/replay@9.42.1":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-9.42.1.tgz#f0266eeeffa67ea749e543fc20f34cec637790ac"
+  integrity sha512-IbKf4L4qxcupM3+FfKYcap4bM4Q6khSIc8X31btmUqPnDT/UuekN5CZmL7Xf42h5L7aMA8Oh8s97powY+hPLQQ==
+  dependencies:
+    "@sentry-internal/browser-utils" "9.42.1"
+    "@sentry/core" "9.42.1"
+
+"@sentry/browser@9.42.1":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-9.42.1.tgz#976695bb1053569146118116cc9b70eb5dec592e"
+  integrity sha512-iFlHpuHGK7pexHdmvmJeMlIIUFcGjGW12bwhPyIb8T7Ziu16B8yOjIv0EQgfxMyiyv9MWqG2Un7efXjXSlIzrg==
+  dependencies:
+    "@sentry-internal/browser-utils" "9.42.1"
+    "@sentry-internal/feedback" "9.42.1"
+    "@sentry-internal/replay" "9.42.1"
+    "@sentry-internal/replay-canvas" "9.42.1"
+    "@sentry/core" "9.42.1"
+
+"@sentry/core@9.42.1":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-9.42.1.tgz#d8f88d3b5ba7aa6f77374504041716496bb8fbb2"
+  integrity sha512-9jWgjgZ8EvIYMTL5HzG8PYRo7+/vv3qwPabPVV2EfGPOjU65GFcT7N+oitg+0rAI/fTMsLaQXC77WmKzhRBSdw==
+
+"@sentry/react@^9.19.0":
+  version "9.42.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-9.42.1.tgz#1480ecfe217cb7098b74671f7d33a36e1c683f9b"
+  integrity sha512-dmz0LxC+Y6aCNz0nJC1onhTGajHE/rNwwjHbsDQWHb1F2SZzJ5bpXVcksjxvUtOxCjT4xwsRaw5gt2kYDzSRzQ==
+  dependencies:
+    "@sentry/browser" "9.42.1"
+    "@sentry/core" "9.42.1"
+    hoist-non-react-statics "^3.3.2"
+
 "@swc/helpers@^0.5.0":
   version "0.5.15"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.5.15.tgz#79efab344c5819ecf83a43f3f9f811fc84b516d7"
@@ -2860,6 +2915,13 @@ hast-util-whitespace@^3.0.0:
   dependencies:
     "@types/hast" "^3.0.0"
 
+hoist-non-react-statics@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
+  integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
+  dependencies:
+    react-is "^16.7.0"
+
 html-encoding-sniffer@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/html-encoding-sniffer/-/html-encoding-sniffer-4.0.0.tgz#696df529a7cfd82446369dc5193e590a3735b448"
@@ -3841,7 +3903,7 @@ react-i18next@^15.4.0:
     "@babel/runtime" "^7.25.0"
     html-parse-stringify "^3.0.1"
 
-react-is@^16.13.1:
+react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
