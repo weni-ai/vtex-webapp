@@ -1,14 +1,14 @@
+import * as Sentry from '@sentry/react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from '../../store/userSlice';
+import { growthbook } from '../../plugins/growthbook';
+import { checkAgentIntegration, updateAgentsList } from '../../services/agent.service';
+import { checkWppIntegration } from '../../services/channel.service';
 import { checkProject, createUserAndProject, fetchAccountData, fetchUserData } from '../../services/user.service';
 import { setBaseAddress } from '../../store/authSlice';
-import store from '../../store/provider.store';
 import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
-import { checkWppIntegration } from '../../services/channel.service';
-import { checkAgentIntegration } from '../../services/agent.service';
-import { useCallback } from 'react';
-import { updateAgentsList } from '../../services/agent.service';
-import { growthbook } from '../../plugins/growthbook';
+import store from '../../store/provider.store';
+import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from '../../store/userSlice';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -29,6 +29,15 @@ export function useUserSetup() {
       growthbook.setAttributes({
         email: userData.user,
         VTEXAccountName: userData.account,
+      });
+
+      Sentry.setUser({
+        email: userData.user,
+        VTEXAccountName: userData.account,
+      });
+
+      window.hj?.('identify', userData.user, {
+        'VTEX Account Name': userData.account,
       });
 
       const { data: accountData, error: accountError } = await fetchAccountData();
