@@ -1,6 +1,8 @@
 declare global {
     interface Window {
       configs?: Record<string, string>;
+
+      hj?: (event: 'identify', id: string, attributes: Record<string, string>) => void;
     }
   }
   
