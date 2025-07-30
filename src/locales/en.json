@@ -1,742 +1,742 @@
 {
-    "common": {
-        "cancel": "Cancel",
-        "continue": "Continue",
-        "finish_and_save": "Finish and save",
-        "confirm": "Confirm",
-        "save": "Save",
-        "back": "Back",
-        "create": "Create",
-        "details": "View details",
-        "manage_settings": "Manage settings",
-        "preferences": "Preferences",
-        "disable": "Deactivate",
-        "errors": {
-            "unauthorized": "You don't have permission to perform this action",
-            "internal_server_error": "Internal server error",
-            "unexpected_error": "An unexpected error occurred",
-            "generic_error_with_support": "Something went wrong. Contact us at"
-        },
-        "new_agent": "New agent",
-        "copy_code": "Copy code",
-        "return": "Return",
-        "finish": "Finish",
-        "skip": "Skip",
-        "url_copied": "URL copied",
-        "script_copied": "Script copied",
-        "clear": "Clear",
-        "apply": "Apply"
+  "common": {
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "finish_and_save": "Finish and save",
+    "confirm": "Confirm",
+    "save": "Save",
+    "back": "Back",
+    "create": "Create",
+    "details": "View details",
+    "manage_settings": "Manage settings",
+    "preferences": "Preferences",
+    "disable": "Deactivate",
+    "errors": {
+      "unauthorized": "You don't have permission to perform this action",
+      "internal_server_error": "Internal server error",
+      "unexpected_error": "An unexpected error occurred",
+      "generic_error_with_support": "Something went wrong. Contact us at"
     },
-    "onboarding": {
-        "select_agent": {
-            "title": "Assign the first agent into your team"
-        },
-        "build_manager": {
-            "title": "Setup Manager profile"
-        }
+    "new_agent": "New agent",
+    "copy_code": "Copy code",
+    "return": "Return",
+    "finish": "Finish",
+    "skip": "Skip",
+    "url_copied": "URL copied",
+    "script_copied": "Script copied",
+    "clear": "Clear",
+    "apply": "Apply"
+  },
+  "onboarding": {
+    "select_agent": {
+      "title": "Assign the first agent into your team"
     },
-    "title": "Weni Agentic IA",
-    "description": "An AI-based CX business solution for brands and retailers.",
-    "improve": {
-        "description": "Connect agents to the Weni platform to access advanced features and customizable options",
-        "button": "Connect to Weni"
+    "build_manager": {
+      "title": "Setup Manager profile"
+    }
+  },
+  "title": "Weni Agentic IA",
+  "description": "An AI-based CX business solution for brands and retailers.",
+  "improve": {
+    "description": "Connect agents to the Weni platform to access advanced features and customizable options",
+    "button": "Connect to Weni"
+  },
+  "agents": {
+    "buttons": {
+      "gallery": "Assign agents",
+      "remove": "Remove agent"
     },
-    "agents": {
-        "buttons": {
-            "gallery": "Assign agents",
-            "remove": "Remove agent"
-        },
-        "modals": {
-            "gallery": {
-                "title": "Agents Gallery",
-                "filters": {
-                    "categories": {
-                        "title": "Category",
-                        "none_selected": "All agents"
-                    },
-                    "agents": {
-                        "title": "Agents",
-                        "none_selected": "All agents",
-                        "options": {
-                            "official": "Official agents",
-                            "custom": "Custom agents"
-                        }
-                    }
-                },
-                "list": {
-                    "empty": {
-                        "title": "No results founded"
-                    }
-                }
-            },
-            "assign": {
-                "buttons": {
-                    "back": "Back",
-                    "next": "Next",
-                    "finish": "Finish"
-                },
-                "alerts": {
-                    "WhatsApp_required": "WhatsApp Channel required"
-                },
-                "title": "Assign {{name}} Agent",
-                "steps": "Step {{currentPage}} of {{totalPages}}",
-                "about": {
-                    "title": "About"
-                },
-                "templates_available": {
-                    "title": "Templates available"
-                },
-                "select_templates": {
-                    "title": "Select templates",
-                    "description": "You can edit, remove and even create custom templates later"
-                },
-                "integrate_support_channel": {
-                    "title": "Integrate a support channel"
-                },
-                "credentials": {
-                    "title": "Credentials",
-                    "description": "Enter the credentials to assign the agent"
-                }
+    "modals": {
+      "gallery": {
+        "title": "Agents Gallery",
+        "filters": {
+          "categories": {
+            "title": "Category",
+            "none_selected": "All agents"
+          },
+          "agents": {
+            "title": "Agents",
+            "none_selected": "All agents",
+            "options": {
+              "official": "Official agents",
+              "custom": "Custom agents"
             }
+          }
         },
-        "title": "My agents team",
         "list": {
-            "empty": {
-                "title": "No agent assigned to team"
-            }
-        },
-        "details": {
-            "about": {
-                "title": "About"
-            },
-            "settings": {
-                "actions": {
-                    "save": {
-                        "success": "Changes saved successfully",
-                        "error": "Unable to save changes, please try again"
-                    }
-                },
-                "steps": {
-                    "processing": {
-                        "description": "An AI is analyzing the rule to ensure everything works as expected. This may take a few minutes."
-                    }
-                },
-                "title": "Settings",
-                "fields": {
-                    "webhook_url": {
-                        "label": "Webhook URL",
-                        "description": "Use this URL to configure your external system to send events to this agent"
-                    },
-                    "global_rule": {
-                        "label": "Global prompt (optional)",
-                        "description": "Use this area to define global rules and guidelines for the agent"
-                    }
-                },
-                "buttons": {
-                    "copy": "Copy",
-                    "save": "Save changes"
-                }
-            }
-        },
-        "categories": {
-            "passive": {
-                "title": "Passive Agent"
-            },
-            "active": {
-                "title": "Active Agent",
-                "order_status": {
-                    "title": "Order status agent",
-                    "description": "Keep customers updated on the order status in real time",
-                    "details": {
-                        "title": "Activate order delivery tracking for customers",
-                        "description": "This agent reduces manual checks and increases transparency, ensuring that customers remain informed and in control"
-                    },
-                    "settings": {
-                        "is_test_contact_number": {
-                            "title": "Restrict to test contact",
-                            "description": "The agent will only send messages to the test phone"
-                        },
-                        "test_contact_number": {
-                            "label": "Phone"
-                        },
-                        "is_selected_sellers": {
-                            "title": "Restricted to selected sales associates",
-                            "description": "The agent will only send messages to selected sales associates"
-                        },
-                        "selected_sellers": {
-                            "label": "Select sales associates",
-                            "placeholder": "Select..."
-                        }
-                    }
-                },
-                "abandoned_cart": {
-                    "title": "Abandoned cart agent",
-                    "description": "Recover sales by reminding customers of items left in the cart",
-                    "details": {
-                        "title": "Recover sales by reminding customers of items left in the cart",
-                        "description": "This agent boosts conversion, retains customers and encourages them to complete their order"
-                    },
-                    "modal": {
-                        "title": "Add abandoned cart",
-                        "description": "Check the store type before following the steps below",
-                        "button": "Go to storefront"
-                    },
-                    "settings": {
-                        "restriction": {
-                            "title": "Restrict when messages can be sent",
-                            "description": "Limit messages to the configured times",
-                            "monday_until_friday": "Monday to Friday",
-                            "saturday": "Saturday",
-                            "from": "From",
-                            "to": "To"
-                        }
-                    }
-                }
-            }
-        },
-        "common": {
-            "configure": {
-                "success": "Settings saved successfully",
-                "error": "Error while saving. Try again later."
-            },
-            "disable": {
-                "title": "Remove agent",
-                "description": "This action is irreversible. Are you sure you want to remove this agent from your team?",
-                "success": "{{agent}} removed from your agents team",
-                "error": "Error removing the agent. Try again later.",
-                "buttons": {
-                    "remove": "Remove",
-                    "cancel": "Cancel"
-                }
-            },
-            "add": "Assign",
-            "added": "Agent in production",
-            "view": "View agent",
-            "test": "Agent in test",
-            "configuring": "Configuring agent"
+          "empty": {
+            "title": "No results founded"
+          }
         }
+      },
+      "assign": {
+        "buttons": {
+          "back": "Back",
+          "next": "Next",
+          "finish": "Finish"
+        },
+        "alerts": {
+          "WhatsApp_required": "WhatsApp Channel required"
+        },
+        "title": "Assign {{name}} Agent",
+        "steps": "Step {{currentPage}} of {{totalPages}}",
+        "about": {
+          "title": "About"
+        },
+        "templates_available": {
+          "title": "Templates available"
+        },
+        "select_templates": {
+          "title": "Select templates",
+          "description": "You can edit, remove and even create custom templates later"
+        },
+        "integrate_support_channel": {
+          "title": "Integrate a support channel"
+        },
+        "credentials": {
+          "title": "Credentials",
+          "description": "Enter the credentials to assign the agent"
+        }
+      }
+    },
+    "title": "My agents team",
+    "list": {
+      "empty": {
+        "title": "No agent assigned to team"
+      }
+    },
+    "details": {
+      "about": {
+        "title": "About"
+      },
+      "settings": {
+        "actions": {
+          "save": {
+            "success": "Changes saved successfully",
+            "error": "Unable to save changes, please try again"
+          }
+        },
+        "steps": {
+          "processing": {
+            "description": "An AI is analyzing the rule to ensure everything works as expected. This may take a few minutes."
+          }
+        },
+        "title": "Settings",
+        "fields": {
+          "webhook_url": {
+            "label": "Webhook URL",
+            "description": "Use this URL to configure your external system to send events to this agent"
+          },
+          "global_rule": {
+            "label": "Global prompt (optional)",
+            "description": "Use this area to define global rules and guidelines for the agent"
+          }
+        },
+        "buttons": {
+          "copy": "Copy",
+          "save": "Save changes"
+        }
+      }
+    },
+    "categories": {
+      "passive": {
+        "title": "Passive Agent"
+      },
+      "active": {
+        "title": "Active Agent",
+        "order_status": {
+          "title": "Order status agent",
+          "description": "Keep customers updated on the order status in real time",
+          "details": {
+            "title": "Activate order delivery tracking for customers",
+            "description": "This agent reduces manual checks and increases transparency, ensuring that customers remain informed and in control"
+          },
+          "settings": {
+            "is_test_contact_number": {
+              "title": "Restrict to test contact",
+              "description": "The agent will only send messages to the test phone"
+            },
+            "test_contact_number": {
+              "label": "Phone"
+            },
+            "is_selected_sellers": {
+              "title": "Restricted to selected sales associates",
+              "description": "The agent will only send messages to selected sales associates"
+            },
+            "selected_sellers": {
+              "label": "Select sales associates",
+              "placeholder": "Select..."
+            }
+          }
+        },
+        "abandoned_cart": {
+          "title": "Abandoned cart agent",
+          "description": "Recover sales by reminding customers of items left in the cart",
+          "details": {
+            "title": "Recover sales by reminding customers of items left in the cart",
+            "description": "This agent boosts conversion, retains customers and encourages them to complete their order"
+          },
+          "modal": {
+            "title": "Add abandoned cart",
+            "description": "Check the store type before following the steps below",
+            "button": "Go to storefront"
+          },
+          "settings": {
+            "restriction": {
+              "title": "Restrict when messages can be sent",
+              "description": "Limit messages to the configured times",
+              "monday_until_friday": "Monday to Friday",
+              "saturday": "Saturday",
+              "from": "From",
+              "to": "To"
+            }
+          }
+        }
+      }
+    },
+    "common": {
+      "configure": {
+        "success": "Settings saved successfully",
+        "error": "Error while saving. Try again later."
+      },
+      "disable": {
+        "title": "Remove agent",
+        "description": "This action is irreversible. Are you sure you want to remove this agent from your team?",
+        "success": "{{agent}} removed from your agents team",
+        "error": "Error removing the agent. Try again later.",
+        "buttons": {
+          "remove": "Remove",
+          "cancel": "Cancel"
+        }
+      },
+      "add": "Assign",
+      "added": "Agent in production",
+      "view": "View agent",
+      "test": "Agent in test",
+      "configuring": "Configuring agent"
+    }
+  },
+  "setup": {
+    "title": "Configuring your Weni app",
+    "description": "We're getting everything ready for you! The initial setup will be completed soon to ensure a great experience."
+  },
+  "agent": {
+    "buttons": {
+      "preview": "Preview",
+      "publish": "Publish and go live",
+      "switch_to_test": "Switch to test mode"
+    },
+    "actions": {
+      "publish": {
+        "success": "{{agentName, lowerCase, firstLetterUpperCase}} published"
+      },
+      "switch_to_test": {
+        "success": "{{agentName, lowerCase, firstLetterUpperCase}} switched to test mode"
+      },
+      "assign": {
+        "success": "Agent successfully assigned! Don’t forget to test and customize before publishing",
+        "error": "Something went wrong. Please try again"
+      },
+      "edit_template": {
+        "success": "Saved changes! It may take up to 24 hours to be approved by Meta and take effec"
+      }
+    },
+    "modals": {
+      "integrate_whatsapp": {
+        "title": "Integrate WhatsApp"
+      },
+      "publish": {
+        "title": "Publish and go live",
+        "description": "Confirming this action will publish the agent to production, where it will begin handling live interactions.",
+        "fields": {
+          "percentage": {
+            "title": "Percentage of the contact base that will be triggered",
+            "description": "Try a smaller percentage if you just want to test with part of your base"
+          }
+        },
+        "buttons": {
+          "publish": "Publish",
+          "cancel": "Cancel"
+        }
+      },
+      "switch_to_test": {
+        "title": "Switch to test mode",
+        "description": "Confirming this action will move the agent to test mode, disabling it from handling live interactions.",
+        "buttons": {
+          "confirm": "Confirm",
+          "cancel": "Cancel"
+        }
+      },
+      "details": {
+        "sections": {
+          "about": {
+            "title": "About",
+            "status": {
+              "title": "Status"
+            }
+          },
+          "preview": {
+            "title": "Preview and test",
+            "description": "Test your agent by scanning the QR code below:",
+            "fields": {
+              "url": {
+                "description": "Or copy and paste in your browser"
+              }
+            },
+            "buttons": {
+              "copy": "Copy"
+            }
+          }
+        }
+      }
+    },
+    "details": {
+      "title": "Smart agents",
+      "description": "Enhance your smart agents by enabling control over conversation flows based on user intent. With the Starter Plan, you can customize language, tone, and behavior to give your agent a unique identity and improve communication quality. See the exchanges and returns agent demo on the side.",
+      "skills": {
+        "title": "Agent skills",
+        "analyze": "Analyze the context",
+        "comprehend": "Understand complex requests",
+        "provide": "Generate custom responses"
+      },
+      "example": {
+        "description": "Exchanges and returns agent demo"
+      }
     },
     "setup": {
-        "title": "Configuring your Weni app",
-        "description": "We're getting everything ready for you! The initial setup will be completed soon to ensure a great experience."
-    },
-    "agent": {
-        "buttons": {
-            "preview": "Preview",
-            "publish": "Publish and go live",
-            "switch_to_test": "Switch to test mode"
+      "title": "Configure your agent's persona",
+      "forms": {
+        "name": "Name",
+        "channel": {
+          "container_title": "Agent setup",
+          "title": "Store type",
+          "site_editor": "VTEX IO",
+          "other": "Other",
+          "description": "The agent will only be functional after following these steps:<0/><1/>Go to the GitHub repository and paste the code below into the <2>thirdpartyscripts.tsx</2> file."
         },
-        "actions": {
-            "publish": {
-                "success": "{{agentName, lowerCase, firstLetterUpperCase}} published"
-            },
-            "switch_to_test": {
-                "success": "{{agentName, lowerCase, firstLetterUpperCase}} switched to test mode"
-            },
-            "assign": {
-                "success": "Agent successfully assigned! Don’t forget to test and customize before publishing",
-                "error": "Something went wrong. Please try again"
-            },
-            "edit_template": {
-                "success": "Saved changes! It may take up to 24 hours to be approved by Meta and take effec"
-            }
+        "occupation": {
+          "title": "Occupation (optional)",
+          "default": "Smart assistant"
         },
-        "modals": {
-            "integrate_whatsapp": {
-                "title": "Integrate WhatsApp"
-            },
-            "publish": {
-                "title": "Publish and go live",
-                "description": "Confirming this action will publish the agent to production, where it will begin handling live interactions.",
-                "fields": {
-                    "percentage": {
-                        "title": "Percentage of the contact base that will be triggered",
-                        "description": "Try a smaller percentage if you just want to test with part of your base"
-                    }
-                },
-                "buttons": {
-                    "publish": "Publish",
-                    "cancel": "Cancel"
-                }
-            },
-            "switch_to_test": {
-                "title": "Switch to test mode",
-                "description": "Confirming this action will move the agent to test mode, disabling it from handling live interactions.",
-                "buttons": {
-                    "confirm": "Confirm",
-                    "cancel": "Cancel"
-                }
-            },
-            "details": {
-                "sections": {
-                    "about": {
-                        "title": "About",
-                        "status": {
-                            "title": "Status"
-                        }
-                    },
-                    "preview": {
-                        "title": "Preview and test",
-                        "description": "Test your agent by scanning the QR code below:",
-                        "fields": {
-                            "url": {
-                                "description": "Or copy and paste in your browser"
-                            }
-                        },
-                        "buttons": {
-                            "copy": "Copy"
-                        }
-                    }
-                }
-            }
+        "objective": {
+          "title": "Objective (optional)",
+          "default": "Its goal is to answer customer questions, share order status updates, provide product information, and support sales. Key features include shopping via WhatsApp and an integrated FAQ."
         },
-        "details": {
-            "title": "Smart agents",
-            "description": "Enhance your smart agents by enabling control over conversation flows based on user intent. With the Starter Plan, you can customize language, tone, and behavior to give your agent a unique identity and improve communication quality. See the exchanges and returns agent demo on the side.",
-            "skills": {
-                "title": "Agent skills",
-                "analyze": "Analyze the context",
-                "comprehend": "Understand complex requests",
-                "provide": "Generate custom responses"
-            },
-            "example": {
-                "description": "Exchanges and returns agent demo"
-            }
+        "knowledge": {
+          "title": "Knowledge base",
+          "context": "Provide the source of the content your agent will use to answer the questions"
         },
-        "setup": {
-            "title": "Configure your agent's persona",
-            "forms": {
-                "name": "Name",
-                "channel": {
-                    "container_title": "Agent setup",
-                    "title": "Store type",
-                    "site_editor": "VTEX IO",
-                    "other": "Other",
-                    "description": "The agent will only be functional after following these steps:<0/><1/>Go to the GitHub repository and paste the code below into the <2>thirdpartyscripts.tsx</2> file."
-                },
-                "occupation": {
-                    "title": "Occupation (optional)",
-                    "default": "Smart assistant"
-                },
-                "objective": {
-                    "title": "Objective (optional)",
-                    "default": "Its goal is to answer customer questions, share order status updates, provide product information, and support sales. Key features include shopping via WhatsApp and an integrated FAQ."
-                },
-                "knowledge": {
-                    "title": "Knowledge base",
-                    "context": "Provide the source of the content your agent will use to answer the questions"
-                },
-                "error": {
-                    "empty_input": "Required field",
-                    "valid_url": "Enter a valid URL"
-                }
-            },
-            "buttons": {
-                "create_agent": "Create agent"
-            }
-        },
-        "error": "Error configuring agent. Try again later.",
-        "success": "Agent created successfully"
-    },
-    "integration": {
-        "title": "Integrate a support channel",
-        "description": "Choose the channel you want to use and follow the steps to integrate it",
-        "channels": {
-            "whatsapp": {
-                "title": "WhatsApp",
-                "description": "Use a WhatsApp Business account to improve communication with your contacts",
-                "error": "Error connecting to WhatsApp. Check your credentials or try again later.",
-                "success": "WhatsApp integrated successfully",
-                "skip_disclaimer": "You can skip this step and integrate WhatsApp Channel later"
-            }
-        },
-        "buttons": {
-            "integrate": "Integrate",
-            "integrated": "Integrated"
-        },
-        "success": "Integration completed successfully",
-        "error": "Error integrating the feature. Try again later."
-    },
-    "error": {
-        "title": "Something went wrong",
-        "description": "Try again or check later if the problem persists",
-        "button": "Try again"
-    },
-    "terms": {
-        "title": "Terms and Conditions",
-        "description1": "VTEX and the Contractor have entered into a Master Service Agreement (\"Agreement\") to establish the authorization for use, as well as the provision of support and maintenance services, for the software developed by VTEX for ecommerce solutions. VTEX and the Contractor are hereinafter referred to collectively as the \"Parties\" and individually as a \"Party\".",
-        "description2": "The Admin Master (\"Owner (Admin Super)\") of the Contractor on the VTEX Platform, duly authorized to act on behalf of the Contractor with full powers and obligations related to this authorization, hereby accepts and acknowledges the provisions of these Terms and Conditions — Weni by VTEX Platform (\"T&C\"), binding the Parties and their successors to be governed, under any circumstances, by the following clauses:",
-        "definition": {
-            "title": "1. Definition",
-            "description": {
-                "1": "1.1 VTEX, through the Weni by VTEX Platform, offers a service to support the Contractor in communicating with their clients via widely used messaging channels, including but not limited to WhatsApp, SMS, and Webchat.",
-                "2": "1.2 Subject to the conditions set forth in these T&C, VTEX shall provide the Contractor with a non-exclusive right to access and use the Weni by VTEX Platform for internal business purposes."
-            }
-        },
-        "responsabilities": {
-            "title": "2. Contractor responsibilities",
-            "description": {
-                "1": "2.1 The Contractor shall be responsible for the entire content of all communications sent by their users through the Weni by VTEX Platform, as well as for ensuring compliance with all applicable laws and regulations related to the activities performed.",
-                "2": "2.2 The Contractor expressly agrees to update their policies and terms of use, and to obtain the express consent of their consumers, where applicable, for sending service-related information through communication channels such as email, SMS, WhatsApp, and others, thereby releasing VTEX from any liability in this regard.",
-                "3": "2.3 The Contractor acknowledges and agrees to the WhatsApp Business Solution Terms, available at https://www.whatsapp.com/legal/meta-terms-whatsapp-business, including any future updates. The Contractor further acknowledges that they may not use the Weni by VTEX Platform to track or create individual user profiles for any business entity; to track, create, sell, or distribute any data derived from the Weni by VTEX Platform; or to engage in any actions prohibited by the applicable terms established by Meta, the company that maintains the WhatsApp Business solution."
-            }
-        },
-        "vtex_responsabilites": {
-            "title": "3. VTEX responsibilities and service credits",
-            "description": {
-                "1": "3.1 Provided that the Contractor fulfills its obligations, VTEX commits to keeping the Weni by VTEX Platform services operational at least 99% of the time each month. The Parties agree that any non-compliance with the Service Level Agreement (SLA) due to instabilities from Meta or other involved third parties are excluded. The SLA (\"Measured SLA\") is calculated by taking the total minutes in the analyzed month and subtracting any recorded downtime during that period. Downtime refers to periods when the Weni by VTEX Platform is not accessible and usable by the Contractor and other internet connections, excluding cases of (1) planned maintenance, (2) events of force majeure, or (3) problems arising from improper use of the Weni by VTEX Platform by the Contractor or proven failure to fulfill their obligations.",
-                "2": "3.2 If the SLA is not met as described above, provided that the Contractor has fulfilled all their obligations, VTEX shall grant service credits in an amount equal to 10% (ten percent) of the Contractor's monthly payments for the Weni by VTEX Platform to VTEX. These credits will be applied to the next invoice issued after the downtime calculation. To receive service credits, the Contractor must submit a request through the VTEX Support system within ten (10) days following the end of the month in which the downtime occurred, in accordance with the terms established in the Agreement between the Parties."
-            }
-        },
-        "services": {
-            "title": "4. Services included in the solution",
-            "description": {
-                "1": "4.1 The Parties agree that the modules included in the Weni Platform by VTEX are: Flows Module; Studio Module; Artificial Intelligence Module; Integration Module; Chat Module; SDK for mobile applications; WhatsApp Business API; and Unlimited agent license for Weni Chat.",
-                "2": "4.2 The Parties agree that the services and support included in the Weni by VTEX Platform comprise: the creation of an environment on the Weni Platform; hosting of the Weni Platform; up to six (6) hours of training; updates and improvements to the Weni by VTEX Platform; and support."
-            }
-        },
-        "contracting": {
-            "title": "5. Terms and parameters of the agreement",
-            "description": {
-                "1": "5.1 The Parties agree that the platform will be presented to the Contractor within five (5) business days following payment of the annual license fee, provided that the Contractor has provided VTEX with the necessary contact information.",
-                "2": "5.2 The Parties agree that the project shall commence after payment of the annual license fee.",
-                "3": "5.3 The terms of these T&C shall take effect on the date of signature and remain valid for a period of twelve (12) months. The agreement will be automatically renewed for successive periods of the same duration, unless either Party notifies the other in writing, at least thirty (30) days prior to the expiration date, expressing their intention not to renew the T&C.",
-                "4": {
-                    "title": "5.4 These T&C can be terminated by either Party at the end of the twelve (12) month period without penalty or compensation, provided the Party wishing to terminate notifies the other Party at least ninety (90) days in advance.",
-                    "items": {
-                        "1": "5.4.1 If the Contractor unilaterally decides to terminate the Agreement before the end of the twelve (12) month term, they shall pay VTEX the monthly contracted license fee, as set forth in clause 6.1, until the end of the twelve (12) month term established in this Section."
-                    }
-                }
-            }
-        },
-        "payment": {
-            "title": "6. Payment terms",
-            "description": {
-                "1": "6.1 The Contractor shall pay VTEX the amounts indicated in the table below, in accordance with the selected plan, upon receipt of an invoice issued by VTEX, as set forth in the Agreement.",
-                "table": {
-                    "headers": {
-                        "feature": "",
-                        "starter": "Starter",
-                        "corporate": "Corporate",
-                        "enterprise": "Enterprise"
-                    },
-                    "rows": [
-                        {
-                            "feature": "Annual licensing fee (cloud hosting, services, and continuous updates)",
-                            "starter": "$1,000/year",
-                            "corporate": "$5,000/year",
-                            "enterprise": "$20,000/year"
-                        },
-                        {
-                            "feature": "Monthly licensing fee (maintenance, monitoring, and support)",
-                            "starter": "$150/month",
-                            "corporate": "$750/month",
-                            "enterprise": "$1,500/month"
-                        },
-                        {
-                            "feature": "Success rate (per customer interaction resolved by AI)",
-                            "starter": "$1.20/resolution",
-                            "corporate": "$0.90/resolution",
-                            "enterprise": "$0.60/resolution"
-                        },
-                        {
-                            "feature": "Outbound CX notifications (order tracking, invoice sending, payment notification, etc.)",
-                            "starter": "Up to 10,000",
-                            "corporate": "Up to 100,000",
-                            "enterprise": "Up to 1,000,000"
-                        },
-                        {
-                            "feature": "Outbound marketing campaign (24-hour conversation window)",
-                            "starter": "$0.24/unit",
-                            "corporate": "$0.18/unit",
-                            "enterprise": "$0.12/unit"
-                        },
-                        {
-                            "feature": "Human interactions",
-                            "starter": "Unlimited",
-                            "corporate": "Unlimited",
-                            "enterprise": "Unlimited"
-                        },
-                        {
-                            "feature": "Initial customer contact",
-                            "starter": "Unlimited",
-                            "corporate": "Unlimited",
-                            "enterprise": "Unlimited"
-                        },
-                        {
-                            "feature": "AI agents",
-                            "starter": "Included",
-                            "corporate": "Included",
-                            "enterprise": "Included"
-                        },
-                        {
-                            "feature": "Weni Framework",
-                            "starter": "Not included",
-                            "corporate": "Not included",
-                            "enterprise": "Included"
-                        },
-                        {
-                            "feature": "WhatsApp costs",
-                            "starter": "Included",
-                            "corporate": "Included",
-                            "enterprise": "Included"
-                        }
-                    ]
-                },
-                "note": "Selected plan: Starter",
-                "2": "6.2 The amounts stipulated in these T&C shall be charged on the invoice issued by VTEX to the Contractor, in accordance with the payment terms established in the Agreement previously signed between the Parties."
-            }
-        },
-        "final": {
-            "title": "7. Final provisions",
-            "description": {
-                "1": "7.1 These T&C shall be governed by and interpreted in accordance with the legislation stipulated in the Agreement. Any dispute between the Parties that cannot be resolved by mutual agreement will be settled exclusively under the terms of the said Agreement.",
-                "2": "7.2 Any delay in payment by the Contractor exceeding fifteen (15) days shall entitle VTEX to restrict access to the solution provided through the Weni by VTEX Platform until payment of the unpaid invoices.",
-                "3": "7.3 The Contractor acknowledges that the Weni by VTEX Platform uses external technology platforms, including but not limited to those offered by the corporate entity Meta. The Contractor acknowledges that any changes, limitations, or suspensions of the Weni by VTEX Platform due to determinations made by the corporate entity Meta will be communicated by VTEX to the Contractor as soon as possible, even if through means other than those established in these T&C, without constituting a violation of these terms by VTEX.",
-                "4": "7.4 The Parties ratify all other provisions of the Agreement that have not been expressly revoked or amended by this Addendum, including those applicable to this instrument. In the event of any conflict between the Agreement and this Addendum, the provisions of this Addendum shall prevail."
-            }
-        },
-        "description": "By using this application, you must accept the Terms and Conditions. These terms define access to and use of the services, detailing the features of the selected plan, its limitations, pricing, and renewal policies. They also describe the product's functionality, usage guidelines and any applicable restrictions to ensure a safe and satisfactory experience.",
-        "plan_details": {
-            "title": "1. Plan details",
-            "description": "Your plan includes specific features, limitations, and billing terms. Check your subscription details to understand what it offers and how renewals work."
-        },
-        "product_usage": {
-            "title": "2. Product usage",
-            "description": "This app was developed to enhance your experience through specific features and functionalities. Any misuse, unauthorized access, or violation of the terms may result in account suspension."
-        },
-        "agree": "Agree"
-    },
-    "template_synchronization": {
-        "rejected": "Agent model not approved. Try adding it again."
-    },
-    "insights": {
-        "dashboard": {
-            "abandoned_cart": {
-                "title": "What's happening in:",
-                "sent_messages": "Sent messages",
-                "delivered_messages": "Delivered messages",
-                "read_messages": "Read messages",
-                "interactions": "Interactions",
-                "utm_revenue": "UTM revenue",
-                "orders_placed": "Orders placed"
-            }
+        "error": {
+          "empty_input": "Required field",
+          "valid_url": "Enter a valid URL"
         }
+      },
+      "buttons": {
+        "create_agent": "Create agent"
+      }
     },
-    "template": {
-        "modals": {
-            "add": {
-                "title": "Add new variable",
-                "buttons": {
-                    "cancel": "Cancel",
-                    "done": "Done"
-                }
-            },
-            "edit": {
-                "steps": {
-                    "processing": {
-                        "description": "An AI is analyzing the start condition to ensure everything works as expected. This may take a few minutes."
-                    }
-                }
-            },
-            "create": {
-                "steps": {
-                    "processing": {
-                        "title": "Processing",
-                        "description": "An AI is analyzing the template to ensure everything works as expected. This may take a few minutes.",
-                        "items": {
-                            "analyzing_defined_requirements": "Analyzing defined requirements",
-                            "reviewing_template_structure": "Reviewing template structure",
-                            "validating_inserted_content": "Validating inserted content",
-                            "adjusting_custom_variables": "Adjusting custom variables",
-                            "optimizing_template_for_fast_delivery": "Optimizing template for fast delivery",
-                            "performing_final_security_checks": "Performing final security checks",
-                            "reviewing_rule_structure": "Reviewing rule structure",
-                            "optimizing_rule_for_fast_delivery": "Optimizing rule for fast delivery",
-                            "reviewing_start_condition_structure": "Reviewing start condition structure",
-                            "optimizing_start_condition_for_fast_delivery": "Optimizing start condition for fast delivery"
-                        }
-                    },
-                    "completed": {
-                        "title": "Processing completed"
-                    }
-                },
-                "buttons": {
-                    "cancel": "Cancel",
-                    "proceed": "Proceed",
-                    "finish": "Finish",
-                    "return_and_fix": "Return and fix"
-                },
-                "success": "The whole template has been validated and is ready to use!",
-                "errors": {
-                    "generic_error": "An error occurred while processing the template. Please try again."
-                }
-            }
-        },
-        "buttons": {
-            "add": "Add custom template"
-        },
-        "list": {
-            "title": "Templates",
-            "description": "Edit your templates or create a new one"
-        },
-        "card": {
-            "actions": {
-                "label": "Actions",
-                "disable": "Disable template"
-            },
-            "status": {
-                "active": "Approved",
-                "rejected": "Rejected",
-                "pending": "Pending",
-                "needs_editing": "Needs editing"
-            },
-            "buttons": {
-                "edit": "Edit template"
-            }
-        },
-        "form": {
-            "alerts": {
-                "needs_editing": {
-                    "description": "Button URL needs to be edited"
-                }
-            },
-            "create": {
-                "title": "Create custom template",
-                "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
-                }
-            },
-            "areas": {
-                "basic": {
-                    "title": "Basic"
-                },
-                "content": {
-                    "title": "Content",
-                    "buttons": {
-                        "add": "Add element",
-                        "remove": "Remove element"
-                    },
-                    "header": {
-                        "media": {
-                            "empty": {
-                                "description": "Attach an example of the file that will be sent"
-                            },
-                            "buttons": {
-                                "upload": "Upload",
-                                "remove": "Remove file"
-                            }
-                        }
-                    },
-                    "elements": {
-                        "header": "Header",
-                        "footer": "Footer",
-                        "button": "Button"
-                    }
-                },
-                "preview": {
-                    "content": {
-                        "placeholder": "Template preview"
-                    }
-                },
-                "variables": {
-                    "title": "Variables",
-                    "variable_name": "Variable {{variableName}}",
-                    "empty": {
-                        "title": "No variables added",
-                        "description": "Use variables to personalize and dynamically customize the message for your contact"
-                    },
-                    "buttons": {
-                        "add": "Add new variable"
-                    }
-                }
-            },
-            "fields": {
-                "errors": {
-                    "required": "required field",
-                    "missing_variable_one": "missing {{variables}} variable",
-                    "missing_variable_other": "missing {{variables}} variables",
-                    "undefined_variable_one": "variable {{variables}} is not defined",
-                    "undefined_variable_other": "variables {{variables}} are not defined"
-                },
-                "name": {
-                    "label": "Template name"
-                },
-                "language": {
-                    "label": "Languages supported"
-                },
-                "start_condition": {
-                    "label": "Start condition",
-                    "description": "Defines the condition that starts the agent.",
-                    "help": "Start condicition example: “When a webhook is received with status = approved”"
-                },
-                "content": {
-                    "label": "Text content",
-                    "description": "Type ‘{{’ to add variables",
-                    "header": {
-                        "title": "Header",
-                        "label": "Text",
-                        "radio": {
-                            "text": {
-                                "label": "Text"
-                            },
-                            "media": {
-                                "label": "Media"
-                            }
-                        }
-                    },
-                    "footer": {
-                        "title": "Footer",
-                        "label": "Text"
-                    },
-                    "button": {
-                        "title": "CTA Button",
-                        "text": {
-                            "label": "Text"
-                        },
-                        "radio": {
-                            "dynamic": {
-                                "label": "Dynamic URL"
-                            },
-                            "static": {
-                                "label": "Static URL"
-                            }
-                        },
-                        "url": {
-                            "label": "URL"
-                        },
-                        "url_example": {
-                            "label": "Example URL",
-                            "description": "Add an example website URL, do not use real customer information"
-                        }
-                    }
-                },
-                "variables": {
-                    "definition": {
-                        "label": "Definition"
-                    },
-                    "fallback_text": {
-                        "label": "Fallback text if variable is missing"
-                    }
-                }
-            }
-        }
+    "error": "Error configuring agent. Try again later.",
+    "success": "Agent created successfully"
+  },
+  "integration": {
+    "title": "Integrate a support channel",
+    "description": "Choose the channel you want to use and follow the steps to integrate it",
+    "channels": {
+      "whatsapp": {
+        "title": "WhatsApp",
+        "description": "Use a WhatsApp Business account to improve communication with your contacts",
+        "error": "Error connecting to WhatsApp. Check your credentials or try again later.",
+        "success": "WhatsApp integrated successfully",
+        "skip_disclaimer": "You can skip this step and integrate WhatsApp Channel later"
+      }
     },
-    "metrics": {
-        "fields": {
-            "template": {
-                "label": "Template"
-            },
-            "period": {
-                "label": "Period",
-                "options": {
-                    "today": "Today",
-                    "yesterday": "Yesterday",
-                    "last_7_days": "Last 7 days",
-                    "last_28_days": "Last 28 days"
-                }
-            }
+    "buttons": {
+      "integrate": "Integrate",
+      "integrated": "Integrated"
+    },
+    "success": "Integration completed successfully",
+    "error": "Error integrating the feature. Try again later."
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "Try again or check later if the problem persists",
+    "button": "Try again"
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "description1": "VTEX and the Contractor have entered into a Master Service Agreement (\"Agreement\") to establish the authorization for use, as well as the provision of support and maintenance services, for the software developed by VTEX for ecommerce solutions. VTEX and the Contractor are hereinafter referred to collectively as the \"Parties\" and individually as a \"Party\".",
+    "description2": "The Admin Master (\"Owner (Admin Super)\") of the Contractor on the VTEX Platform, duly authorized to act on behalf of the Contractor with full powers and obligations related to this authorization, hereby accepts and acknowledges the provisions of these Terms and Conditions — Weni by VTEX Platform (\"T&C\"), binding the Parties and their successors to be governed, under any circumstances, by the following clauses:",
+    "definition": {
+      "title": "1. Definition",
+      "description": {
+        "1": "1.1 VTEX, through the Weni by VTEX Platform, offers a service to support the Contractor in communicating with their clients via widely used messaging channels, including but not limited to WhatsApp, SMS, and Webchat.",
+        "2": "1.2 Subject to the conditions set forth in these T&C, VTEX shall provide the Contractor with a non-exclusive right to access and use the Weni by VTEX Platform for internal business purposes."
+      }
+    },
+    "responsabilities": {
+      "title": "2. Contractor responsibilities",
+      "description": {
+        "1": "2.1 The Contractor shall be responsible for the entire content of all communications sent by their users through the Weni by VTEX Platform, as well as for ensuring compliance with all applicable laws and regulations related to the activities performed.",
+        "2": "2.2 The Contractor expressly agrees to update their policies and terms of use, and to obtain the express consent of their consumers, where applicable, for sending service-related information through communication channels such as email, SMS, WhatsApp, and others, thereby releasing VTEX from any liability in this regard.",
+        "3": "2.3 The Contractor acknowledges and agrees to the WhatsApp Business Solution Terms, available at https://www.whatsapp.com/legal/meta-terms-whatsapp-business, including any future updates. The Contractor further acknowledges that they may not use the Weni by VTEX Platform to track or create individual user profiles for any business entity; to track, create, sell, or distribute any data derived from the Weni by VTEX Platform; or to engage in any actions prohibited by the applicable terms established by Meta, the company that maintains the WhatsApp Business solution."
+      }
+    },
+    "vtex_responsabilites": {
+      "title": "3. VTEX responsibilities and service credits",
+      "description": {
+        "1": "3.1 Provided that the Contractor fulfills its obligations, VTEX commits to keeping the Weni by VTEX Platform services operational at least 99% of the time each month. The Parties agree that any non-compliance with the Service Level Agreement (SLA) due to instabilities from Meta or other involved third parties are excluded. The SLA (\"Measured SLA\") is calculated by taking the total minutes in the analyzed month and subtracting any recorded downtime during that period. Downtime refers to periods when the Weni by VTEX Platform is not accessible and usable by the Contractor and other internet connections, excluding cases of (1) planned maintenance, (2) events of force majeure, or (3) problems arising from improper use of the Weni by VTEX Platform by the Contractor or proven failure to fulfill their obligations.",
+        "2": "3.2 If the SLA is not met as described above, provided that the Contractor has fulfilled all their obligations, VTEX shall grant service credits in an amount equal to 10% (ten percent) of the Contractor's monthly payments for the Weni by VTEX Platform to VTEX. These credits will be applied to the next invoice issued after the downtime calculation. To receive service credits, the Contractor must submit a request through the VTEX Support system within ten (10) days following the end of the month in which the downtime occurred, in accordance with the terms established in the Agreement between the Parties."
+      }
+    },
+    "services": {
+      "title": "4. Services included in the solution",
+      "description": {
+        "1": "4.1 The Parties agree that the modules included in the Weni Platform by VTEX are: Flows Module; Studio Module; Artificial Intelligence Module; Integration Module; Chat Module; SDK for mobile applications; WhatsApp Business API; and Unlimited agent license for Weni Chat.",
+        "2": "4.2 The Parties agree that the services and support included in the Weni by VTEX Platform comprise: the creation of an environment on the Weni Platform; hosting of the Weni Platform; up to six (6) hours of training; updates and improvements to the Weni by VTEX Platform; and support."
+      }
+    },
+    "contracting": {
+      "title": "5. Terms and parameters of the agreement",
+      "description": {
+        "1": "5.1 The Parties agree that the platform will be presented to the Contractor within five (5) business days following payment of the annual license fee, provided that the Contractor has provided VTEX with the necessary contact information.",
+        "2": "5.2 The Parties agree that the project shall commence after payment of the annual license fee.",
+        "3": "5.3 The terms of these T&C shall take effect on the date of signature and remain valid for a period of twelve (12) months. The agreement will be automatically renewed for successive periods of the same duration, unless either Party notifies the other in writing, at least thirty (30) days prior to the expiration date, expressing their intention not to renew the T&C.",
+        "4": {
+          "title": "5.4 These T&C can be terminated by either Party at the end of the twelve (12) month period without penalty or compensation, provided the Party wishing to terminate notifies the other Party at least ninety (90) days in advance.",
+          "items": {
+            "1": "5.4.1 If the Contractor unilaterally decides to terminate the Agreement before the end of the twelve (12) month term, they shall pay VTEX the monthly contracted license fee, as set forth in clause 6.1, until the end of the twelve (12) month term established in this Section."
+          }
         }
+      }
+    },
+    "payment": {
+      "title": "6. Payment terms",
+      "description": {
+        "1": "6.1 The Contractor shall pay VTEX the amounts indicated in the table below, in accordance with the selected plan, upon receipt of an invoice issued by VTEX, as set forth in the Agreement.",
+        "2": "6.2 The amounts stipulated in these T&C shall be charged on the invoice issued by VTEX to the Contractor, in accordance with the payment terms established in the Agreement previously signed between the Parties.",
+        "table": {
+          "headers": {
+            "feature": "",
+            "starter": "Starter",
+            "corporate": "Corporate",
+            "enterprise": "Enterprise"
+          },
+          "rows": [
+            {
+              "feature": "Annual licensing fee (cloud hosting, services, and continuous updates)",
+              "starter": "$1,000/year",
+              "corporate": "$5,000/year",
+              "enterprise": "$20,000/year"
+            },
+            {
+              "feature": "Monthly licensing fee (maintenance, monitoring, and support)",
+              "starter": "$150/month",
+              "corporate": "$750/month",
+              "enterprise": "$1,500/month"
+            },
+            {
+              "feature": "Success rate (per customer interaction resolved by AI)",
+              "starter": "$1.20/resolution",
+              "corporate": "$0.90/resolution",
+              "enterprise": "$0.60/resolution"
+            },
+            {
+              "feature": "Outbound CX notifications (order tracking, invoice sending, payment notification, etc.)",
+              "starter": "Up to 10,000",
+              "corporate": "Up to 100,000",
+              "enterprise": "Up to 1,000,000"
+            },
+            {
+              "feature": "Outbound marketing campaign (24-hour conversation window)",
+              "starter": "$0.24/unit",
+              "corporate": "$0.18/unit",
+              "enterprise": "$0.12/unit"
+            },
+            {
+              "feature": "Human interactions",
+              "starter": "Unlimited",
+              "corporate": "Unlimited",
+              "enterprise": "Unlimited"
+            },
+            {
+              "feature": "Initial customer contact",
+              "starter": "Unlimited",
+              "corporate": "Unlimited",
+              "enterprise": "Unlimited"
+            },
+            {
+              "feature": "AI agents",
+              "starter": "Included",
+              "corporate": "Included",
+              "enterprise": "Included"
+            },
+            {
+              "feature": "Weni Framework",
+              "starter": "Not included",
+              "corporate": "Not included",
+              "enterprise": "Included"
+            },
+            {
+              "feature": "WhatsApp costs",
+              "starter": "Included",
+              "corporate": "Included",
+              "enterprise": "Included"
+            }
+          ]
+        },
+        "note": "Selected plan: Starter"
+      }
+    },
+    "final": {
+      "title": "7. Final provisions",
+      "description": {
+        "1": "7.1 These T&C shall be governed by and interpreted in accordance with the legislation stipulated in the Agreement. Any dispute between the Parties that cannot be resolved by mutual agreement will be settled exclusively under the terms of the said Agreement.",
+        "2": "7.2 Any delay in payment by the Contractor exceeding fifteen (15) days shall entitle VTEX to restrict access to the solution provided through the Weni by VTEX Platform until payment of the unpaid invoices.",
+        "3": "7.3 The Contractor acknowledges that the Weni by VTEX Platform uses external technology platforms, including but not limited to those offered by the corporate entity Meta. The Contractor acknowledges that any changes, limitations, or suspensions of the Weni by VTEX Platform due to determinations made by the corporate entity Meta will be communicated by VTEX to the Contractor as soon as possible, even if through means other than those established in these T&C, without constituting a violation of these terms by VTEX.",
+        "4": "7.4 The Parties ratify all other provisions of the Agreement that have not been expressly revoked or amended by this Addendum, including those applicable to this instrument. In the event of any conflict between the Agreement and this Addendum, the provisions of this Addendum shall prevail."
+      }
+    },
+    "description": "By using this application, you must accept the Terms and Conditions. These terms define access to and use of the services, detailing the features of the selected plan, its limitations, pricing, and renewal policies. They also describe the product's functionality, usage guidelines and any applicable restrictions to ensure a safe and satisfactory experience.",
+    "plan_details": {
+      "title": "1. Plan details",
+      "description": "Your plan includes specific features, limitations, and billing terms. Check your subscription details to understand what it offers and how renewals work."
+    },
+    "product_usage": {
+      "title": "2. Product usage",
+      "description": "This app was developed to enhance your experience through specific features and functionalities. Any misuse, unauthorized access, or violation of the terms may result in account suspension."
+    },
+    "agree": "Agree"
+  },
+  "template_synchronization": {
+    "rejected": "Agent model not approved. Try adding it again."
+  },
+  "insights": {
+    "dashboard": {
+      "abandoned_cart": {
+        "title": "What's happening in:",
+        "sent_messages": "Sent messages",
+        "delivered_messages": "Delivered messages",
+        "read_messages": "Read messages",
+        "interactions": "Interactions",
+        "utm_revenue": "UTM revenue",
+        "orders_placed": "Orders placed"
+      }
     }
+  },
+  "template": {
+    "modals": {
+      "add": {
+        "title": "Add new variable",
+        "buttons": {
+          "cancel": "Cancel",
+          "done": "Done"
+        }
+      },
+      "edit": {
+        "steps": {
+          "processing": {
+            "description": "An AI is analyzing the start condition to ensure everything works as expected. This may take a few minutes."
+          }
+        }
+      },
+      "create": {
+        "steps": {
+          "processing": {
+            "title": "Processing",
+            "description": "An AI is analyzing the template to ensure everything works as expected. This may take a few minutes.",
+            "items": {
+              "analyzing_defined_requirements": "Analyzing defined requirements",
+              "reviewing_template_structure": "Reviewing template structure",
+              "validating_inserted_content": "Validating inserted content",
+              "adjusting_custom_variables": "Adjusting custom variables",
+              "optimizing_template_for_fast_delivery": "Optimizing template for fast delivery",
+              "performing_final_security_checks": "Performing final security checks",
+              "reviewing_rule_structure": "Reviewing rule structure",
+              "optimizing_rule_for_fast_delivery": "Optimizing rule for fast delivery",
+              "reviewing_start_condition_structure": "Reviewing start condition structure",
+              "optimizing_start_condition_for_fast_delivery": "Optimizing start condition for fast delivery"
+            }
+          },
+          "completed": {
+            "title": "Processing completed"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "proceed": "Proceed",
+          "finish": "Finish",
+          "return_and_fix": "Return and fix"
+        },
+        "success": "The whole template has been validated and is ready to use!",
+        "errors": {
+          "generic_error": "An error occurred while processing the template. Please try again."
+        }
+      }
+    },
+    "buttons": {
+      "add": "Add custom template"
+    },
+    "list": {
+      "title": "Templates",
+      "description": "Edit your templates or create a new one"
+    },
+    "card": {
+      "actions": {
+        "label": "Actions",
+        "disable": "Disable template"
+      },
+      "status": {
+        "active": "Approved",
+        "rejected": "Rejected",
+        "pending": "Pending",
+        "needs_editing": "Needs editing"
+      },
+      "buttons": {
+        "edit": "Edit template"
+      }
+    },
+    "form": {
+      "alerts": {
+        "needs_editing": {
+          "description": "Button URL needs to be edited"
+        }
+      },
+      "create": {
+        "title": "Create custom template",
+        "buttons": {
+          "save": "Save",
+          "cancel": "Cancel"
+        }
+      },
+      "areas": {
+        "basic": {
+          "title": "Basic"
+        },
+        "content": {
+          "title": "Content",
+          "buttons": {
+            "add": "Add element",
+            "remove": "Remove element"
+          },
+          "header": {
+            "media": {
+              "empty": {
+                "description": "Attach an example of the file that will be sent"
+              },
+              "buttons": {
+                "upload": "Upload",
+                "remove": "Remove file"
+              }
+            }
+          },
+          "elements": {
+            "header": "Header",
+            "footer": "Footer",
+            "button": "Button"
+          }
+        },
+        "preview": {
+          "content": {
+            "placeholder": "Template preview"
+          }
+        },
+        "variables": {
+          "title": "Variables",
+          "variable_name": "Variable {{variableName}}",
+          "empty": {
+            "title": "No variables added",
+            "description": "Use variables to personalize and dynamically customize the message for your contact"
+          },
+          "buttons": {
+            "add": "Add new variable"
+          }
+        }
+      },
+      "fields": {
+        "errors": {
+          "required": "required field",
+          "missing_variable_one": "missing {{variables}} variable",
+          "missing_variable_other": "missing {{variables}} variables",
+          "undefined_variable_one": "variable {{variables}} is not defined",
+          "undefined_variable_other": "variables {{variables}} are not defined"
+        },
+        "name": {
+          "label": "Template name"
+        },
+        "language": {
+          "label": "Languages supported"
+        },
+        "start_condition": {
+          "label": "Start condition",
+          "description": "Defines the condition that starts the agent.",
+          "help": "Start condicition example: “When a webhook is received with status = approved”"
+        },
+        "content": {
+          "label": "Text content",
+          "description": "Type ‘{{’ to add variables",
+          "header": {
+            "title": "Header",
+            "label": "Text",
+            "radio": {
+              "text": {
+                "label": "Text"
+              },
+              "media": {
+                "label": "Media"
+              }
+            }
+          },
+          "footer": {
+            "title": "Footer",
+            "label": "Text"
+          },
+          "button": {
+            "title": "CTA Button",
+            "text": {
+              "label": "Text"
+            },
+            "radio": {
+              "dynamic": {
+                "label": "Dynamic URL"
+              },
+              "static": {
+                "label": "Static URL"
+              }
+            },
+            "url": {
+              "label": "URL"
+            },
+            "url_example": {
+              "label": "Example URL",
+              "description": "Add an example website URL, do not use real customer information"
+            }
+          }
+        },
+        "variables": {
+          "definition": {
+            "label": "Definition"
+          },
+          "fallback_text": {
+            "label": "Fallback text if variable is missing"
+          }
+        }
+      }
+    }
+  },
+  "metrics": {
+    "fields": {
+      "template": {
+        "label": "Template"
+      },
+      "period": {
+        "label": "Period",
+        "options": {
+          "today": "Today",
+          "yesterday": "Yesterday",
+          "last_7_days": "Last 7 days",
+          "last_28_days": "Last 28 days"
+        }
+      }
+    }
+  }
 }
