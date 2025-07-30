@@ -20,7 +20,7 @@ export function AssignAbout({ description, notificationType, templates }: { desc
         <TagType type={notificationType} />
       </Flex>
 
-      <Flex direction="column" gap="$space-2">
+      {templates.length > 0 && (<Flex direction="column" gap="$space-2">
         <Text variant="display3">
           {t('agents.modals.assign.templates_available.title')}
         </Text>
@@ -46,7 +46,7 @@ export function AssignAbout({ description, notificationType, templates }: { desc
             </Flex>
           ))}
         </Grid>
-      </Flex>
+      </Flex>)}
 
       {!isWppIntegrated && (
         <Alert variant="warning">

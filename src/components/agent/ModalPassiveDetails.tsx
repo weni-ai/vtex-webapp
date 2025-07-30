@@ -5,6 +5,7 @@ import { getWhatsAppURLService } from "../../services/agent.service";
 import store from "../../store/provider.store";
 import { InputCopyToClipboard } from "../InputCopyToClipboard";
 import { AgentDescriptiveStatus } from "./DescriptiveStatus";
+import { TagType } from "../TagType";
 
 interface ModalAgentPassiveDetailsProps {
   open: boolean;
@@ -14,7 +15,7 @@ interface ModalAgentPassiveDetailsProps {
   skills: string[];
 }
 
-function About({ description, skills }: { description: string, skills: string[] }) {
+export function AgentPassiveAbout({ description, skills, type }: { description: string, skills: string[], type?: 'active' | 'passive' }) {
   return (
     <Flex direction="column" gap="$space-2">
       <Text variant="display3" color="$fg-base">{t('agent.modals.details.sections.about.title')}</Text>
@@ -28,6 +29,10 @@ function About({ description, skills }: { description: string, skills: string[] 
             </Flex>
           ))}
         </Flex>
+      )}
+
+      {type && (
+        <TagType type={type} />
       )}
     </Flex>
   )
@@ -96,7 +101,7 @@ export function ModalAgentPassiveDetails({ open, onClose, agentName, agentDescri
       <ModalContent>
         <Flex direction="column" gap="$space-5">
           <Flex direction="column" gap="$space-4">
-            <About description={agentDescription} skills={skills} />
+            <AgentPassiveAbout description={agentDescription} skills={skills} />
             <AgentDescriptiveStatus status="integrated" showLabel={true} />
           </Flex>
 
