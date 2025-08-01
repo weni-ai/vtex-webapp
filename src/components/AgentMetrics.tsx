@@ -9,6 +9,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { getPeriodDates } from "../utils";
 
 function Menu({ dataTestid, value, setValue, options, trigger }: { dataTestid?: string; value: string; setValue: (value: string) => void; options: { label: string; value: string }[]; trigger: (label: string) => React.ReactNode }) {
+  const { t } = useTranslation();
   const [localValue, setLocalValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
