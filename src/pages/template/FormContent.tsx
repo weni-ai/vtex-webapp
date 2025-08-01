@@ -3,23 +3,8 @@ import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
 import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
-
-async function fileToBase64(file: File) {
-  try {
-    return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = (error) => {
-        reject(error as unknown as Error);
-      };
-      reader.readAsDataURL(file);
-    });
-  } catch (error) {
-    throw error;
-  }
-}
+import { useTranslation } from "react-i18next";
+import { fileToBase64 } from "../../utils";
 
 export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
@@ -37,6 +22,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   contentError?: string;
   canCreateVariable: boolean;
 }) {
+  const { t } = useTranslation();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [headerType, setHeaderType] = useState<'text' | 'media'>('text');
@@ -232,8 +219,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
         <>
           <Bleed top="$space-7">
             <RadioGroup label="" horizontal state={headerTypeState}>
-              <Radio value="text" disabled={status === 'needs-editing'}>{t('template.form.fields.content.header.radio.text.label')}</Radio>
-              <Radio value="media" disabled={status === 'needs-editing'}>{t('template.form.fields.content.header.radio.media.label')}</Radio>
+              <Radio value="text" disabled={status === 'needs-editing'} data-testid="add-element-header-text-button">{t('template.form.fields.content.header.radio.text.label')}</Radio>
+              <Radio value="media" disabled={status === 'needs-editing'} data-testid="add-element-header-media-button">{t('template.form.fields.content.header.radio.media.label')}</Radio>
             </RadioGroup>
           </Bleed>
 
@@ -259,11 +246,18 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                       wordBreak: 'break-word',
                       textDecoration: 'underline',
                     }}
+                    data-testid="file-name"
                   >
                     {treatFileName(file.name)}
                   </Text>
 
-                  <IconButton variant="secondary" label={t('template.form.areas.content.header.media.buttons.remove')} onClick={() => { setFile(undefined); setFilePreview(undefined); }} disabled={status === 'needs-editing'}>
+                  <IconButton
+                    variant="secondary"
+                    label={t('template.form.areas.content.header.media.buttons.remove')}
+                    onClick={() => { setFile(undefined); setFilePreview(undefined); }}
+                    disabled={status === 'needs-editing'}
+                    data-testid="remove-file-button"
+                  >
                     <IconX />
                   </IconButton>
                 </Flex>
@@ -274,7 +268,12 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               )}
 
               {!file && (
-                <Button variant="secondary" size="large" onClick={() => document.getElementById('file-input')?.click()}>
+                <Button
+                  variant="secondary"
+                  size="large"
+                  onClick={() => document.getElementById('file-input')?.click()}
+                  data-testid="upload-file-button"
+                >
                   <Flex gap="$space-1" align="center">
                     <IconPlus />
                     {t('template.form.areas.content.header.media.buttons.upload')}
@@ -283,7 +282,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               )}
 
               <VisuallyHidden>
-                <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" />
+                <input id="file-input" type="file" onChange={handleFileChange} accept="image/*" data-testid="file-input" />
               </VisuallyHidden>
             </>
           )}
@@ -328,6 +327,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               onChange={(value) => setButtonUrl(cleanURL(value))}
               disabled={status !== 'needs-editing' && !canChangeButton}
               suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
+              data-testid="button-url-input"
             />
           </Field>
 
@@ -335,7 +335,13 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Field>
               <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
 
-              <Input prefix="https://" value={buttonUrlExample} onChange={(value) => setButtonUrlExample(cleanURL(value))} disabled={status !== 'needs-editing' && !canChangeButton} />
+              <Input
+                prefix="https://"
+                value={buttonUrlExample}
+                onChange={(value) => setButtonUrlExample(cleanURL(value))}
+                disabled={status !== 'needs-editing' && !canChangeButton}
+                data-testid="button-url-example-input"
+              />
 
               <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
             </Field>
@@ -378,6 +384,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             disabled={status === 'needs-editing'}
             ref={contentTextRef}
             onKeyUp={calculateIfShouldSuggestAVariable}
+            data-testid="content-textarea"
           />
 
           <MenuProvider
@@ -389,11 +396,15 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               <Flex style={{ position: 'absolute', top: cursorPosition.y + 20, left: cursorPosition.x }}></Flex>
             </MenuTrigger>
 
-            <MenuPopover>
+            <MenuPopover data-testid="variable-suggestions-menu">
               {variables.map((variable, index) => (
-                <MenuItem key={index} onClick={() => {
-                  setContentText(temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${index + 1}}}`));
-                }}>
+                <MenuItem
+                  key={index}
+                  onClick={() => {
+                    setContentText(temporaryContentText.replace(/{{toBeReplaced(}})?/, `{{${index + 1}}}`));
+                  }}
+                  data-testid={`add-variable-${index + 1}-button`}
+                >
                   {canCreateVariable ? `{{${index + 1}}} ${variable}` : variable}
                 </MenuItem>
               ))}
@@ -401,7 +412,10 @@ export function FormContent({ status, content, setContent, prefilledContent, can
               {variables.length > 0 && canCreateVariable && <MenuSeparator />}
 
               {canCreateVariable && (
-                <MenuItem onClick={() => { openNewVariableModal(temporaryContentText) }}>
+                <MenuItem
+                  onClick={() => { openNewVariableModal(temporaryContentText) }}
+                  data-testid="add-variable-button"
+                >
                   <IconPencil />
                   {t('template.form.areas.variables.buttons.add')}
                 </MenuItem>
@@ -436,6 +450,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                   label={t('template.form.areas.content.buttons.remove')}
                   onClick={() => setElementVisibility(element, false)}
                   disabled={!canRemoveElements[element]}
+                  data-testid={`add-element-${element}-remove-button`}
                 >
                   <IconTrash />
                 </IconButton>
@@ -462,7 +477,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             setOpen={setIsMenuOpen}
           >
             <MenuTrigger asChild>
-              <Flex gap="$space-1" align="center">
+              <Flex gap="$space-1" align="center" data-testid="add-element-button">
                 <IconPlus />
                 {t('template.form.areas.content.buttons.add')}
               </Flex>
@@ -475,6 +490,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                     key={element}
                     disabled={isElementDisabled(element)}
                     onClick={() => setElementVisibility(element, true)}
+                    data-testid={`add-element-${element}-button`}
                   >
                     {t(`template.form.areas.content.elements.${element}`)}
                   </MenuItem>
