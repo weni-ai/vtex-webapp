@@ -24,3 +24,20 @@ export function getPeriodDates(period: 'today' | 'yesterday' | 'last 7 days' | '
 
   return periodMap[period]();
 }
+
+export async function fileToBase64(file: File) {
+  try {
+    return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        reject(error as unknown as Error);
+      };
+      reader.readAsDataURL(file);
+    });
+  } catch (error) {
+    throw error;
+  }
+}
