@@ -1,5 +1,6 @@
 import { ContextualHelp, Field, FieldDescription, FieldError, Flex, Input, Label } from "@vtex/shoreline";
 import { SectionHeader } from "./Template";
+import { useTranslation } from "react-i18next";
 
 export function FormEssential({
   name,
@@ -10,6 +11,7 @@ export function FormEssential({
   startConditionError,
   isStartConditionEditable,
   isNameEditable,
+  dataTestId,
 }: {
   name: string,
   setName: (name: string) => void,
@@ -19,9 +21,12 @@ export function FormEssential({
   startConditionError: string,
   isStartConditionEditable: boolean,
   isNameEditable: boolean,
+  dataTestId?: string,
 }) {
+  const { t } = useTranslation();
+
   return (
-    <Flex direction="column" gap="$space-4">
+    <Flex direction="column" gap="$space-4" data-testid={dataTestId}>
       <SectionHeader title={t('template.form.areas.basic.title')} />
 
       <Field error={!!nameError}>
@@ -31,7 +36,7 @@ export function FormEssential({
           </Flex>
         </Label>
 
-        <Input value={name} disabled={!isNameEditable} onChange={(value) => setName(value)} />
+        <Input value={name} disabled={!isNameEditable} onChange={(value) => setName(value)} data-testid="name-input" />
 
         <FieldError>{nameError}</FieldError>
       </Field>
@@ -47,7 +52,7 @@ export function FormEssential({
           </Flex>
         </Label>
 
-        <Input value={startCondition} disabled={!isStartConditionEditable} onChange={(value) => setStartCondition(value)} />
+        <Input value={startCondition} disabled={!isStartConditionEditable} onChange={(value) => setStartCondition(value)} data-testid="start-condition-input" />
 
         {startConditionError ?
           <FieldError>{startConditionError}</FieldError>
