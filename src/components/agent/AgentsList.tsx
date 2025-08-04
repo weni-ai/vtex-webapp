@@ -3,14 +3,18 @@ import { useState, useMemo, useEffect } from "react";
 import { RootState } from "../../interfaces/Store";
 import { useSelector } from "react-redux";
 import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from "../AgentBox";
+import { useTranslation } from "react-i18next";
 
-function DropdownMenu({ label, noneSelected, value, setValue, options }: {
+function DropdownMenu({ label, noneSelected, value, setValue, options, testId }: {
   label: string,
   noneSelected: string,
   value: string[],
   options: { value: string, label: string }[],
   setValue: (value: string[]) => void,
+  testId?: string,
 }) {
+  const { t } = useTranslation();
+
   const [localValue, setLocalValue] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +31,7 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
   return (
     <MenuProvider placement="bottom-start" open={isOpen} setOpen={setIsOpen}>
       <MenuTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" data-testid={`dropdown-menu-${testId}-trigger`}>
           <Flex align="center" gap="$space-1">
             {label}:{' '}
 
@@ -42,7 +46,7 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
         </Button>
       </MenuTrigger>
 
-      <MenuPopover>
+      <MenuPopover data-testid={`dropdown-menu-${testId}-popover`}>
         <Flex style={{ padding: '0 var(--sl-space-2) var(--sl-space-4)' }}>
           <CheckboxGroup label="">
             {options.map((option, index) => (
@@ -70,17 +74,27 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
             padding: 'var(--sl-space-4) var(--sl-space-3) var(--sl-space-3) var(--sl-space-3)'
           }}
         >
-          <Button variant="secondary" disabled={localValue.length === 0} onClick={() => {
-            setLocalValue([]);
-            setValue([]);
-          }}>
+          <Button
+            variant="secondary"
+            disabled={localValue.length === 0}
+            onClick={() => {
+              setLocalValue([]);
+              setValue([]);
+            }}
+            data-testid={`dropdown-menu-${testId}-clear-button`}
+          >
             {t('common.clear')}
           </Button>
 
-          <Button variant="primary" disabled={isSame} onClick={() => {
-            setValue(localValue);
-            setIsOpen(false);
-          }}>
+          <Button
+            variant="primary"
+            disabled={isSame}
+            onClick={() => {
+              setValue(localValue);
+              setIsOpen(false);
+            }}
+            data-testid={`dropdown-menu-${testId}-apply-button`}
+          >
             {t('common.apply')}
           </Button>
         </Flex>
@@ -89,9 +103,14 @@ function DropdownMenu({ label, noneSelected, value, setValue, options }: {
   );
 }
 
+const agentsSelector = (state: RootState) => state.project.agents;
+const hasTheFirstLoadOfTheAgentsHappenedSelector = (state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened;
+
 export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
-  const unassignedAgents = useSelector((state: RootState) => state.project.agents).filter((agent) => !agent.isAssigned);
-  const hasTheFirstLoadOfTheAgentsHappened = useSelector((state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened);
+  const { t } = useTranslation();
+
+  const unassignedAgents = useSelector(agentsSelector).filter((agent) => !agent.isAssigned);
+  const hasTheFirstLoadOfTheAgentsHappened = useSelector(hasTheFirstLoadOfTheAgentsHappenedSelector);
   const [categories, setCategories] = useState<('active' | 'passive')[]>([]);
   const [agents, setAgents] = useState<('official' | 'custom')[]>([]);
 
@@ -157,6 +176,7 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
               label: t('agents.categories.passive.title')
             }
           ]}
+          testId="categories"
         />
 
         {isOfficialValues.length > 1 && (
@@ -175,6 +195,7 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
                 label: t('agents.modals.gallery.filters.agents.options.custom')
               }
             ]}
+            testId="agents"
           />
         )}
       </Flex>
