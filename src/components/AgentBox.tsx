@@ -12,6 +12,7 @@ import { TagType } from "./TagType";
 import { AgentDescriptiveStatus } from "./agent/DescriptiveStatus";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
+import { useTranslation } from "react-i18next";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -30,12 +31,14 @@ export function AgentBoxContainer({ children }: { children: React.ReactNode }) {
 export function AgentBoxSkeleton({ count }: { count: number }) {
   return (
     Array.from({ length: count }).map((_, index) => (
-      <Skeleton key={index} />
+      <Skeleton key={index} data-testid="agent-box-skeleton" />
     ))
   )
 }
 
 export function AgentBoxEmpty() {
+  const { t } = useTranslation();
+  
   return (
     <Flex
       direction="column"
@@ -57,6 +60,8 @@ export function AgentBoxEmpty() {
 }
 
 export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const [openAbout, setOpenAbout] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
@@ -112,10 +117,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const isNexusAgent = origin === 'nexus';
   const isStatusBetweenIntegrated = ['test', 'configuring', 'integrated'].includes(status);
 
-  const navigateToAgentDetailsPage = () => {
-    navigate(`/agents/${uuid}`);
-  }
-
   const canSeeAgent = useMemo(() => {
     if (!isIntegrated) {
       return false;
@@ -125,10 +126,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }, [isIntegrated, type, isWppIntegrated]);
 
   const handleSeeAgent = () => {
-    if (!canSeeAgent) {
-      return;
-    }
-
     if (type === 'passive') {
       setIsPassiveDetailsModalOpen(true);
       return;
@@ -140,8 +137,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       navigate(`/agents/${agent.assignedAgentUuid}`);
       return;
     }
-
-    navigateToAgentDetailsPage();
   }
 
   const options = useMemo(() => {
@@ -151,6 +146,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         label: string;
         icon: React.ReactNode;
         onClick: () => void;
+        testId?: string;
       }
     )[] = [];
 
@@ -159,6 +155,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         label: t('common.details'),
         icon: <IconInfo />,
         onClick: openDetailsModal,
+        testId: 'agent-details-button',
       });
 
       if (isStatusBetweenIntegrated) {
@@ -166,6 +163,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           label: t('common.manage_settings'),
           icon: <IconGearSix />,
           onClick: toggleIsPreferencesOpen,
+          testId: 'agent-manage-settings-button',
         });
       }
     }
@@ -179,6 +177,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
         label: t('agents.buttons.remove'),
         icon: <IconTrash />,
         onClick: openDisableModal,
+        testId: 'agent-remove-button',
       });
     }
 
@@ -215,7 +214,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
             options.length > 0 && (
               <MenuProvider>
                 <MenuTrigger asChild>
-                  <IconButton variant="tertiary" label="Actions">
+                  <IconButton variant="tertiary" label="Actions" data-testid="agent-actions-button">
                     <IconDotsThreeVertical />
                   </IconButton>
                 </MenuTrigger>
@@ -223,11 +222,11 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
                 <MenuPopover>
                   {options.map((option) => {
                     if (option === 'separator') {
-                      return <MenuSeparator />;
+                      return <MenuSeparator key="separator" />;
                     }
 
                     return (
-                      <MenuItem key={option.label} onClick={option.onClick}>
+                      <MenuItem key={option.label} onClick={option.onClick} data-testid={option.testId}>
                         {option.icon}
                         {option.label}
                       </MenuItem>
@@ -251,6 +250,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               textOverflow: 'ellipsis',
             }}
             title={agentDescription}
+            data-testid="agent-description"
           >
             {agentDescription}
           </Text>
@@ -271,13 +271,14 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
                     variant="primary"
                     size="large"
                     onClick={handleSeeAgent}
+                    data-testid="agent-view-button"
                   >
                     <Text>{t('agents.common.view')}</Text>
                   </Button>
                 )}
               </Flex>
             ) : (
-              <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading}>
+              <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading} data-testid="agent-add-button">
                 <Text>{t('agents.common.add')}</Text>
               </Button>
             )
