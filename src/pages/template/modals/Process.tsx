@@ -1,12 +1,13 @@
 import { Alert, Button, Flex, IconCheck, Modal, ModalContent, ModalDismiss, ModalFooter, ModalHeader, ModalHeading, Spinner, Text } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 
 let stepsLocal: { status: 'completed' | 'loading' | 'pending', description: string }[] = [];
 
 function CompletedStep({ variant, description }: { variant: 'success' | 'critical', description: string }) {
   return (
-    <Alert variant={variant}>
+    <Alert variant={variant} data-testid="alert-completed">
       <Text variant="body">
         <Markdown>{description}</Markdown>
       </Text>
@@ -29,6 +30,8 @@ export function ProcessModal({
   errorText: string;
   successText: string;
 }) {
+  const { t } = useTranslation();
+
   const [page, setPage] = useState<'processing' | 'completed'>('processing');
   const [steps, setSteps] = useState<{ status: 'completed' | 'loading' | 'pending', description: string }[]>([]);
 
@@ -125,9 +128,9 @@ export function ProcessModal({
               {steps.map((step, index) => (
                 <Text key={index} variant="action" color={{ completed: '$fg-success', loading: '$fg-base-soft', pending: '$color-gray-5' }[step.status]}>
                   <Flex gap="$space-2" align="center">
-                    {step.status === 'completed' && <IconCheck width={16} height={16} />}
-                    {step.status === 'loading' && <Spinner />}
-                    {step.status === 'pending' && <Spinner style={{ opacity: 0 }} />}
+                    {step.status === 'completed' && <IconCheck width={16} height={16} data-testid="icon-check" />}
+                    {step.status === 'loading' && <Spinner data-testid="icon-spinner" />}
+                    {step.status === 'pending' && <Spinner style={{ opacity: 0 }} data-testid="icon-pending" />}
 
                     {t(`template.modals.create.steps.processing.items.${step.description}`)}
                   </Flex>
@@ -145,7 +148,7 @@ export function ProcessModal({
       <ModalFooter>
         {page === 'processing' && (
           <>
-            <Button size="large" onClick={onClose}>
+            <Button size="large" onClick={onClose} data-testid="button-cancel">
               {t('template.modals.create.buttons.cancel')}
             </Button>
 
@@ -154,6 +157,7 @@ export function ProcessModal({
               variant="primary"
               onClick={() => setPage('completed')}
               disabled={!isFinished}
+              data-testid="button-proceed"
             >
               {t('template.modals.create.buttons.proceed')}
             </Button>
@@ -166,12 +170,13 @@ export function ProcessModal({
               size="large"
               variant="primary"
               onClick={() => { onClose(); }}
+              data-testid="button-finish"
             >
               {t('template.modals.create.buttons.finish')}
             </Button>
             :
             <>
-              <Button size="large" onClick={onClose}>
+              <Button size="large" onClick={onClose} data-testid="button-cancel">
                 {t('template.modals.create.buttons.cancel')}
               </Button>
 
@@ -179,6 +184,7 @@ export function ProcessModal({
                 size="large"
                 variant="primary"
                 onClick={() => { onClose(); }}
+                data-testid="button-return-and-fix"
               >
                 {t('template.modals.create.buttons.return_and_fix')}
               </Button>
