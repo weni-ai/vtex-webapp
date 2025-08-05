@@ -63,31 +63,31 @@ describe('ProcessModal', () => {
   });
 
   describe('basic rendering', () => {
-    it.only('should render modal when open is true', () => {
+    it('should render modal when open is true', () => {
       render(<ProcessModal {...defaultProps} />);
 
       expect(screen.getByTestId('modal')).toBeInTheDocument();
     });
 
-    it.only('should not render modal when open is false', () => {
+    it('should not render modal when open is false', () => {
       render(<ProcessModal {...defaultProps} open={false} />);
 
       expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
     });
 
-    it.only('should display processing title', () => {
+    it('should display processing title', () => {
       render(<ProcessModal {...defaultProps} />);
 
       expect(screen.getByText('template.modals.create.steps.processing.title')).toBeInTheDocument();
     });
 
-    it.only('should display processing text', () => {
+    it('should display processing text', () => {
       render(<ProcessModal {...defaultProps} />);
 
       expect(screen.getByText('Processing template...')).toBeInTheDocument();
     });
 
-    it.only('should display all steps initially as pending', () => {
+    it('should display all steps initially as pending', () => {
       render(<ProcessModal {...defaultProps} />);
 
       expect(screen.getByText('template.modals.create.steps.processing.items.step1')).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe('ProcessModal', () => {
   });
 
   describe('step progression', () => {
-    it.only('should progress through steps automatically', async () => {
+    it('should progress through steps automatically', async () => {
       render(<ProcessModal {...defaultProps} />);
       
       expect(screen.getByText('template.modals.create.steps.processing.items.step1')).toBeInTheDocument();
@@ -117,7 +117,7 @@ describe('ProcessModal', () => {
       expect(screen.queryAllByTestId('icon-spinner')).toHaveLength(1);
     });
 
-    it.only('should complete all steps after progression', async () => {
+    it('should complete all steps after progression', async () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
 
       await act(async () => {
@@ -129,14 +129,14 @@ describe('ProcessModal', () => {
   });
 
   describe('button states', () => {
-    it.only('should disable proceed button when steps are not finished', () => {
+    it('should disable proceed button when steps are not finished', () => {
       render(<ProcessModal {...defaultProps} />);
 
       const proceedButton = screen.getByTestId('button-proceed');
       expect(proceedButton).toBeDisabled();
     });
 
-    it.only('should enable proceed button when all steps are completed', async () => {
+    it('should enable proceed button when all steps are completed', async () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} successText="Success!" />);
@@ -145,7 +145,7 @@ describe('ProcessModal', () => {
       expect(proceedButton).not.toBeDisabled();
     });
 
-    it.only('should show cancel button during processing', () => {
+    it('should show cancel button during processing', () => {
       render(<ProcessModal {...defaultProps} />);
 
       const cancelButton = screen.getByTestId('button-cancel');
@@ -154,7 +154,7 @@ describe('ProcessModal', () => {
   });
 
   describe('completion page', () => {
-    it.only('should show completion page when proceed is clicked', async () => {
+    it('should show completion page when proceed is clicked', async () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} successText="Success!" />);
@@ -167,7 +167,7 @@ describe('ProcessModal', () => {
       expect(screen.getByText('template.modals.create.steps.completed.title')).toBeInTheDocument();
     });
 
-    it.only('should show success message when successText is provided', async () => {
+    it('should show success message when successText is provided', async () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} successText="Template created successfully!" />);
@@ -180,7 +180,7 @@ describe('ProcessModal', () => {
       expect(screen.getByTestId('alert-completed')).toHaveTextContent('Template created successfully!');
     });
 
-    it.only('should automatically show completion page when errorText is provided', () => {
+    it('should automatically show completion page when errorText is provided', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} errorText="Failed to create template." />);
@@ -191,7 +191,7 @@ describe('ProcessModal', () => {
   });
 
   describe('completion page buttons', () => {
-    it.only('should show finish button when success', () => {
+    it('should show finish button when success', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} successText="Success!" />);
@@ -203,7 +203,7 @@ describe('ProcessModal', () => {
       expect(finishButton).toBeInTheDocument();
     });
 
-    it.only('should show cancel and return buttons when error', () => {
+    it('should show cancel and return buttons when error', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} errorText="Error!" />);
@@ -217,7 +217,7 @@ describe('ProcessModal', () => {
   });
 
   describe('modal interactions', () => {
-    it.only('should call onClose when cancel button is clicked', () => {
+    it('should call onClose when cancel button is clicked', () => {
       render(<ProcessModal {...defaultProps} />);
 
       const cancelButton = screen.getByTestId('button-cancel');
@@ -226,7 +226,7 @@ describe('ProcessModal', () => {
       expect(mocks.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it.only('should call onClose when finish button is clicked', () => {
+    it('should call onClose when finish button is clicked', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} successText="Success!" />);
@@ -240,7 +240,7 @@ describe('ProcessModal', () => {
       expect(mocks.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it.only('should call onClose when return button is clicked', () => {
+    it('should call onClose when return button is clicked', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
       
       rerender(<ProcessModal {...defaultProps} errorText="Error!" />);
@@ -251,7 +251,7 @@ describe('ProcessModal', () => {
       expect(mocks.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it.only('should call onClose when modal close event is triggered', () => {
+    it('should call onClose when modal close event is triggered', () => {
       render(<ProcessModal {...defaultProps} />);
 
       const closeButton = screen.getByTestId('modal-on-close-event');
@@ -260,7 +260,7 @@ describe('ProcessModal', () => {
       expect(mocks.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it.only('should call onClose when modal close event is triggered', () => {
+    it('should call onClose when modal close event is triggered', () => {
       render(<ProcessModal {...defaultProps} />);
 
       const closeButton = screen.getByTestId('modal-on-close-event');
@@ -271,7 +271,7 @@ describe('ProcessModal', () => {
   });
 
   describe('state management', () => {
-    it.only('should reset to processing page when modal opens', () => {
+    it('should reset to processing page when modal opens', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} open={false} />);
 
       rerender(<ProcessModal {...defaultProps} open={true} />);
@@ -279,7 +279,7 @@ describe('ProcessModal', () => {
       expect(screen.getByText('template.modals.create.steps.processing.title')).toBeInTheDocument();
     });
 
-    it.only('should initialize steps when modal opens', () => {
+    it('should initialize steps when modal opens', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} open={false} />);
 
       rerender(<ProcessModal {...defaultProps} open={true} />);
@@ -289,7 +289,7 @@ describe('ProcessModal', () => {
       expect(screen.getByText('template.modals.create.steps.processing.items.step3')).toBeInTheDocument();
     });
 
-    it.only('should clear timeouts when modal closes', () => {
+    it('should clear timeouts when modal closes', () => {
       const { rerender } = render(<ProcessModal {...defaultProps} />);
 
       vi.advanceTimersByTime(500);
