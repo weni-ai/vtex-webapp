@@ -7,15 +7,36 @@ import { AssignCredentials } from "./AssignCredentials";
 import { AssignSelectTemplate } from "./AssignSelectTemplate";
 import { AssignWhatsAppRequired } from "./AssignWhatsAppRequired";
 import { AgentPassiveAbout } from "../ModalPassiveDetails";
+import { useTranslation } from "react-i18next";
 
-export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery, onAssign, isAssigningAgent, changeNextButtonTextOnLastPage = true }: { open: boolean, onClose: () => void, agentUuid: string, onViewAgentsGallery: () => void, onAssign: (data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) => void, isAssigningAgent: boolean, changeNextButtonTextOnLastPage?: boolean }) {
+const isWppIntegratedSelector = (state: RootState) => state.user.isWhatsAppIntegrated;
+
+export function AgentAssignModal({
+  open,
+  onClose,
+  agentUuid,
+  onViewAgentsGallery,
+  onAssign,
+  isAssigningAgent,
+  changeNextButtonTextOnLastPage = true,
+}: {
+  open: boolean;
+  onClose: () => void;
+  agentUuid: string;
+  onViewAgentsGallery: () => void;
+  onAssign: (data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) => void;
+  isAssigningAgent: boolean;
+  changeNextButtonTextOnLastPage?: boolean;
+}) {
+  const { t } = useTranslation();
+
   const agent = useSelector((state: RootState) => state.project.agents.find((agent) => agent.uuid === agentUuid));
 
   const [selectedTemplatesUuids, setSelectedTemplatesUuids] = useState<string[]>([]);
   const [credentials, setCredentials] = useState<{ name: string, value: string }[]>([]);
 
   const [currentPage, setCurrentPage] = useState(0);
-  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
+  const isWppIntegrated = useSelector(isWppIntegratedSelector);
 
   useEffect(() => {
     if (open && agent?.origin === 'CLI') {
@@ -109,7 +130,7 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
             {t('agents.modals.assign.title', { name: agent?.name })}
 
             {pages.length !== 1 &&
-              <Tag size="normal" variant="secondary" color="gray">
+              <Tag size="normal" variant="secondary" color="gray" data-testid="step-tag">
                 {t('agents.modals.assign.steps', { currentPage: currentPage + 1, totalPages: pages.length })}
               </Tag>
             }
@@ -170,7 +191,11 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
       </ModalContent>
 
       <ModalFooter>
-        <Button size="large" onClick={handlePreviousPage}>
+        <Button
+          size="large"
+          onClick={handlePreviousPage}
+          data-testid="back-button"
+        >
           {t('agents.modals.assign.buttons.back')}
         </Button>
 
@@ -180,6 +205,7 @@ export function AgentAssignModal({ open, onClose, agentUuid, onViewAgentsGallery
           onClick={handleNextPage}
           disabled={isNextPageDisabled}
           loading={isAssigningAgent}
+          data-testid="next-button"
         >
           {
             isLastPage && changeNextButtonTextOnLastPage ?
