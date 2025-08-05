@@ -10,6 +10,7 @@ import { SwitchToTestModeModal } from '../../components/agent/modals/SwitchToTes
 import { agentCLI, updateAgentGlobalRule } from '../../services/agent.service';
 import store from '../../store/provider.store';
 import { ProcessModal } from '../template/modals/Process';
+import { useTranslation } from 'react-i18next';
 
 export interface Template {
   uuid: string;
@@ -19,6 +20,8 @@ export interface Template {
 }
 
 function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgentDetails }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean, loadAgentDetails: () => void }) {
+  const { t } = useTranslation();
+
   return (
     <Flex direction="column" gap="$space-5">
       <Flex gap="$space-5" align="center" justify="space-between">
@@ -27,7 +30,7 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
           <Text variant="body" color="$fg-base">{t('template.list.description')}</Text>
         </Flex>
 
-        <Button variant="secondary" size="large" onClick={navigateToCreateTemplate}>
+        <Button variant="secondary" size="large" onClick={navigateToCreateTemplate} data-testid="create-custom-template-button">
           <IconPlus />
           {t('template.buttons.add')}
         </Button>
@@ -47,8 +50,10 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
 }
 
 function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string }) {
+  const { t } = useTranslation();
+
   const { assignedAgentUuid } = useParams();
-  const [percentage, setPercentage] = useState<string | undefined>(undefined);
+  const [percentage, setPercentage] = useState<string>('');
   const [globalRule, setGlobalRule] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
   const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
@@ -59,6 +64,8 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
   useEffect(() => {
     if (contactPercentage) {
       setPercentage(contactPercentage.toString());
+    } else {
+      setPercentage('');
     }
 
     if (previousGlobalRule) {
@@ -119,7 +126,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 
       loadAgentDetails();
     } catch (error) {
-      setPercentage(contactPercentage?.toString());
+      setPercentage(contactPercentage?.toString() || '');
 
       if (hasGlobalRuleChanged) {
         setErrorText((error as Error).message);
@@ -133,7 +140,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 
   return (
     <Flex direction="column" gap="$space-5">
-      {errorText && <Alert variant="critical">
+      {errorText && <Alert variant="critical" data-testid="error-alert">
         <Text variant="body">
           <Markdown>{errorText}</Markdown>
         </Text>
@@ -146,6 +153,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         value={webhookUrl}
         description={t('agents.details.settings.fields.webhook_url.description')}
         successMessage={t('common.url_copied')}
+        testId="webhook-url-input"
       />
 
       <Field>
@@ -154,7 +162,14 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         {isLoading ? (
           <Skeleton style={{ width: '100%', height: '44px' }} />
         ) : (
-          <Input type="number" value={percentage} onChange={handlePercentageChange} onBlur={(e) => handlePercentageBlur(e.target.value)} suffix="%" />
+          <Input
+            type="number"
+            value={percentage}
+            onChange={handlePercentageChange}
+            onBlur={(e) => handlePercentageBlur(e.target.value)}
+            suffix="%"
+            data-testid="contact-percentage-input"
+          />
         )}
 
         <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
@@ -170,6 +185,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
             className="content-textarea-full-width"
             value={globalRule}
             onChange={setGlobalRule}
+            data-testid="global-rule-textarea"
           />
         )}
 
@@ -183,6 +199,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
           disabled={!hasPercentageChanged && !hasGlobalRuleChanged}
           onClick={handleSave}
           loading={isSaving}
+          data-testid="save-settings-button"
         >
           {t('agents.details.settings.buttons.save')}
         </Button>
@@ -207,6 +224,8 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 }
 
 export function AgentIndex() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { assignedAgentUuid } = useParams();
 
@@ -244,10 +263,6 @@ export function AgentIndex() {
   }, [templates]);
 
   async function index() {
-    if (!assignedAgentUuid) {
-      return;
-    }
-
     const agent = store.getState().project.agents
       .filter((agent) => agent.origin === 'CLI')
       .find((agent) => agent.assignedAgentUuid === assignedAgentUuid);
@@ -262,16 +277,12 @@ export function AgentIndex() {
   }
 
   async function loadAgentDetails({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
-    if (!assignedAgentUuid) {
-      return;
-    }
-
     try {
       if (!forceUpdate) {
         setIsLoading(true);
       }
 
-      const response = await agentCLI({ agentUuid: assignedAgentUuid, forceUpdate });
+      const response = await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate });
 
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
@@ -286,17 +297,17 @@ export function AgentIndex() {
         status: status as 'active' | 'pending' | 'rejected' | 'needs-editing',
       })));
     } catch (error) {
-      console.error(error);
+      toast.critical(t('common.errors.unexpected_error'));
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function verifyPendingTemplates() {
+  function verifyPendingTemplates() {
     const pendingTemplates = templates.filter(({ status }) => status === 'pending');
 
     if (pendingTemplates.length > 0) {
-      await loadAgentDetails({ forceUpdate: true });
+      loadAgentDetails({ forceUpdate: true }).catch(console.error);
     }
   }
 
@@ -326,6 +337,7 @@ export function AgentIndex() {
                 variant="tertiary"
                 size="large"
                 onClick={() => navigate('/dash')}
+                data-testid="back-button"
               >
                 <IconArrowLeft />
               </IconButton>
@@ -375,17 +387,17 @@ export function AgentIndex() {
           </TabPanel>
         </TabProvider>
 
-        <SwitchToTestModeModal
+        {false && <SwitchToTestModeModal
           open={isSwitchToTestModeModalOpen}
           onClose={() => setIsSwitchToTestModeModalOpen(false)}
           onTest={handleTest}
-        />
+        />}
 
-        <PublishModal
+        {false && <PublishModal
           open={isPublishModalOpen}
           onClose={() => setIsPublishModalOpen(false)}
           onPublish={handlePublish}
-        />
+        />}
       </PageContent>
     </Page>
   )
