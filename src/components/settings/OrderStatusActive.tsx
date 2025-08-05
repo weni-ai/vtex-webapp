@@ -3,8 +3,11 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { agents } from "../../store/projectSlice";
 import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
+import { useTranslation } from "react-i18next";
 
 export function PreferencesOrderStatusActive() {
+  const { t } = useTranslation();
+
   const { formData = {}, setFormData } = useContext(SettingsContext) || {};
   const agentsList = useSelector(agents);
   const orderStatusAgent = agentsList.find(agent => agent.origin === 'commerce' && agent.code === 'order_status');
@@ -75,7 +78,9 @@ export function PreferencesOrderStatusActive() {
         pointerPositionBefore
         + nonNumbersCharactersBeforeThePointer;
 
-      eventLocal.target.selectionStart = eventLocal.target.selectionEnd = pointerCalculated
+      if (eventLocal?.target?.selectionStart) {
+        eventLocal.target.selectionStart = eventLocal.target.selectionEnd = pointerCalculated
+      }
     }
   }
 
@@ -120,6 +125,7 @@ export function PreferencesOrderStatusActive() {
             name="contact-number"
             value={testContactNumber}
             onChange={beforeSetTestContactNumber}
+            data-testid="contact-number-input"
           />
         </Field>
       }
