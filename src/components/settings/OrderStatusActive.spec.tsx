@@ -351,7 +351,7 @@ describe('PreferencesOrderStatusActive', () => {
   });
 
   describe('edge cases', () => {
-    it.only.each([
+    it.each([
       {
         agent: {
           ...mockOrderStatusAgent,
