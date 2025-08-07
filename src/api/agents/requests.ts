@@ -47,6 +47,7 @@ export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Project-Uuid': projectUuid,
     },
     body: JSON.stringify(data),
   });
@@ -90,6 +91,7 @@ export async function integratedAgentsList() {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Project-Uuid': projectUuid,
     },
   });
 
@@ -97,6 +99,8 @@ export async function integratedAgentsList() {
 }
 
 export async function integrateAgentRequest(data: IntegrateAgentData) {
+  const projectUuid = data.project_uuid;
+
   const response = await VTEXFetch<{
     message: string;
     error: string;
@@ -104,6 +108,7 @@ export async function integrateAgentRequest(data: IntegrateAgentData) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Project-Uuid': projectUuid,
     },
     body: JSON.stringify(data),
   });
@@ -325,7 +330,8 @@ export async function saveAgentButtonTemplateRequest(data: {
 }
 
 export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
-  const adaptedData = adaptUpdateAgentSettingsRequest(store.getState().project.project_uuid, data);
+  const projectUuid = store.getState().project.project_uuid;
+  const adaptedData = adaptUpdateAgentSettingsRequest(projectUuid, data);
 
   const response = await VTEXFetch<UpdateAgentSettingsResponse>(
     '/_v/update-feature-settings',
@@ -333,6 +339,7 @@ export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) 
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Project-Uuid': projectUuid,
       },
       body: JSON.stringify(adaptedData),
     }
@@ -352,6 +359,7 @@ export async function disableFeatureRequest(data: {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
+      'Project-Uuid': data.project_uuid,
     },
     body: JSON.stringify(data),
   });
@@ -378,6 +386,7 @@ export async function getSkillMetricsRequest(data: { startDate: string, endDate:
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Project-Uuid': projectUuid,
       },
     }),
   };
@@ -631,6 +640,8 @@ export async function disableAssignedAgentTemplateRequest(data: {
 };
 
 export async function agentMetricsRequest(data: { templateUuid: string, startDate: string, endDate: string }) {
+  const projectUuid = store.getState().project.project_uuid;
+
   const response = await VTEXFetch<{
     data: {
       status_count: {
@@ -657,7 +668,9 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
     body: JSON.stringify({
       method: 'POST',
       url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/template-metrics/`,
-      headers: {},
+      headers: {
+        'Project-Uuid': projectUuid,
+      },
       data: {
         template_uuid: data.templateUuid,
         start: data.startDate,

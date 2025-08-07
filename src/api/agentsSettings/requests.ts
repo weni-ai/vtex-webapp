@@ -40,6 +40,7 @@ export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agen
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'Project-Uuid': projectUuid,
     },
     body: JSON.stringify({
       feature_uuid: agentUuid,
