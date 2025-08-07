@@ -133,6 +133,7 @@ export async function assignAgentCLIRequest(data: {
   const projectUuid = store.getState().project.project_uuid;
   const flowsChannelUuid = store.getState().project.flows_channel_uuid;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<{
     uuid: string;
@@ -154,6 +155,7 @@ export async function assignAgentCLIRequest(data: {
       params: {
         app_uuid: WhatsAppCloudAppUuid,
         channel_uuid: flowsChannelUuid,
+        user_email: userEmail,
       },
       headers: {
         'Project-Uuid': projectUuid,
@@ -173,6 +175,7 @@ export async function unassignAgentCLIRequest(data: {
   agentUuid: string;
 }) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<{} | { error: string; }>('/_v/proxy-request', {
     method: 'POST',
@@ -183,7 +186,9 @@ export async function unassignAgentCLIRequest(data: {
       method: 'POST',
       url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/unassign/`,
       data: {},
-      params: {},
+      params: {
+        user_email: userEmail,
+      },
       headers: { 'Project-Uuid': projectUuid, },
     }),
   });
