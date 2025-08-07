@@ -10,6 +10,7 @@ export const checkWhatsAppIntegration = async (projectUUID: string) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Project-Uuid': projectUUID,
     },
   });
 }; 

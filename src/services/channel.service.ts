@@ -25,6 +25,7 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Project-Uuid': project_uuid,
       },
       body: JSON.stringify(data),
     });

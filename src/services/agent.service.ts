@@ -19,6 +19,7 @@ export async function checkAgentIntegration(project_uuid: string) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Project-Uuid': project_uuid,
       },
     });
 
