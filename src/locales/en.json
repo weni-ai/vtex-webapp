@@ -191,6 +191,10 @@
               "to": "To"
             }
           }
+        },
+        "active_order_status": {
+          "title": "Active Order Status",
+          "description": "Agent responsible for triggering order status templates, based on the status received from VTEX - Order Status"
         }
       }
     },
