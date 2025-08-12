@@ -4,31 +4,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../interfaces/Store";
 import { agentCLI, agentMetrics, getSkillMetrics } from "../services/agent.service";
 import { DashboardItem } from "./DashboardItem";
+import { useTranslation } from "react-i18next";
+import { createSelector } from "@reduxjs/toolkit";
+import { getPeriodDates } from "../utils";
 
-function getPeriodDates(period: 'today' | 'yesterday' | 'last 7 days' | 'last 28 days') {
-  const toISODate = (date: Date) => date.toISOString().split('T')[0];
-
-  const getStartAndEndDates = (daysAgo: number, includeToday: boolean = true) => {
-    const end = new Date();
-    const start = new Date();
-    start.setDate(end.getDate() - daysAgo);
-    return {
-      startDate: toISODate(start),
-      endDate: toISODate(includeToday ? end : start),
-    };
-  };
-
-  const periodMap: Record<typeof period, () => { startDate: string; endDate: string }> = {
-    'today': () => getStartAndEndDates(0),
-    'yesterday': () => getStartAndEndDates(1, false),
-    'last 7 days': () => getStartAndEndDates(7),
-    'last 28 days': () => getStartAndEndDates(28),
-  };
-
-  return periodMap[period]();
-}
-
-function Menu({ value, setValue, options, trigger }: { value: string; setValue: (value: string) => void; options: { label: string; value: string }[]; trigger: (label: string) => React.ReactNode }) {
+function Menu({ dataTestid, value, setValue, options, trigger }: { dataTestid?: string; value: string; setValue: (value: string) => void; options: { label: string; value: string }[]; trigger: (label: string) => React.ReactNode }) {
+  const { t } = useTranslation();
   const [localValue, setLocalValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -50,15 +31,15 @@ function Menu({ value, setValue, options, trigger }: { value: string; setValue: 
 
   return (
     <MenuProvider placement="bottom-start" open={isOpen} setOpen={setIsOpen}>
-      <MenuTrigger asChild>
+      <MenuTrigger asChild data-testid={`${dataTestid}-trigger`}>
         {trigger(options.find((option) => option.value === value)?.label || '')}
       </MenuTrigger>
 
       <MenuPopover>
-        <Flex style={{ padding: '0 var(--sl-space-3) var(--sl-space-4)' }}>
+        <Flex style={{ padding: '0 var(--sl-space-3) var(--sl-space-4)' }} data-testid={`${dataTestid}-popover`}>
           <RadioGroup label="" state={radioState}>
             {options.map((option) => (
-              <Radio key={option.value} value={option.value}>
+              <Radio key={option.value} value={option.value} data-testid={`${dataTestid}-option-${option.value}`}>
                 {option.label}
               </Radio>
             ))}
@@ -74,8 +55,8 @@ function Menu({ value, setValue, options, trigger }: { value: string; setValue: 
             padding: 'var(--sl-space-4) var(--sl-space-3) var(--sl-space-3) var(--sl-space-3)'
           }}
         >
-          <Button variant="primary" disabled={value === ''} onClick={handleApply}>
-            Apply
+          <Button variant="primary" disabled={value === ''} onClick={handleApply} data-testid={`${dataTestid}-apply-button`}>
+            {t('common.apply')}
           </Button>
         </Flex>
       </MenuPopover>
@@ -83,13 +64,22 @@ function Menu({ value, setValue, options, trigger }: { value: string; setValue: 
   );
 }
 
+const selectAgents = (state: RootState) => state.project.agents;
+
+const selectAssignedAgents = createSelector(
+  selectAgents,
+  (agents) => agents.filter((agent) => agent.notificationType === 'active' && agent.isAssigned),
+);
+
 export function AgentMetrics() {
+  const { t } = useTranslation();
+
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [dataRows, setDataRows] = useState<number>(0);
   const [data, setData] = useState<{ title: string; value: string; }[][]>([]);
 
   const [currentAgentUuid, setCurrentAgentUuid] = useState<string>('');
-  const assignedAgents = useSelector((state: RootState) => state.project.agents.filter((agent) => agent.notificationType === 'active' && agent.isAssigned));
+  const assignedAgents = useSelector(selectAssignedAgents);
   const assignedAgentsUuids = useMemo(() => assignedAgents.map((agent) => agent.uuid), [assignedAgents]);
 
   const [currentTemplateUuid, setCurrentTemplateUuid] = useState<string>('');
@@ -108,19 +98,17 @@ export function AgentMetrics() {
 
       const count = response.data.length;
 
-      const lines = Math.floor(count / 3) || 1;
+      const lines = Math.floor(count / 3);
       const itensByLine = Math.floor(count / lines);
 
-      if ('data' in response) {
-        let data = [];
+      let data = [];
 
-        for (let i = 0; i < lines; i += 1) {
-          const last = i === lines - 1 ? count : (i + 1) * itensByLine;
-          data.push(response.data.slice(i * itensByLine, last));
-        }
-
-        setData(data);
+      for (let i = 0; i < lines; i += 1) {
+        const last = i === lines - 1 ? count : (i + 1) * itensByLine;
+        data.push(response.data.slice(i * itensByLine, last));
       }
+
+      setData(data);
     } finally {
       setIsDataLoading(false);
     }
@@ -300,6 +288,7 @@ export function AgentMetrics() {
   return (
     <Flex direction="column" gap="$space-4">
       <Flex
+        data-testid="agent-metrics-header"
         style={{
           display: assignedAgents.length > 0 ? 'flex' : 'none',
           minHeight: '36px',
@@ -314,6 +303,7 @@ export function AgentMetrics() {
           </Text>
 
           <Menu
+            dataTestid="agent-selection-menu"
             value={currentAgentUuid}
             setValue={setCurrentAgentUuid}
             options={assignedAgentsUuids.map((uuid) => ({ label: getAgentName(uuid), value: uuid }))}
@@ -332,6 +322,7 @@ export function AgentMetrics() {
         <Flex>
           {currentTemplateUuid && (
             <Menu
+              dataTestid="template-selection-menu"
               value={currentTemplateUuid}
               setValue={setCurrentTemplateUuid}
               options={templates.map((template) => ({ label: template.name, value: template.uuid }))}
@@ -347,6 +338,7 @@ export function AgentMetrics() {
 
           {hasMetrics && (
             <Menu
+              dataTestid="period-selection-menu"
               value={currentPeriod}
               setValue={(value) => setCurrentPeriod(value as typeof currentPeriod)}
               options={[
@@ -370,6 +362,7 @@ export function AgentMetrics() {
       {isDataLoading && <Skeleton width="100%" height={skeletonLoadingHeight(dataRows)} />}
 
       <Flex
+        data-testid="metrics-details-container"
         direction="column"
         gap="$space-0"
         style={{
