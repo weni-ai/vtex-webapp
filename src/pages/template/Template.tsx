@@ -41,9 +41,9 @@ export function SectionHeader({ title }: { title: string }) {
   )
 }
 
-function TemplateAlert({ variant, message }: { variant: "warning" | "critical", message: string }) {
+function TemplateAlert({ variant, message, dataTestId }: { variant: "warning" | "critical", message: string, dataTestId?: string }) {
   return (
-    <Alert variant={variant} style={{ marginBottom: 'var(--sl-space-8)' }}>
+    <Alert variant={variant} style={{ marginBottom: 'var(--sl-space-8)' }} data-testid={dataTestId}>
       <Text variant="body">
         <Markdown>{message}</Markdown>
       </Text>
@@ -52,10 +52,12 @@ function TemplateAlert({ variant, message }: { variant: "warning" | "critical", 
 }
 
 export function Template() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid } = useParams();
   const { i18n } = useTranslation();
 
+  const [previousTemplateName, setPreviousTemplateName] = useState('');
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');
   const [previousStartCondition, setPreviousStartCondition] = useState('');
@@ -130,6 +132,7 @@ export function Template() {
   const hasChanges = useMemo(() => {
     return [
       hasVariablesChanged,
+      previousTemplateName !== templateName,
       previousStartCondition !== startCondition,
       prefilledContent.content !== content.content,
       prefilledContent.header?.type !== content.header?.type,
@@ -140,7 +143,7 @@ export function Template() {
       prefilledContent.button?.url !== content.button?.url,
       prefilledContent.button?.urlExample !== content.button?.urlExample,
     ].some(Boolean);
-  }, [content, prefilledContent, previousStartCondition, startCondition, hasVariablesChanged]);
+  }, [content, prefilledContent, previousStartCondition, startCondition, hasVariablesChanged, previousTemplateName, templateName]);
 
   async function loadTemplate() {
     const template = await assignedAgentTemplate({ templateUuid: templateUuid as string });
@@ -178,7 +181,9 @@ export function Template() {
       footer = template.metadata.footer;
     }
 
+    setPreviousTemplateName(template.name);
     setTemplateName(template.name);
+
     setTemplateStatus(template.status as "active" | "pending" | "rejected" | "needs-editing");
     setTemplateIsCustom(template.isCustom);
 
@@ -402,11 +407,7 @@ export function Template() {
   }
 
   async function updateTemplates() {
-    try {
-      await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate: true });
-    } catch (error) {
-      console.error(error);
-    }
+    await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate: true });
   }
 
   function navigateToAgent() {
@@ -530,7 +531,14 @@ export function Template() {
             </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleSaveTemplate} loading={isSaving} disabled={!hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0}>
+              <Button
+                variant="primary"
+                size="large"
+                onClick={handleSaveTemplate}
+                loading={isSaving}
+                disabled={!hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0}
+                data-testid="save-button"
+              >
                 {t('template.form.create.buttons.save')}
               </Button>
             </Bleed>
@@ -538,9 +546,10 @@ export function Template() {
         </PageHeaderRow>
       </PageHeader>
 
-      <PageContent>
+      <PageContent data-testid="page-content">
         {(errorText || templateStatus === 'needs-editing') && (
           <TemplateAlert
+            dataTestId="template-alert"
             {...(
               templateStatus === 'needs-editing' ? {
                 variant: 'warning',
@@ -563,6 +572,7 @@ export function Template() {
             setStartCondition={setStartCondition}
             startConditionError={startConditionError}
             isStartConditionEditable={!isEditing || templateIsCustom}
+            dataTestId="form-essential"
           />
 
           <Divider />
