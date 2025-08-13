@@ -12,10 +12,16 @@ import { selectAccount } from '../store/userSlice';
 import { AgentBuilder, FormState } from './agent/AgentBuilder';
 import { useAgentBuilderSetup } from "./setup/useAgentBuilderSetup";
 import { useUserSetup } from "./setup/useUserSetup";
+import { useTranslation } from "react-i18next";
+
+const isWhatsAppIntegrated = (state: RootState) => state.user.isWhatsAppIntegrated;
+const projectUuidSelector = (state: RootState) => state.project.project_uuid;
 
 export function Onboarding() {
+  const { t } = useTranslation();
+  
   const [agentUuid, setAgentUuid] = useState('');
-  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
+  const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const agentsList = useSelector(agents)
   const agentBuilder = useSelector(getAgentBuilder);
   const account = useSelector(selectAccount);
@@ -26,7 +32,7 @@ export function Onboarding() {
     objective: agentBuilder.objective || t('agent.setup.forms.objective.default'),
   });
   const [errors, setErrors] = useState<{ [key in keyof FormState]?: string }>({});
-  const projectUuid = useSelector((state: RootState) => state.project.project_uuid);
+  const projectUuid = useSelector(projectUuidSelector);
 
   const [isAgentAssignModalOpen, setIsAgentAssignModalOpen] = useState(false);
   const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
@@ -111,21 +117,17 @@ export function Onboarding() {
   async function handleAssign(uuid: string) {
     const agent = agentsList.find((item) => item.uuid === uuid);
 
-    if (!agent) {
-      return;
-    }
-
-    if (agent.origin === 'CLI') {
+    if (agent?.origin === 'CLI') {
       setAgentUuid(uuid);
       setIsAgentAssignModalOpen(true);
       setChangeNextButtonTextOnLastPage(true);
-    } else if (agent.origin === 'nexus') {
+    } else if (agent?.origin === 'nexus') {
       setAgentUuid(uuid);
       setIsAgentAssignModalOpen(true);
       setChangeNextButtonTextOnLastPage(false);
     }
 
-    if (agent.origin === 'commerce' && agent.notificationType === 'active') {
+    if (agent?.origin === 'commerce' && agent?.notificationType === 'active') {
       if (isWppIntegrated) {
         integrateAgentInside(uuid);
       } else {
@@ -139,8 +141,10 @@ export function Onboarding() {
     await integrateAgentInside(data.uuid);
   }
 
-  async function handleAssignCLI(data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) {
-    if (data.type === 'passive') {      
+  async function handleAssignCLI(data: { uuid: string, templatesUuids: string[], credentials: Record<string, string> }) {
+    const agent = agentsList.find((item) => item.uuid === data.uuid);
+
+    if (agent?.notificationType === 'passive') {
       setIsAssigningAgent(true);
 
       await assignPassiveAgent({
@@ -201,6 +205,7 @@ export function Onboarding() {
                 variant="tertiary"
                 size="large"
                 onClick={handlePreviousPage}
+                data-testid="back-button"
               >
                 <IconArrowLeft />
               </IconButton>
@@ -216,7 +221,7 @@ export function Onboarding() {
 
           <Stack space="$space-3" horizontal>
             <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="primary" size="large" onClick={handleNextPage}>
+              <Button variant="primary" size="large" onClick={handleNextPage} data-testid="next-button">
                 {isLastPage ? t('common.finish') : t('common.skip')}
               </Button>
             </Bleed>
