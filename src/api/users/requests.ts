@@ -27,7 +27,7 @@ export const userRequests = {
   },
 
   createUserAndProject: async (payload: CreateUserAndProjectPayload) => {
-    return VTEXFetch<{ project_uuid: string, error?: boolean, message?: string }>('/_v/create-user-and-project', {
+    return VTEXFetch<{ project_uuid: string, error?: boolean, message?: string }>(`/_v/create-user-and-project?user_email=${payload.user_email}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
