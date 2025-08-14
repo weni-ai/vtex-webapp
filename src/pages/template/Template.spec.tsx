@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as agentService from '../../services/agent.service';
 import { Template } from './Template';
 
 const mocks = vi.hoisted(() => ({
@@ -224,8 +223,8 @@ describe('Template', () => {
     });
 
     it('should create template when save button is clicked', async () => {
-      agentService.assignedAgentTemplate.mockResolvedValue({});
-      agentService.createAssignedAgentTemplate.mockResolvedValue({});
+      mocks.assignedAgentTemplate.mockResolvedValue({});
+      mocks.createAssignedAgentTemplate.mockResolvedValue({});
 
       render(<Template />);
 
@@ -241,7 +240,7 @@ describe('Template', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(agentService.createAssignedAgentTemplate).toHaveBeenCalled();
+        expect(mocks.createAssignedAgentTemplate).toHaveBeenCalled();
       });
 
       expect(screen.queryByTestId('process-modal')).toBeInTheDocument();
@@ -256,7 +255,7 @@ describe('Template', () => {
     });
 
     it('should show error message when template is not valid', async () => {
-      agentService.createAssignedAgentTemplate.mockRejectedValue(new Error('Template is not valid'));
+      mocks.createAssignedAgentTemplate.mockRejectedValue(new Error('Template is not valid'));
 
       render(<Template />);
 
@@ -274,7 +273,7 @@ describe('Template', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(agentService.createAssignedAgentTemplate).toHaveBeenCalled();
+        expect(mocks.createAssignedAgentTemplate).toHaveBeenCalled();
       });
 
       await waitFor(() => {
@@ -320,7 +319,7 @@ describe('Template', () => {
         templateUuid: '2222',
       });
 
-      agentService.assignedAgentTemplate.mockResolvedValue({
+      mocks.assignedAgentTemplate.mockResolvedValue({
         status: 'needs-editing',
         name: 'Test Template',
         isCustom: true,
@@ -349,7 +348,7 @@ describe('Template', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(agentService.saveAgentButtonTemplate).toHaveBeenCalled();
+        expect(mocks.saveAgentButtonTemplate).toHaveBeenCalled();
       });
 
       await waitFor(() => {
@@ -358,7 +357,7 @@ describe('Template', () => {
     });
 
     it('should show error message when save fails', async () => {
-      agentService.saveAgentButtonTemplate.mockRejectedValue(new Error('Update failed'));
+      mocks.saveAgentButtonTemplate.mockRejectedValue(new Error('Update failed'));
 
       await act(async () => {
         render(<Template />);
@@ -388,7 +387,7 @@ describe('Template', () => {
         templateUuid: '2222',
       });
 
-      agentService.assignedAgentTemplate.mockResolvedValue({
+      mocks.assignedAgentTemplate.mockResolvedValue({
         status: 'active',
         name: 'Test Template',
         isCustom: true,
@@ -402,7 +401,7 @@ describe('Template', () => {
 
     describe('when it needs to be processed by AI', () => {
       it('should update template when save button is clicked', async () => {
-        agentService.updateAgentTemplate.mockResolvedValue({});
+        mocks.updateAgentTemplate.mockResolvedValue({});
 
         await act(async () => {
           render(<Template />);
@@ -422,7 +421,7 @@ describe('Template', () => {
         fireEvent.click(saveButton);
 
         await waitFor(() => {
-          expect(agentService.updateAgentTemplate).toHaveBeenCalledWith({
+          expect(mocks.updateAgentTemplate).toHaveBeenCalledWith({
             templateUuid: '2222',
             template: {
               content: 'Updated content',
@@ -437,7 +436,7 @@ describe('Template', () => {
       });
 
       it('should show error message when save fails', async () => {
-        agentService.updateAgentTemplate.mockRejectedValue(new Error('Update failed'));
+        mocks.updateAgentTemplate.mockRejectedValue(new Error('Update failed'));
 
         render(<Template />);
 
@@ -451,7 +450,7 @@ describe('Template', () => {
         fireEvent.click(saveButton);
 
         await waitFor(() => {
-          expect(agentService.updateAgentTemplate).toHaveBeenCalled();
+          expect(mocks.updateAgentTemplate).toHaveBeenCalled();
         });
 
         expect(screen.getByTestId('process-modal')).toBeInTheDocument();
@@ -461,7 +460,7 @@ describe('Template', () => {
 
     describe('when it does not need to be processed by AI', () => {
       it('should update template when save button is clicked', async () => {
-        agentService.updateAgentTemplate.mockResolvedValue({});
+        mocks.updateAgentTemplate.mockResolvedValue({});
 
         render(<Template />);
 
@@ -476,7 +475,7 @@ describe('Template', () => {
         fireEvent.click(saveButton);
 
         await waitFor(() => {
-          expect(agentService.updateAgentTemplate).toHaveBeenCalledWith({
+          expect(mocks.updateAgentTemplate).toHaveBeenCalledWith({
             templateUuid: '2222',
             template: {
               content: 'Updated content',
@@ -489,7 +488,7 @@ describe('Template', () => {
       });
 
       it('should show error message when save fails', async () => {
-        agentService.updateAgentTemplate.mockRejectedValue(new Error('Update failed'));
+        mocks.updateAgentTemplate.mockRejectedValue(new Error('Update failed'));
 
         render(<Template />);
 
@@ -500,7 +499,7 @@ describe('Template', () => {
         fireEvent.click(saveButton);
 
         await waitFor(() => {
-          expect(agentService.updateAgentTemplate).toHaveBeenCalled();
+          expect(mocks.updateAgentTemplate).toHaveBeenCalled();
         });
 
         expect(mocks.toastCritical).toHaveBeenCalledWith('Update failed');
