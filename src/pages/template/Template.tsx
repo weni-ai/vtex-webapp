@@ -281,12 +281,12 @@ export function Template() {
           content: content.content,
           footer: content.footer,
           button: content.button,
+          variables: variables.map((variable) => ({
+            definition: variable.definition,
+            fallback: variable.fallbackText,
+          })),
           ...(mustBeProcessedByAI ? {
             startCondition: startCondition,
-            variables: variables.map((variable) => ({
-              definition: variable.definition,
-              fallback: variable.fallbackText,
-            })),
           } : {}),
         },
       });

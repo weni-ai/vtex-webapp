@@ -460,7 +460,7 @@ export async function updateAgentTemplateRequest(data: {
     footer?: string,
     button?: { text: string, url: string, urlExample?: string },
     startCondition?: string,
-    variables?: Template["variables"],
+    variables: Template["variables"],
   }
 }) {
   const projectUuid = store.getState().project.project_uuid;
@@ -469,7 +469,7 @@ export async function updateAgentTemplateRequest(data: {
 
   const parameters: { name: string, value: string | Template["variables"] }[] = [];
 
-  if (data.template.startCondition && data.template.variables) {
+  if (data.template.startCondition) {
     parameters.push(...[{
       name: 'start_condition',
       value: data.template.startCondition,

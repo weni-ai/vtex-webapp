@@ -356,7 +356,7 @@ export async function updateAgentTemplate(data: {
     footer?: string,
     button?: { text: string, url: string, urlExample?: string },
     startCondition?: string,
-    variables?: { definition: string; fallback: string; }[],
+    variables: { definition: string; fallback: string; }[],
   }
 }) {
   const response = await updateAgentTemplateRequest(data);
