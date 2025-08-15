@@ -39,7 +39,9 @@ interface CreateAgentBuilderData {
 
 export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
   const projectUuid = store.getState().project.project_uuid;
-  const url = `/_v/create-agent-builder?projectUUID=${projectUuid}`;
+  const userEmail = store.getState().user.userData?.user;
+
+  const url = `/_v/create-agent-builder?projectUUID=${projectUuid}&user_email=${userEmail}`;
   const response = await VTEXFetch<{
     message: string;
     error: string;
@@ -57,6 +59,7 @@ export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
 
 export async function agentsList() {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<AgentsListResponse>('/_v/proxy-request', {
     method: 'POST',
@@ -68,6 +71,7 @@ export async function agentsList() {
       url: `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
       headers: { 'Project-Uuid': projectUuid, },
       params: {
+        user_email: userEmail,
         category: 'ACTIVE',
         can_vtex_integrate: true,
         nexus_agents: true,
@@ -80,9 +84,11 @@ export async function agentsList() {
 
 export async function integratedAgentsList() {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const queryParams = new URLSearchParams({
-    projectUUID: projectUuid
+    projectUUID: projectUuid,
+    user_email: userEmail || '',
   });
 
   const url = `/_v/get-integrated-features?${queryParams.toString()}`;
@@ -100,11 +106,12 @@ export async function integratedAgentsList() {
 
 export async function integrateAgentRequest(data: IntegrateAgentData) {
   const projectUuid = data.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<{
     message: string;
     error: string;
-  }>('/_v/integrate-feature', {
+  }>(`/_v/integrate-feature?user_email=${userEmail}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -202,6 +209,7 @@ export async function unassignAgentCLIRequest(data: {
 
 export async function agentCLIRequest(data: { agentUuid: string, params?: { showAll?: boolean } }) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<{
     uuid: string;
@@ -258,6 +266,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       headers: { 'Project-Uuid': projectUuid, },
       data: {},
       params: {
+        user_email: userEmail,
         show_all: !!data.params?.showAll,
       },
     }),
@@ -287,6 +296,7 @@ export async function saveAgentButtonTemplateRequest(data: {
   },
 }) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
 
   const response = await VTEXFetch<{
@@ -317,6 +327,7 @@ export async function saveAgentButtonTemplateRequest(data: {
         }],
       },
       params: {
+        user_email: userEmail,
         project_uuid: projectUuid,
         app_uuid: WhatsAppCloudAppUuid,
       },
@@ -336,10 +347,11 @@ export async function saveAgentButtonTemplateRequest(data: {
 
 export async function updateAgentSettingsRequest(data: UpdateAgentSettingsData) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
   const adaptedData = adaptUpdateAgentSettingsRequest(projectUuid, data);
 
   const response = await VTEXFetch<UpdateAgentSettingsResponse>(
-    '/_v/update-feature-settings',
+    `/_v/update-feature-settings?user_email=${userEmail}`,
     {
       method: 'PUT',
       headers: {
@@ -357,10 +369,12 @@ export async function disableFeatureRequest(data: {
   project_uuid: string;
   feature_uuid: string;
 }) {
+  const userEmail = store.getState().user.userData?.user;
+
   return await VTEXFetch<{
     message: string;
     error: string;
-  }>(`/_v/disable-feature`, {
+  }>(`/_v/disable-feature?user_email=${userEmail}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -372,12 +386,14 @@ export async function disableFeatureRequest(data: {
 
 export async function getSkillMetricsRequest(data: { startDate: string, endDate: string }) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const queryParams = new URLSearchParams({
     projectUUID: projectUuid,
     skill: 'abandoned_cart',
     start_date: data.startDate,
     end_date: data.endDate,
+    user_email: userEmail || '',
   });
 
   const url = `/_v/get-skill-metrics?${queryParams.toString()}`;
@@ -409,6 +425,7 @@ export async function getWhatsAppURLRequest(): Promise<{
   };
 } & IntegrationsError> {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<{
     config?: {
@@ -425,7 +442,10 @@ export async function getWhatsAppURLRequest(): Promise<{
       headers: { 'Project-Uuid': projectUuid, },
       data: {
         project_uuid: projectUuid,
-      }
+      },
+      params: {
+        user_email: userEmail,
+      },
     }),
   });
 
@@ -444,6 +464,7 @@ export async function updateAgentTemplateRequest(data: {
   }
 }) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
 
   const parameters: { name: string, value: string | Template["variables"] }[] = [];
@@ -511,7 +532,9 @@ export async function updateAgentTemplateRequest(data: {
         }] : [],
         parameters,
       },
-      params: {},
+      params: {
+        user_email: userEmail,
+      },
       headers: { 'Project-Uuid': projectUuid, },
     }),
   });
@@ -558,6 +581,8 @@ class AssignedAgentTemplate {
     variables: Template["variables"],
     startCondition: string,
   }) {
+    const userEmail = store.getState().user.userData?.user;
+
     const button = data.button ? [{
       type: 'URL',
       text: data.button.text,
@@ -610,17 +635,25 @@ class AssignedAgentTemplate {
             },
           ],
         },
+        params: {
+          user_email: userEmail || '',
+        },
       }
     );
   }
 
   static disable(data: { templateUuid: string, projectUuid: string }) {
+    const userEmail = store.getState().user.userData?.user;
+
     return proxy<{ text: string; }>(
       'DELETE',
       `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`,
       {
         headers: {
           'Project-Uuid': data.projectUuid,
+        },
+        params: {
+          user_email: userEmail || '',
         },
       }
     );
@@ -646,6 +679,7 @@ export async function disableAssignedAgentTemplateRequest(data: {
 
 export async function agentMetricsRequest(data: { templateUuid: string, startDate: string, endDate: string }) {
   const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
 
   const response = await VTEXFetch<{
     data: {
@@ -681,7 +715,9 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
         start: data.startDate,
         end: data.endDate,
       },
-      params: {},
+      params: {
+        user_email: userEmail,
+      },
     }),
   });
 
@@ -752,6 +788,8 @@ class AssignedAgent {
     contactPercentage?: number,
     globalRule?: string,
   }) {
+    const userEmail = store.getState().user.userData?.user;
+
     type error =
       {
         error?: {
@@ -776,6 +814,9 @@ class AssignedAgent {
         data: {
           global_rule: data.globalRule || null,
           contact_percentage: data.contactPercentage,
+        },
+        params: {
+          user_email: userEmail || '',
         },
       }
     );
