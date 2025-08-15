@@ -479,6 +479,7 @@ describe('Template', () => {
             templateUuid: '2222',
             template: {
               content: 'Updated content',
+              variables: [],
             },
           });
         });
