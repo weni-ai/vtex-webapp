@@ -11,6 +11,7 @@ import {
   adapterAgentsList,
   adapterIntegratedAgentsList,
 } from "./adapters";
+import { proxy } from "../proxy";
 
 interface Template {
   variables: {
@@ -61,23 +62,19 @@ export async function agentsList() {
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const response = await VTEXFetch<AgentsListResponse>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      method: 'GET',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
+  const response = await proxy<AgentsListResponse>(
+    'GET',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
+    {
       headers: { 'Project-Uuid': projectUuid, },
       params: {
-        user_email: userEmail,
+        user_email: userEmail || '',
         category: 'ACTIVE',
         can_vtex_integrate: true,
         nexus_agents: true,
       },
-    }),
-  });
+    },
+  );
 
   return adapterAgentsList(response);
 }
@@ -142,33 +139,28 @@ export async function assignAgentCLIRequest(data: {
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const response = await VTEXFetch<{
+  const response = await proxy<{
     uuid: string;
     webhook_url: string;
     templates: {}[];
     channel_uuid: string;
-  } & { error?: { agent: string } }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  } & { error?: { agent: string } }>(
+    'POST',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/assign/`, {
+    data: {
+      templates: data.templatesUuids,
+      credentials: data.credentials,
     },
-    body: JSON.stringify({
-      method: 'POST',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/assign/`,
-      data: {
-        templates: data.templatesUuids,
-        credentials: data.credentials,
-      },
-      params: {
-        app_uuid: WhatsAppCloudAppUuid,
-        channel_uuid: flowsChannelUuid,
-        user_email: userEmail,
-      },
-      headers: {
-        'Project-Uuid': projectUuid,
-      },
-    }),
-  });
+    params: {
+      app_uuid: WhatsAppCloudAppUuid,
+      channel_uuid: flowsChannelUuid,
+      user_email: userEmail,
+    },
+    headers: {
+      'Project-Uuid': projectUuid,
+    },
+  },
+  );
 
   if ('webhook_url' in Object(response)) {
     return response;
@@ -184,21 +176,17 @@ export async function unassignAgentCLIRequest(data: {
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const response = await VTEXFetch<{} | { error: string; }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      method: 'POST',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/unassign/`,
+  const response = await proxy<{} | { error: string; }>(
+    'POST',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/${data.agentUuid}/unassign/`,
+    {
       data: {},
       params: {
         user_email: userEmail,
       },
       headers: { 'Project-Uuid': projectUuid, },
-    }),
-  });
+    }
+  );
 
   if ('error' in Object(response)) {
     throw new Error('error unassigning agent');
@@ -211,7 +199,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const response = await VTEXFetch<{
+  const response = await proxy<{
     uuid: string;
     contact_percentage: number;
     templates: {
@@ -257,20 +245,17 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
     channel_uuid: string;
     webhook_url: string;
     global_rule_prompt: string;
-  }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', },
-    body: JSON.stringify({
-      method: 'GET',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
+  }>(
+    'GET',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
+    {
       headers: { 'Project-Uuid': projectUuid, },
-      data: {},
       params: {
         user_email: userEmail,
         show_all: !!data.params?.showAll,
       },
-    }),
-  });
+    }
+  );
 
   if ('webhook_url' in Object(response)) {
     return {
@@ -299,7 +284,7 @@ export async function saveAgentButtonTemplateRequest(data: {
   const userEmail = store.getState().user.userData?.user;
   const WhatsAppCloudAppUuid = store.getState().project.wpp_cloud_app_uuid;
 
-  const response = await VTEXFetch<{
+  const response = await proxy<{
     needs_button_edit: boolean;
     status: 'PENDING' | 'APPROVED' | 'IN_APPEAL' | 'REJECTED' | 'PENDING_DELETION' | 'DELETED' | 'DISABLED' | 'LOCKED';
     metadata: {
@@ -310,12 +295,10 @@ export async function saveAgentButtonTemplateRequest(data: {
         example?: string[];
       }[];
     };
-  }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', },
-    body: JSON.stringify({
-      method: 'PATCH',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/library/${data.templateUuid}/`,
+  }>(
+    'PATCH',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/library/${data.templateUuid}/`,
+    {
       headers: { 'Project-Uuid': projectUuid, },
       data: {
         library_template_button_inputs: [{
@@ -331,8 +314,8 @@ export async function saveAgentButtonTemplateRequest(data: {
         project_uuid: projectUuid,
         app_uuid: WhatsAppCloudAppUuid,
       },
-    }),
-  });
+    },
+  );
 
   if ('status' in Object(response)) {
     return {
@@ -427,18 +410,14 @@ export async function getWhatsAppURLRequest(): Promise<{
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const response = await VTEXFetch<{
+  const response = await proxy<{
     config?: {
       redirect_url?: string;
     };
-  } & IntegrationsError>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      method: 'POST',
-      url: `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-demo/apps/get-or-create/`,
+  } & IntegrationsError>(
+    'POST',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-demo/apps/get-or-create/`,
+    {
       headers: { 'Project-Uuid': projectUuid, },
       data: {
         project_uuid: projectUuid,
@@ -446,8 +425,8 @@ export async function getWhatsAppURLRequest(): Promise<{
       params: {
         user_email: userEmail,
       },
-    }),
-  });
+    },
+  );
 
   return response;
 }
@@ -491,7 +470,7 @@ export async function updateAgentTemplateRequest(data: {
       message: string,
     };
 
-  const response = await VTEXFetch<{
+  const response = await proxy<{
     uuid: string;
     display_name: string;
     status: "APPROVED" | "IN_APPEAL" | "PENDING" | "REJECTED" | "PENDING_DELETION" | "DELETED" | "DISABLED" | "LOCKED";
@@ -507,14 +486,10 @@ export async function updateAgentTemplateRequest(data: {
       }[];
     };
     error?: error,
-  }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      method: 'PATCH',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`,
+  }>(
+    'PATCH',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/${data.templateUuid}/`,
+    {
       data: {
         project_uuid: projectUuid,
         app_uuid: WhatsAppCloudAppUuid,
@@ -536,8 +511,8 @@ export async function updateAgentTemplateRequest(data: {
         user_email: userEmail,
       },
       headers: { 'Project-Uuid': projectUuid, },
-    }),
-  });
+    },
+  );
 
   if ('display_name' in Object(response)) {
     return response;
@@ -551,22 +526,6 @@ export async function updateAgentTemplateRequest(data: {
     throw new Error(errorText || `${t('error.title')}! ${t('error.description')}`);
   }
 };
-
-function proxy<T = unknown>(method: string, url: string, { headers = {}, data = {}, params = {} }: { headers?: Record<string, string>, data?: Record<string, any>, params?: Record<string, string> }) {
-  return VTEXFetch<T>('/_v/proxy-request', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      method,
-      url,
-      data,
-      params,
-      headers,
-    }),
-  });
-}
 
 class AssignedAgentTemplate {
   static create(data: {
@@ -681,7 +640,7 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const response = await VTEXFetch<{
+  const response = await proxy<{
     data: {
       status_count: {
         sent: {
@@ -701,12 +660,10 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
         }
       }
     }
-  }>('/_v/proxy-request', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', },
-    body: JSON.stringify({
-      method: 'POST',
-      url: `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/template-metrics/`,
+  }>(
+    'POST',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/templates/template-metrics/`,
+    {
       headers: {
         'Project-Uuid': projectUuid,
       },
@@ -718,8 +675,8 @@ export async function agentMetricsRequest(data: { templateUuid: string, startDat
       params: {
         user_email: userEmail,
       },
-    }),
-  });
+    },
+  );
 
   if ('data' in Object(response) && 'status_count' in Object(response.data)) {
     return response.data.status_count;
