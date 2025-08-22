@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, IconButton, IconDotsThreeVertical, IconGearSix, IconInfo, IconTrash, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
+import { Flex, Grid, IconButton, IconXCircle, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text } from "@vtex/shoreline";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,8 @@ import { AgentDescriptiveStatus } from "./agent/DescriptiveStatus";
 import { ModalAgentPassiveDetails } from "./agent/ModalPassiveDetails";
 import { SettingsContainer } from "./settings/SettingsContainer/SettingsContainer";
 import { useTranslation } from "react-i18next";
+import { Button } from "./adapters/Button";
+import { IconGearSix, IconTrash, IconInfo, IconDotsThreeVertical } from "./adapters/Icon";
 
 type codes = 'abandoned_cart' | 'order_status';
 
@@ -38,7 +40,7 @@ export function AgentBoxSkeleton({ count }: { count: number }) {
 
 export function AgentBoxEmpty() {
   const { t } = useTranslation();
-  
+
   return (
     <Flex
       direction="column"
@@ -153,7 +155,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
     if (isCommerceAgent) {
       items.push({
         label: t('common.details'),
-        icon: <IconInfo />,
+        icon: <IconInfo size="20" />,
         onClick: openDetailsModal,
         testId: 'agent-details-button',
       });
@@ -161,7 +163,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       if (isStatusBetweenIntegrated) {
         items.push({
           label: t('common.manage_settings'),
-          icon: <IconGearSix />,
+          icon: <IconGearSix size="20" />,
           onClick: toggleIsPreferencesOpen,
           testId: 'agent-manage-settings-button',
         });
@@ -175,7 +177,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
 
       items.push({
         label: t('agents.buttons.remove'),
-        icon: <IconTrash />,
+        icon: <IconTrash size="20" />,
         onClick: openDisableModal,
         testId: 'agent-remove-button',
       });
@@ -215,7 +217,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               <MenuProvider>
                 <MenuTrigger asChild>
                   <IconButton variant="tertiary" label="Actions" data-testid="agent-actions-button">
-                    <IconDotsThreeVertical />
+                    <IconDotsThreeVertical size="20" />
                   </IconButton>
                 </MenuTrigger>
 
