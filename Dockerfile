@@ -1,6 +1,6 @@
 # Use the official Node.js 22 image.
 # The '-alpine' tag uses a lightweight version of Linux.
-FROM node:20.19.4-alpine
+FROM node:22-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
