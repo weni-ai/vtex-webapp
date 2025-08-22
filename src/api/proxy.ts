@@ -1,7 +1,5 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
-
-const environment: 'weni' | 'app' = 'app';
-const authorization = 'Bearer 1234567890';
+import store from "../store/provider.store";
 
 export function proxy<T = unknown>(
   method: string,
@@ -16,7 +14,9 @@ export function proxy<T = unknown>(
     params?: Record<string, string | boolean | undefined>,
   },
 ) {
-  if (environment === 'weni') {
+  const embeddedWithin = store.getState().app.embeddedWithin;
+
+  if (embeddedWithin === 'Weni Platform') {
     const urlEncoded = new URL(url);
 
     if (params) {
@@ -32,7 +32,7 @@ export function proxy<T = unknown>(
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: authorization,
+          Authorization: localStorage.getItem('access_token') as string,
           ...headers,
         },
         body: JSON.stringify(data),
