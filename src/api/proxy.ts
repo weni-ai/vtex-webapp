@@ -1,5 +1,6 @@
 import { VTEXFetch } from "../utils/VTEXFetch";
 import store from "../store/provider.store";
+import { moduleStorage } from "../utils/storage";
 
 export function proxy<T = unknown>(
   method: string,
@@ -32,7 +33,7 @@ export function proxy<T = unknown>(
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: localStorage.getItem('access_token') as string,
+          Authorization: moduleStorage.getItem('access_token') as string,
           ...headers,
         },
         body: JSON.stringify(data),
