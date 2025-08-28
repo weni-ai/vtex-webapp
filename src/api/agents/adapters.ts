@@ -157,7 +157,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
 }
 
 export interface IntegratedAgentsListResponse {
-  integratedFeatures: {
+  results: {
     feature_uuid: string;
     category: 'ACTIVE' | 'PASSIVE';
     code: 'order_status' | 'abandoned_cart';
@@ -172,7 +172,7 @@ export interface IntegratedAgentsListResponse {
 };
 
 export function adapterIntegratedAgentsList(response: IntegratedAgentsListResponse) {
-  return response.integratedFeatures.map((agent) => ({
+  return response.results.map((agent) => ({
       origin: 'commerce' as const,
       isOfficial: true,
       uuid: agent.feature_uuid,
