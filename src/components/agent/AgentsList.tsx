@@ -151,12 +151,12 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
   const isOfficialValues = useMemo(() => {
     const uniqueValues = new Set<boolean>();
 
-    agentsList.forEach((agent) => {
+    unassignedAgents.forEach((agent) => {
       uniqueValues.add(agent.isOfficial);
     });
 
     return Array.from(uniqueValues);
-  }, [agentsList]);
+  }, [unassignedAgents]);
 
   return (
     <Flex direction="column">
