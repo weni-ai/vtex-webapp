@@ -18,6 +18,7 @@ export function Button({
   variant = 'secondary',
   children,
   loading = false,
+  ...props
 }: {
   system?: 'shoreline' | 'unnnic',
   onClick?: () => void,
@@ -25,8 +26,10 @@ export function Button({
   variant?: 'primary' | 'secondary' | 'tertiary' | 'critical' | 'criticalTertiary' | 'unnnic:attention' | 'unnnic:alternative',
   children: React.ReactNode,
   loading?: boolean,
+  'data-testid'?: string,
 }) {
   const designSystem = system || useSelector(selectDesignSystem);
+  const dataTestId = props['data-testid'];
 
   if (designSystem === 'shoreline') {
     const variantResolved = {
@@ -39,6 +42,7 @@ export function Button({
       size={size}
       variant={variantResolved as 'primary' | 'secondary' | 'tertiary' | 'critical' | 'criticalTertiary'}
       loading={loading}
+      data-testid={dataTestId}
     > 
       {children}
     </ShorelineButton>;
