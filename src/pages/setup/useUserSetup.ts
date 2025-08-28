@@ -10,6 +10,7 @@ import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid
 import store from '../../store/provider.store';
 import { setAccount, setAgentBuilderIntegrated, setUser, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from '../../store/userSlice';
 import { setEmbeddedWithin } from '../../store/appSlice';
+import { moduleStorage } from '../../utils/storage';
 
 export function useUserSetup() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export function useUserSetup() {
         store.dispatch(setEmbeddedWithin('Weni Platform'));
         store.dispatch(setProjectUuid(projectUuid));
 
-        localStorage.setItem('access_token', accessToken);
+        moduleStorage.setItem('access_token', accessToken);
 
         Sentry.setUser({
           email: userEmail,
