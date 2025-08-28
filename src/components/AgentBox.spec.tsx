@@ -121,6 +121,9 @@ describe('AgentBox', () => {
       if (selector.name === 'isWhatsAppIntegrated') {
         return true;
       }
+      if (selector.name === 'selectDesignSystem') {
+        return 'shoreline';
+      }
       return [];
     });
 
@@ -190,6 +193,8 @@ describe('AgentBox', () => {
       mocks.useSelector.mockImplementation((selector) => {
         if (selector.name === 'agentsLoading') {
           return [{ agent_uuid: 'test-uuid', isLoading: true }];
+        } else if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
         }
         return [];
       });
