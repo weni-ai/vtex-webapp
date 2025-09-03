@@ -17,15 +17,6 @@ export const userRequests = {
     return VTEXFetch<{ error?: boolean, message?: string }>('/api/license-manager/account');
   },
 
-  checkProject: async (vtex_account: string, user_email: string) => {
-    return VTEXFetch<{ error?: boolean, message?: string }>(`/_v/check-project-by-user?vtex_account=${vtex_account}&user_email=${user_email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  },
-
   createUserAndProject: async (payload: CreateUserAndProjectPayload) => {
     return VTEXFetch<{ project_uuid: string, error?: boolean, message?: string }>(`/_v/create-user-and-project?user_email=${payload.user_email}`, {
       method: 'POST',

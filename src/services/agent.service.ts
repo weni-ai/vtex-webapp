@@ -5,6 +5,7 @@ import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import getEnv from "../utils/env";
+import { useCache } from "../utils";
 
 export async function checkAgentIntegration(project_uuid: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
@@ -14,33 +15,39 @@ export async function checkAgentIntegration(project_uuid: string) {
     return { success: false, error: 'missing configuration' };
   }
 
+  const cacheKey: [string, string] = ['GET', `${getEnv('VITE_APP_NEXUS_URL')}/api/commerce/check-exists-agent-builder`];
+  const cacheKeyString = `gallery_cache_${project_uuid}_${cacheKey.join('_')}`;
+
   try {
-    const response = await proxy<{
-      error?: boolean,
-      message?: string,
-      data: {
-        has_agent: boolean,
-        name: string,
-        links: string[],
-        objective: string,
-        occupation: string,
-      },
-    }>(
-      'GET',
-      `${getEnv('VITE_APP_NEXUS_URL')}/api/commerce/check-exists-agent-builder`,
-      {
-        headers: { 'Project-Uuid': project_uuid, },
-        params: {
-          project_uuid: project_uuid,
-        },
-      },
-    );
+    const { response, saveCache } = await useCache({
+      cacheKey: cacheKeyString,
+      getResponse: () =>
+        proxy<{
+          error?: boolean,
+          message?: string,
+          data: {
+            has_agent: boolean,
+            name: string,
+            links: string[],
+            objective: string,
+            occupation: string,
+          },
+        }>(
+          ...cacheKey,
+          {
+            headers: { 'Project-Uuid': project_uuid, },
+            params: {
+              project_uuid: project_uuid,
+            },
+          },
+        )
+    });
 
     if (!response || response?.error) {
       throw new Error(response?.message || 'error integrating agents.');
     }
 
-    return { success: true, data: response };
+    return { success: true, data: response, saveCache };
   } catch (error) {
     console.error('error in the integration check:', error);
     return { success: false, error: error || 'unknown error' };
