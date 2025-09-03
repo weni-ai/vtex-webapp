@@ -39,21 +39,6 @@ export const userAdapters = {
     }
   },
 
-  checkProject: async (vtex_account: string, user_email: string) => {
-    try {
-      const response = await userRequests.checkProject(vtex_account, user_email);
-
-      if (!response || response.error) {
-        throw new Error(response?.message || 'error creating user and project.');
-      }
-
-      return { success: true, data: response };
-    } catch (error) {
-      console.error('error when checking project:', error);
-      return { success: false, error: error || 'unknown error' };
-    }
-  },
-
   createUserAndProject: async (userData: { user: string; account: string }) => {
     store.dispatch(setLoadingSetup(true));
 

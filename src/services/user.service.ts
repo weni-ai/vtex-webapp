@@ -4,6 +4,8 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateAgentsList } from "./agent.service";
 import { userAdapters } from "../api/users/adapters";
 import { AccountData, UserData } from "../interfaces/Store";
+import getEnv from "../utils/env";
+import { proxy } from "../api/proxy";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -30,14 +32,23 @@ export async function fetchAccountData() {
 }
 
 export async function checkProject(vtex_account: string, user_email: string) {
-
   try {
-  const response = await VTEXFetch<{ project_uuid: string, error?: boolean, message?: string, data: { project_uuid: string, has_project: boolean } }>(`/_v/check-project-by-user?vtex_account=${vtex_account}&user_email=${user_email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await proxy<{
+      project_uuid: string,
+      error?: boolean,
+      message?: string,
+      data: { project_uuid: string, has_project: boolean }
+    }>(
+      'GET',
+      `${getEnv('VITE_APP_API_URL')}/v2/commerce/check-project`,
+      {
+        headers: {},
+        params: {
+          user_email: user_email || '',
+          vtex_account: vtex_account || '',
+        },
       },
-    });
+    );
 
     if (!response || response.error) {
       throw new Error(response?.message || 'error creating user and project.');
