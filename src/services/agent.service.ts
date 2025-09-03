@@ -1,9 +1,9 @@
+import { proxy } from "../api/proxy";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
 import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
-import { VTEXFetch } from "../utils/VTEXFetch";
 import getEnv from "../utils/env";
 
 export async function checkAgentIntegration(project_uuid: string) {
@@ -15,13 +15,26 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 
   try {
-    const response = await VTEXFetch<{ error?: boolean, message?: string, data: { has_agent: boolean, name: string, links: string[], objective: string, occupation: string } }>(`/_v/check-agent-builder?projectUUID=${project_uuid}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Project-Uuid': project_uuid,
+    const response = await proxy<{
+      error?: boolean,
+      message?: string,
+      data: {
+        has_agent: boolean,
+        name: string,
+        links: string[],
+        objective: string,
+        occupation: string,
       },
-    });
+    }>(
+      'GET',
+      `${getEnv('VITE_APP_NEXUS_URL')}/api/commerce/check-exists-agent-builder`,
+      {
+        headers: { 'Project-Uuid': project_uuid, },
+        params: {
+          project_uuid: project_uuid,
+        },
+      },
+    );
 
     if (!response || response?.error) {
       throw new Error(response?.message || 'error integrating agents.');
