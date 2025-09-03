@@ -6,6 +6,7 @@ import { userAdapters } from "../api/users/adapters";
 import { AccountData, UserData } from "../interfaces/Store";
 import getEnv from "../utils/env";
 import { proxy } from "../api/proxy";
+import { useCache } from "../utils";
 
 export function getUserFromLocalStorage() {
   const user = localStorage.getItem('userData');
@@ -32,29 +33,35 @@ export async function fetchAccountData() {
 }
 
 export async function checkProject(vtex_account: string, user_email: string) {
+  const cacheKey: [string, string] = ['GET', `${getEnv('VITE_APP_API_URL')}/v2/commerce/check-project`];
+  const cacheKeyString = `gallery_cache_${vtex_account}_${user_email}_${cacheKey.join('_')}`;
+
   try {
-    const response = await proxy<{
-      project_uuid: string,
-      error?: boolean,
-      message?: string,
-      data: { project_uuid: string, has_project: boolean }
-    }>(
-      'GET',
-      `${getEnv('VITE_APP_API_URL')}/v2/commerce/check-project`,
-      {
-        headers: {},
-        params: {
-          user_email: user_email || '',
-          vtex_account: vtex_account || '',
-        },
-      },
-    );
+    const { response, saveCache } = await useCache({
+      cacheKey: cacheKeyString,
+      getResponse: () =>
+        proxy<{
+          project_uuid: string,
+          error?: boolean,
+          message?: string,
+          data: { project_uuid: string, has_project: boolean }
+        }>(
+          ...cacheKey,
+          {
+            headers: {},
+            params: {
+              user_email: user_email || '',
+              vtex_account: vtex_account || '',
+            },
+          },
+        )
+    });
 
     if (!response || response.error) {
       throw new Error(response?.message || 'error creating user and project.');
     }
 
-    return { success: true, data: response };
+    return { success: true, data: response, saveCache };
   } catch (error) {
     console.error('error when checking project:', error);
     return { success: false, error: error || 'unknown error' };
