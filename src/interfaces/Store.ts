@@ -88,8 +88,14 @@ export interface UserState {
     WhatsAppPhoneNumber: string | null;
 }
 
+export interface AppState {
+    designSystem: 'shoreline' | 'unnnic';
+    embeddedWithin: 'VTEX App' | 'Weni Platform';
+}
+
 export interface RootState {
     auth: AuthState;
     project: ProjectState,
-    user: UserState
+    user: UserState,
+    app: AppState,
 }
