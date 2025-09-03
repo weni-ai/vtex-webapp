@@ -27,7 +27,7 @@ export function getPeriodDates(period: 'today' | 'yesterday' | 'last 7 days' | '
 
 export async function fileToBase64(file: File) {
   try {
-    return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {      
+    return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         resolve(reader.result as string);
@@ -40,4 +40,29 @@ export async function fileToBase64(file: File) {
   } catch (error) {
     throw error;
   }
+}
+
+export async function useCache({ cacheKey, getResponse }: { cacheKey: string, getResponse: () => Promise<any> }) {
+  const cachedResponse = localStorage.getItem(cacheKey);
+
+  if (cachedResponse) {
+    const { expiresAt, response } = JSON.parse(cachedResponse);
+
+    if (expiresAt > Date.now()) {
+      return { response, saveCache: () => { } };
+    }
+  }
+
+  const response = await getResponse();
+  const expiresAt = Date.now() + 1000 * 60 * 60 * 24; // 24 hours
+
+  return {
+    response,
+    saveCache: () => {
+      localStorage.setItem(cacheKey, JSON.stringify({
+        expiresAt,
+        response,
+      }));
+    }
+  };
 }
