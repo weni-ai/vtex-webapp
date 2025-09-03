@@ -28,5 +28,5 @@
     "typeRoots": ["./node_modules/@types", "./src/types"],
     
   },
-  "include": ["src", "global.d.ts"]
+  "include": ["src", "global.d.ts", "vite-env.d.ts"]
 }
