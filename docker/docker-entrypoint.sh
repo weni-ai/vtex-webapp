@@ -16,6 +16,8 @@ export JSON_STRING='window.configs = { \
   "VITE_APP_GROWTHBOOK_API_HOST":"'${VITE_APP_GROWTHBOOK_API_HOST}'", \
   "VITE_APP_GROWTHBOOK_CLIENT_KEY":"'${VITE_APP_GROWTHBOOK_CLIENT_KEY}'", \
   "VITE_APP_HOTJAR_ID":"'${VITE_APP_HOTJAR_ID}'", \
+  "VITE_APP_API_URL":"'${VITE_APP_API_URL}'", \
+  "VITE_APP_INSIGHTS_URL":"'${VITE_APP_INSIGHTS_URL}'", \
 }'
 sed "s|\/\/CONFIGURATIONS_PLACEHOLDER|${JSON_STRING}|" /usr/share/nginx/html/vtex-webapp/index.html.tmpl > /tmp/index.html
 
