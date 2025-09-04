@@ -2,10 +2,11 @@ import store from "../../store/provider.store";
 import { setLoadingSetup, setProjectUuid } from "../../store/projectSlice";
 import { updateAgentsList } from "../../services/agent.service";
 import { userRequests } from "./requests";
+import { moduleStorage } from "../../utils/storage";
 
 export const userAdapters = {
   getUserFromLocalStorage: () => {
-    const user = localStorage.getItem('userData');
+    const user = moduleStorage.getItem('userData');
     return user ? JSON.parse(user) : null;
   },
 
