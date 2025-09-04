@@ -35,7 +35,7 @@ export async function fetchAccountData() {
 
 export async function checkProject(vtex_account: string, user_email: string) {
   const cacheKey: [string, string] = ['GET', `${getEnv('VITE_APP_API_URL')}/v2/commerce/check-project`];
-  const cacheKeyString = `gallery_cache_${vtex_account}_${user_email}_${cacheKey.join('_')}`;
+  const cacheKeyString = `cache_${vtex_account}_${user_email}_${cacheKey.join('_')}`;
 
   try {
     const { response, saveCache } = await useCache({

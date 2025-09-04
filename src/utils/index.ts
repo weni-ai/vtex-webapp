@@ -1,3 +1,5 @@
+import { moduleStorage } from "./storage";
+
 export function cleanURL(url: string) {
   return url.trim().replace(/^https?:\/\//, '');
 }
@@ -43,7 +45,7 @@ export async function fileToBase64(file: File) {
 }
 
 export async function useCache({ cacheKey, getResponse }: { cacheKey: string, getResponse: () => Promise<any> }) {
-  const cachedResponse = localStorage.getItem(cacheKey);
+  const cachedResponse = moduleStorage.getItem(cacheKey);
 
   if (cachedResponse) {
     const { expiresAt, response } = JSON.parse(cachedResponse);
@@ -59,7 +61,7 @@ export async function useCache({ cacheKey, getResponse }: { cacheKey: string, ge
   return {
     response,
     saveCache: () => {
-      localStorage.setItem(cacheKey, JSON.stringify({
+      moduleStorage.setItem(cacheKey, JSON.stringify({
         expiresAt,
         response,
       }));
