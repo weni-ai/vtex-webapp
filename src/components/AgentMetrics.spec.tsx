@@ -50,11 +50,21 @@ const initialState = {
       isAssigned: true,
     }],
   },
+  app: {
+    embeddedWithin: 'VTEX App',
+    designSystem: 'shoreline',
+  },
 };
 
 const mockProjectSlice = createSlice({
   name: 'project',
   initialState: initialState.project,
+  reducers: {},
+});
+
+const mockAppSlice = createSlice({
+  name: 'app',
+  initialState: initialState.app,
   reducers: {},
 });
 
@@ -65,6 +75,7 @@ const renderWithProviders = (
     store = configureStore({
       reducer: {
         project: mockProjectSlice.reducer,
+        app: mockAppSlice.reducer,
       }, preloadedState
     }),
     ...renderOptions
@@ -230,6 +241,7 @@ describe('AgentMetrics', () => {
             store = configureStore({
               reducer: {
                 project: mockProjectSliceWithAbandonedCartAgent.reducer,
+                app: mockAppSlice.reducer,
               }, preloadedState
             }),
             ...renderOptions
@@ -304,6 +316,7 @@ describe('AgentMetrics', () => {
             store = configureStore({
               reducer: {
                 project: mockProjectSliceWithCLI.reducer,
+                app: mockAppSlice.reducer,
               }, preloadedState
             }),
             ...renderOptions

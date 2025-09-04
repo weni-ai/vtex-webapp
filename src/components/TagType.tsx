@@ -1,4 +1,4 @@
-import { Tag } from "@vtex/shoreline";
+import { Tag } from "./adapters/Tag";
 import { useTranslation } from "react-i18next";
 export interface TagTypeProps {
   type: 'active' | 'passive';

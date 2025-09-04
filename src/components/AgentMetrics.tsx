@@ -7,6 +7,8 @@ import { DashboardItem } from "./DashboardItem";
 import { useTranslation } from "react-i18next";
 import { createSelector } from "@reduxjs/toolkit";
 import { getPeriodDates } from "../utils";
+import { Select } from "./adapters/Select";
+import { selectDesignSystem } from "../store/appSlice";
 
 function Menu({ dataTestid, value, setValue, options, trigger }: { dataTestid?: string; value: string; setValue: (value: string) => void; options: { label: string; value: string }[]; trigger: (label: string) => React.ReactNode }) {
   const { t } = useTranslation();
@@ -61,6 +63,50 @@ function Menu({ dataTestid, value, setValue, options, trigger }: { dataTestid?: 
         </Flex>
       </MenuPopover>
     </MenuProvider>
+  );
+}
+
+function InsideSelect(props: {
+  dataTestid?: string;
+  value: string;
+  setValue: (value: string) => void;
+  options: { label: string; value: string }[];
+  label: string;
+}) {
+  const designSystem = useSelector(selectDesignSystem);
+
+  if (designSystem === 'shoreline') {
+    return (
+      <Menu
+        dataTestid={props.dataTestid}
+        value={props.value}
+        setValue={props.setValue}
+        options={props.options}
+        trigger={
+          (label) =>
+            <Button variant="secondary">
+              {props.label + ': ' + label}
+              <IconCaretDown />
+            </Button>
+        }
+      />
+    );
+  }
+
+  return (
+    <Flex direction="row" align="center">
+      <Text variant="body">
+        {props.label}
+      </Text>
+
+      <Select
+        data-testid={props.dataTestid}
+        value={props.value}
+        setValue={props.setValue}
+        options={props.options}
+        size="small"
+      />
+    </Flex>
   );
 }
 
@@ -321,23 +367,17 @@ export function AgentMetrics() {
 
         <Flex>
           {currentTemplateUuid && (
-            <Menu
+            <InsideSelect
               dataTestid="template-selection-menu"
               value={currentTemplateUuid}
               setValue={setCurrentTemplateUuid}
               options={templates.map((template) => ({ label: template.name, value: template.uuid }))}
-              trigger={
-                (label) =>
-                  <Button variant="secondary">
-                    {t('metrics.fields.template.label') + ': ' + label}
-                    <IconCaretDown />
-                  </Button>
-              }
+              label={t('metrics.fields.template.label')}
             />
           )}
 
           {hasMetrics && (
-            <Menu
+            <InsideSelect
               dataTestid="period-selection-menu"
               value={currentPeriod}
               setValue={(value) => setCurrentPeriod(value as typeof currentPeriod)}
@@ -347,13 +387,7 @@ export function AgentMetrics() {
                 { label: t('metrics.fields.period.options.last_7_days'), value: 'last 7 days' },
                 { label: t('metrics.fields.period.options.last_28_days'), value: 'last 28 days' },
               ]}
-              trigger={
-                (label) =>
-                  <Button variant="secondary">
-                    {t('metrics.fields.period.label') + ': ' + label}
-                    <IconCaretDown />
-                  </Button>
-              }
+              label={t('metrics.fields.period.label')}
             />
           )}
         </Flex>
