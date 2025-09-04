@@ -7,9 +7,10 @@ import { AccountData, UserData } from "../interfaces/Store";
 import getEnv from "../utils/env";
 import { proxy } from "../api/proxy";
 import { useCache } from "../utils";
+import { moduleStorage } from "../utils/storage";
 
 export function getUserFromLocalStorage() {
-  const user = localStorage.getItem('userData');
+  const user = moduleStorage.getItem('userData');
   return user ? JSON.parse(user) : null;
 }
 
