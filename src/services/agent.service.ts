@@ -53,13 +53,9 @@ export async function setAgentBuilder(
 }
 
 export async function updateAgentsList() {
-  const embeddedWithin = store.getState().app.embeddedWithin;
-
-  const skipIntegratedAgentsRequest = embeddedWithin === 'Weni Platform';
-  
   const [availableAgents, integratedAgents] = await Promise.all([
     agentsList(),
-    skipIntegratedAgentsRequest ? [] : integratedAgentsList()
+    integratedAgentsList(),
   ]);
 
   store.dispatch(setAgents([...availableAgents, ...integratedAgents]));
