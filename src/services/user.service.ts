@@ -4,9 +4,10 @@ import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateAgentsList } from "./agent.service";
 import { userAdapters } from "../api/users/adapters";
 import { AccountData, UserData } from "../interfaces/Store";
+import { moduleStorage } from "../utils/storage";
 
 export function getUserFromLocalStorage() {
-  const user = localStorage.getItem('userData');
+  const user = moduleStorage.getItem('userData');
   return user ? JSON.parse(user) : null;
 }
 
