@@ -83,20 +83,17 @@ export async function integratedAgentsList() {
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
 
-  const queryParams = new URLSearchParams({
-    projectUUID: projectUuid,
-    user_email: userEmail || '',
-  });
-
-  const url = `/_v/get-integrated-features?${queryParams.toString()}`;
-
-  const response = await VTEXFetch<IntegratedAgentsListResponse>(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Project-Uuid': projectUuid,
+  const response = await proxy<IntegratedAgentsListResponse>(
+    'GET',
+    `${getEnv('VITE_APP_COMMERCE_URL')}/v2/app_integrated_feature/${projectUuid}/`,
+    {
+      headers: { 'Project-Uuid': projectUuid, },
+      params: {
+        projectUUID: projectUuid,
+        user_email: userEmail || '',
+      },
     },
-  });
+  );
 
   return adapterIntegratedAgentsList(response);
 }
