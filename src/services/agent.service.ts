@@ -16,7 +16,7 @@ export async function checkAgentIntegration(project_uuid: string) {
   }
 
   const cacheKey: [string, string] = ['GET', `${getEnv('VITE_APP_NEXUS_URL')}/api/commerce/check-exists-agent-builder`];
-  const cacheKeyString = `gallery_cache_${project_uuid}_${cacheKey.join('_')}`;
+  const cacheKeyString = `cache_${project_uuid}_${cacheKey.join('_')}`;
 
   try {
     const { response, saveCache } = await useCache({
