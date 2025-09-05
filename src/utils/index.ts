@@ -48,7 +48,7 @@ export async function useCache({ cacheKey, getResponse }: { cacheKey: string, ge
   const cachedResponse = moduleStorage.getItem(cacheKey);
 
   if (cachedResponse) {
-    const { expiresAt, response } = JSON.parse(cachedResponse);
+    const { expiresAt, response } = cachedResponse;
 
     if (expiresAt > Date.now()) {
       return { response, saveCache: () => { } };
