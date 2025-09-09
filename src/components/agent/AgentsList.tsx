@@ -4,6 +4,7 @@ import { RootState } from "../../interfaces/Store";
 import { useSelector } from "react-redux";
 import { AgentBox, AgentBoxContainer, AgentBoxSkeleton } from "../AgentBox";
 import { useTranslation } from "react-i18next";
+import { selectEmbeddedWithin } from "../../store/appSlice";
 
 function DropdownMenu({ label, noneSelected, value, setValue, options, testId }: {
   label: string,
@@ -108,8 +109,16 @@ const hasTheFirstLoadOfTheAgentsHappenedSelector = (state: RootState) => state.p
 
 export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
   const { t } = useTranslation();
+  const embeddedWithin = useSelector(selectEmbeddedWithin);
 
-  const unassignedAgents = useSelector(agentsSelector).filter((agent) => !agent.isAssigned);
+  const unassignedAgents = useSelector(agentsSelector).filter((agent) => {
+    if (embeddedWithin === 'Weni Platform') {
+      return agent.notificationType === 'active' && !agent.isAssigned;
+    }
+
+    return !agent.isAssigned;
+  });
+
   const hasTheFirstLoadOfTheAgentsHappened = useSelector(hasTheFirstLoadOfTheAgentsHappenedSelector);
   const [categories, setCategories] = useState<('active' | 'passive')[]>([]);
   const [agents, setAgents] = useState<('official' | 'custom')[]>([]);
@@ -148,6 +157,16 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
     });
   }, [unassignedAgents, categories]);
 
+  const categoriesValues = useMemo(() => {
+    const uniqueValues = new Set<string>();
+
+    unassignedAgents.forEach((agent) => {
+      uniqueValues.add(agent.notificationType);
+    });
+
+    return Array.from(uniqueValues);
+  }, [unassignedAgents]);
+
   const isOfficialValues = useMemo(() => {
     const uniqueValues = new Set<boolean>();
 
@@ -161,23 +180,25 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
   return (
     <Flex direction="column">
       <Flex align="center">
-        <DropdownMenu
-          label={t('agents.modals.gallery.filters.categories.title')}
-          noneSelected={t('agents.modals.gallery.filters.categories.none_selected')}
-          value={categories}
-          setValue={(value) => setCategories(value as ('active' | 'passive')[])}
-          options={[
-            {
-              value: 'active',
-              label: t('agents.categories.active.title')
-            },
-            {
-              value: 'passive',
-              label: t('agents.categories.passive.title')
-            }
-          ]}
-          testId="categories"
-        />
+        {categoriesValues.length > 1 && (
+          <DropdownMenu
+            label={t('agents.modals.gallery.filters.categories.title')}
+            noneSelected={t('agents.modals.gallery.filters.categories.none_selected')}
+            value={categories}
+            setValue={(value) => setCategories(value as ('active' | 'passive')[])}
+            options={[
+              {
+                value: 'active',
+                label: t('agents.categories.active.title')
+              },
+              {
+                value: 'passive',
+                label: t('agents.categories.passive.title')
+              }
+            ]}
+            testId="categories"
+          />
+        )}
 
         {isOfficialValues.length > 1 && (
           <DropdownMenu
