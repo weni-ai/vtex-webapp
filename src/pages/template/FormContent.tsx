@@ -1,10 +1,11 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, Textarea, useRadioState, VisuallyHidden } from "@vtex/shoreline";
+import { Alert, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, Textarea, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
 import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 import { useTranslation } from "react-i18next";
 import { fileToBase64 } from "../../utils";
+import { Radio } from "../../components/adapters/Radio";
 
 export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
@@ -27,16 +28,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [headerType, setHeaderType] = useState<'text' | 'media'>('text');
-  const headerTypeState = useRadioState({
-    value: headerType,
-    setValue: setHeaderType as any,
-  });
-
   const [buttonType, setButtonType] = useState<'dynamic' | 'static'>('static');
-  const buttonTypeState = useRadioState({
-    value: buttonType,
-    setValue: setButtonType as any,
-  });
 
   const contentTextRef = useRef<HTMLTextAreaElement>(null);
   const contentTextCloneRef = useRef<HTMLDivElement>(null);
@@ -217,12 +209,27 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       isVisible: false,
       component: (
         <>
-          <Bleed top="$space-7">
-            <RadioGroup label="" horizontal state={headerTypeState}>
-              <Radio value="text" disabled={status === 'needs-editing'} data-testid="add-element-header-text-button">{t('template.form.fields.content.header.radio.text.label')}</Radio>
-              <Radio value="media" disabled={status === 'needs-editing'} data-testid="add-element-header-media-button">{t('template.form.fields.content.header.radio.media.label')}</Radio>
-            </RadioGroup>
-          </Bleed>
+          <Flex gap="$space-5">
+            <Radio
+              value="text"
+              disabled={status === 'needs-editing'}
+              data-testid="add-element-header-text-button"
+              checked={headerType === 'text'}
+              onChange={( ) => setHeaderType('text')}
+            >
+              {t('template.form.fields.content.header.radio.text.label')}
+            </Radio>
+
+            <Radio
+              value="media"
+              disabled={status === 'needs-editing'}
+              data-testid="add-element-header-media-button"
+              checked={headerType === 'media'}
+              onChange={() => setHeaderType('media')}
+            >
+              {t('template.form.fields.content.header.radio.media.label')}
+            </Radio>
+          </Flex>
 
           {headerType === 'text' && (
             <Field>
@@ -305,12 +312,27 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       isVisible: false,
       component: (
         <>
-          {false && (<Bleed top="$space-7">
-            <RadioGroup label="" horizontal state={buttonTypeState}>
-              <Radio value="dynamic" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.dynamic.label')}</Radio>
-              <Radio value="static" disabled={status !== 'needs-editing' && !canChangeButton}>{t('template.form.fields.content.button.radio.static.label')}</Radio>
-            </RadioGroup>
-          </Bleed>)}
+          {true && (
+            <Flex gap="$space-5">
+              <Radio
+                value="dynamic"
+                disabled={status !== 'needs-editing' && !canChangeButton}
+                checked={buttonType === 'dynamic'}
+                onChange={( ) => setButtonType('dynamic')}
+              >
+                {t('template.form.fields.content.button.radio.dynamic.label')}
+              </Radio>
+
+              <Radio
+                value="static"
+                disabled={status !== 'needs-editing' && !canChangeButton}
+                checked={buttonType === 'static'}
+                onChange={() => setButtonType('static')}
+              >
+                {t('template.form.fields.content.button.radio.static.label')}
+              </Radio>
+            </Flex>
+          )}
 
           <Field>
             <Label>{t('template.form.fields.content.button.text.label')}</Label>
