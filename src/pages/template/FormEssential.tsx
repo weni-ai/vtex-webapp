@@ -1,6 +1,7 @@
-import { ContextualHelp, Field, FieldDescription, FieldError, Flex, Input, Label } from "@vtex/shoreline";
+import { Field, FieldDescription, FieldError, Flex, Input, Label } from "@vtex/shoreline";
 import { SectionHeader } from "./Template";
 import { useTranslation } from "react-i18next";
+import { ContextualHelp } from "../../components/adapters/ContextualHelp";
 
 export function FormEssential({
   name,
