@@ -11,7 +11,12 @@ import { useSelector } from "react-redux";
 import { selectDesignSystem } from "../../store/appSlice";
 
 const UnnnicModal = applyPureVueInReact(unnnic.unnnicModalDialog) as React.ComponentType<{
-  open: boolean,
+  children: React.ReactNode,
+  title: React.ReactNode,
+  showCloseIcon: boolean,
+  'onUpdate:modelValue': (value: boolean) => void,
+  modelValue: boolean,
+  size: 'lg',
   onClose: () => void,
 }>;
 
@@ -56,7 +61,7 @@ export function Modal(props: {
   return <UnnnicModal
     modelValue={props.open}
     onClose={props.onClose}
-    size={sizeMap[props.size as keyof typeof sizeMap]}
+    size={sizeMap[props.size as keyof typeof sizeMap] || 'lg'}
     title={props.header}
     showCloseIcon={true}
     onUpdate:modelValue={onUpdateModelValue}
