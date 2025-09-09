@@ -53,8 +53,8 @@ export function ContextualHelpExamples() {
   return (
     <section>
       <h1>ContextualHelp - shoreline</h1>
-      <ContextualHelp placement="bottom-start" system="shoreline">ContextualHelp</ContextualHelp>
-      <ContextualHelp placement="bottom-start" system="unnnic">ContextualHelp</ContextualHelp>
+      <ContextualHelp placement="bottom-start" system="shoreline" label="ContextualHelp">ContextualHelp</ContextualHelp>
+      <ContextualHelp placement="bottom-start" system="unnnic" label="ContextualHelp">ContextualHelp</ContextualHelp>
     </section>
   );
 }
