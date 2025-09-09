@@ -116,7 +116,13 @@ describe('PreferencesAbandonedCartActive', () => {
 
   describe('checkbox interactions', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockAbandonedCartAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockAbandonedCartAgent];
+      });
     });
 
     it('should toggle restriction when checkbox is clicked', () => {
@@ -163,7 +169,13 @@ describe('PreferencesAbandonedCartActive', () => {
 
   describe('time input handling', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockAbandonedCartAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockAbandonedCartAgent];
+      });
     });
 
     it('should display saturdays section when restriction is enabled', () => {
@@ -236,7 +248,13 @@ describe('PreferencesAbandonedCartActive', () => {
 
   describe('form data updates', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockAbandonedCartAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockAbandonedCartAgent];
+      });
     });
 
     it('should call setFormData when restriction is toggled', async () => {
@@ -316,7 +334,13 @@ describe('PreferencesAbandonedCartActive', () => {
     };
 
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockActiveAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockActiveAgent];
+      });
       mocks.convertStringToTimeValue.mockReturnValue({ hour: 9, minute: 0 });
     });
 
@@ -363,7 +387,13 @@ describe('PreferencesAbandonedCartActive', () => {
     });
 
     it('should initialize with restriction disabled when agent not found', () => {
-      mocks.useSelector.mockReturnValue([]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [];
+      });
 
       render(
         <PreferencesAbandonedCartActive />
@@ -374,7 +404,13 @@ describe('PreferencesAbandonedCartActive', () => {
     });
 
     it('should not show time inputs when agent not found and restriction disabled', () => {
-      mocks.useSelector.mockReturnValue([]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [];
+      });
 
       render(
         <PreferencesAbandonedCartActive />
@@ -403,7 +439,13 @@ describe('PreferencesAbandonedCartActive', () => {
 
   describe('layout and styling', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockAbandonedCartAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockAbandonedCartAgent];
+      });
     });
 
     it('should render with proper grid layout for time inputs', () => {
@@ -444,7 +486,13 @@ describe('PreferencesAbandonedCartActive', () => {
 
   describe('accessibility', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockAbandonedCartAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockAbandonedCartAgent];
+      });
     });
 
     it('should have proper aria-label for checkbox', () => {
@@ -478,7 +526,13 @@ describe('PreferencesAbandonedCartActive', () => {
         restrictMessageTime: undefined,
       };
 
-      mocks.useSelector.mockReturnValue([agentWithoutRestriction]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [agentWithoutRestriction];
+      });
 
       render(
         <PreferencesAbandonedCartActive />
@@ -506,7 +560,13 @@ describe('PreferencesAbandonedCartActive', () => {
         },
       };
 
-      mocks.useSelector.mockReturnValue([agentWithPartialData]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [agentWithPartialData];
+      });
 
       render(
         <PreferencesAbandonedCartActive />
@@ -525,7 +585,13 @@ describe('PreferencesAbandonedCartActive', () => {
         },
       };
 
-      mocks.useSelector.mockReturnValue([agentWithEmptyPeriods]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [agentWithEmptyPeriods];
+      });
 
       render(
         <PreferencesAbandonedCartActive />
