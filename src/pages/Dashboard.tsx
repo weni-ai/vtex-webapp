@@ -14,8 +14,10 @@ import { agents, hasTheFirstLoadOfTheAgentsHappened, selectProject, setAgents } 
 import store from '../store/provider.store';
 import { selectUser } from "../store/userSlice";
 import getEnv from '../utils/env';
+import { selectEmbeddedWithin } from '../store/appSlice';
 
 export function Dashboard() {
+  const embeddedWithin = useSelector(selectEmbeddedWithin);
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
   const agentsListOriginal = useSelector(agents)
   const project_uuid = useSelector(selectProject)
@@ -221,38 +223,40 @@ export function Dashboard() {
 
       <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
         <Flex direction="column" style={{ width: '100%' }} gap="$space-8">
-          <Alert
-            variant="informational"
-            style={{
-              width: '100%',
-            }}
-          >
-            <Flex
-              align="center"
-              justify="space-between"
+          {embeddedWithin === 'VTEX App' && (
+            <Alert
+              variant="informational"
               style={{
                 width: '100%',
               }}
             >
-              <Text variant="emphasis" color="$fg-base">
-                {t('improve.description')}
-              </Text>
+              <Flex
+                align="center"
+                justify="space-between"
+                style={{
+                  width: '100%',
+                }}
+              >
+                <Text variant="emphasis" color="$fg-base">
+                  {t('improve.description')}
+                </Text>
 
-              <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-                <Text variant='action'> {t('improve.button')}</Text>
-                <IconArrowUpRight
-                  height="1rem"
-                  width="1rem"
-                  display="inline"
-                  style={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    marginLeft: 'var(--sl-space-05)'
-                  }}
-                />
-              </Button>
-            </Flex>
-          </Alert>
+                <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
+                  <Text variant='action'> {t('improve.button')}</Text>
+                  <IconArrowUpRight
+                    height="1rem"
+                    width="1rem"
+                    display="inline"
+                    style={{
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      marginLeft: 'var(--sl-space-05)'
+                    }}
+                  />
+                </Button>
+              </Flex>
+            </Alert>
+          )}
 
           <AgentMetrics />
 
