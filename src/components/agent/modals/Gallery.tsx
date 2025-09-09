@@ -1,5 +1,5 @@
-import { Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading } from "@vtex/shoreline";
 import { AgentsList } from "../AgentsList";
+import { Modal } from "../../adapters/Modal";
 
 export function AgentsGalleryModal({ open, onClose, onAssign }: { open: boolean, onClose: () => void, onAssign: (uuid: string) => void }) {
   function handleAssign(uuid: string) {
@@ -8,15 +8,14 @@ export function AgentsGalleryModal({ open, onClose, onAssign }: { open: boolean,
   }
 
   return (
-    <Modal open={open} onClose={onClose} size="large">
-      <ModalHeader>
-        <ModalHeading>{t('agents.modals.gallery.title')}</ModalHeading>
-        <ModalDismiss />
-      </ModalHeader>
-
-      <ModalContent>
-        <AgentsList onAssign={handleAssign} />
-      </ModalContent>
+    <Modal
+      system="unnnic"
+      open={open}
+      onClose={onClose}
+      size="large"
+      header={t('agents.modals.gallery.title')}
+    >
+      <AgentsList onAssign={handleAssign} />
     </Modal>
   )
 }
