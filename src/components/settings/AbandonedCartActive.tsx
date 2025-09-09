@@ -1,22 +1,23 @@
 import { TimeValue } from '@react-aria/datepicker';
-import { Checkbox, Divider, DrawerContent, Flex, Grid, GridCell, Text, TimeInput } from "@vtex/shoreline";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { Divider, DrawerContent, Flex, Grid, GridCell, Text, TimeInput } from "@vtex/shoreline";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { agents } from "../../store/projectSlice";
 import { convertStringToTimeValue, convertTimeValueToString } from "../../utils/timeConversor";
 import { SettingsContext } from "./SettingsContainer/SettingsContext";
 import { useTranslation } from "react-i18next";
+import { Checkbox } from "../adapters/Checkbox";
 
 export function PreferencesAbandonedCartActive() {
   const { t } = useTranslation();
-  
+
   const context = useContext(SettingsContext);
   const agentsList = useSelector(agents);
   const abandonedCartAgent = agentsList.find(agent => agent.origin === 'commerce' && agent.code === 'abandoned_cart');
   const currentMessageTimeRestrictions = abandonedCartAgent?.restrictMessageTime;
   const [restriction, setRestriction] = useState<boolean>(currentMessageTimeRestrictions?.isActive ?? false);
-  const setRestrictionValue = (event: ChangeEvent<HTMLInputElement>) => {
-    setRestriction(event.target.checked)
+  const setRestrictionValue = () => {
+    setRestriction(!restriction)
   }
 
   type TimeType = TimeValue | null;
