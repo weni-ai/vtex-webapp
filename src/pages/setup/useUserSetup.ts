@@ -87,6 +87,8 @@ export function useUserSetup() {
         const { has_project, project_uuid } = result.data.data;
 
         if (has_project) {
+          result.saveCache?.();
+
           store.dispatch(setProjectUuid(project_uuid));
           await updateAgentsList();
 
@@ -105,6 +107,8 @@ export function useUserSetup() {
           const { name = '', links = [], objective = '', occupation = '', has_agent = false } = agentIntegration.data.data;
 
           if (name) {
+            agentIntegration.saveCache?.();
+
             store.dispatch(
               setAgentBuilder({
                 name,
