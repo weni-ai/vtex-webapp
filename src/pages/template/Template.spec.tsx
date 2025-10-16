@@ -16,8 +16,12 @@ const mocks = vi.hoisted(() => ({
   navigate: vi.fn(),
   toastSuccess: vi.fn(),
   toastCritical: vi.fn(),
+  useSelector: vi.fn(),
 }));
 
+vi.mock('react-redux', () => ({
+  useSelector: mocks.useSelector,
+}));
 
 vi.mock('@vtex/shoreline', async () => {
   const actual = await vi.importActual('@vtex/shoreline');

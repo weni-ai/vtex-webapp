@@ -59,7 +59,13 @@ describe('PreferencesOrderStatusActive', () => {
 
   describe('basic rendering', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockOrderStatusAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockOrderStatusAgent];
+      });
     });
 
     it('should render component when order status agent exists', () => {
@@ -82,7 +88,13 @@ describe('PreferencesOrderStatusActive', () => {
 
   describe('checkbox interactions', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockOrderStatusAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockOrderStatusAgent];
+      });
     });
 
     it('should toggle test contact number when checkbox is clicked', () => {
@@ -127,7 +139,13 @@ describe('PreferencesOrderStatusActive', () => {
 
   describe('phone number input handling', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockOrderStatusAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockOrderStatusAgent];
+      });
     });
 
     it('should handle phone number input change', () => {
@@ -189,7 +207,13 @@ describe('PreferencesOrderStatusActive', () => {
 
   describe('form data updates', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockOrderStatusAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockOrderStatusAgent];
+      });
     });
 
     it('should call setFormData when checkbox is toggled', () => {
@@ -260,7 +284,13 @@ describe('PreferencesOrderStatusActive', () => {
     };
 
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockAgentWithPhone]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockAgentWithPhone];
+      });
     });
 
     it('should show checkbox as checked when phone number exists', () => {
@@ -303,7 +333,13 @@ describe('PreferencesOrderStatusActive', () => {
     });
 
     it('should initialize with checkbox unchecked when agent not found', () => {
-      mocks.useSelector.mockReturnValue([]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [];
+      });
 
       render(
         <PreferencesOrderStatusActive />
@@ -326,7 +362,13 @@ describe('PreferencesOrderStatusActive', () => {
 
   describe('accessibility', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockOrderStatusAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockOrderStatusAgent];
+      });
     });
 
     it('should have proper aria-label for checkbox', () => {
@@ -375,7 +417,13 @@ describe('PreferencesOrderStatusActive', () => {
         },
       },
     ])('should handle agent with no restrictTestContact property', ({ agent }) => {
-      mocks.useSelector.mockReturnValue([agent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [agent];
+      });
 
       render(
         <PreferencesOrderStatusActive />
@@ -388,7 +436,13 @@ describe('PreferencesOrderStatusActive', () => {
 
   describe('phone number formatting edge cases', () => {
     beforeEach(() => {
-      mocks.useSelector.mockReturnValue([mockOrderStatusAgent]);
+      mocks.useSelector.mockImplementation((selector) => {
+        if (selector.name === 'selectDesignSystem') {
+          return 'shoreline';
+        }
+
+        return [mockOrderStatusAgent];
+      });
     });
 
     it('should handle incomplete Brazilian phone numbers', () => {

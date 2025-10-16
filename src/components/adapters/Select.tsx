@@ -2,8 +2,6 @@ import unnnic from "@weni/unnnic-system";
 import { applyPureVueInReact } from "veaury";
 import { useState } from "react";
 
-console.log(unnnic)
-
 const UnnnicSelect = applyPureVueInReact(unnnic.unnnicSelectSmart) as React.ComponentType<{
   'data-testid'?: string;
   modelValue: { value: string }[];
@@ -11,8 +9,6 @@ const UnnnicSelect = applyPureVueInReact(unnnic.unnnicSelectSmart) as React.Comp
   'onUpdate:modelValue': (value: { value: string }[]) => void;
   size?: string;
 }>;
-
-console.log(UnnnicSelect)
 
 export function Select(props: {
   system?: 'shoreline' | 'unnnic',
