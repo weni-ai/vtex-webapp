@@ -4,6 +4,10 @@ import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { FormContent } from './FormContent';
 
+const mocks = vi.hoisted(() => ({
+  useSelector: vi.fn(),
+}));
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -11,6 +15,10 @@ vi.mock('react-i18next', () => ({
       changeLanguage: () => new Promise(() => { }),
     },
   }),
+}));
+
+vi.mock('react-redux', () => ({
+  useSelector: mocks.useSelector,
 }));
 
 vi.mock('./FormContent', async () => {
@@ -58,6 +66,12 @@ describe('FormContent', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mocks.useSelector.mockImplementation((selector) => {
+      if (selector.name === 'selectDesignSystem') {
+        return 'shoreline';
+      }
+    });
   });
 
   describe('content textarea', () => {
