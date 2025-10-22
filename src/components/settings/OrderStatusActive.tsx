@@ -1,9 +1,10 @@
-import { Checkbox, DrawerContent, Field, FieldDescription, Input, Label } from "@vtex/shoreline";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { DrawerContent, Field, FieldDescription, Input, Label } from "@vtex/shoreline";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { agents } from "../../store/projectSlice";
 import { SettingsContext, SettingsFormData } from "./SettingsContainer/SettingsContext";
 import { useTranslation } from "react-i18next";
+import { Checkbox } from "../adapters/Checkbox";
 
 export function PreferencesOrderStatusActive() {
   const { t } = useTranslation();
@@ -102,7 +103,7 @@ export function PreferencesOrderStatusActive() {
       <Field style={{ display: 'flex', }}>
         <Checkbox
           checked={hasTestContactNumber}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setHasTestContactNumber(e.target.value as unknown as boolean)}
+          onChange={() => setHasTestContactNumber(!hasTestContactNumber)}
           aria-label={t('agents.categories.active.order_status.settings.is_test_contact_number.title')}
         >
           {t('agents.categories.active.order_status.settings.is_test_contact_number.title')}

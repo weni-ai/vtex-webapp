@@ -1,5 +1,6 @@
-import { Checkbox, Flex, Grid, Text } from "@vtex/shoreline";
+import { Flex, Grid, Text } from "@vtex/shoreline";
 import { SetStateAction } from "react";
+import { Checkbox } from "../../adapters/Checkbox";
 
 export function AssignSelectTemplate({ templates, selectedTemplatesUuids, setSelectedTemplatesUuids }: {
   templates: {
