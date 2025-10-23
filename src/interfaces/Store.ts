@@ -59,6 +59,11 @@ export interface ProjectState {
         }[];
         channelUuid: string;
         globalRule: string;
+        hasDeliveredOrderTemplates: boolean;
+        deliveredOrderTrackingConfig: {
+            isEnabled: boolean;
+            webhookUrl: string;
+        };
     }[];
 }
 

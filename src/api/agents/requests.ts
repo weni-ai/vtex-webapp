@@ -242,6 +242,11 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
     channel_uuid: string;
     webhook_url: string;
     global_rule_prompt: string;
+    has_delivered_order_templates: boolean;
+    delivered_order_tracking_config?: {
+      is_enabled: boolean;
+      webhook_url: string;
+    };
   }>(
     'GET',
     `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
@@ -262,6 +267,11 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       contactPercentage: response.contact_percentage,
       webhookUrl: response.webhook_url,
       globalRule: response.global_rule_prompt,
+      hasDeliveredOrderTemplates: response.has_delivered_order_templates,
+      deliveredOrderTrackingConfig: {
+        isEnabled: response.delivered_order_tracking_config?.is_enabled || false,
+        webhookUrl: response.delivered_order_tracking_config?.webhook_url || '',
+      },
     };
   } else {
     throw new Error('error retrieving agent');
@@ -775,6 +785,63 @@ class AssignedAgent {
       }
     );
   }
+
+  static enableDeliveredOrderTracking(data: {
+    projectUuid: string,
+    agentUuid: string,
+    appToken: string,
+    appKey: string,
+  }) {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    type error =
+      {
+        error?: {
+          error?: string;
+          detail?: string,
+        }
+      }
+
+    return proxy<{} & error>(
+      'POST',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/delivered-order-tracking/enable/`,
+      {
+        data: {
+          vtex_app_key: data.appKey,
+          vtex_app_token: data.appToken,
+        },
+        headers: { 'Project-Uuid': projectUuid, },
+        params: { user_email: userEmail || '', },
+      }
+    );
+  }
+
+  static disableDeliveredOrderTracking(data: {
+    projectUuid: string,
+    agentUuid: string,
+  }) {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    type error =
+      {
+        error?: {
+          error?: string;
+          detail?: string,
+        }
+      }
+
+    return proxy<{} & error>(
+      'POST',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/delivered-order-tracking/disable/`,
+      {
+        data: {},
+        headers: { 'Project-Uuid': projectUuid, },
+        params: { user_email: userEmail || '', },
+      }
+    );
+  }
 }
 
 
@@ -806,5 +873,55 @@ export async function updateAgentGlobalRuleRequest(data: {
     }
 
     throw new Error(errorText || t('agents.details.settings.actions.save.error'));
+  }
+}
+
+export async function enableDeliveredOrderTrackingRequest(data: {
+  agentUuid: string,
+  appToken: string,
+  appKey: string,
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await AssignedAgent.enableDeliveredOrderTracking({
+    projectUuid,
+    agentUuid: data.agentUuid,
+    appToken: data.appToken,
+    appKey: data.appKey,
+  });
+
+  if ('uuid' in Object(response)) {
+    return {};
+  } else {
+    let errorText = '';
+
+    if ('error' in Object(response)) {
+      errorText = response.error?.error || response.error?.detail || '';
+    }
+
+    throw new Error(errorText || t('agents.details.delivered_order_tracking.actions.enable.error'));
+  }
+}
+
+export async function disableDeliveredOrderTrackingRequest(data: {
+  agentUuid: string,
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await AssignedAgent.disableDeliveredOrderTracking({
+    projectUuid,
+    agentUuid: data.agentUuid,
+  });
+
+  if ('uuid' in Object(response)) {
+    return {};
+  } else {
+    let errorText = '';
+
+    if ('error' in Object(response)) {
+      errorText = response.error?.error || response.error?.detail || '';
+    }
+
+    throw new Error(errorText || t('agents.details.delivered_order_tracking.actions.disable.error'));
   }
 }
