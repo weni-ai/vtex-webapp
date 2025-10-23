@@ -136,6 +136,35 @@
           "copy": "Copy",
           "save": "Save changes"
         }
+      },
+      "delivered_order_tracking": {
+        "title": "Delivered order tracking",
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "actions": {
+          "enable": {
+            "success": "Delivered order tracking enabled successfully",
+            "error": "Unable to enable delivered order tracking, please try again"
+          },
+          "disable": {
+            "success": "Delivered order tracking disabled successfully",
+            "error": "Unable to disable delivered order tracking, please try again"
+          }
+        },
+        "fields": {
+          "app_key": {
+            "label": "App Key"
+          },
+          "app_token": {
+            "label": "App Token"
+          }
+        },
+        "buttons": {
+          "enable": "Enable",
+          "disable": "Disable"
+        }
       }
     },
     "categories": {
