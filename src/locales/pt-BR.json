@@ -136,6 +136,35 @@
                     "copy": "Copiar",
                     "save": "Salvar alterações"
                 }
+            },
+            "delivered_order_tracking": {
+                "title": "Acompanhamento de pedidos entregues",
+                "status": {
+                    "enabled": "Ativado",
+                    "disabled": "Desativado"
+                },
+                "actions": {
+                    "enable": {
+                    "success": "Acompanhamento de pedidos entregues ativado com sucesso",
+                    "error": "Erro ao ativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
+                    },
+                    "disable": {
+                    "success": "Acompanhamento de pedidos entregues desativado com sucesso",
+                    "error": "Erro ao desativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
+                    }
+                },
+                "fields": {
+                    "app_key": {
+                    "label": "App Key"
+                    },
+                    "app_token": {
+                    "label": "App Token"
+                    }
+                },
+                "buttons": {
+                    "enable": "Ativar",
+                    "disable": "Desativar"
+                }
             }
         },
         "categories": {
