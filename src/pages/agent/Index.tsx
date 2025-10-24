@@ -228,12 +228,16 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 function DeliveredOrderTab({
   isLoading,
   assignedAgentUuid,
+  isEnabledFromFather,
+  appKeyFromFather,
 }: {
   isLoading: boolean;
   assignedAgentUuid: string;
+  isEnabledFromFather: boolean;
+  appKeyFromFather: string;
 }) {
   const {
-    isEnabled,
+    isEnabled, setIsEnabled,
     appKey, setAppKey,
     appToken, setAppToken,
     enable, isEnabling,
@@ -241,6 +245,18 @@ function DeliveredOrderTab({
   } = useAgentTemplateDeliveredOrderContext();
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (isEnabledFromFather) {
+      setIsEnabled(isEnabledFromFather);
+    }
+  }, [isEnabledFromFather]);
+
+  useEffect(() => {
+    if (appKeyFromFather) {
+      setAppKey(appKeyFromFather);
+    }
+  }, [appKeyFromFather]);
 
   return (
     <Flex direction="column" gap="$space-5">
@@ -316,6 +332,7 @@ export function AgentIndex() {
 
   const [hasDeliveredOrderTemplate, setHasDeliveredOrderTemplate] = useState(false);
   const [isDeliveredOrderTrackingEnabled, setIsDeliveredOrderTrackingEnabled] = useState(false);
+  const [deliveredOrderAppKey, setDeliveredOrderAppKey] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
@@ -370,6 +387,7 @@ export function AgentIndex() {
 
       setHasDeliveredOrderTemplate(response.hasDeliveredOrderTemplates);
       setIsDeliveredOrderTrackingEnabled(response.deliveredOrderTrackingConfig.isEnabled);
+      setDeliveredOrderAppKey(response.deliveredOrderTrackingConfig.appKey);
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
       setAgentGlobalRule(response.globalRule || '');
@@ -494,6 +512,8 @@ export function AgentIndex() {
               <DeliveredOrderTab
                 isLoading={isLoading}
                 assignedAgentUuid={assignedAgentUuid as string}
+                isEnabledFromFather={isDeliveredOrderTrackingEnabled}
+                appKeyFromFather={deliveredOrderAppKey}
               />
             </TabPanel>
           </TabProvider>

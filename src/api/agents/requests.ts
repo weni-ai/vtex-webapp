@@ -246,6 +246,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
     delivered_order_tracking_config?: {
       is_enabled: boolean;
       webhook_url: string;
+      vtex_app_key: string;
     };
   }>(
     'GET',
@@ -271,6 +272,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       deliveredOrderTrackingConfig: {
         isEnabled: response.delivered_order_tracking_config?.is_enabled || false,
         webhookUrl: response.delivered_order_tracking_config?.webhook_url || '',
+        appKey: response.delivered_order_tracking_config?.vtex_app_key || '',
       },
     };
   } else {
@@ -803,7 +805,7 @@ class AssignedAgent {
         }
       }
 
-    return proxy<{} & error>(
+    return proxy<{ is_enabled: boolean } & error>(
       'POST',
       `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/delivered-order-tracking/enable/`,
       {
@@ -832,7 +834,7 @@ class AssignedAgent {
         }
       }
 
-    return proxy<{} & error>(
+    return proxy<{ is_enabled: boolean } & error>(
       'POST',
       `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/delivered-order-tracking/disable/`,
       {
@@ -890,8 +892,10 @@ export async function enableDeliveredOrderTrackingRequest(data: {
     appKey: data.appKey,
   });
 
-  if ('uuid' in Object(response)) {
-    return {};
+  if ('is_enabled' in Object(response)) {
+    return {
+      isEnabled: response.is_enabled,
+    };
   } else {
     let errorText = '';
 
@@ -913,8 +917,10 @@ export async function disableDeliveredOrderTrackingRequest(data: {
     agentUuid: data.agentUuid,
   });
 
-  if ('uuid' in Object(response)) {
-    return {};
+  if ('is_enabled' in Object(response)) {
+    return {
+      isEnabled: response.is_enabled,
+    };
   } else {
     let errorText = '';
 
