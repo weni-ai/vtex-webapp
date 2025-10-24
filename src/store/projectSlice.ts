@@ -37,6 +37,7 @@ interface AssignedAgent {
   hasDeliveredOrderTemplates: boolean;
   deliveredOrderTrackingConfig: {
     isEnabled: boolean;
+    appKey: string;
     webhookUrl: string;
   };
   templates: {
