@@ -62,6 +62,7 @@ export interface ProjectState {
         hasDeliveredOrderTemplates: boolean;
         deliveredOrderTrackingConfig: {
             isEnabled: boolean;
+            appKey: string;
             webhookUrl: string;
         };
     }[];

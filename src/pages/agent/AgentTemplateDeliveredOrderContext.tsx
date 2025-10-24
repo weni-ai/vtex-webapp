@@ -12,6 +12,7 @@ export const AgentTemplateDeliveredOrderContext = createContext<{
   isEnabling: boolean;
   disable: (agentUuid: string) => Promise<void>;
   isDisabling: boolean;
+  setIsEnabled: (isEnabled: boolean) => void;
 }>({
   appKey: '',
   setAppKey: () => {},
@@ -22,6 +23,7 @@ export const AgentTemplateDeliveredOrderContext = createContext<{
   isEnabling: false,
   disable: () => Promise.resolve(),
   isDisabling: false,
+  setIsEnabled: () => {},
 });
 
 export function AgentTemplateDeliveredOrderProvider({ children, ...props }: PropsWithChildren<{ isEnabled: boolean, setIsEnabled: (isEnabled: boolean) => void }>) {
@@ -46,7 +48,7 @@ export function AgentTemplateDeliveredOrderProvider({ children, ...props }: Prop
         appKey,
       });
 
-      toast.success(t('agents.details.settings.actions.enable_delivered_order_tracking.success'));
+      toast.success(t('agents.details.delivered_order_tracking.actions.enable.success'));
       handleSetIsEnabled(true);
     } catch (error) {
       if (error instanceof Error) {
@@ -65,7 +67,7 @@ export function AgentTemplateDeliveredOrderProvider({ children, ...props }: Prop
         agentUuid: agentUuid,
       });
 
-      toast.success(t('agents.details.settings.actions.disable_delivered_order_tracking.success'));
+      toast.success(t('agents.details.delivered_order_tracking.actions.disable.success'));
       handleSetIsEnabled(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -82,7 +84,7 @@ export function AgentTemplateDeliveredOrderProvider({ children, ...props }: Prop
       appToken, setAppToken,
       enable, isEnabling,
       disable, isDisabling,
-      isEnabled,
+      isEnabled, setIsEnabled,
     }}>
       {children}
     </AgentTemplateDeliveredOrderContext.Provider>
