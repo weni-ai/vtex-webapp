@@ -1,5 +1,7 @@
 function log(...messages) {
-  console.log(`[Gist Pixel Script - ${new Date().toISOString()}] ${messages.join(' ')}`);
+  if (localStorage.getItem('showWeniPixelLogs') === 'true') {
+    console.log(`[Gist Pixel Script - ${new Date().toISOString()}] ${messages.join(' ')}`);
+  }
 }
 
 JSON.safeStringify = (obj, indent = 2) => {
