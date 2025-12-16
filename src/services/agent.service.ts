@@ -1,6 +1,6 @@
 import { proxy } from "../api/proxy";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableFeatureRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -464,5 +464,21 @@ export async function updateAgentGlobalRule(data: {
     contactPercentage: response.contactPercentage,
   });
 
+  return response;
+}
+
+export async function enableDeliveredOrderTracking(data: {
+  agentUuid: string;
+  appToken: string;
+  appKey: string;
+}) {
+  const response = await enableDeliveredOrderTrackingRequest(data);
+  return response;
+}
+
+export async function disableDeliveredOrderTracking(data: {
+  agentUuid: string;
+}) {
+  const response = await disableDeliveredOrderTrackingRequest(data);
   return response;
 }
