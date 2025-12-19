@@ -12,6 +12,7 @@ import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import { ProcessModal } from "./modals/Process";
 import './Template.style.css';
+import { cleanURL } from "../../utils";
 
 function normalizeItems(language: string, items: string[]) {
   return new Intl.ListFormat(language, { style: 'long', type: 'conjunction' }).format(items);
@@ -51,11 +52,15 @@ function TemplateAlert({ variant, message, dataTestId }: { variant: "warning" | 
   )
 }
 
-export function Template() {
+export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: { templateUuid?: string, isSimplifiedView?: boolean }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { assignedAgentUuid, templateUuid } = useParams();
+  const { assignedAgentUuid, templateUuid: paramTemplateUuid } = useParams();
   const { i18n } = useTranslation();
+
+  const templateUuid = useMemo(() => propTemplateUuid || paramTemplateUuid, [propTemplateUuid, paramTemplateUuid]);
+
+  console.log('templateUuid', templateUuid);
 
   const [previousTemplateName, setPreviousTemplateName] = useState('');
   const [templateName, setTemplateName] = useState('');
@@ -130,6 +135,28 @@ export function Template() {
   }, [templateUuid]);
 
   const hasChanges = useMemo(() => {
+    let header = prefilledContent.header?.type === 'media' && content.header?.type === 'media' && prefilledContent.header?.previewSrc !== content.header?.previewSrc;
+
+    if (isSimplifiedView) {
+      header = !(prefilledContent.header?.type === 'media' && content.header?.type === 'media');
+    }
+
+    
+
+    console.log('result', [
+      hasVariablesChanged,
+      previousTemplateName !== templateName,
+      previousStartCondition !== startCondition,
+      prefilledContent.content !== content.content,
+      prefilledContent.header?.type !== content.header?.type,
+      prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
+      header,
+      prefilledContent.footer !== content.footer,
+      prefilledContent.button?.text !== content.button?.text,
+      cleanURL(prefilledContent.button?.url || '') !== cleanURL(content.button?.url || ''),
+      cleanURL(prefilledContent.button?.urlExample || '') !== cleanURL(content.button?.urlExample || ''),
+    ]);
+    
     return [
       hasVariablesChanged,
       previousTemplateName !== templateName,
@@ -137,11 +164,11 @@ export function Template() {
       prefilledContent.content !== content.content,
       prefilledContent.header?.type !== content.header?.type,
       prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
-      prefilledContent.header?.type === 'media' && content.header?.type === 'media' && prefilledContent.header?.previewSrc !== content.header?.previewSrc,
+      header,
       prefilledContent.footer !== content.footer,
       prefilledContent.button?.text !== content.button?.text,
-      prefilledContent.button?.url !== content.button?.url,
-      prefilledContent.button?.urlExample !== content.button?.urlExample,
+      cleanURL(prefilledContent.button?.url || '') !== cleanURL(content.button?.url || ''),
+      cleanURL(prefilledContent.button?.urlExample || '') !== cleanURL(content.button?.urlExample || ''),
     ].some(Boolean);
   }, [content, prefilledContent, previousStartCondition, startCondition, hasVariablesChanged, previousTemplateName, templateName]);
 
@@ -498,17 +525,19 @@ export function Template() {
       <PageHeader>
         <PageHeaderRow>
           <Flex align="center">
-            <Bleed top="$space-2" bottom="$space-2">
-              <IconButton
-                label={t('common.return')}
-                asChild
-                variant="tertiary"
-                size="large"
-                onClick={navigateToAgent}
-              >
-                <IconArrowLeft />
-              </IconButton>
-            </Bleed>
+            {!isSimplifiedView && (
+              <Bleed top="$space-2" bottom="$space-2">
+                <IconButton
+                  label={t('common.return')}
+                  asChild
+                  variant="tertiary"
+                  size="large"
+                  onClick={navigateToAgent}
+                >
+                  <IconArrowLeft />
+                </IconButton>
+              </Bleed>
+            )}
 
             {isEditing ? (
               <PageHeading>
@@ -524,11 +553,13 @@ export function Template() {
           </Flex>
 
           <Stack space="$space-3" horizontal>
-            <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="secondary" size="large" onClick={navigateToAgent}>
-                {t('template.form.create.buttons.cancel')}
-              </Button>
-            </Bleed>
+            {!isSimplifiedView && (
+              <Bleed top="$space-2" bottom="$space-2">
+                <Button variant="secondary" size="large" onClick={navigateToAgent}>
+                  {t('template.form.create.buttons.cancel')}
+                </Button>
+              </Bleed>
+            )}
 
             <Bleed top="$space-2" bottom="$space-2">
               <Button
@@ -563,19 +594,23 @@ export function Template() {
         )}
 
         <Flex direction="column" gap="$space-5">
-          <FormEssential
-            name={templateName}
-            setName={setTemplateName}
-            nameError={templateNameError}
-            isNameEditable={!isEditing}
-            startCondition={startCondition}
-            setStartCondition={setStartCondition}
-            startConditionError={startConditionError}
-            isStartConditionEditable={!isEditing || templateIsCustom}
-            dataTestId="form-essential"
-          />
+          {!isSimplifiedView && (
+            <>
+              <FormEssential
+                name={templateName}
+                setName={setTemplateName}
+                nameError={templateNameError}
+                isNameEditable={!isEditing}
+                startCondition={startCondition}
+                setStartCondition={setStartCondition}
+                startConditionError={startConditionError}
+                isStartConditionEditable={!isEditing || templateIsCustom}
+                dataTestId="form-essential"
+              />
 
-          <Divider />
+              <Divider />
+            </>
+          )}
 
           <Grid columns="1fr 1fr" gap="$space-5">
             <FormContent
@@ -586,6 +621,7 @@ export function Template() {
               isHeaderEditable={true}
               isFooterEditable={true}
               isButtonEditable={true}
+              isSimplifiedView={isSimplifiedView}
               canChangeButton={true}
               totalVariables={variables.length}
               addEmptyVariables={(count: number) => {
@@ -618,14 +654,18 @@ export function Template() {
           </Grid>
 
           {(isCreating || templateIsCustom) && (<>
-            <Divider />
+            {!isSimplifiedView && (
+              <>
+                <Divider />
 
-            <FormVariables
-              variables={variables}
-              setVariables={setVariables}
-              openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
-              variablesError={variablesError}
-            />
+                <FormVariables
+                  variables={variables}
+                  setVariables={setVariables}
+                  openAddingVariableModal={() => setIsAddingVariableModalOpen(true)}
+                  variablesError={variablesError}
+                />
+              </>
+            )}
 
             <AddingVariableModal
               open={isAddingVariableModalOpen}
