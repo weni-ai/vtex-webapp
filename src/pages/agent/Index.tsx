@@ -1,4 +1,4 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast } from '@vtex/shoreline';
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast, useTabStore } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +11,10 @@ import { agentCLI, updateAgentGlobalRule } from '../../services/agent.service';
 import store from '../../store/provider.store';
 import { ProcessModal } from '../template/modals/Process';
 import { useTranslation } from 'react-i18next';
+import { Template as TemplatePage } from '../template/Template';
+
+import './Index.style.css';
+
 
 export interface Template {
   uuid: string;
@@ -49,7 +53,7 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
   )
 }
 
-function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean }) {
   const { t } = useTranslation();
 
   const { assignedAgentUuid } = useParams();
@@ -175,22 +179,60 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
       </Field>
 
-      <Field>
-        <Label>{t('agents.details.settings.fields.global_rule.label')}</Label>
+      {!isSimplifiedView && (
+        <Field>
+          <Label>{t('agents.details.settings.fields.global_rule.label')}</Label>
 
-        {isLoading ? (
-          <Skeleton style={{ width: '100%', height: '68px' }} />
-        ) : (
-          <Textarea
-            className="content-textarea-full-width"
-            value={globalRule}
-            onChange={setGlobalRule}
-            data-testid="global-rule-textarea"
-          />
-        )}
+          {isLoading ? (
+            <Skeleton style={{ width: '100%', height: '68px' }} />
+          ) : (
+            <Textarea
+              className="content-textarea-full-width"
+              value={globalRule}
+              onChange={setGlobalRule}
+              data-testid="global-rule-textarea"
+            />
+          )}
 
-        <FieldDescription>{t('agents.details.settings.fields.global_rule.description')}</FieldDescription>
-      </Field>
+          <FieldDescription>{t('agents.details.settings.fields.global_rule.description')}</FieldDescription>
+        </Field>
+      )}
+
+      {isSimplifiedView && (
+        <>
+          <Field>
+            <Label>{'Valor minimo do carrinho para disparo'}</Label>
+
+            {isLoading ? (
+              <Skeleton style={{ width: '100%', height: '44px' }} />
+            ) : (
+              <Input
+                type="number"
+                value={percentage}
+                onChange={handlePercentageChange}
+                onBlur={(e) => handlePercentageBlur(e.target.value)}
+                data-testid="contact-percentage-input"
+              />
+            )}
+          </Field>
+
+          <Field>
+            <Label>{'Tempo de abandono do carrinho'}</Label>
+
+            {isLoading ? (
+              <Skeleton style={{ width: '100%', height: '44px' }} />
+            ) : (
+              <Input
+                type="number"
+                value={percentage}
+                onChange={handlePercentageChange}
+                onBlur={(e) => handlePercentageBlur(e.target.value)}
+                data-testid="contact-percentage-input"
+              />
+            )}
+          </Field>
+        </>
+      )}
 
       <Flex justify="end">
         <Button
@@ -244,6 +286,10 @@ export function AgentIndex() {
 
   const [updateTemplatesTimeout, setUpdateTemplatesTimeout] = useState<NodeJS.Timeout | null>(null);
 
+  const [isAbandonedCart, setIsAbandonedCart] = useState(false);
+
+  const tabStore = useTabStore();
+
   useEffect(() => {
     index();
   }, []);
@@ -283,6 +329,16 @@ export function AgentIndex() {
       }
 
       const response = await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate });
+
+      const isAbandonedCart = response.templates.at(0)?.name.toLowerCase() === 'abandoned cart' && response.templates.length === 1;
+
+      setIsAbandonedCart(isAbandonedCart);
+
+      // if (isAbandonedCart) {
+      //   tabStore.setSelectedId('template');
+      // } else {
+      //   tabStore.setSelectedId('about');
+      // }
 
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
@@ -349,40 +405,50 @@ export function AgentIndex() {
       </PageHeader>
 
       <PageContent>
-        <TabProvider>
+        <TabProvider store={tabStore}>
           <TabList>
-            <Tab>{t('agents.details.about.title')}</Tab>
-            <Tab>{t('agents.details.settings.title')}</Tab>
+            <Tab id={'about'}>
+              {isAbandonedCart ? 'Template' : t('agents.details.about.title')}
+            </Tab>
+
+            <Tab id={'settings'}>{t('agents.details.settings.title')}</Tab>
           </TabList>
 
-          <TabPanel>
+          <TabPanel tabId={'about'}>
             <Flex direction="column" gap="$space-8">
               <Flex direction="column" gap="$space-5">
                 <Text variant="body">
                   {agentDescription}
                 </Text>
 
-                <AgentDescriptiveStatus status={'integrated'} showLabel={true} />
+                {!isAbandonedCart && <AgentDescriptiveStatus status={'integrated'} showLabel={true} />}
               </Flex>
 
-              <Divider />
+              {!isAbandonedCart && <Divider />}
 
-              <TemplateList
-                navigateToCreateTemplate={navigateToCreateTemplate}
-                templates={templates}
-                isLoading={isLoading}
-                loadAgentDetails={loadAgentDetails}
-              />
+              {isAbandonedCart ? (
+                <section className="abandoned-cart-container">
+                  <TemplatePage templateUuid={templates[0].uuid} isSimplifiedView />
+                </section>
+              ) : (
+                <TemplateList
+                  navigateToCreateTemplate={navigateToCreateTemplate}
+                  templates={templates}
+                  isLoading={isLoading}
+                  loadAgentDetails={loadAgentDetails}
+                />
+              )}
             </Flex>
           </TabPanel>
 
-          <TabPanel>
+          <TabPanel tabId={'settings'}>
             <Settings
               isLoading={isLoading}
               webhookUrl={webhookUrl}
               contactPercentage={contactPercentage}
               loadAgentDetails={loadAgentDetails}
               previousGlobalRule={agentGlobalRule}
+              isSimplifiedView
             />
           </TabPanel>
         </TabProvider>
