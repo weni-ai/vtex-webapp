@@ -1,4 +1,4 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast, useTabStore } from '@vtex/shoreline';
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast, useTabStore } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -53,7 +53,11 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
   )
 }
 
-function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView, abandonedCartConfig }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean, abandonedCartConfig?: {
+  abandonmentTimeMinutes: number;
+  minimumCartValue: number;
+  headerImageType: 'first_image' | 'most_expensive';
+} | undefined }) {
   const { t } = useTranslation();
 
   const { assignedAgentUuid } = useParams();
@@ -64,6 +68,16 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 
   const [successText, setSuccessText] = useState('');
   const [errorText, setErrorText] = useState('');
+  
+  const [abandonedCartConfigState, setAbandonedCartConfigState] = useState<{
+    abandonmentTimeMinutes: number;
+    minimumCartValue: number;
+    headerImageType: 'first_image' | 'most_expensive';
+  } | undefined>(abandonedCartConfig);
+
+  useEffect(() => {
+    setAbandonedCartConfigState(abandonedCartConfig);
+  }, [abandonedCartConfig]);
 
   useEffect(() => {
     if (contactPercentage) {
@@ -105,6 +119,15 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
     return previousGlobalRule !== globalRule;
   }, [previousGlobalRule, globalRule]);
 
+  const hasAbandonedCartConfigChanged = useMemo(() => {
+    return abandonedCartConfigState?.minimumCartValue !== abandonedCartConfig?.minimumCartValue
+    || abandonedCartConfigState?.abandonmentTimeMinutes !== abandonedCartConfig?.abandonmentTimeMinutes;
+  }, [abandonedCartConfigState, abandonedCartConfig]);
+
+  const hasAbandonedCartAbandonmentTimeMinutesError = useMemo(() => {
+    return (abandonedCartConfigState?.abandonmentTimeMinutes || 0) < 20;
+  }, [abandonedCartConfigState?.abandonmentTimeMinutes]);
+
   async function handleSave() {
     setSuccessText('');
     setErrorText('');
@@ -120,6 +143,8 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         agentUuid: assignedAgentUuid as string,
         globalRule: hasGlobalRuleChanged ? globalRule : undefined,
         contactPercentage: hasPercentageChanged ? Number(percentage) : undefined,
+        abandonedCartAbandonmentTimeMinutes: hasAbandonedCartConfigChanged ? abandonedCartConfigState?.abandonmentTimeMinutes : undefined,
+        abandonedCartMinimumCartValue: hasAbandonedCartConfigChanged ? abandonedCartConfigState?.minimumCartValue : undefined,
       });
 
       if (hasGlobalRuleChanged) {
@@ -140,6 +165,15 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
     } finally {
       setIsSaving(false);
     }
+  }
+
+  function handleAbandonedCartConfigChange(key: 'minimumCartValue' | 'abandonmentTimeMinutes', value: string) {
+    setAbandonedCartConfigState({
+      headerImageType: abandonedCartConfigState?.headerImageType || 'first_image',
+      abandonmentTimeMinutes: abandonedCartConfigState?.abandonmentTimeMinutes || 0,
+      minimumCartValue: abandonedCartConfigState?.minimumCartValue || 0,
+      [key]: Number(value) || 0,
+    });
   }
 
   return (
@@ -208,28 +242,29 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
             ) : (
               <Input
                 type="number"
-                value={percentage}
-                onChange={handlePercentageChange}
-                onBlur={(e) => handlePercentageBlur(e.target.value)}
-                data-testid="contact-percentage-input"
+                value={abandonedCartConfigState?.minimumCartValue.toString() || ''}
+                prefix="R$"
+                onChange={(value) => handleAbandonedCartConfigChange('minimumCartValue', value)}
+                data-testid="abandoned-cart-minimum-cart-value-input"
               />
             )}
           </Field>
 
-          <Field>
-            <Label>{'Tempo de abandono do carrinho'}</Label>
+          <Field error={hasAbandonedCartAbandonmentTimeMinutesError}>
+            <Label>{'Tempo de abandono do carrinho em minutos'}</Label>
 
             {isLoading ? (
               <Skeleton style={{ width: '100%', height: '44px' }} />
             ) : (
               <Input
                 type="number"
-                value={percentage}
-                onChange={handlePercentageChange}
-                onBlur={(e) => handlePercentageBlur(e.target.value)}
-                data-testid="contact-percentage-input"
+                value={abandonedCartConfigState?.abandonmentTimeMinutes.toString() || ''}
+                onChange={(value) => handleAbandonedCartConfigChange('abandonmentTimeMinutes', value)}
+                data-testid="abandoned-cart-abandonment-time-minutes-input"
               />
             )}
+
+            {hasAbandonedCartAbandonmentTimeMinutesError && <FieldError>{'O tempo de abandono do carrinho deve ser maior que 20 minutos'}</FieldError>}
           </Field>
         </>
       )}
@@ -238,7 +273,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         <Button
           variant="primary"
           size="large"
-          disabled={!hasPercentageChanged && !hasGlobalRuleChanged}
+          disabled={(!hasPercentageChanged && !hasGlobalRuleChanged && !hasAbandonedCartConfigChanged) || hasAbandonedCartAbandonmentTimeMinutesError}
           onClick={handleSave}
           loading={isSaving}
           data-testid="save-settings-button"
@@ -277,6 +312,11 @@ export function AgentIndex() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
+  const [abandonedCartConfig, setAbandonedCartConfig] = useState<{
+    abandonmentTimeMinutes: number;
+    minimumCartValue: number;
+    headerImageType: 'first_image' | 'most_expensive';
+  } | undefined>(undefined);
   const [contactPercentage, setContactPercentage] = useState<number | undefined>(undefined);
   const [agentGlobalRule, setAgentGlobalRule] = useState('');
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -343,6 +383,21 @@ export function AgentIndex() {
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
       setAgentGlobalRule(response.globalRule || '');
+
+      console.log(response.abandonedCartHeaderImageType, 'response.abandonedCartHeaderImageType');
+
+      if (response.abandonedCartAbandonmentTimeMinutes || response.abandonedCartMinimumCartValue || response.abandonedCartHeaderImageType) {
+        setAbandonedCartConfig({
+          abandonmentTimeMinutes: response.abandonedCartAbandonmentTimeMinutes || 0,
+          minimumCartValue: response.abandonedCartMinimumCartValue || 0,
+          headerImageType: {
+            'first_image': 'first_image' as const,
+            'most_expensive': 'most_expensive' as const,
+          }[response.abandonedCartHeaderImageType as 'first_image' | 'most_expensive'] || 'first_image' as const
+        });
+
+        console.log('aqui', abandonedCartConfig?.headerImageType)
+      }
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 
@@ -428,7 +483,7 @@ export function AgentIndex() {
 
               {isAbandonedCart ? (
                 <section className="abandoned-cart-container">
-                  <TemplatePage templateUuid={templates[0].uuid} isSimplifiedView />
+                  <TemplatePage templateUuid={templates[0].uuid} isSimplifiedView abandonedCartHeaderImageType={abandonedCartConfig?.headerImageType} loadAgentDetails={loadAgentDetails} />
                 </section>
               ) : (
                 <TemplateList
@@ -448,6 +503,7 @@ export function AgentIndex() {
               contactPercentage={contactPercentage}
               loadAgentDetails={loadAgentDetails}
               previousGlobalRule={agentGlobalRule}
+              abandonedCartConfig={abandonedCartConfig}
               isSimplifiedView
             />
           </TabPanel>

@@ -456,12 +456,18 @@ export async function updateAgentGlobalRule(data: {
   agentUuid: string;
   contactPercentage?: number;
   globalRule?: string;
+  abandonedCartAbandonmentTimeMinutes?: number;
+  abandonedCartMinimumCartValue?: number;
+  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive';
 }) {
   const response = await updateAgentGlobalRuleRequest(data);
 
   updateAssignedAgentProperty(data.agentUuid, {
     globalRule: response.globalRule,
     contactPercentage: response.contactPercentage,
+    abandonedCartAbandonmentTimeMinutes: response.abandonedCartAbandonmentTimeMinutes,
+    abandonedCartMinimumCartValue: response.abandonedCartMinimumCartValue,
+    abandonedCartHeaderImageType: response.abandonedCartHeaderImageType,
   });
 
   return response;

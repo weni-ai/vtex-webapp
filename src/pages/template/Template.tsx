@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import { useNavigate, useParams } from "react-router-dom";
 import { TemplateStatusTag } from "../../components/TemplateCard";
-import { agentCLI, assignedAgentTemplate, createAssignedAgentTemplate, saveAgentButtonTemplate, updateAgentTemplate } from "../../services/agent.service";
+import { agentCLI, assignedAgentTemplate, createAssignedAgentTemplate, saveAgentButtonTemplate, updateAgentGlobalRule, updateAgentTemplate } from "../../services/agent.service";
 import { FormContent } from "./FormContent";
 import { FormEssential } from "./FormEssential";
 import { FormVariables } from "./FormVariables";
@@ -52,7 +52,7 @@ function TemplateAlert({ variant, message, dataTestId }: { variant: "warning" | 
   )
 }
 
-export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: { templateUuid?: string, isSimplifiedView?: boolean }) {
+export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, abandonedCartHeaderImageType, loadAgentDetails }: { templateUuid?: string, isSimplifiedView?: boolean, abandonedCartHeaderImageType?: 'first_image' | 'most_expensive', loadAgentDetails?: () => void }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid: paramTemplateUuid } = useParams();
@@ -68,6 +68,17 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: {
   const [previousStartCondition, setPreviousStartCondition] = useState('');
   const [startCondition, setStartCondition] = useState('');
   const [templateIsCustom, setTemplateIsCustom] = useState(false);
+
+  const [abandonedCartHeaderImageTypeState, setAbandonedCartHeaderImageTypeState] = useState<typeof abandonedCartHeaderImageType>(abandonedCartHeaderImageType || 'first_image');
+
+  // useEffect(() => {
+  //   console.log(abandonedCartHeaderImageType, 'abandonedCartHeaderImageType', abandonedCartHeaderImageTypeState);
+  //   setAbandonedCartHeaderImageTypeState(abandonedCartHeaderImageType || 'first_image');
+  // }, [abandonedCartHeaderImageType]);
+
+  const hasAbandonedCartHeaderImageTypeChanged = useMemo(() => {
+    return abandonedCartHeaderImageType !== abandonedCartHeaderImageTypeState;
+  }, [abandonedCartHeaderImageType, abandonedCartHeaderImageTypeState]);
 
   const [temporaryContentText, setTemporaryContentText] = useState('');
 
@@ -138,7 +149,11 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: {
     let header = prefilledContent.header?.type === 'media' && content.header?.type === 'media' && prefilledContent.header?.previewSrc !== content.header?.previewSrc;
 
     if (isSimplifiedView) {
-      header = !(prefilledContent.header?.type === 'media' && content.header?.type === 'media');
+      if (prefilledContent.header?.type === undefined && content.header?.type === undefined) {
+        header = false;
+      } else {
+        header = !(prefilledContent.header?.type === 'media' && content.header?.type === 'media');
+      }
     }
 
     
@@ -520,6 +535,28 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: {
     setVariablesError(uniqueErrorsByField);
   }, [variables, content.content]);
 
+  async function handleSaveAbandonedCartHeaderImageType() {
+    try {
+      setIsSaving(true);
+      await updateAgentGlobalRule({
+        agentUuid: assignedAgentUuid as string,
+        abandonedCartHeaderImageType: abandonedCartHeaderImageTypeState,
+      });
+      
+      await loadAgentDetails?.();
+
+      const isDisabled = !hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0;
+
+      if (!isDisabled) {
+        await handleSaveTemplate();
+      }
+    } catch (error) {
+      toast.critical(`${t('error.title')}! ${t('error.description')}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   return (
     <Page>
       <PageHeader>
@@ -562,16 +599,29 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: {
             )}
 
             <Bleed top="$space-2" bottom="$space-2">
-              <Button
-                variant="primary"
-                size="large"
-                onClick={handleSaveTemplate}
-                loading={isSaving}
-                disabled={!hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0}
-                data-testid="save-button"
-              >
-                {t('template.form.create.buttons.save')}
-              </Button>
+              {
+                hasAbandonedCartHeaderImageTypeChanged ? 
+                  <Button
+                  variant="primary"
+                  size="large"
+                  onClick={handleSaveAbandonedCartHeaderImageType}
+                  loading={isSaving}
+                  data-testid="save-button"
+                >
+                  {t('template.form.create.buttons.save')}
+                </Button>
+              :
+                <Button
+                  variant="primary"
+                  size="large"
+                  onClick={handleSaveTemplate}
+                  loading={isSaving}
+                  disabled={!hasChanges || !!templateNameError || !!startConditionError || variablesError.length > 0}
+                  data-testid="save-button"
+                >
+                  {t('template.form.create.buttons.save')}
+                </Button>
+              }
             </Bleed>
           </Stack>
         </PageHeaderRow>
@@ -622,6 +672,8 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView }: {
               isFooterEditable={true}
               isButtonEditable={true}
               isSimplifiedView={isSimplifiedView}
+              abandonedCartHeaderImageType={abandonedCartHeaderImageTypeState}
+              setAbandonedCartHeaderImageType={setAbandonedCartHeaderImageTypeState}
               canChangeButton={true}
               totalVariables={variables.length}
               addEmptyVariables={(count: number) => {
