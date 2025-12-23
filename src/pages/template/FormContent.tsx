@@ -8,7 +8,7 @@ import { fileToBase64 } from "../../utils";
 import { Radio } from "../../components/adapters/Radio";
 import { Select } from "../../components/adapters/Select";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, isSimplifiedView = false, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, isSimplifiedView = false, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable, abandonedCartHeaderImageType, setAbandonedCartHeaderImageType }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -24,6 +24,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   contentError?: string;
   canCreateVariable: boolean;
   isSimplifiedView?: boolean;
+  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive';
+  setAbandonedCartHeaderImageType?: (value: 'first_image' | 'most_expensive') => void;
 }) {
   const { t } = useTranslation();
 
@@ -44,7 +46,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
-  const [abandonedCartImage, setAbandonedCartImage] = useState('Primeiro item do carrinho');
+  const [abandonedCartImage, setAbandonedCartImage] = useState({ 'first_image': 'Primeiro item do carrinho' as const, 'most_expensive': 'Produto mais caro' as const }[abandonedCartHeaderImageType as 'first_image' | 'most_expensive'] || 'Primeiro item do carrinho' as const);
 
   function adjustContentTextHeight() {
     if (contentTextRef.current) {
@@ -506,7 +508,10 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                   system="shoreline"
                   data-testid="abandoned-cart-image-select"
                   value={abandonedCartImage}
-                  setValue={(value) => setAbandonedCartImage(value)}
+                  setValue={(value) => {
+                    setAbandonedCartImage(value as 'Primeiro item do carrinho' | 'Produto mais caro');
+                    setAbandonedCartHeaderImageType?.({ 'Primeiro item do carrinho': 'first_image' as const, 'Produto mais caro': 'most_expensive' as const }[value] || 'first_image');
+                  }}
                   options={[
                     {
                       label: 'Primeiro item do carrinho',
