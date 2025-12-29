@@ -1,4 +1,4 @@
-import { Alert, Bleed, Button, Divider, Field, FieldDescription, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast } from '@vtex/shoreline';
+import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Flex, IconArrowLeft, IconButton, IconPlus, Input, Label, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Skeleton, Tab, TabList, TabPanel, TabProvider, Text, Textarea, toast, useTabStore } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +11,17 @@ import { agentCLI, updateAgentGlobalRule } from '../../services/agent.service';
 import store from '../../store/provider.store';
 import { ProcessModal } from '../template/modals/Process';
 import { useTranslation } from 'react-i18next';
+import { Tag } from '../../components/adapters/Tag';
+import { AgentTemplateDeliveredOrderProvider, useAgentTemplateDeliveredOrderContext } from './AgentTemplateDeliveredOrderContext';
+import { Template as TemplatePage } from '../template/Template';
+
+import './Index.style.css';
+
+interface AbandonedCartConfig {
+  abandonmentTimeMinutes: number;
+  minimumCartValue: number;
+  headerImageType: 'first_item' | 'most_expensive';
+}
 
 export interface Template {
   uuid: string;
@@ -49,7 +60,7 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
   )
 }
 
-function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView, abandonedCartConfig }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean, abandonedCartConfig?: AbandonedCartConfig }) {
   const { t } = useTranslation();
 
   const { assignedAgentUuid } = useParams();
@@ -60,6 +71,12 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 
   const [successText, setSuccessText] = useState('');
   const [errorText, setErrorText] = useState('');
+  
+  const [abandonedCartConfigState, setAbandonedCartConfigState] = useState<AbandonedCartConfig | undefined>(abandonedCartConfig);
+
+  useEffect(() => {
+    setAbandonedCartConfigState(abandonedCartConfig);
+  }, [abandonedCartConfig]);
 
   useEffect(() => {
     if (contactPercentage) {
@@ -101,6 +118,15 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
     return previousGlobalRule !== globalRule;
   }, [previousGlobalRule, globalRule]);
 
+  const hasAbandonedCartConfigChanged = useMemo(() => {
+    return abandonedCartConfigState?.minimumCartValue !== abandonedCartConfig?.minimumCartValue
+    || abandonedCartConfigState?.abandonmentTimeMinutes !== abandonedCartConfig?.abandonmentTimeMinutes;
+  }, [abandonedCartConfigState, abandonedCartConfig]);
+
+  const hasAbandonedCartAbandonmentTimeMinutesError = useMemo(() => {
+    return isSimplifiedView && (abandonedCartConfigState?.abandonmentTimeMinutes || 0) < 20;
+  }, [abandonedCartConfigState?.abandonmentTimeMinutes]);
+
   async function handleSave() {
     setSuccessText('');
     setErrorText('');
@@ -116,6 +142,8 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         agentUuid: assignedAgentUuid as string,
         globalRule: hasGlobalRuleChanged ? globalRule : undefined,
         contactPercentage: hasPercentageChanged ? Number(percentage) : undefined,
+        abandonedCartAbandonmentTimeMinutes: hasAbandonedCartConfigChanged ? abandonedCartConfigState?.abandonmentTimeMinutes : undefined,
+        abandonedCartMinimumCartValue: hasAbandonedCartConfigChanged ? abandonedCartConfigState?.minimumCartValue : undefined,
       });
 
       if (hasGlobalRuleChanged) {
@@ -136,6 +164,15 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
     } finally {
       setIsSaving(false);
     }
+  }
+
+  function handleAbandonedCartConfigChange(key: 'minimumCartValue' | 'abandonmentTimeMinutes', value: string) {
+    setAbandonedCartConfigState({
+      headerImageType: abandonedCartConfigState?.headerImageType || 'first_item',
+      abandonmentTimeMinutes: abandonedCartConfigState?.abandonmentTimeMinutes || 0,
+      minimumCartValue: abandonedCartConfigState?.minimumCartValue || 0,
+      [key]: Number(value) || 0,
+    });
   }
 
   return (
@@ -175,28 +212,67 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         <FieldDescription>{t('agent.modals.publish.fields.percentage.description')}</FieldDescription>
       </Field>
 
-      <Field>
-        <Label>{t('agents.details.settings.fields.global_rule.label')}</Label>
+      {!isSimplifiedView && (
+        <Field>
+          <Label>{t('agents.details.settings.fields.global_rule.label')}</Label>
 
-        {isLoading ? (
-          <Skeleton style={{ width: '100%', height: '68px' }} />
-        ) : (
-          <Textarea
-            className="content-textarea-full-width"
-            value={globalRule}
-            onChange={setGlobalRule}
-            data-testid="global-rule-textarea"
-          />
-        )}
+          {isLoading ? (
+            <Skeleton style={{ width: '100%', height: '68px' }} />
+          ) : (
+            <Textarea
+              className="content-textarea-full-width"
+              value={globalRule}
+              onChange={setGlobalRule}
+              data-testid="global-rule-textarea"
+            />
+          )}
 
-        <FieldDescription>{t('agents.details.settings.fields.global_rule.description')}</FieldDescription>
-      </Field>
+          <FieldDescription>{t('agents.details.settings.fields.global_rule.description')}</FieldDescription>
+        </Field>
+      )}
+
+      {isSimplifiedView && (
+        <>
+          <Field>
+            <Label>{'Valor minimo do carrinho para disparo'}</Label>
+
+            {isLoading ? (
+              <Skeleton style={{ width: '100%', height: '44px' }} />
+            ) : (
+              <Input
+                type="number"
+                value={abandonedCartConfigState?.minimumCartValue.toString() || ''}
+                prefix="R$"
+                onChange={(value) => handleAbandonedCartConfigChange('minimumCartValue', value)}
+                data-testid="abandoned-cart-minimum-cart-value-input"
+              />
+            )}
+          </Field>
+
+          <Field error={hasAbandonedCartAbandonmentTimeMinutesError}>
+            <Label>{'Tempo de abandono do carrinho em minutos'}</Label>
+
+            {isLoading ? (
+              <Skeleton style={{ width: '100%', height: '44px' }} />
+            ) : (
+              <Input
+                type="number"
+                value={abandonedCartConfigState?.abandonmentTimeMinutes.toString() || ''}
+                onChange={(value) => handleAbandonedCartConfigChange('abandonmentTimeMinutes', value)}
+                data-testid="abandoned-cart-abandonment-time-minutes-input"
+              />
+            )}
+
+            {hasAbandonedCartAbandonmentTimeMinutesError && <FieldError>{t('agents.details.settings.fields.abandoned_cart.abandonment_time_minutes.errors.min')}</FieldError>}
+          </Field>
+        </>
+      )}
 
       <Flex justify="end">
         <Button
           variant="primary"
           size="large"
-          disabled={!hasPercentageChanged && !hasGlobalRuleChanged}
+          disabled={(!hasPercentageChanged && !hasGlobalRuleChanged && !hasAbandonedCartConfigChanged) || hasAbandonedCartAbandonmentTimeMinutesError}
           onClick={handleSave}
           loading={isSaving}
           data-testid="save-settings-button"
@@ -223,6 +299,101 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
   )
 }
 
+function DeliveredOrderTab({
+  isLoading,
+  assignedAgentUuid,
+  isEnabledFromFather,
+  appKeyFromFather,
+}: {
+  isLoading: boolean;
+  assignedAgentUuid: string;
+  isEnabledFromFather: boolean;
+  appKeyFromFather: string;
+}) {
+  const {
+    isEnabled, setIsEnabled,
+    appKey, setAppKey,
+    appToken, setAppToken,
+    enable, isEnabling,
+    disable, isDisabling,
+  } = useAgentTemplateDeliveredOrderContext();
+
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (isEnabledFromFather) {
+      setIsEnabled(isEnabledFromFather);
+    }
+  }, [isEnabledFromFather]);
+
+  useEffect(() => {
+    if (appKeyFromFather) {
+      setAppKey(appKeyFromFather);
+    }
+  }, [appKeyFromFather]);
+
+  return (
+    <Flex direction="column" gap="$space-5">
+      <Field>
+        <Label>{t('agents.details.delivered_order_tracking.fields.app_key.label')}</Label>
+
+        {isLoading ? (
+          <Skeleton style={{ width: '100%', height: '44px' }} />
+        ) : (
+          <Input
+            disabled={isEnabled}
+            value={appKey}
+            onChange={setAppKey}
+            data-testid="app-key-input"
+          />
+        )}
+      </Field>
+
+      {!isEnabled && (
+        <Field>
+          <Label>{t('agents.details.delivered_order_tracking.fields.app_token.label')}</Label>
+
+          {isLoading ? (
+            <Skeleton style={{ width: '100%', height: '44px' }} />
+          ) : (
+            <Input
+              type="password"
+              value={appToken}
+              onChange={setAppToken}
+              data-testid="app-token-input"
+            />
+          )}
+        </Field>
+      )}
+
+      <Flex justify="end">
+        {isEnabled ? (
+          <Button
+            variant="critical"
+            size="large"
+            onClick={() => disable(assignedAgentUuid)}
+            loading={isDisabling}
+            data-testid="disable-delivered-order-tracking-button"
+          >
+            {t('agents.details.delivered_order_tracking.buttons.disable')}
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            size="large"
+            disabled={!appKey || !appToken}
+            onClick={() => enable(assignedAgentUuid)}
+            loading={isEnabling}
+            data-testid="enable-delivered-order-tracking-button"
+          >
+            {t('agents.details.delivered_order_tracking.buttons.enable')}
+          </Button>
+        )}
+      </Flex>
+    </Flex>
+  )
+}
+
 export function AgentIndex() {
   const { t } = useTranslation();
 
@@ -233,8 +404,13 @@ export function AgentIndex() {
   const [agentDescription, setAgentDescription] = useState('');
   const [_agentStatus, setAgentStatus] = useState<'test' | 'production'>('test');
 
+  const [hasDeliveredOrderTemplate, setHasDeliveredOrderTemplate] = useState(false);
+  const [isDeliveredOrderTrackingEnabled, setIsDeliveredOrderTrackingEnabled] = useState(false);
+  const [deliveredOrderAppKey, setDeliveredOrderAppKey] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
+  const [abandonedCartConfig, setAbandonedCartConfig] = useState<AbandonedCartConfig | undefined>(undefined);
   const [contactPercentage, setContactPercentage] = useState<number | undefined>(undefined);
   const [agentGlobalRule, setAgentGlobalRule] = useState('');
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -243,6 +419,10 @@ export function AgentIndex() {
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
 
   const [updateTemplatesTimeout, setUpdateTemplatesTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const [isAbandonedCart, setIsAbandonedCart] = useState(false);
+
+  const tabStore = useTabStore();
 
   useEffect(() => {
     index();
@@ -284,9 +464,27 @@ export function AgentIndex() {
 
       const response = await agentCLI({ agentUuid: assignedAgentUuid as string, forceUpdate });
 
+      setHasDeliveredOrderTemplate(response.hasDeliveredOrderTemplates);
+      setIsDeliveredOrderTrackingEnabled(response.deliveredOrderTrackingConfig.isEnabled);
+      setDeliveredOrderAppKey(response.deliveredOrderTrackingConfig.appKey);
+      const isAbandonedCart = response.templates.at(0)?.name.toLowerCase() === 'abandoned cart' && response.templates.length === 1;
+
+      setIsAbandonedCart(isAbandonedCart);
+
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);
       setAgentGlobalRule(response.globalRule || '');
+
+      if (response.abandonedCartAbandonmentTimeMinutes || response.abandonedCartMinimumCartValue || response.abandonedCartHeaderImageType) {
+        setAbandonedCartConfig({
+          abandonmentTimeMinutes: response.abandonedCartAbandonmentTimeMinutes || 0,
+          minimumCartValue: response.abandonedCartMinimumCartValue || 0,
+          headerImageType: {
+            'first_item': 'first_item' as const,
+            'most_expensive': 'most_expensive' as const,
+          }[response.abandonedCartHeaderImageType as 'first_item' | 'most_expensive'] || 'first_image' as const
+        });
+      }
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
 
@@ -326,79 +524,119 @@ export function AgentIndex() {
   }
 
   return (
-    <Page>
-      <PageHeader>
-        <PageHeaderRow>
-          <Flex align="center">
-            <Bleed top="$space-2" bottom="$space-2">
-              <IconButton
-                label={t('common.return')}
-                asChild
-                variant="tertiary"
-                size="large"
-                onClick={() => navigate('/dash')}
-                data-testid="back-button"
-              >
-                <IconArrowLeft />
-              </IconButton>
-            </Bleed>
+    <AgentTemplateDeliveredOrderProvider isEnabled={isDeliveredOrderTrackingEnabled} setIsEnabled={setIsDeliveredOrderTrackingEnabled}>
+      <Page>
+        <PageHeader>
+          <PageHeaderRow>
+            <Flex align="center">
+              <Bleed top="$space-2" bottom="$space-2">
+                <IconButton
+                  label={t('common.return')}
+                  asChild
+                  variant="tertiary"
+                  size="large"
+                  onClick={() => navigate('/dash')}
+                  data-testid="back-button"
+                >
+                  <IconArrowLeft />
+                </IconButton>
+              </Bleed>
 
-            <PageHeading>{agentName}</PageHeading>
-          </Flex>
-        </PageHeaderRow>
-      </PageHeader>
-
-      <PageContent>
-        <TabProvider>
-          <TabList>
-            <Tab>{t('agents.details.about.title')}</Tab>
-            <Tab>{t('agents.details.settings.title')}</Tab>
-          </TabList>
-
-          <TabPanel>
-            <Flex direction="column" gap="$space-8">
-              <Flex direction="column" gap="$space-5">
-                <Text variant="body">
-                  {agentDescription}
-                </Text>
-
-                <AgentDescriptiveStatus status={'integrated'} showLabel={true} />
-              </Flex>
-
-              <Divider />
-
-              <TemplateList
-                navigateToCreateTemplate={navigateToCreateTemplate}
-                templates={templates}
-                isLoading={isLoading}
-                loadAgentDetails={loadAgentDetails}
-              />
+              <PageHeading>{agentName}</PageHeading>
             </Flex>
-          </TabPanel>
+          </PageHeaderRow>
+        </PageHeader>
 
-          <TabPanel>
-            <Settings
-              isLoading={isLoading}
-              webhookUrl={webhookUrl}
-              contactPercentage={contactPercentage}
-              loadAgentDetails={loadAgentDetails}
-              previousGlobalRule={agentGlobalRule}
-            />
-          </TabPanel>
-        </TabProvider>
+        <PageContent>
+          <TabProvider store={tabStore}>
+            <TabList>
+              <Tab id={'about'}>
+                {isAbandonedCart ? 'Template' : t('agents.details.about.title')}
+              </Tab>
 
-        {false && <SwitchToTestModeModal
-          open={isSwitchToTestModeModalOpen}
-          onClose={() => setIsSwitchToTestModeModalOpen(false)}
-          onTest={handleTest}
-        />}
+              <Tab id={'settings'}>{t('agents.details.settings.title')}</Tab>
 
-        {false && <PublishModal
-          open={isPublishModalOpen}
-          onClose={() => setIsPublishModalOpen(false)}
-          onPublish={handlePublish}
-        />}
-      </PageContent>
-    </Page>
+              {hasDeliveredOrderTemplate && (
+                <Tab id={'delivered-order-tracking'}>
+                  <Flex align="center" gap="$space-2">
+                    {t('agents.details.delivered_order_tracking.title')}
+
+                    {isDeliveredOrderTrackingEnabled ? (
+                      <Tag color="blue" variant="secondary">
+                        {t('agents.details.delivered_order_tracking.status.enabled')}
+                      </Tag>
+                    ) : (
+                      <Tag color="purple" variant="secondary">
+                        {t('agents.details.delivered_order_tracking.status.disabled')}
+                      </Tag>
+                    )}
+                  </Flex>
+                </Tab>
+              )}
+            </TabList>
+
+            <TabPanel tabId={'about'}>
+              <Flex direction="column" gap="$space-8">
+                <Flex direction="column" gap="$space-5">
+                  <Text variant="body">
+                    {agentDescription}
+                  </Text>
+
+                  {!isAbandonedCart && <AgentDescriptiveStatus status={'integrated'} showLabel={true} />}
+                </Flex>
+
+                {!isAbandonedCart && <Divider />}
+
+                {isAbandonedCart ? (
+                  <section className="abandoned-cart-container">
+                    <TemplatePage templateUuid={templates[0].uuid} isSimplifiedView abandonedCartHeaderImageType={abandonedCartConfig?.headerImageType} loadAgentDetails={loadAgentDetails} />
+                  </section>
+                ) : (
+                  <TemplateList
+                    navigateToCreateTemplate={navigateToCreateTemplate}
+                    templates={templates}
+                    isLoading={isLoading}
+                    loadAgentDetails={loadAgentDetails}
+                  />
+                )}
+              </Flex>
+            </TabPanel>
+
+            <TabPanel tabId={'settings'}>
+              <Settings
+                isLoading={isLoading}
+                webhookUrl={webhookUrl}
+                contactPercentage={contactPercentage}
+                loadAgentDetails={loadAgentDetails}
+                previousGlobalRule={agentGlobalRule}
+                abandonedCartConfig={abandonedCartConfig}
+                isSimplifiedView={isAbandonedCart}
+              />
+            </TabPanel>
+
+            <TabPanel tabId={'delivered-order-tracking'}>
+              <DeliveredOrderTab
+                isLoading={isLoading}
+                assignedAgentUuid={assignedAgentUuid as string}
+                isEnabledFromFather={isDeliveredOrderTrackingEnabled}
+                appKeyFromFather={deliveredOrderAppKey}
+              />
+            </TabPanel>
+          </TabProvider>
+
+          {false && <SwitchToTestModeModal
+            open={isSwitchToTestModeModalOpen}
+            onClose={() => setIsSwitchToTestModeModalOpen(false)}
+            onTest={handleTest}
+          />}
+
+          {false && <PublishModal
+            open={isPublishModalOpen}
+            onClose={() => setIsPublishModalOpen(false)}
+            onPublish={handlePublish}
+          />}
+        </PageContent>
+      </Page>
+    </AgentTemplateDeliveredOrderProvider>
   )
 }

@@ -130,11 +130,47 @@
                     "global_rule": {
                         "label": "Prompt global (opcional)",
                         "description": "Usa esta área para definir reglas y directrices globales para el agente"
+                    },
+                    "abandoned_cart": {
+                        "abandonment_time_minutes": {
+                            "errors": {
+                                "min": "El tiempo de abandono del carrito debe ser mayor que 20 minutos"
+                            }
+                        }
                     }
                 },
                 "buttons": {
                     "copy": "Copiar",
                     "save": "Guardar cambios"
+                }
+            },
+            "delivered_order_tracking": {
+                "title": "Seguimiento de pedidos entregados",
+                "status": {
+                    "enabled": "Activado",
+                    "disabled": "Desactivado"
+                },
+                "actions": {
+                    "enable": {
+                    "success": "Seguimiento de pedidos entregados activado con éxito",
+                    "error": "Error al activar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                    },
+                    "disable": {
+                    "success": "Seguimiento de pedidos entregados desactivado con éxito",
+                    "error": "Error al desactivar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                    }
+                },
+                "fields": {
+                    "app_key": {
+                    "label": "App Key"
+                    },
+                    "app_token": {
+                    "label": "App Token"
+                    }
+                },
+                "buttons": {
+                    "enable": "Activar",
+                    "disable": "Desactivar"
                 }
             }
         },
@@ -683,6 +719,13 @@
                             },
                             "media": {
                                 "label": "Media"
+                            }
+                        },
+                        "media": {
+                            "title": "Imagen del carrito",
+                            "options": {
+                                "first_item": "Primer artículo del carrito",
+                                "most_expensive": "Producto más caro"
                             }
                         }
                     },

@@ -34,6 +34,12 @@ interface AssignedAgent {
   channelUuid: string;
   contactPercentage: number;
   globalRule: string;
+  hasDeliveredOrderTemplates: boolean;
+  deliveredOrderTrackingConfig: {
+    isEnabled: boolean;
+    appKey: string;
+    webhookUrl: string;
+  };
   templates: {
     uuid: string;
     name: string;

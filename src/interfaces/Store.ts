@@ -37,6 +37,9 @@ export interface ProjectState {
         uuid: string;
         webhookUrl: string;
         contactPercentage: number;
+        abandonedCartAbandonmentTimeMinutes?: number;
+        abandonedCartMinimumCartValue?: number;
+        abandonedCartHeaderImageType?: 'no_image' | 'first_item';
         templates: {
             uuid: string;
             name: string;
@@ -59,6 +62,12 @@ export interface ProjectState {
         }[];
         channelUuid: string;
         globalRule: string;
+        hasDeliveredOrderTemplates: boolean;
+        deliveredOrderTrackingConfig: {
+            isEnabled: boolean;
+            appKey: string;
+            webhookUrl: string;
+        };
     }[];
 }
 

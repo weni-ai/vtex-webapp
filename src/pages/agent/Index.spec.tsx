@@ -139,6 +139,11 @@ describe('AgentIndex', () => {
       webhookUrl: 'https://webhook.example.com',
       contactPercentage: 50,
       globalRule: 'Test global rule',
+      hasDeliveredOrderTemplates: false,
+      deliveredOrderTrackingConfig: {
+        isEnabled: false,
+        webhookUrl: 'https://webhook.example.com',
+      },
       templates: [
         {
           uuid: 'template-1',
@@ -453,6 +458,11 @@ describe('AgentIndex', () => {
         webhookUrl: 'https://webhook.example.com',
         contactPercentage: 50,
         globalRule: 'Test global rule',
+        hasDeliveredOrderTemplates: false,
+        deliveredOrderTrackingConfig: {
+          isEnabled: false,
+          webhookUrl: 'https://webhook.example.com',
+        },
         templates: [
           {
             uuid: 'template-1',
@@ -492,6 +502,11 @@ describe('AgentIndex', () => {
         webhookUrl: 'https://webhook.example.com',
         contactPercentage: 50,
         globalRule: 'Test global rule',
+        hasDeliveredOrderTemplates: false,
+        deliveredOrderTrackingConfig: {
+          isEnabled: false,
+          webhookUrl: 'https://webhook.example.com',
+        },
         templates: [
           {
             uuid: 'template-1',
@@ -506,6 +521,11 @@ describe('AgentIndex', () => {
         webhookUrl: 'https://webhook.example.com',
         contactPercentage: 50,
         globalRule: 'Test global rule',
+        hasDeliveredOrderTemplates: false,
+        deliveredOrderTrackingConfig: {
+          isEnabled: false,
+          webhookUrl: 'https://webhook.example.com',
+        },
         templates: [
           {
             uuid: 'template-1',
