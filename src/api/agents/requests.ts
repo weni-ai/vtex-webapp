@@ -766,6 +766,16 @@ class AssignedAgent {
           message?: string,
         }
       }
+    
+    let abandonedCartConfig = undefined;
+
+    if (data.abandonedCartAbandonmentTimeMinutes || data.abandonedCartMinimumCartValue || data.abandonedCartHeaderImageType) {
+      abandonedCartConfig = {
+        abandonment_time_minutes: data.abandonedCartAbandonmentTimeMinutes,
+        minimum_cart_value: data.abandonedCartMinimumCartValue,
+        header_image_type: data.abandonedCartHeaderImageType,
+      };
+    }
 
     return proxy<{
       uuid: string;
@@ -782,11 +792,7 @@ class AssignedAgent {
         data: {
           global_rule: data.globalRule || null,
           contact_percentage: data.contactPercentage,
-          abandoned_cart_config: {
-            abandonment_time_minutes: data.abandonedCartAbandonmentTimeMinutes,
-            minimum_cart_value: data.abandonedCartMinimumCartValue,
-            header_image_type: data.abandonedCartHeaderImageType,
-          },
+          abandoned_cart_config: abandonedCartConfig,
         },
         params: {
           user_email: userEmail || '',

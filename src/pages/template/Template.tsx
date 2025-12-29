@@ -148,22 +148,6 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
         header = !(prefilledContent.header?.type === 'media' && content.header?.type === 'media');
       }
     }
-
-    
-
-    console.log('result', [
-      hasVariablesChanged,
-      previousTemplateName !== templateName,
-      previousStartCondition !== startCondition,
-      prefilledContent.content !== content.content,
-      prefilledContent.header?.type !== content.header?.type,
-      prefilledContent.header?.type === 'text' && content.header?.type === 'text' && prefilledContent.header?.text !== content.header?.text,
-      header,
-      prefilledContent.footer !== content.footer,
-      prefilledContent.button?.text !== content.button?.text,
-      cleanURL(prefilledContent.button?.url || '') !== cleanURL(content.button?.url || ''),
-      cleanURL(prefilledContent.button?.urlExample || '') !== cleanURL(content.button?.urlExample || ''),
-    ]);
     
     return [
       hasVariablesChanged,
