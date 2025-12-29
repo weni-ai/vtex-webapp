@@ -6,8 +6,9 @@ import { calculateCursorPosition, TextareaClone } from "./TextareaClone";
 import { useTranslation } from "react-i18next";
 import { fileToBase64 } from "../../utils";
 import { Radio } from "../../components/adapters/Radio";
+import { Select } from "../../components/adapters/Select";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, isSimplifiedView = false, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable, abandonedCartHeaderImageType, setAbandonedCartHeaderImageType }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -22,6 +23,9 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   variables: string[];
   contentError?: string;
   canCreateVariable: boolean;
+  isSimplifiedView?: boolean;
+  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive';
+  setAbandonedCartHeaderImageType?: (value: 'first_image' | 'most_expensive') => void;
 }) {
   const { t } = useTranslation();
 
@@ -42,6 +46,9 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
+  const initialAbandonedCartImage: 'first_image' | 'most_expensive' =
+    abandonedCartHeaderImageType === 'most_expensive' ? 'most_expensive' : 'first_image';
+  const [abandonedCartImage, setAbandonedCartImage] = useState<'first_image' | 'most_expensive'>(initialAbandonedCartImage);
 
   function adjustContentTextHeight() {
     if (contentTextRef.current) {
@@ -122,7 +129,19 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   });
 
   useEffect(() => {
-    const header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
+    let header = headerType === 'text' ? { type: 'text' as const, text: headerText || ' ' } : { type: 'media' as const, file: file, previewSrc: filePreview };
+
+    if (isSimplifiedView && elementsVisibility.header) {
+      const previewSrc = 'https://cdn.stg.cloud.weni.ai/min_abandoned_cart.png';
+      const fileName = previewSrc.split('/').pop() || 'header.jpg';
+
+      header = {
+        type: 'media',
+        file: new File([], fileName),
+        previewSrc: previewSrc,
+      }
+    }
+    
     const button = { text: buttonText, url: buttonUrl, urlExample: buttonType === 'dynamic' ? buttonUrlExample : undefined };
 
     setContent({
@@ -312,7 +331,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
       isVisible: false,
       component: (
         <>
-          {true && (
+          {!isSimplifiedView && (
             <Flex gap="$space-5">
               <Radio
                 value="dynamic"
@@ -340,33 +359,37 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Input value={buttonText} onChange={setButtonText} disabled={!canChangeButton || status === 'needs-editing'} />
           </Field>
 
-          <Field>
-            <Label>{t('template.form.fields.content.button.url.label')}</Label>
+          {!isSimplifiedView && (
+            <>
+              <Field>
+                <Label>{t('template.form.fields.content.button.url.label')}</Label>
 
-            <Input
-              prefix="https://"
-              value={buttonUrl}
-              onChange={(value) => setButtonUrl(cleanURL(value))}
-              disabled={status !== 'needs-editing' && !canChangeButton}
-              suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
-              data-testid="button-url-input"
-            />
-          </Field>
+                <Input
+                  prefix="https://"
+                  value={buttonUrl}
+                  onChange={(value) => setButtonUrl(cleanURL(value))}
+                  disabled={status !== 'needs-editing' && !canChangeButton}
+                  suffix={buttonType === 'dynamic' ? "{{1}}" : undefined}
+                  data-testid="button-url-input"
+                />
+              </Field>
 
-          {buttonType === 'dynamic' && (
-            <Field>
-              <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
+              {buttonType === 'dynamic' && (
+                <Field>
+                  <Label>{t('template.form.fields.content.button.url_example.label')}</Label>
 
-              <Input
-                prefix="https://"
-                value={buttonUrlExample}
-                onChange={(value) => setButtonUrlExample(cleanURL(value))}
-                disabled={status !== 'needs-editing' && !canChangeButton}
-                data-testid="button-url-example-input"
-              />
+                  <Input
+                    prefix="https://"
+                    value={buttonUrlExample}
+                    onChange={(value) => setButtonUrlExample(cleanURL(value))}
+                    disabled={status !== 'needs-editing' && !canChangeButton}
+                    data-testid="button-url-example-input"
+                  />
 
-              <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
-            </Field>
+                  <FieldDescription>{t('template.form.fields.content.button.url_example.description')}</FieldDescription>
+                </Field>
+              )}
+            </>
           )}
         </>
       ),
@@ -465,20 +488,50 @@ export function FormContent({ status, content, setContent, prefilledContent, can
           (Object.keys(elements) as Array<keyof typeof elements>).filter((element) => elementsVisibility[element]).map((element, index, { length }) => (
             <Flex direction="column" gap="$space-4" key={`element-${index}`}>
               <Flex align="center" gap="$space-2" justify="space-between">
-                <Text variant="emphasis" color="$fg-base">{t(`template.form.fields.content.${element}.title`)}</Text>
+                <Text variant="emphasis" color="$fg-base">
+                  {isSimplifiedView && element === 'header' ? t('template.form.fields.content.header.media.title') : t(`template.form.fields.content.${element}.title`)}
+                </Text>
 
-                <IconButton
-                  variant="tertiary"
-                  label={t('template.form.areas.content.buttons.remove')}
-                  onClick={() => setElementVisibility(element, false)}
-                  disabled={!canRemoveElements[element]}
-                  data-testid={`add-element-${element}-remove-button`}
-                >
-                  <IconTrash />
-                </IconButton>
+                {isSimplifiedView && element !== 'button' && (
+                  <IconButton
+                    variant="tertiary"
+                    label={t('template.form.areas.content.buttons.remove')}
+                    onClick={() => setElementVisibility(element, false)}
+                    disabled={!canRemoveElements[element]}
+                    data-testid={`add-element-${element}-remove-button`}
+                  >
+                    <IconTrash />
+                  </IconButton>
+                )}
               </Flex>
 
-              {elements[element].component}
+              {isSimplifiedView && element === 'header' ? (
+                <Select
+                  system="shoreline"
+                  data-testid="abandoned-cart-image-select"
+                  value={{
+                    'first_image': t('template.form.fields.content.header.media.options.first_item'),
+                    'most_expensive': t('template.form.fields.content.header.media.options.most_expensive'),
+                  }[abandonedCartImage]}
+                  setValue={(value) => {
+                    setAbandonedCartImage(value as 'first_image' | 'most_expensive');
+                    setAbandonedCartHeaderImageType?.(value as 'first_image' | 'most_expensive');
+                  }}
+                  options={[
+                    {
+                      label: t('template.form.fields.content.header.media.options.first_item'),
+                      value: 'first_image',
+                    },
+                    {
+                      label: t('template.form.fields.content.header.media.options.most_expensive'),
+                      value: 'most_expensive',
+                    },
+                  ]}
+                  style={{ width: '100%' }}
+                />
+              ) : (
+                elements[element].component
+              )}
 
               {index < length - 1 && (
                 <Divider />
@@ -514,7 +567,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                     onClick={() => setElementVisibility(element, true)}
                     data-testid={`add-element-${element}-button`}
                   >
-                    {t(`template.form.areas.content.elements.${element}`)}
+                    {isSimplifiedView && element === 'header' ? t('template.form.fields.content.header.media.title') : t(`template.form.areas.content.elements.${element}`)}
                   </MenuItem>
                 ))
               }

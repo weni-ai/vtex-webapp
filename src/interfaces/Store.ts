@@ -37,6 +37,9 @@ export interface ProjectState {
         uuid: string;
         webhookUrl: string;
         contactPercentage: number;
+        abandonedCartAbandonmentTimeMinutes?: number;
+        abandonedCartMinimumCartValue?: number;
+        abandonedCartHeaderImageType?: 'no_image' | 'first_image';
         templates: {
             uuid: string;
             name: string;
