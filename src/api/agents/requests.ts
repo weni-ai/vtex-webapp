@@ -38,6 +38,12 @@ interface CreateAgentBuilderData {
   links: string[];
 }
 
+interface AbandonedCartConfig {
+  abandonment_time_minutes: number;
+  minimum_cart_value: number;
+  header_image_type: 'no_image' | 'first_image' | 'most_expensive';
+}
+
 export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
@@ -248,6 +254,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       webhook_url: string;
       vtex_app_key: string;
     };
+    abandoned_cart_config?: AbandonedCartConfig;
   }>(
     'GET',
     `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
@@ -274,6 +281,9 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
         webhookUrl: response.delivered_order_tracking_config?.webhook_url || '',
         appKey: response.delivered_order_tracking_config?.vtex_app_key || '',
       },
+      abandonedCartAbandonmentTimeMinutes: response.abandoned_cart_config?.abandonment_time_minutes || 0,
+      abandonedCartMinimumCartValue: response.abandoned_cart_config?.minimum_cart_value || 0,
+      abandonedCartHeaderImageType: response.abandoned_cart_config?.header_image_type || 'no_image',
     };
   } else {
     throw new Error('error retrieving agent');
@@ -753,6 +763,9 @@ class AssignedAgent {
     agentUuid: string,
     contactPercentage?: number,
     globalRule?: string,
+    abandonedCartAbandonmentTimeMinutes?: number,
+    abandonedCartMinimumCartValue?: number,
+    abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive',
   }) {
     const userEmail = store.getState().user.userData?.user;
 
@@ -765,11 +778,22 @@ class AssignedAgent {
           message?: string,
         }
       }
+    
+    let abandonedCartConfig = undefined;
+
+    if (data.abandonedCartAbandonmentTimeMinutes || data.abandonedCartMinimumCartValue || data.abandonedCartHeaderImageType) {
+      abandonedCartConfig = {
+        abandonment_time_minutes: data.abandonedCartAbandonmentTimeMinutes,
+        minimum_cart_value: data.abandonedCartMinimumCartValue,
+        header_image_type: data.abandonedCartHeaderImageType,
+      };
+    }
 
     return proxy<{
       uuid: string;
       contact_percentage: number;
       global_rule_prompt: string;
+      abandoned_cart_config: AbandonedCartConfig;
     } & error>(
       'PATCH',
       `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
@@ -780,6 +804,7 @@ class AssignedAgent {
         data: {
           global_rule: data.globalRule || null,
           contact_percentage: data.contactPercentage,
+          abandoned_cart_config: abandonedCartConfig,
         },
         params: {
           user_email: userEmail || '',
@@ -851,6 +876,9 @@ export async function updateAgentGlobalRuleRequest(data: {
   agentUuid: string,
   contactPercentage?: number,
   globalRule?: string,
+  abandonedCartAbandonmentTimeMinutes?: number,
+  abandonedCartMinimumCartValue?: number,
+  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive',
 }) {
   const projectUuid = store.getState().project.project_uuid;
 
@@ -859,6 +887,9 @@ export async function updateAgentGlobalRuleRequest(data: {
     agentUuid: data.agentUuid,
     contactPercentage: data.contactPercentage,
     globalRule: data.globalRule,
+    abandonedCartAbandonmentTimeMinutes: data.abandonedCartAbandonmentTimeMinutes,
+    abandonedCartMinimumCartValue: data.abandonedCartMinimumCartValue,
+    abandonedCartHeaderImageType: data.abandonedCartHeaderImageType,
   });
 
   if ('uuid' in Object(response)) {
@@ -866,6 +897,9 @@ export async function updateAgentGlobalRuleRequest(data: {
       uuid: response.uuid,
       contactPercentage: response.contact_percentage,
       globalRule: response.global_rule_prompt,
+      abandonedCartAbandonmentTimeMinutes: response.abandoned_cart_config?.abandonment_time_minutes,
+      abandonedCartMinimumCartValue: response.abandoned_cart_config?.minimum_cart_value,
+      abandonedCartHeaderImageType: response.abandoned_cart_config?.header_image_type,
     };
   } else {
     let errorText = '';
