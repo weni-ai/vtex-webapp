@@ -38,7 +38,6 @@ export function Radio(props: {
   }
 
   function onUpdateModelValue(value: string | number) {
-    console.log('onUpdateModelValue', value);
     props.onChange?.();
   }
 

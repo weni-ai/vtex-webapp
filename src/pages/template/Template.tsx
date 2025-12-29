@@ -60,8 +60,6 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
 
   const templateUuid = useMemo(() => propTemplateUuid || paramTemplateUuid, [propTemplateUuid, paramTemplateUuid]);
 
-  console.log('templateUuid', templateUuid);
-
   const [previousTemplateName, setPreviousTemplateName] = useState('');
   const [templateName, setTemplateName] = useState('');
   const [templateStatus, setTemplateStatus] = useState<"active" | "pending" | "rejected" | "needs-editing">('active');

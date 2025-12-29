@@ -371,8 +371,6 @@ export function AgentIndex() {
       setContactPercentage(response.contactPercentage);
       setAgentGlobalRule(response.globalRule || '');
 
-      console.log(response.abandonedCartHeaderImageType, 'response.abandonedCartHeaderImageType');
-
       if (response.abandonedCartAbandonmentTimeMinutes || response.abandonedCartMinimumCartValue || response.abandonedCartHeaderImageType) {
         setAbandonedCartConfig({
           abandonmentTimeMinutes: response.abandonedCartAbandonmentTimeMinutes || 0,
@@ -382,8 +380,6 @@ export function AgentIndex() {
             'most_expensive': 'most_expensive' as const,
           }[response.abandonedCartHeaderImageType as 'first_image' | 'most_expensive'] || 'first_image' as const
         });
-
-        console.log('aqui', abandonedCartConfig?.headerImageType)
       }
 
       const templates = response.templates.filter(({ status }) => ['active', 'pending', 'rejected', 'needs-editing'].includes(status));
