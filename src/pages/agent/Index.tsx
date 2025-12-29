@@ -124,7 +124,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
   }, [abandonedCartConfigState, abandonedCartConfig]);
 
   const hasAbandonedCartAbandonmentTimeMinutesError = useMemo(() => {
-    return (abandonedCartConfigState?.abandonmentTimeMinutes || 0) < 20;
+    return isSimplifiedView && (abandonedCartConfigState?.abandonmentTimeMinutes || 0) < 20;
   }, [abandonedCartConfigState?.abandonmentTimeMinutes]);
 
   async function handleSave() {
