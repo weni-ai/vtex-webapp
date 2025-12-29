@@ -15,6 +15,11 @@ import { Template as TemplatePage } from '../template/Template';
 
 import './Index.style.css';
 
+interface AbandonedCartConfig {
+  abandonmentTimeMinutes: number;
+  minimumCartValue: number;
+  headerImageType: 'first_image' | 'most_expensive';
+}
 
 export interface Template {
   uuid: string;
@@ -53,11 +58,7 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
   )
 }
 
-function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView, abandonedCartConfig }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean, abandonedCartConfig?: {
-  abandonmentTimeMinutes: number;
-  minimumCartValue: number;
-  headerImageType: 'first_image' | 'most_expensive';
-} | undefined }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView, abandonedCartConfig }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean, abandonedCartConfig?: AbandonedCartConfig }) {
   const { t } = useTranslation();
 
   const { assignedAgentUuid } = useParams();
@@ -69,11 +70,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
   const [successText, setSuccessText] = useState('');
   const [errorText, setErrorText] = useState('');
   
-  const [abandonedCartConfigState, setAbandonedCartConfigState] = useState<{
-    abandonmentTimeMinutes: number;
-    minimumCartValue: number;
-    headerImageType: 'first_image' | 'most_expensive';
-  } | undefined>(abandonedCartConfig);
+  const [abandonedCartConfigState, setAbandonedCartConfigState] = useState<AbandonedCartConfig | undefined>(abandonedCartConfig);
 
   useEffect(() => {
     setAbandonedCartConfigState(abandonedCartConfig);
@@ -312,11 +309,7 @@ export function AgentIndex() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
-  const [abandonedCartConfig, setAbandonedCartConfig] = useState<{
-    abandonmentTimeMinutes: number;
-    minimumCartValue: number;
-    headerImageType: 'first_image' | 'most_expensive';
-  } | undefined>(undefined);
+  const [abandonedCartConfig, setAbandonedCartConfig] = useState<AbandonedCartConfig | undefined>(undefined);
   const [contactPercentage, setContactPercentage] = useState<number | undefined>(undefined);
   const [agentGlobalRule, setAgentGlobalRule] = useState('');
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -373,12 +366,6 @@ export function AgentIndex() {
       const isAbandonedCart = response.templates.at(0)?.name.toLowerCase() === 'abandoned cart' && response.templates.length === 1;
 
       setIsAbandonedCart(isAbandonedCart);
-
-      // if (isAbandonedCart) {
-      //   tabStore.setSelectedId('template');
-      // } else {
-      //   tabStore.setSelectedId('about');
-      // }
 
       setWebhookUrl(response.webhookUrl);
       setContactPercentage(response.contactPercentage);

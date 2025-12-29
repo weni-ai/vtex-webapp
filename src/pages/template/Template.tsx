@@ -71,11 +71,6 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
 
   const [abandonedCartHeaderImageTypeState, setAbandonedCartHeaderImageTypeState] = useState<typeof abandonedCartHeaderImageType>(abandonedCartHeaderImageType || 'first_image');
 
-  // useEffect(() => {
-  //   console.log(abandonedCartHeaderImageType, 'abandonedCartHeaderImageType', abandonedCartHeaderImageTypeState);
-  //   setAbandonedCartHeaderImageTypeState(abandonedCartHeaderImageType || 'first_image');
-  // }, [abandonedCartHeaderImageType]);
-
   const hasAbandonedCartHeaderImageTypeChanged = useMemo(() => {
     return abandonedCartHeaderImageType !== abandonedCartHeaderImageTypeState;
   }, [abandonedCartHeaderImageType, abandonedCartHeaderImageTypeState]);

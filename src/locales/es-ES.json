@@ -684,6 +684,13 @@
                             "media": {
                                 "label": "Media"
                             }
+                        },
+                        "media": {
+                            "title": "Imagen del carrito",
+                            "options": {
+                                "first_item": "Primer artículo del carrito",
+                                "most_expensive": "Producto más caro"
+                            }
                         }
                     },
                     "footer": {
