@@ -41,7 +41,7 @@ interface CreateAgentBuilderData {
 interface AbandonedCartConfig {
   abandonment_time_minutes: number;
   minimum_cart_value: number;
-  header_image_type: 'no_image' | 'first_image' | 'most_expensive';
+  header_image_type: 'no_image' | 'first_item' | 'most_expensive';
 }
 
 export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
@@ -765,7 +765,7 @@ class AssignedAgent {
     globalRule?: string,
     abandonedCartAbandonmentTimeMinutes?: number,
     abandonedCartMinimumCartValue?: number,
-    abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive',
+    abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive',
   }) {
     const userEmail = store.getState().user.userData?.user;
 
@@ -878,7 +878,7 @@ export async function updateAgentGlobalRuleRequest(data: {
   globalRule?: string,
   abandonedCartAbandonmentTimeMinutes?: number,
   abandonedCartMinimumCartValue?: number,
-  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive',
+  abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive',
 }) {
   const projectUuid = store.getState().project.project_uuid;
 

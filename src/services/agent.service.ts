@@ -458,7 +458,7 @@ export async function updateAgentGlobalRule(data: {
   globalRule?: string;
   abandonedCartAbandonmentTimeMinutes?: number;
   abandonedCartMinimumCartValue?: number;
-  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive';
+  abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive';
 }) {
   const response = await updateAgentGlobalRuleRequest(data);
 

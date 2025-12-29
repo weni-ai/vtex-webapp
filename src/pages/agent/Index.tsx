@@ -20,7 +20,7 @@ import './Index.style.css';
 interface AbandonedCartConfig {
   abandonmentTimeMinutes: number;
   minimumCartValue: number;
-  headerImageType: 'first_image' | 'most_expensive';
+  headerImageType: 'first_item' | 'most_expensive';
 }
 
 export interface Template {
@@ -168,7 +168,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
 
   function handleAbandonedCartConfigChange(key: 'minimumCartValue' | 'abandonmentTimeMinutes', value: string) {
     setAbandonedCartConfigState({
-      headerImageType: abandonedCartConfigState?.headerImageType || 'first_image',
+      headerImageType: abandonedCartConfigState?.headerImageType || 'first_item',
       abandonmentTimeMinutes: abandonedCartConfigState?.abandonmentTimeMinutes || 0,
       minimumCartValue: abandonedCartConfigState?.minimumCartValue || 0,
       [key]: Number(value) || 0,
@@ -480,9 +480,9 @@ export function AgentIndex() {
           abandonmentTimeMinutes: response.abandonedCartAbandonmentTimeMinutes || 0,
           minimumCartValue: response.abandonedCartMinimumCartValue || 0,
           headerImageType: {
-            'first_image': 'first_image' as const,
+            'first_item': 'first_item' as const,
             'most_expensive': 'most_expensive' as const,
-          }[response.abandonedCartHeaderImageType as 'first_image' | 'most_expensive'] || 'first_image' as const
+          }[response.abandonedCartHeaderImageType as 'first_item' | 'most_expensive'] || 'first_image' as const
         });
       }
 
