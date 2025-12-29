@@ -46,7 +46,9 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
-  const [abandonedCartImage, setAbandonedCartImage] = useState({ 'first_image': 'Primeiro item do carrinho' as const, 'most_expensive': 'Produto mais caro' as const }[abandonedCartHeaderImageType as 'first_image' | 'most_expensive'] || 'Primeiro item do carrinho' as const);
+  const initialAbandonedCartImage: 'first_image' | 'most_expensive' =
+    abandonedCartHeaderImageType === 'most_expensive' ? 'most_expensive' : 'first_image';
+  const [abandonedCartImage, setAbandonedCartImage] = useState<'first_image' | 'most_expensive'>(initialAbandonedCartImage);
 
   function adjustContentTextHeight() {
     if (contentTextRef.current) {
@@ -487,7 +489,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
             <Flex direction="column" gap="$space-4" key={`element-${index}`}>
               <Flex align="center" gap="$space-2" justify="space-between">
                 <Text variant="emphasis" color="$fg-base">
-                  {isSimplifiedView && element === 'header' ? 'Imagem do carrinho' : t(`template.form.fields.content.${element}.title`)}
+                  {isSimplifiedView && element === 'header' ? t('template.form.fields.content.header.media.title') : t(`template.form.fields.content.${element}.title`)}
                 </Text>
 
                 {isSimplifiedView && element !== 'button' && (
@@ -509,17 +511,17 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                   data-testid="abandoned-cart-image-select"
                   value={abandonedCartImage}
                   setValue={(value) => {
-                    setAbandonedCartImage(value as 'Primeiro item do carrinho' | 'Produto mais caro');
-                    setAbandonedCartHeaderImageType?.({ 'Primeiro item do carrinho': 'first_image' as const, 'Produto mais caro': 'most_expensive' as const }[value] || 'first_image');
+                    setAbandonedCartImage(value as 'first_image' | 'most_expensive');
+                    setAbandonedCartHeaderImageType?.(value as 'first_image' | 'most_expensive');
                   }}
                   options={[
                     {
-                      label: 'Primeiro item do carrinho',
-                      value: 'Primeiro item do carrinho',
+                      label: t('template.form.fields.content.header.media.options.first_item'),
+                      value: 'first_image',
                     },
                     {
-                      label: 'Produto mais caro',
-                      value: 'Produto mais caro',
+                      label: t('template.form.fields.content.header.media.options.most_expensive'),
+                      value: 'most_expensive',
                     },
                   ]}
                   style={{ width: '100%' }}
@@ -562,7 +564,7 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                     onClick={() => setElementVisibility(element, true)}
                     data-testid={`add-element-${element}-button`}
                   >
-                    {isSimplifiedView && element === 'header' ? 'Imagem do carrinho' : t(`template.form.areas.content.elements.${element}`)}
+                    {isSimplifiedView && element === 'header' ? t('template.form.fields.content.header.media.title') : t(`template.form.areas.content.elements.${element}`)}
                   </MenuItem>
                 ))
               }
