@@ -261,7 +261,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
               />
             )}
 
-            {hasAbandonedCartAbandonmentTimeMinutesError && <FieldError>{'O tempo de abandono do carrinho deve ser maior que 20 minutos'}</FieldError>}
+            {hasAbandonedCartAbandonmentTimeMinutesError && <FieldError>{t('agents.details.settings.fields.abandoned_cart.abandonment_time_minutes.errors.min')}</FieldError>}
           </Field>
         </>
       )}

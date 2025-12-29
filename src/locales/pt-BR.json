@@ -130,6 +130,13 @@
                     "global_rule": {
                         "label": "Prompt global (opcional)",
                         "description": "Use esta área para definir regras e diretrizes globais para o agente"
+                    },
+                    "abandoned_cart": {
+                        "abandonment_time_minutes": {
+                            "errors": {
+                                "min": "O tempo de abandono do carrinho deve ser maior que 20 minutos"
+                            }
+                        }
                     }
                 },
                 "buttons": {
