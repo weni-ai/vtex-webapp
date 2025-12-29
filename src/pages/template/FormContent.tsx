@@ -509,7 +509,10 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                 <Select
                   system="shoreline"
                   data-testid="abandoned-cart-image-select"
-                  value={abandonedCartImage}
+                  value={{
+                    'first_image': t('template.form.fields.content.header.media.options.first_item'),
+                    'most_expensive': t('template.form.fields.content.header.media.options.most_expensive'),
+                  }[abandonedCartImage]}
                   setValue={(value) => {
                     setAbandonedCartImage(value as 'first_image' | 'most_expensive');
                     setAbandonedCartHeaderImageType?.(value as 'first_image' | 'most_expensive');
