@@ -688,6 +688,13 @@
               "media": {
                 "label": "Media"
               }
+            },
+            "media": {
+              "title": "Cart image",
+              "options": {
+                "first_item": "First cart item",
+                "most_expensive": "Most expensive product"
+              }
             }
           },
           "footer": {
