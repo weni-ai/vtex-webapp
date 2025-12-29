@@ -38,6 +38,12 @@ interface CreateAgentBuilderData {
   links: string[];
 }
 
+interface AbandonedCartConfig {
+  abandonment_time_minutes: number;
+  minimum_cart_value: number;
+  header_image_type: 'no_image' | 'first_image' | 'most_expensive';
+}
+
 export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
   const projectUuid = store.getState().project.project_uuid;
   const userEmail = store.getState().user.userData?.user;
@@ -242,11 +248,7 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
     channel_uuid: string;
     webhook_url: string;
     global_rule_prompt: string;
-    abandoned_cart_config?: {
-      abandonment_time_minutes: number;
-      minimum_cart_value: number;
-      header_image_type: 'no_image' | 'first_image' | 'most_expensive';
-    };
+    abandoned_cart_config?: AbandonedCartConfig;
   }>(
     'GET',
     `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
@@ -769,11 +771,7 @@ class AssignedAgent {
       uuid: string;
       contact_percentage: number;
       global_rule_prompt: string;
-      abandoned_cart_config: {
-        abandonment_time_minutes: number;
-        minimum_cart_value: number;
-        header_image_type: 'no_image' | 'first_image' | 'most_expensive';
-      };
+      abandoned_cart_config: AbandonedCartConfig;
     } & error>(
       'PATCH',
       `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/`,
