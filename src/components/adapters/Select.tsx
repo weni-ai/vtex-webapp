@@ -1,6 +1,7 @@
 import unnnic from "@weni/unnnic-system";
 import { applyPureVueInReact } from "veaury";
 import { useState } from "react";
+import { Select as ShorelineSelect, SelectItem as ShorelineSelectItem } from "@vtex/shoreline";
 
 const UnnnicSelect = applyPureVueInReact(unnnic.unnnicSelectSmart) as React.ComponentType<{
   'data-testid'?: string;
@@ -20,6 +21,7 @@ export function Select(props: {
   }[],
   size?: 'small' | 'medium' | 'large',
   'data-testid'?: string,
+  style?: React.CSSProperties,
 }) {
   const dataTestId = props['data-testid'];
   const size = props.size || 'medium';
@@ -32,6 +34,19 @@ export function Select(props: {
     small: 'sm' as const,
     medium: 'md' as const,
   };
+
+  if (props.system === 'shoreline') {
+    return <ShorelineSelect
+      data-testid={dataTestId}
+      value={props.value}
+      setValue={props.setValue}
+      style={props.style}
+    >
+      {props.options.map(option => (
+        <ShorelineSelectItem key={option.value} value={option.value}>{option.label}</ShorelineSelectItem>
+      ))}
+    </ShorelineSelect>;
+  }
 
   return <UnnnicSelect
     data-testid={dataTestId}

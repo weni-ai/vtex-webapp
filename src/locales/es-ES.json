@@ -130,6 +130,13 @@
                     "global_rule": {
                         "label": "Prompt global (opcional)",
                         "description": "Usa esta área para definir reglas y directrices globales para el agente"
+                    },
+                    "abandoned_cart": {
+                        "abandonment_time_minutes": {
+                            "errors": {
+                                "min": "El tiempo de abandono del carrito debe ser mayor que 20 minutos"
+                            }
+                        }
                     }
                 },
                 "buttons": {
@@ -712,6 +719,13 @@
                             },
                             "media": {
                                 "label": "Media"
+                            }
+                        },
+                        "media": {
+                            "title": "Imagen del carrito",
+                            "options": {
+                                "first_item": "Primer artículo del carrito",
+                                "most_expensive": "Producto más caro"
                             }
                         }
                     },
