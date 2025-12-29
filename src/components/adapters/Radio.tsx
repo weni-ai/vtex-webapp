@@ -37,7 +37,7 @@ export function Radio(props: {
     </ShorelineRadio>;
   }
 
-  function onUpdateModelValue(value: string | number) {
+  function onUpdateModelValue(_value: string | number) {
     props.onChange?.();
   }
 
