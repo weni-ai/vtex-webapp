@@ -41,7 +41,7 @@ interface CreateAgentBuilderData {
 interface AbandonedCartConfig {
   abandonment_time_minutes: number;
   minimum_cart_value: number;
-  header_image_type: 'no_image' | 'first_image' | 'most_expensive';
+  header_image_type: 'no_image' | 'first_item' | 'most_expensive';
 }
 
 export async function createAgentBuilderRequest(data: CreateAgentBuilderData) {
@@ -248,6 +248,12 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
     channel_uuid: string;
     webhook_url: string;
     global_rule_prompt: string;
+    has_delivered_order_templates: boolean;
+    delivered_order_tracking_config?: {
+      is_enabled: boolean;
+      webhook_url: string;
+      vtex_app_key: string;
+    };
     abandoned_cart_config?: AbandonedCartConfig;
   }>(
     'GET',
@@ -269,6 +275,12 @@ export async function agentCLIRequest(data: { agentUuid: string, params?: { show
       contactPercentage: response.contact_percentage,
       webhookUrl: response.webhook_url,
       globalRule: response.global_rule_prompt,
+      hasDeliveredOrderTemplates: response.has_delivered_order_templates,
+      deliveredOrderTrackingConfig: {
+        isEnabled: response.delivered_order_tracking_config?.is_enabled || false,
+        webhookUrl: response.delivered_order_tracking_config?.webhook_url || '',
+        appKey: response.delivered_order_tracking_config?.vtex_app_key || '',
+      },
       abandonedCartAbandonmentTimeMinutes: response.abandoned_cart_config?.abandonment_time_minutes || 0,
       abandonedCartMinimumCartValue: response.abandoned_cart_config?.minimum_cart_value || 0,
       abandonedCartHeaderImageType: response.abandoned_cart_config?.header_image_type || 'no_image',
@@ -753,7 +765,7 @@ class AssignedAgent {
     globalRule?: string,
     abandonedCartAbandonmentTimeMinutes?: number,
     abandonedCartMinimumCartValue?: number,
-    abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive',
+    abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive',
   }) {
     const userEmail = store.getState().user.userData?.user;
 
@@ -800,6 +812,63 @@ class AssignedAgent {
       }
     );
   }
+
+  static enableDeliveredOrderTracking(data: {
+    projectUuid: string,
+    agentUuid: string,
+    appToken: string,
+    appKey: string,
+  }) {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    type error =
+      {
+        error?: {
+          error?: string;
+          detail?: string,
+        }
+      }
+
+    return proxy<{ is_enabled: boolean } & error>(
+      'POST',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/delivered-order-tracking/enable/`,
+      {
+        data: {
+          vtex_app_key: data.appKey,
+          vtex_app_token: data.appToken,
+        },
+        headers: { 'Project-Uuid': projectUuid, },
+        params: { user_email: userEmail || '', },
+      }
+    );
+  }
+
+  static disableDeliveredOrderTracking(data: {
+    projectUuid: string,
+    agentUuid: string,
+  }) {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    type error =
+      {
+        error?: {
+          error?: string;
+          detail?: string,
+        }
+      }
+
+    return proxy<{ is_enabled: boolean } & error>(
+      'POST',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/assigneds/${data.agentUuid}/delivered-order-tracking/disable/`,
+      {
+        data: {},
+        headers: { 'Project-Uuid': projectUuid, },
+        params: { user_email: userEmail || '', },
+      }
+    );
+  }
 }
 
 
@@ -809,7 +878,7 @@ export async function updateAgentGlobalRuleRequest(data: {
   globalRule?: string,
   abandonedCartAbandonmentTimeMinutes?: number,
   abandonedCartMinimumCartValue?: number,
-  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive',
+  abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive',
 }) {
   const projectUuid = store.getState().project.project_uuid;
 
@@ -840,5 +909,59 @@ export async function updateAgentGlobalRuleRequest(data: {
     }
 
     throw new Error(errorText || t('agents.details.settings.actions.save.error'));
+  }
+}
+
+export async function enableDeliveredOrderTrackingRequest(data: {
+  agentUuid: string,
+  appToken: string,
+  appKey: string,
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await AssignedAgent.enableDeliveredOrderTracking({
+    projectUuid,
+    agentUuid: data.agentUuid,
+    appToken: data.appToken,
+    appKey: data.appKey,
+  });
+
+  if ('is_enabled' in Object(response)) {
+    return {
+      isEnabled: response.is_enabled,
+    };
+  } else {
+    let errorText = '';
+
+    if ('error' in Object(response)) {
+      errorText = response.error?.error || response.error?.detail || '';
+    }
+
+    throw new Error(errorText || t('agents.details.delivered_order_tracking.actions.enable.error'));
+  }
+}
+
+export async function disableDeliveredOrderTrackingRequest(data: {
+  agentUuid: string,
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await AssignedAgent.disableDeliveredOrderTracking({
+    projectUuid,
+    agentUuid: data.agentUuid,
+  });
+
+  if ('is_enabled' in Object(response)) {
+    return {
+      isEnabled: response.is_enabled,
+    };
+  } else {
+    let errorText = '';
+
+    if ('error' in Object(response)) {
+      errorText = response.error?.error || response.error?.detail || '';
+    }
+
+    throw new Error(errorText || t('agents.details.delivered_order_tracking.actions.disable.error'));
   }
 }

@@ -52,7 +52,7 @@ function TemplateAlert({ variant, message, dataTestId }: { variant: "warning" | 
   )
 }
 
-export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, abandonedCartHeaderImageType, loadAgentDetails }: { templateUuid?: string, isSimplifiedView?: boolean, abandonedCartHeaderImageType?: 'first_image' | 'most_expensive', loadAgentDetails?: () => void }) {
+export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, abandonedCartHeaderImageType, loadAgentDetails }: { templateUuid?: string, isSimplifiedView?: boolean, abandonedCartHeaderImageType?: 'first_item' | 'most_expensive', loadAgentDetails?: () => void }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid: paramTemplateUuid } = useParams();
@@ -67,7 +67,7 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
   const [startCondition, setStartCondition] = useState('');
   const [templateIsCustom, setTemplateIsCustom] = useState(false);
 
-  const [abandonedCartHeaderImageTypeState, setAbandonedCartHeaderImageTypeState] = useState<typeof abandonedCartHeaderImageType>(abandonedCartHeaderImageType || 'first_image');
+  const [abandonedCartHeaderImageTypeState, setAbandonedCartHeaderImageTypeState] = useState<typeof abandonedCartHeaderImageType>(abandonedCartHeaderImageType || 'first_item');
 
   const hasAbandonedCartHeaderImageTypeChanged = useMemo(() => {
     return abandonedCartHeaderImageType !== abandonedCartHeaderImageTypeState;

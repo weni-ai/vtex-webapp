@@ -143,6 +143,35 @@
                     "copy": "Copiar",
                     "save": "Guardar cambios"
                 }
+            },
+            "delivered_order_tracking": {
+                "title": "Seguimiento de pedidos entregados",
+                "status": {
+                    "enabled": "Activado",
+                    "disabled": "Desactivado"
+                },
+                "actions": {
+                    "enable": {
+                    "success": "Seguimiento de pedidos entregados activado con éxito",
+                    "error": "Error al activar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                    },
+                    "disable": {
+                    "success": "Seguimiento de pedidos entregados desactivado con éxito",
+                    "error": "Error al desactivar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                    }
+                },
+                "fields": {
+                    "app_key": {
+                    "label": "App Key"
+                    },
+                    "app_token": {
+                    "label": "App Token"
+                    }
+                },
+                "buttons": {
+                    "enable": "Activar",
+                    "disable": "Desactivar"
+                }
             }
         },
         "categories": {
