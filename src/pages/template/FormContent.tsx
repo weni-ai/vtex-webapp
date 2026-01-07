@@ -24,8 +24,8 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   contentError?: string;
   canCreateVariable: boolean;
   isSimplifiedView?: boolean;
-  abandonedCartHeaderImageType?: 'no_image' | 'first_image' | 'most_expensive';
-  setAbandonedCartHeaderImageType?: (value: 'first_image' | 'most_expensive') => void;
+  abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive';
+  setAbandonedCartHeaderImageType?: (value: 'first_item' | 'most_expensive') => void;
 }) {
   const { t } = useTranslation();
 
@@ -46,9 +46,9 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   const [buttonText, setButtonText] = useState('');
   const [buttonUrl, setButtonUrl] = useState('');
   const [buttonUrlExample, setButtonUrlExample] = useState('');
-  const initialAbandonedCartImage: 'first_image' | 'most_expensive' =
-    abandonedCartHeaderImageType === 'most_expensive' ? 'most_expensive' : 'first_image';
-  const [abandonedCartImage, setAbandonedCartImage] = useState<'first_image' | 'most_expensive'>(initialAbandonedCartImage);
+  const initialAbandonedCartImage: 'first_item' | 'most_expensive' =
+    abandonedCartHeaderImageType === 'most_expensive' ? 'most_expensive' : 'first_item';
+  const [abandonedCartImage, setAbandonedCartImage] = useState<'first_item' | 'most_expensive'>(initialAbandonedCartImage);
 
   function adjustContentTextHeight() {
     if (contentTextRef.current) {
@@ -510,17 +510,17 @@ export function FormContent({ status, content, setContent, prefilledContent, can
                   system="shoreline"
                   data-testid="abandoned-cart-image-select"
                   value={{
-                    'first_image': t('template.form.fields.content.header.media.options.first_item'),
+                    'first_item': t('template.form.fields.content.header.media.options.first_item'),
                     'most_expensive': t('template.form.fields.content.header.media.options.most_expensive'),
                   }[abandonedCartImage]}
                   setValue={(value) => {
-                    setAbandonedCartImage(value as 'first_image' | 'most_expensive');
-                    setAbandonedCartHeaderImageType?.(value as 'first_image' | 'most_expensive');
+                    setAbandonedCartImage(value as 'first_item' | 'most_expensive');
+                    setAbandonedCartHeaderImageType?.(value as 'first_item' | 'most_expensive');
                   }}
                   options={[
                     {
                       label: t('template.form.fields.content.header.media.options.first_item'),
-                      value: 'first_image',
+                      value: 'first_item',
                     },
                     {
                       label: t('template.form.fields.content.header.media.options.most_expensive'),
