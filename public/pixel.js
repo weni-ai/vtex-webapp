@@ -99,7 +99,7 @@ function handleEvents(e) {
 
 window.addEventListener('message', handleEvents);
 
-if (typeof $(window) === 'object' && typeof $(window).on === 'function') {
+if (typeof $ === 'function' && typeof $(window) === 'object' && typeof $(window).on === 'function') {
   const seeOrderFormThrottled = throttle(seeOrderForm, timeToCallNextAbandonedCartUpdateInSeconds * 1e3);
   $(window).on('orderFormUpdated.vtex', seeOrderFormThrottled);
 }
