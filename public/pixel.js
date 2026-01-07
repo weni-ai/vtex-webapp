@@ -4,6 +4,23 @@ function log(...messages) {
   }
 }
 
+const throttle = (func, limit) => {
+  let inThrottle;
+
+  return function(...args) {
+    const context = this;
+
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  };
+};
+
 JSON.safeStringify = (obj, indent = 2) => {
   let cache = [];
   const retVal = JSON.stringify(
@@ -81,4 +98,10 @@ function handleEvents(e) {
 }
 
 window.addEventListener('message', handleEvents);
+
+if (typeof $ === 'function' && typeof $(window) === 'object' && typeof $(window).on === 'function') {
+  const seeOrderFormThrottled = throttle(seeOrderForm, timeToCallNextAbandonedCartUpdateInSeconds * 1e3);
+  $(window).on('orderFormUpdated.vtex', seeOrderFormThrottled);
+}
+
 seeOrderForm();
