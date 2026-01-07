@@ -130,6 +130,13 @@
           "global_rule": {
             "label": "Global prompt (optional)",
             "description": "Use this area to define global rules and guidelines for the agent"
+          },
+          "abandoned_cart": {
+            "abandonment_time_minutes": {
+              "errors": {
+                "min": "Abandoned cart time must be greater than 20 minutes"
+              }
+            }
           }
         },
         "buttons": {
@@ -687,6 +694,13 @@
               },
               "media": {
                 "label": "Media"
+              }
+            },
+            "media": {
+              "title": "Cart image",
+              "options": {
+                "first_item": "First cart item",
+                "most_expensive": "Most expensive product"
               }
             }
           },
