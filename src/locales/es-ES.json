@@ -176,10 +176,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Agente pasivo"
+                "title": "Agente"
             },
             "active": {
-                "title": "Agente activo",
+                "title": "Automatización",
                 "order_status": {
                     "title": "Agente de status de pedido",
                     "description": "Mantén a tus clientes actualizados en tiempo real sobre el status de sus pedidos",
