@@ -190,16 +190,6 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
         </Text>
       </Alert>}
 
-      <InputCopyToClipboard
-        isLoading={isLoading}
-        label={t('agents.details.settings.fields.webhook_url.label')}
-        prefix="URL"
-        value={webhookUrl}
-        description={t('agents.details.settings.fields.webhook_url.description')}
-        successMessage={t('common.url_copied')}
-        testId="webhook-url-input"
-      />
-
       <Field>
         <Label>{t('agent.modals.publish.fields.percentage.title')}</Label>
 
@@ -241,7 +231,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
       {isSimplifiedView && (
         <>
           <Field>
-            <Label>{'Valor minimo do carrinho para disparo'}</Label>
+            <Label>{t('agents.details.settings.fields.abandoned_cart.minimum_cart_value.label')}</Label>
 
             {isLoading ? (
               <Skeleton style={{ width: '100%', height: '44px' }} />
@@ -257,7 +247,7 @@ function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, 
           </Field>
 
           <Field error={hasAbandonedCartAbandonmentTimeMinutesError}>
-            <Label>{'Tempo de abandono do carrinho em minutos'}</Label>
+            <Label>{t('agents.details.settings.fields.abandoned_cart.abandonment_time_minutes.label')}</Label>
 
             {isLoading ? (
               <Skeleton style={{ width: '100%', height: '44px' }} />
@@ -558,7 +548,7 @@ export function AgentIndex() {
           <TabProvider store={tabStore}>
             <TabList>
               <Tab id={'about'}>
-                {isAbandonedCart ? 'Template' : t('agents.details.about.title')}
+                {t('agents.details.about.title')}
               </Tab>
 
               <Tab id={'settings'}>{t('agents.details.settings.title')}</Tab>

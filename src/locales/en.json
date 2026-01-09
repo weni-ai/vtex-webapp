@@ -133,9 +133,13 @@
           },
           "abandoned_cart": {
             "abandonment_time_minutes": {
+              "label": "Abandoned cart time in minutes",
               "errors": {
                 "min": "Abandoned cart time must be greater than 20 minutes"
               }
+            },
+            "minimum_cart_value": {
+              "label": "Minimum cart value for trigger"
             }
           }
         },
