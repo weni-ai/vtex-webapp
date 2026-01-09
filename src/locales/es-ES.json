@@ -133,9 +133,13 @@
                     },
                     "abandoned_cart": {
                         "abandonment_time_minutes": {
+                            "label": "Tiempo de abandono del carrito en minutos",
                             "errors": {
                                 "min": "El tiempo de abandono del carrito debe ser mayor que 20 minutos"
                             }
+                        },
+                        "minimum_cart_value": {
+                            "label": "Valor mínimo del carrito para disparo"
                         }
                     }
                 },
