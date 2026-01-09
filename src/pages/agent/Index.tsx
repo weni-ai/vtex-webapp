@@ -30,7 +30,7 @@ export interface Template {
   status: 'active' | 'rejected' | 'pending' | 'needs-editing';
 }
 
-function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgentDetails }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean, loadAgentDetails: () => void }) {
+function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgentDetails, canManageTemplates = true }: { navigateToCreateTemplate: () => void, templates: Template[], isLoading: boolean, loadAgentDetails: () => void, canManageTemplates?: boolean }) {
   const { t } = useTranslation();
 
   return (
@@ -41,10 +41,12 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
           <Text variant="body" color="$fg-base">{t('template.list.description')}</Text>
         </Flex>
 
-        <Button variant="secondary" size="large" onClick={navigateToCreateTemplate} data-testid="create-custom-template-button">
+        {canManageTemplates && (
+          <Button variant="secondary" size="large" onClick={navigateToCreateTemplate} data-testid="create-custom-template-button">
           <IconPlus />
-          {t('template.buttons.add')}
-        </Button>
+            {t('template.buttons.add')}
+          </Button>
+        )}
       </Flex>
 
       <TemplateCardContainer>
@@ -53,7 +55,12 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
         )}
 
         {templates.map((template, index) => (
-          <TemplateCard key={index} {...template} loadAgentDetails={loadAgentDetails} />
+          <TemplateCard 
+            key={index} 
+            {...template} 
+            loadAgentDetails={loadAgentDetails} 
+            hasMenuOptions={canManageTemplates} 
+          />
         ))}
       </TemplateCardContainer>
     </Flex>
@@ -582,23 +589,16 @@ export function AgentIndex() {
                     {agentDescription}
                   </Text>
 
-                  {!isAbandonedCart && <AgentDescriptiveStatus status={'integrated'} showLabel={true} />}
+                  <AgentDescriptiveStatus status={'integrated'} showLabel={true} />
                 </Flex>
-
-                {!isAbandonedCart && <Divider />}
-
-                {isAbandonedCart ? (
-                  <section className="abandoned-cart-container">
-                    <TemplatePage templateUuid={templates[0].uuid} isSimplifiedView abandonedCartHeaderImageType={abandonedCartConfig?.headerImageType} loadAgentDetails={loadAgentDetails} />
-                  </section>
-                ) : (
-                  <TemplateList
-                    navigateToCreateTemplate={navigateToCreateTemplate}
-                    templates={templates}
-                    isLoading={isLoading}
-                    loadAgentDetails={loadAgentDetails}
-                  />
-                )}
+                <Divider />
+                <TemplateList
+                  navigateToCreateTemplate={navigateToCreateTemplate}
+                  templates={templates}
+                  isLoading={isLoading}
+                  loadAgentDetails={loadAgentDetails}
+                  canManageTemplates={!isAbandonedCart}
+                />              
               </Flex>
             </TabPanel>
 
