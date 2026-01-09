@@ -48,7 +48,7 @@ export function TemplateCardSkeleton({ count }: { count: number }) {
   )
 }
 
-export function TemplateCard({ uuid, name, description, status, loadAgentDetails }: Template & { loadAgentDetails: () => void }) {
+export function TemplateCard({ uuid, name, description, status, loadAgentDetails, hasMenuOptions = true }: Template & { loadAgentDetails: () => void, hasMenuOptions?: boolean }) {
   const navigate = useNavigate();
   const [isDisabling, setIsDisabling] = useState(false);
 
@@ -86,28 +86,30 @@ export function TemplateCard({ uuid, name, description, status, loadAgentDetails
 
         <TemplateStatusTag status={status} />
 
-        <Flex style={{ marginLeft: 'auto', alignSelf: 'flex-start' }}>
-          {isDisabling ? (
-            <Flex style={{ padding: 'var(--sl-space-2)' }}>
-              <Spinner size={20} />
-            </Flex>
-          ) : (
-            <MenuProvider>
-              <MenuTrigger asChild>
-                <IconButton variant="tertiary" label={t('template.card.actions.label')}>
-                  <IconDotsThreeVertical />
-                </IconButton>
-              </MenuTrigger>
+        {hasMenuOptions && (
+          <Flex style={{ marginLeft: 'auto', alignSelf: 'flex-start' }}>
+            {isDisabling ? (
+              <Flex style={{ padding: 'var(--sl-space-2)' }}>
+                <Spinner size={20} />
+              </Flex>
+            ) : (
+              <MenuProvider>
+                <MenuTrigger asChild>
+                  <IconButton variant="tertiary" label={t('template.card.actions.label')}>
+                    <IconDotsThreeVertical />
+                  </IconButton>
+                </MenuTrigger>
 
-              <MenuPopover>
-                <MenuItem onClick={disableTemplate}>
-                  <IconPauseCircle />
-                  {t('template.card.actions.disable')}
-                </MenuItem>
-              </MenuPopover>
-            </MenuProvider>
-          )}
-        </Flex>
+                <MenuPopover>
+                  <MenuItem onClick={disableTemplate}>
+                    <IconPauseCircle />
+                    {t('template.card.actions.disable')}
+                  </MenuItem>
+                </MenuPopover>
+              </MenuProvider>
+            )}
+          </Flex>
+        )}
       </Flex>
 
       <Flex style={{ height: '60px' }}>

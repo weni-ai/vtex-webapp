@@ -133,9 +133,13 @@
           },
           "abandoned_cart": {
             "abandonment_time_minutes": {
+              "label": "Abandoned cart time in minutes",
               "errors": {
                 "min": "Abandoned cart time must be greater than 20 minutes"
               }
+            },
+            "minimum_cart_value": {
+              "label": "Minimum cart value for trigger"
             }
           }
         },
@@ -176,10 +180,10 @@
     },
     "categories": {
       "passive": {
-        "title": "Passive Agent"
+        "title": "Agent"
       },
       "active": {
-        "title": "Active Agent",
+        "title": "Automation",
         "order_status": {
           "title": "Order status agent",
           "description": "Keep customers updated on the order status in real time",
