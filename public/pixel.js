@@ -71,19 +71,31 @@ function seeOrderForm() {
 
       const phone = profile.phone?.value || data.clientProfileData.phone;
 
-      fetch('/_v/abandoned-cart-notification', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cart_id: data.orderFormId,
-          phone,
-          account: account.accountName?.value,
-          name: data.clientProfileData.firstName,
-        }),
+      const accountName = account.accountName?.value;
+
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      };
+
+      const body = JSON.stringify({
+        cart_id: data.orderFormId,
+        phone,
+        account: accountName,
+        name: data.clientProfileData.firstName,
       });
+
+      const requestOptions = {
+        method: 'POST',
+        headers,
+        body,
+      };
+
+      fetch('/_v/abandoned-cart-notification', requestOptions)
+        .then((response) => { if (response.status !== 200) { throw new Error('Status different from 200')} })
+        .catch(() => {
+          fetch(`https://${accountName}.myvtex.com/_v/abandoned-cart-notification`, requestOptions);
+        });
     });
 }
 
