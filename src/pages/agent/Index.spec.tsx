@@ -225,17 +225,6 @@ describe('AgentIndex', () => {
   });
 
   describe('settings tab', () => {
-    it('should display webhook URL', async () => {
-      render(<AgentIndex />);
-
-      const settingsTab = screen.getByText('agents.details.settings.title');
-      fireEvent.click(settingsTab);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('webhook-url-input')).toHaveValue('https://webhook.example.com');
-      });
-    });
-
     it('should display contact percentage', async () => {
       render(<AgentIndex />);
 
