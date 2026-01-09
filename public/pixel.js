@@ -91,9 +91,11 @@ function seeOrderForm() {
         body,
       };
 
-      fetch('/_v/abandoned-cart-notification', requestOptions).catch(() => {
-        fetch(`https://${accountName}.myvtex.com/_v/abandoned-cart-notification`, requestOptions);
-      });
+      fetch('/_v/abandoned-cart-notification', requestOptions)
+        .then((response) => { if (response.status !== 200) { throw new Error('Status different from 200')} })
+        .catch(() => {
+          fetch(`https://${accountName}.myvtex.com/_v/abandoned-cart-notification`, requestOptions);
+        });
     });
 }
 
