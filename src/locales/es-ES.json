@@ -133,9 +133,13 @@
                     },
                     "abandoned_cart": {
                         "abandonment_time_minutes": {
+                            "label": "Tiempo de abandono del carrito en minutos",
                             "errors": {
                                 "min": "El tiempo de abandono del carrito debe ser mayor que 20 minutos"
                             }
+                        },
+                        "minimum_cart_value": {
+                            "label": "Valor mínimo del carrito para disparo"
                         }
                     }
                 },
@@ -176,10 +180,10 @@
         },
         "categories": {
             "passive": {
-                "title": "Agente pasivo"
+                "title": "Agente"
             },
             "active": {
-                "title": "Agente activo",
+                "title": "Automatización",
                 "order_status": {
                     "title": "Agente de status de pedido",
                     "description": "Mantén a tus clientes actualizados en tiempo real sobre el status de sus pedidos",
