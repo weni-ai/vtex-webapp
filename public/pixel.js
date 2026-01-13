@@ -7,7 +7,7 @@ function log(...messages) {
 const throttle = (func, limit) => {
   let inThrottle;
 
-  return function(...args) {
+  return function (...args) {
     const context = this;
 
     if (!inThrottle) {
@@ -92,7 +92,7 @@ function seeOrderForm() {
       };
 
       fetch('/_v/abandoned-cart-notification', requestOptions)
-        .then((response) => { if (response.status !== 200) { throw new Error('Status different from 200')} })
+        .then((response) => { if (response.status !== 200) { throw new Error('Status different from 200') } })
         .catch(() => {
           fetch(`https://${accountName}.myvtex.com/_v/abandoned-cart-notification`, requestOptions);
         });
@@ -112,8 +112,18 @@ function handleEvents(e) {
 window.addEventListener('message', handleEvents);
 
 if (typeof $ === 'function' && typeof $(window) === 'object' && typeof $(window).on === 'function') {
-  const seeOrderFormThrottled = throttle(seeOrderForm, timeToCallNextAbandonedCartUpdateInSeconds * 1e3);
+  const seeOrderFormThrottled = throttle(seeOrderForm, 3e3);
   $(window).on('orderFormUpdated.vtex', seeOrderFormThrottled);
 }
 
 seeOrderForm();
+
+getDetails().then(({ account }) => {
+  const accountId = account.id?.value;
+
+  if (accountId) {
+    const script = document.createElement('script');
+    script.src = `https://cdn.cloud.weni.ai/VTEXApp/accounts/${accountId}/webchat.js`;
+    document.head.appendChild(script);
+  }
+});
