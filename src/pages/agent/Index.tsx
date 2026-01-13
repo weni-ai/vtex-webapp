@@ -2,6 +2,7 @@ import { Alert, Bleed, Button, Divider, Field, FieldDescription, FieldError, Fle
 import { useEffect, useMemo, useState } from 'react';
 import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
+import { InputCopyToClipboard } from '../../components/InputCopyToClipboard';
 import { TemplateCard, TemplateCardContainer, TemplateCardSkeleton } from '../../components/TemplateCard';
 import { AgentDescriptiveStatus } from '../../components/agent/DescriptiveStatus';
 import { PublishModal } from '../../components/agent/modals/Publish';
@@ -65,7 +66,7 @@ function TemplateList({ navigateToCreateTemplate, templates, isLoading, loadAgen
   )
 }
 
-function Settings({ isLoading, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView, abandonedCartConfig }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean, abandonedCartConfig?: AbandonedCartConfig }) {
+function Settings({ isLoading, webhookUrl, contactPercentage, loadAgentDetails, previousGlobalRule, isSimplifiedView, abandonedCartConfig }: { isLoading: boolean, webhookUrl: string, contactPercentage: number | undefined, loadAgentDetails: () => void, previousGlobalRule: string, isSimplifiedView: boolean, abandonedCartConfig?: AbandonedCartConfig }) {
   const { t } = useTranslation();
 
   const { assignedAgentUuid } = useParams();
@@ -187,6 +188,18 @@ function Settings({ isLoading, contactPercentage, loadAgentDetails, previousGlob
           <Markdown>{errorText}</Markdown>
         </Text>
       </Alert>}
+
+      {!isSimplifiedView && (
+        <InputCopyToClipboard
+          isLoading={isLoading}
+          label={t('agents.details.settings.fields.webhook_url.label')}
+          prefix="URL"
+          value={webhookUrl}
+          description={t('agents.details.settings.fields.webhook_url.description')}
+          successMessage={t('common.url_copied')}
+          testId="webhook-url-input"
+        />
+      )}
 
       <Field>
         <Label>{t('agent.modals.publish.fields.percentage.title')}</Label>
