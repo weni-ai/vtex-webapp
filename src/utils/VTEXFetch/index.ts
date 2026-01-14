@@ -39,10 +39,11 @@ export function VTEXFetch<T = unknown>(url: string, options?: FetchOptions): Pro
         if (name === 'VTEXFetch' && id === responseId) {
           window.removeEventListener('message', handleMessage);
 
-          if (status === 'success') {
+
+          if (status === 'error' || response?.error) {
+            reject(new Error(reason || response?.error || 'Unknown error'));
+          } else if (status === 'success') {
             resolve(response);
-          } else if (status === 'error') {
-            reject(new Error(reason || 'Erro desconhecido'));
           }
         }
       };
