@@ -113,6 +113,12 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
   });
 
   useEffect(() => {
+    if (typeof document !== 'undefined' && document?.body?.style) {
+      document.body.style.overflow = '';
+    }
+  }, []);
+
+  useEffect(() => {
     if (templateUuid) {
       loadTemplate();
     }
