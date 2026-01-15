@@ -6,6 +6,7 @@ import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDi
 import store from "../store/provider.store";
 import getEnv from "../utils/env";
 import { useCache } from "../utils";
+import * as Sentry from "@sentry/react";
 
 export async function checkAgentIntegration(project_uuid: string) {
   const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
@@ -330,7 +331,20 @@ export async function getSkillMetrics(data: { startDate: string, endDate: string
     }
     return adaptGetSkillMetricsResponse(response);
   } catch (error: unknown) {
-    console.error('error getting skill metrics:', error);
+    Sentry.captureEvent({
+      message: 'getSkillMetrics error',
+      level: 'error',
+      tags: {
+        service: 'agent.service',
+        function: 'getSkillMetrics',
+      },
+      extra: {
+        startDate: data.startDate,
+        endDate: data.endDate,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+      },
+    });
     return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
   }
 }
