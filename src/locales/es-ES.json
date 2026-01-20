@@ -661,7 +661,7 @@
                     "header": {
                         "media": {
                             "empty": {
-                                "description": "Adjunta un ejemplo del archivo que se enviará"
+                                "description": "Adjunta un ejemplo del archivo que se enviará (máx. 500 KB)."
                             },
                             "buttons": {
                                 "upload": "Subir",
@@ -698,7 +698,8 @@
                     "missing_variable_one": "faltando {{variables}} variable",
                     "missing_variable_other": "faltando {{variables}} variables",
                     "undefined_variable_one": "variable {{variables}} no definida",
-                    "undefined_variable_other": "variables {{variables}} no definidas"
+                    "undefined_variable_other": "variables {{variables}} no definidas",
+                    "file_too_large": "El archivo seleccionado excede el tamaño máximo de 500 KB."
                 },
                 "name": {
                     "label": "Nombre de la plantilla"

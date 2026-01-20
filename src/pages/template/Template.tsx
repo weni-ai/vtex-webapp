@@ -330,7 +330,13 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
         if (mustBeProcessedByAI) {
           setErrorText(error.message);
         } else {
-          toast.critical(error.message);
+          let errorMessage = error.message;
+
+          if (errorMessage === 'request entity too large') {
+            errorMessage = t('template.form.fields.errors.file_too_large');
+          }
+
+          toast.critical(errorMessage);
         }
       }
     } finally {

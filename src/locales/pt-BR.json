@@ -661,7 +661,7 @@
                     "header": {
                         "media": {
                             "empty": {
-                                "description": "Anexe um exemplo do arquivo que será enviado"
+                                "description": "Anexe um exemplo do arquivo que será enviado (máx. 500 KB)."
                             },
                             "buttons": {
                                 "upload": "Upload",
@@ -698,7 +698,8 @@
                     "missing_variable_one": "faltando {{variables}} variável",
                     "missing_variable_other": "faltando {{variables}} variáveis",
                     "undefined_variable_one": "variável {{variables}} não definida",
-                    "undefined_variable_other": "variáveis {{variables}} não definidas"
+                    "undefined_variable_other": "variáveis {{variables}} não definidas",
+                    "file_too_large": "O arquivo selecionado excede o tamanho máximo de 500 KB."
                 },
                 "name": {
                     "label": "Nome do template"
