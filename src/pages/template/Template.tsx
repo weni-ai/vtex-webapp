@@ -52,7 +52,7 @@ function TemplateAlert({ variant, message, dataTestId }: { variant: "warning" | 
   )
 }
 
-export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, abandonedCartHeaderImageType, loadAgentDetails }: { templateUuid?: string, isSimplifiedView?: boolean, abandonedCartHeaderImageType?: 'first_item' | 'most_expensive', loadAgentDetails?: () => void }) {
+export function Template({ templateUuid: propTemplateUuid, abandonedCartHeaderImageType, loadAgentDetails }: { templateUuid?: string, abandonedCartHeaderImageType?: 'first_item' | 'most_expensive', loadAgentDetails?: () => void }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { assignedAgentUuid, templateUuid: paramTemplateUuid } = useParams();
@@ -66,6 +66,16 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
   const [previousStartCondition, setPreviousStartCondition] = useState('');
   const [startCondition, setStartCondition] = useState('');
   const [templateIsCustom, setTemplateIsCustom] = useState(false);
+
+  const [isSimplifiedView, setIsSimplifiedView] = useState(false);
+
+  useEffect(() => {
+    if (templateName.toLowerCase() === 'abandoned cart') {
+      setIsSimplifiedView(true);
+    } else {
+      setIsSimplifiedView(false);
+    }
+  }, [templateName]);
 
   const [abandonedCartHeaderImageTypeState, setAbandonedCartHeaderImageTypeState] = useState<typeof abandonedCartHeaderImageType>(abandonedCartHeaderImageType || 'first_item');
 
@@ -545,19 +555,17 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
       <PageHeader>
         <PageHeaderRow>
           <Flex align="center">
-            {!isSimplifiedView && (
-              <Bleed top="$space-2" bottom="$space-2">
-                <IconButton
-                  label={t('common.return')}
-                  asChild
-                  variant="tertiary"
-                  size="large"
-                  onClick={navigateToAgent}
-                >
-                  <IconArrowLeft />
-                </IconButton>
-              </Bleed>
-            )}
+            <Bleed top="$space-2" bottom="$space-2">
+              <IconButton
+                label={t('common.return')}
+                asChild
+                variant="tertiary"
+                size="large"
+                onClick={navigateToAgent}
+              >
+                <IconArrowLeft />
+              </IconButton>
+            </Bleed>
 
             {isEditing ? (
               <PageHeading>
@@ -573,13 +581,11 @@ export function Template({ templateUuid: propTemplateUuid, isSimplifiedView, aba
           </Flex>
 
           <Stack space="$space-3" horizontal>
-            {!isSimplifiedView && (
-              <Bleed top="$space-2" bottom="$space-2">
-                <Button variant="secondary" size="large" onClick={navigateToAgent}>
-                  {t('template.form.create.buttons.cancel')}
-                </Button>
-              </Bleed>
-            )}
+            <Bleed top="$space-2" bottom="$space-2">
+              <Button variant="secondary" size="large" onClick={navigateToAgent}>
+                {t('template.form.create.buttons.cancel')}
+              </Button>
+            </Bleed>
 
             <Bleed top="$space-2" bottom="$space-2">
               {
