@@ -665,7 +665,7 @@
           "header": {
             "media": {
               "empty": {
-                "description": "Attach an example of the file that will be sent"
+                "description": "Attach an example of the file that will be sent (max. 500 KB)."
               },
               "buttons": {
                 "upload": "Upload",
@@ -702,7 +702,8 @@
           "missing_variable_one": "missing {{variables}} variable",
           "missing_variable_other": "missing {{variables}} variables",
           "undefined_variable_one": "variable {{variables}} is not defined",
-          "undefined_variable_other": "variables {{variables}} are not defined"
+          "undefined_variable_other": "variables {{variables}} are not defined",
+          "file_too_large": "The selected file exceeds the 500 KB size limit."
         },
         "name": {
           "label": "Template name"
