@@ -590,7 +590,7 @@ export function AgentIndex() {
                     {agentDescription}
                   </Text>
 
-                  <AgentDescriptiveStatus status={'integrated'} showLabel={true} />
+                  <AgentDescriptiveStatus status={'integrated'} showLabel={true} type={'active'} />
                 </Flex>
                 <Divider />
                 <TemplateList

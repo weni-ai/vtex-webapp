@@ -1,6 +1,6 @@
 import { Flex, IconCheck, IconCode, Text } from "@vtex/shoreline";
 
-export function AgentDescriptiveStatus({ status, style, showLabel = false }: { status: 'test' | 'configuring' | 'integrated', style?: React.CSSProperties, showLabel?: boolean }) {
+export function AgentDescriptiveStatus({ status, style, showLabel = false, type }: { status: 'test' | 'configuring' | 'integrated', style?: React.CSSProperties, showLabel?: boolean, type?: 'active' | 'passive' }) {
   const { color, icon, text } = {
     test: {
       color: '$fg-base-disabled',
@@ -15,7 +15,7 @@ export function AgentDescriptiveStatus({ status, style, showLabel = false }: { s
     integrated: {
       color: '$fg-success',
       icon: <IconCheck />,
-      text: t('agents.common.added'),
+      text: type === 'active' ? t('agents.common.connected') : t('agents.common.added'),
     },
   }[status];
 

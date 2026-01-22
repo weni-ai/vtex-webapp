@@ -38,17 +38,17 @@
     "title": "Weni Agentic AI",
     "description": "Una solución empresarial de CX basada en IA para grandes marcas y retailers.",
     "improve": {
-        "description": "Conecta agentes a la plataforma Weni para acceder a recursos avanzados y opciones personalizables",
-        "button": "Conectarse con Weni"
+        "description": "Accede a la plataforma Weni para usar recursos avanzados y opciones personalizables.",
+        "button": "Acceder a Weni"
     },
     "agents": {
         "buttons": {
-            "gallery": "Asignar agentes",
-            "remove": "Eliminar agente"
+            "gallery": "Agregar solución",
+            "remove": "Desconectar automatización"
         },
         "modals": {
             "gallery": {
-                "title": "Galería de Agentes",
+                "title": "Soluciones disponibles",
                 "filters": {
                     "categories": {
                         "title": "Categoría",
@@ -79,6 +79,7 @@
                     "WhatsApp_required": "Canal WhatsApp necesario"
                 },
                 "title": "Asignar Agente {{name}}",
+                "automation_title": "Conectar {{name}}",
                 "steps": "Paso {{currentPage}} de {{totalPages}}",
                 "about": {
                     "title": "Acerca de"
@@ -99,7 +100,7 @@
                 }
             }
         },
-        "title": "Mi equipo de agentes",
+        "title": "Mis soluciones",
         "list": {
             "empty": {
                 "title": "Ningún agente asignado al equipo"
@@ -125,11 +126,11 @@
                 "fields": {
                     "webhook_url": {
                         "label": "URL de Webhook",
-                        "description": "Usa esta URL para configurar tu sistema externo para enviar eventos a este agente"
+                        "description": "Usa esta URL para configurar tu sistema externo para enviar eventos a esta automatización"
                     },
                     "global_rule": {
                         "label": "Prompt global (opcional)",
-                        "description": "Usa esta área para definir reglas y directrices globales para el agente"
+                        "description": "Usa esta área para definir reglas y directrices globales para la automatización"
                     },
                     "abandoned_cart": {
                         "abandonment_time_minutes": {
@@ -250,8 +251,10 @@
                 }
             },
             "add": "Asignar",
-            "added": "Agente activo",
-            "view": "Ver agente",
+            "added": "Activo",
+            "connect": "Conectar",
+            "connected": "Conectado",
+            "view": "Ver detalles",
             "test": "Agente en prueba",
             "configuring": "Configurando agente"
         }
@@ -275,6 +278,7 @@
             },
             "assign": {
                 "success": "Agente asignado con éxito. No olvides probar y personalizar antes de publicar",
+                "automation_success": "Automatización asignada con éxito.",
                 "error": "Algo salió mal. Por favor, inténtalo de nuevo"
             },
             "edit_template": {
@@ -316,7 +320,7 @@
                         }
                     },
                     "preview": {
-                        "title": "Vista previa y prueba",
+                        "title": "Previsualizar y probar",
                         "description": "Prueba tu agente escaneando el código QR de la imagen de la derecha:",
                         "fields": {
                             "url": {

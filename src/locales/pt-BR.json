@@ -38,17 +38,17 @@
     "title": "Weni Agentic IA",
     "description": "Uma solução empresarial de CX baseada em IA para marcas e varejistas.",
     "improve": {
-        "description": "Conecte agentes à plataforma Weni para acessar recursos avançados e opções personalizáveis",
-        "button": "Conectar à Weni"
+        "description": "Acesse a plataforma Weni para usar recursos avançados e opções personalizáveis.",
+        "button": "Acessar Weni"
     },
     "agents": {
         "buttons": {
-            "gallery": "Atribuir agentes",
-            "remove": "Remover agente"
+            "gallery": "Adicionar solução",
+            "remove": "Desconectar automação"
         },
         "modals": {
             "gallery": {
-                "title": "Galeria de Agentes",
+                "title": "Soluções disponíveis",
                 "filters": {
                     "categories": {
                         "title": "Categoria",
@@ -79,6 +79,7 @@
                     "WhatsApp_required": "Canal WhatsApp necessário"
                 },
                 "title": "Atribuir Agente {{name}}",
+                "automation_title": "Conectar {{name}}",
                 "steps": "Passo {{currentPage}} de {{totalPages}}",
                 "about": {
                     "title": "Sobre"
@@ -99,7 +100,7 @@
                 }
             }
         },
-        "title": "Meu time de agentes",
+        "title": "Minhas soluções",
         "list": {
             "empty": {
                 "title": "Nenhum agente atribuído à equipe"
@@ -125,11 +126,11 @@
                 "fields": {
                     "webhook_url": {
                         "label": "URL de Webhook",
-                        "description": "Use esta URL para configurar seu sistema externo para enviar eventos a este agente"
+                        "description": "Use esta URL para configurar seu sistema externo para enviar eventos a esta automação"
                     },
                     "global_rule": {
                         "label": "Prompt global (opcional)",
-                        "description": "Use esta área para definir regras e diretrizes globais para o agente"
+                        "description": "Use esta área para definir regras e diretrizes globais para a automação"
                     },
                     "abandoned_cart": {
                         "abandonment_time_minutes": {
@@ -250,8 +251,10 @@
                 }
             },
             "add": "Atribuir",
-            "added": "Agente ativo",
-            "view": "Ver agente",
+            "added": "Ativo",
+            "connect": "Conectar",
+            "connected": "Conectado",
+            "view": "Ver detalhes",
             "test": "Agente em teste",
             "configuring": "Configurando agente"
         }
@@ -275,6 +278,7 @@
             },
             "assign": {
                 "success": "Agente atribuído com sucesso. Não se esqueça de testar e personalizar antes de publicar",
+                "automation_success": "Automação conectada com sucesso.",
                 "error": "Algo saiu errado. Por favor, tente novamente"
             },
             "edit_template": {
@@ -316,7 +320,7 @@
                         }
                     },
                     "preview": {
-                        "title": "Vista previa e teste",
+                        "title": "Pré-visualizar e testar",
                         "description": "Teste seu agente escaneando o código QR abaixo:",
                         "fields": {
                             "url": {

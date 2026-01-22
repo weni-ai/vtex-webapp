@@ -266,7 +266,11 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           ].includes(status) && !isUpdateAgentLoading ?
             (
               <Flex align="center" gap="$space-4" justify="space-between">
-                <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
+                <AgentDescriptiveStatus
+                  status={status as 'test' | 'configuring' | 'integrated'}
+                  style={{ padding: 'var(--sl-space-3)' }}
+                  type={type}
+                />
 
                 {canSeeAgent && (
                   <Button
@@ -281,7 +285,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               </Flex>
             ) : (
               <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading} data-testid="agent-add-button">
-                <Text>{t('agents.common.add')}</Text>
+                <Text>{type === 'active' ? t('agents.common.connect') : t('agents.common.add')}</Text>
               </Button>
             )
         }
