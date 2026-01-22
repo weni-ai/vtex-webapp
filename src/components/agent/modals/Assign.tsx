@@ -122,12 +122,16 @@ export function AgentAssignModal({
     }
   }
 
+  const titleKey = useMemo(() => {
+    return agent?.notificationType === 'active' ? 'automation_title' : 'title';
+  }, [agent]);
+
   return (
     <Modal open={open} onClose={onClose} size="large">
       <ModalHeader>
         <ModalHeading>
           <Flex gap="$space-3" align="center">
-            {t('agents.modals.assign.title', { name: agent?.name })}
+            {t(`agents.modals.assign.${titleKey}`, { name: agent?.name })}
 
             {pages.length !== 1 &&
               <Tag size="normal" variant="secondary" color="gray" data-testid="step-tag">

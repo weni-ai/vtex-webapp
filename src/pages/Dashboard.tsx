@@ -187,7 +187,7 @@ export function Dashboard() {
 
       setIsAgentAssignModalOpen(false);
 
-      toast.success(t('agent.actions.assign.success'));
+      toast.success(t('agent.actions.assign.automation_success'));
     } catch {
       toast.critical(<GenericErrorToast />);
     } finally {

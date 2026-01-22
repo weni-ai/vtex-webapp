@@ -38,17 +38,17 @@
   "title": "Weni Agentic IA",
   "description": "An AI-based CX business solution for brands and retailers.",
   "improve": {
-    "description": "Connect agents to the Weni platform to access advanced features and customizable options",
-    "button": "Connect to Weni"
+    "description": "Access the Weni platform to use advanced features and customizable options.",
+    "button": "Access Weni"
   },
   "agents": {
     "buttons": {
-      "gallery": "Assign agents",
-      "remove": "Remove agent"
+      "gallery": "Add solution",
+      "remove": "Disconnect automation"
     },
     "modals": {
       "gallery": {
-        "title": "Agents Gallery",
+        "title": "Available solutions",
         "filters": {
           "categories": {
             "title": "Category",
@@ -79,6 +79,7 @@
           "WhatsApp_required": "WhatsApp Channel required"
         },
         "title": "Assign {{name}} Agent",
+        "automation_title": "Connect {{name}}",
         "steps": "Step {{currentPage}} of {{totalPages}}",
         "about": {
           "title": "About"
@@ -99,7 +100,7 @@
         }
       }
     },
-    "title": "My agents team",
+    "title": "My solutions",
     "list": {
       "empty": {
         "title": "No agent assigned to team"
@@ -125,11 +126,11 @@
         "fields": {
           "webhook_url": {
             "label": "Webhook URL",
-            "description": "Use this URL to configure your external system to send events to this agent"
+            "description": "Use this URL to configure your external system to send events to this automation"
           },
           "global_rule": {
             "label": "Global prompt (optional)",
-            "description": "Use this area to define global rules and guidelines for the agent"
+            "description": "Use this area to define global rules and guidelines for automation"
           },
           "abandoned_cart": {
             "abandonment_time_minutes": {
@@ -254,8 +255,10 @@
         }
       },
       "add": "Assign",
-      "added": "Agent in production",
-      "view": "View agent",
+      "added": "Active",
+      "connect": "Connect",
+      "connected": "Connected",
+      "view": "View details",
       "test": "Agent in test",
       "configuring": "Configuring agent"
     }
@@ -279,6 +282,7 @@
       },
       "assign": {
         "success": "Agent successfully assigned! Don’t forget to test and customize before publishing",
+        "automation_success": "Automation successfully assigned.",
         "error": "Something went wrong. Please try again"
       },
       "edit_template": {
