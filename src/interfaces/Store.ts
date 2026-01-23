@@ -33,6 +33,7 @@ export interface ProjectState {
     storeType: string;
     initialLoading: boolean;
     WhatsAppURL: string;
+    templateLanguages: { code: string; display_name: string }[] | null;
     assignedAgents: {
         uuid: string;
         webhookUrl: string;
