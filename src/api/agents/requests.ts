@@ -757,6 +757,26 @@ export async function createAssignedAgentTemplateRequest(data: {
   }
 }
 
+class Template {
+  static languages() {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    return proxy<{ code: string, display_name: string }[]>(
+      'GET',
+      `${getEnv('VITE_APP_COMMERCE_URL')}/api/v3/agents/template-languages`,
+      {
+        headers: {
+          'Project-Uuid': projectUuid,
+        },
+        params: {
+          user_email: userEmail || '',
+        },
+      }
+    );
+  }
+}
+
 class AssignedAgent {
   static update(data: {
     projectUuid: string,
@@ -963,5 +983,15 @@ export async function disableDeliveredOrderTrackingRequest(data: {
     }
 
     throw new Error(errorText || t('agents.details.delivered_order_tracking.actions.disable.error'));
+  }
+}
+
+export async function getTemplateLanguagesRequest() {
+  const response = await Template.languages();
+
+  if (response instanceof Array) {
+    return response;
+  } else {
+    throw new Error('error retrieving template languages');
   }
 }

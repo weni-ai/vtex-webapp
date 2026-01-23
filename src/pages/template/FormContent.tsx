@@ -1,4 +1,4 @@
-import { Alert, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Text, Textarea, VisuallyHidden } from "@vtex/shoreline";
+import { Alert, Button, Divider, Field, FieldDescription, FieldError, Flex, IconButton, IconPencil, IconPlus, IconTrash, IconX, Input, Label, MenuItem, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Skeleton, Text, Textarea, VisuallyHidden } from "@vtex/shoreline";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { cleanURL } from "../../utils";
 import { Content, SectionHeader } from "./Template";
@@ -8,7 +8,7 @@ import { fileToBase64 } from "../../utils";
 import { Radio } from "../../components/adapters/Radio";
 import { Select } from "../../components/adapters/Select";
 
-export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, isSimplifiedView = false, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable, abandonedCartHeaderImageType, setAbandonedCartHeaderImageType }: {
+export function FormContent({ status, content, setContent, prefilledContent, canChangeButton = true, isHeaderEditable = true, isFooterEditable = true, isButtonEditable = true, isSimplifiedView = false, totalVariables, addEmptyVariables, openNewVariableModal, variables, contentError, canCreateVariable, abandonedCartHeaderImageType, setAbandonedCartHeaderImageType, languages, isLanguagesLoading, language, setLanguage }: {
   status: 'active' | 'pending' | 'rejected' | 'needs-editing',
   content: Content,
   setContent: React.Dispatch<SetStateAction<Content>>,
@@ -26,6 +26,10 @@ export function FormContent({ status, content, setContent, prefilledContent, can
   isSimplifiedView?: boolean;
   abandonedCartHeaderImageType?: 'no_image' | 'first_item' | 'most_expensive';
   setAbandonedCartHeaderImageType?: (value: 'first_item' | 'most_expensive') => void;
+  languages: { code: string, display_name: string }[] | undefined;
+  isLanguagesLoading: boolean;
+  language: string | undefined;
+  setLanguage: (value: string) => void;
 }) {
   const { t } = useTranslation();
 
@@ -412,9 +416,33 @@ export function FormContent({ status, content, setContent, prefilledContent, can
     });
   }
 
+  const selectedLanguage = useMemo(() => {
+    return languages?.find(({ code }) => code === language)?.display_name || '';
+  }, [languages, language]);
+
   return (
     <Flex direction="column" gap="$space-4">
       <SectionHeader title={t('template.form.areas.content.title')} />
+
+      <Field>
+        <Label>{t('template.form.fields.content.language.label')}</Label>
+
+        {
+          isLanguagesLoading ?
+          <Skeleton style={{ width: '100%', height: '44px' }} /> :
+          <Select
+            system="shoreline"
+            data-testid="abandoned-cart-image-select"
+            value={selectedLanguage}
+            setValue={setLanguage}
+            options={languages?.map(({ code, display_name }) => ({
+              label: display_name,
+              value: code,
+            })) || []}
+            style={{ width: '100%' }}
+          />
+        }
+      </Field>
 
       <Field error={!!contentError}>
         <Label>{t('template.form.fields.content.label')}</Label>

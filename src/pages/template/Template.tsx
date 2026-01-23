@@ -13,6 +13,7 @@ import { AddingVariableModal } from "./modals/AddingVariable";
 import { ProcessModal } from "./modals/Process";
 import './Template.style.css';
 import { cleanURL } from "../../utils";
+import { getTemplateLanguages } from "../../services/agent.service";
 
 function normalizeItems(language: string, items: string[]) {
   return new Intl.ListFormat(language, { style: 'long', type: 'conjunction' }).format(items);
@@ -103,6 +104,10 @@ export function Template({ templateUuid: propTemplateUuid, abandonedCartHeaderIm
   const [previousVariables, setPreviousVariables] = useState<Variable[]>([]);
   const [variables, setVariables] = useState<Variable[]>([]);
 
+  const [isLanguagesLoading, setIsLanguagesLoading] = useState(false);
+  const [languages, setLanguages] = useState<{ code: string, display_name: string }[] | undefined>(undefined);
+  const [language, setLanguage] = useState<string | undefined>(undefined);
+
   const [isSaving, setIsSaving] = useState(false);
 
   const [isCreatingTemplateModalOpen, setIsCreatingTemplateModalOpen] = useState(false);
@@ -133,6 +138,15 @@ export function Template({ templateUuid: propTemplateUuid, abandonedCartHeaderIm
       loadTemplate();
     }
   }, [templateUuid]);
+
+  useEffect(() => {
+    setIsLanguagesLoading(true);
+    getTemplateLanguages().then((languages) => {
+      setLanguages(languages);
+    }).catch(() => {}).finally(() => {
+      setIsLanguagesLoading(false);
+    });
+  }, []);
 
   const hasVariablesChanged = useMemo(() => {
     if (previousVariables.length !== variables.length) {
@@ -653,6 +667,10 @@ export function Template({ templateUuid: propTemplateUuid, abandonedCartHeaderIm
 
           <Grid columns="1fr 1fr" gap="$space-5">
             <FormContent
+              isLanguagesLoading={isLanguagesLoading}
+              languages={languages}
+              language={language}
+              setLanguage={setLanguage}
               status={templateStatus}
               content={content}
               setContent={setContent}

@@ -714,6 +714,9 @@
                 "content": {
                     "label": "Conteúdo de texto",
                     "description": "Digite ‘{{’ para adicionar variáveis",
+                    "language": {
+                        "label": "Idioma"
+                    },
                     "header": {
                         "title": "Cabeçalho",
                         "label": "Texto",

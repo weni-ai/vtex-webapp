@@ -25,6 +25,7 @@ const initialState: ProjectState = {
   storeType: '',
   initialLoading: false,
   WhatsAppURL: '',
+  templateLanguages: null,
   assignedAgents: [],
 }
 
@@ -117,6 +118,9 @@ const projectSlice = createSlice({
     setWhatsAppURL: (state, action: PayloadAction<string>) => {
       state.WhatsAppURL = action.payload;
     },
+    setTemplateLanguages: (state, action: PayloadAction<{ code: string; display_name: string }[]>) => {
+      state.templateLanguages = action.payload;
+    },
     setAgents: (state, action: PayloadAction<(AgentCommerce | AgentNexus | AgentCLI)[]>) => {
       state.agents = action.payload;
     },
@@ -146,6 +150,7 @@ export const {
   setStoreType,
   setInitialLoading,
   setWhatsAppURL,
+  setTemplateLanguages,
   addAssignedAgent,
   setAssignedAgents,
 } = projectSlice.actions;

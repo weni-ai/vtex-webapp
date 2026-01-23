@@ -714,6 +714,9 @@
                 "content": {
                     "label": "Contenido de texto",
                     "description": "Escribe ‘{{’ para agregar variables",
+                    "language": {
+                        "label": "Idioma"
+                    },
                     "header": {
                         "title": "Encabezado",
                         "label": "Texto",

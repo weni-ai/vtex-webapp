@@ -1,8 +1,8 @@
 import { proxy } from "../api/proxy";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getSkillMetricsRequest, getTemplateLanguagesRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
-import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
+import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setTemplateLanguages, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
 import getEnv from "../utils/env";
 import { useCache } from "../utils";
@@ -500,5 +500,21 @@ export async function disableDeliveredOrderTracking(data: {
   agentUuid: string;
 }) {
   const response = await disableDeliveredOrderTrackingRequest(data);
+  return response;
+}
+
+export async function getTemplateLanguages() {
+  const cached = store.getState().project.templateLanguages;
+
+  if (cached && cached.length > 0) {
+    return cached;
+  }
+
+  const response = await getTemplateLanguagesRequest();
+
+  if (response && Array.isArray(response)) {
+    store.dispatch(setTemplateLanguages(response));
+  }
+
   return response;
 }
