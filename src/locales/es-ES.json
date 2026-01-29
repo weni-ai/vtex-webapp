@@ -784,6 +784,7 @@
                     "last_28_days": "Últimos 28 días"
                 }
             }
-        }
+        },
+        "error": "Error al obtener métricas. Por favor, inténtalo de nuevo más tarde."
     }
 }

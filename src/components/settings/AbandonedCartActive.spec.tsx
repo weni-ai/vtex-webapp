@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PreferencesAbandonedCartActive } from './AbandonedCartActive';
+import { ABANDONED_CART_CODES } from '../../constants/abandonedCart';
 
 const mocks = vi.hoisted(() => ({
   useSelector: vi.fn(),
@@ -57,7 +58,7 @@ describe('PreferencesAbandonedCartActive', () => {
     uuid: 'abandoned-cart-agent',
     name: 'Abandoned Cart Agent',
     origin: 'commerce',
-    code: 'abandoned_cart',
+    code: ABANDONED_CART_CODES.LEGACY,
     restrictMessageTime: {
       isActive: false,
       periods: {

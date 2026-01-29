@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AgentBox, AgentBoxContainer, AgentBoxEmpty, AgentBoxSkeleton } from './AgentBox';
+import { ABANDONED_CART_CODES } from '../constants/abandonedCart';
 
 const mocks = vi.hoisted(() => ({
   navigate: vi.fn(),
@@ -102,7 +103,7 @@ describe('AgentBox', () => {
     name: 'Test Agent',
     description: 'Test Agent Description',
     uuid: 'test-uuid',
-    code: 'abandoned_cart' as const,
+    code: ABANDONED_CART_CODES.LEGACY,
     type: 'active' as const,
     isIntegrated: false,
     isInTest: false,

@@ -44,7 +44,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                     </DrawerHeader>
 
                     {
-                        code === 'abandoned_cart' &&
+                        code === ABANDONED_CART_CODES.LEGACY &&
                         <PreferencesAbandonedCartActive />
                     }
 
