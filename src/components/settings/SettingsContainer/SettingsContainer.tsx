@@ -7,6 +7,7 @@ import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
 import { updateAgentLoading } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/agent.service";
+import { ABANDONED_CART_CODES } from "../../../constants/abandonedCart";
 
 export interface SettingsContainerProps {
     open: boolean;
