@@ -1,3 +1,8 @@
+enum ABANDONED_CART_CODES {
+  LEGACY = 'abandoned_cart',
+  ACTIVE = 'active_cart_abandonment',
+}
+
 interface AgentNext {
   uuid: string;
   name: string;
@@ -31,7 +36,7 @@ interface AgentNext {
 }
 
 interface AgentCommerce extends AgentNext {
-  code: 'order_status' | 'abandoned_cart';
+  code: 'order_status' | ABANDONED_CART_CODES.LEGACY;
   origin: 'commerce';
   notificationType: 'active';
   isConfiguring: boolean;
@@ -69,7 +74,7 @@ interface AgentCLI extends AgentNext {
     uuid: string;
     name: string;
     startCondition: string;
-    metadata: {};
+    metadata: object;
   }[];
   credentials: {
     [key: string]: {

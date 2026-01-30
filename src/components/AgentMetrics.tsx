@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, IconCaretDown, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Skeleton, Text, useRadioState } from "@vtex/shoreline";
+import { Button, Flex, Grid, IconCaretDown, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Skeleton, Text, useRadioState, toast } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../interfaces/Store";
@@ -9,6 +9,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { getPeriodDates } from "../utils";
 import { Select } from "./adapters/Select";
 import { selectDesignSystem } from "../store/appSlice";
+import { isAbandonedCart } from "../utils/abandonedCart";
 
 function Menu({ dataTestid, value, setValue, options, trigger }: { dataTestid?: string; value: string; setValue: (value: string) => void; options: { label: string; value: string }[]; trigger: (label: string) => React.ReactNode }) {
   const { t } = useTranslation();
@@ -142,12 +143,17 @@ export function AgentMetrics() {
 
       const response = await getSkillMetrics({ startDate, endDate }) as { data: { title: string; value: string; }[] };
 
+      if (!response.data) {
+        toast.critical(t('metrics.error'));
+        return;
+      }
+
       const count = response.data.length;
 
       const lines = Math.floor(count / 3);
       const itensByLine = Math.floor(count / lines);
 
-      let data = [];
+      const data = [];
 
       for (let i = 0; i < lines; i += 1) {
         const last = i === lines - 1 ? count : (i + 1) * itensByLine;
@@ -188,9 +194,8 @@ export function AgentMetrics() {
     setData([]);
 
     const agent = assignedAgents.find((agent) => agent.uuid === currentAgentUuid);
-    const isAbandonedCart = agent?.origin === 'commerce' && agent?.code === 'abandoned_cart';
 
-    if (isAbandonedCart) {
+    if (isAbandonedCart(agent)) {
       getMetrics();
       return;
     }
@@ -259,9 +264,8 @@ export function AgentMetrics() {
 
   const hasMetrics = useMemo(() => {
     const agent = assignedAgents.find((agent) => agent.uuid === currentAgentUuid);
-    const isAbandonedCart = agent?.origin === 'commerce' && agent?.code === 'abandoned_cart';
 
-    if (isAbandonedCart) {
+    if (isAbandonedCart(agent)) {
       return true;
     }
 
@@ -282,9 +286,8 @@ export function AgentMetrics() {
     setData([]);
 
     const agent = assignedAgents.find((agent) => agent.uuid === currentAgentUuid);
-    const isAbandonedCart = agent?.origin === 'commerce' && agent?.code === 'abandoned_cart';
 
-    if (isAbandonedCart) {
+    if (isAbandonedCart(agent)) {
       fetchSkillMetrics();
       return;
     }

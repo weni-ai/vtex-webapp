@@ -2,13 +2,14 @@ import { Flex, Modal, ModalContent, ModalDismiss, ModalHeader, ModalHeading, Tex
 import activeAbandonedCartPreview from '../assets/agents_preview/active_abandoned_cart.png';
 import activeOrderStatusPreview from '../assets/agents_preview/active_order_status.svg';
 import { TagType } from "./TagType";
+import { ABANDONED_CART_CODES } from "../constants/abandonedCart";
 
 type categories = 'active' | 'passive';
-type codes = 'abandoned_cart' | 'order_status';
+type codes = ABANDONED_CART_CODES.LEGACY | 'order_status';
 
 const previews: {[K in categories]?: {[L in codes]?: string}} = {
     active: {
-        'abandoned_cart': activeAbandonedCartPreview,
+        [ABANDONED_CART_CODES.LEGACY]: activeAbandonedCartPreview,
         'order_status': activeOrderStatusPreview,
     },
 };

@@ -2,6 +2,7 @@ import { SettingsFormData } from "../../components/settings/SettingsContainer/Se
 import { VTEXFetch } from "../../utils/VTEXFetch";
 import { adapterAgentsSettingsUpdate, AgentsSettingsUpdateResponse } from "./adapters";
 import store from "../../store/provider.store";
+import { ABANDONED_CART_CODES } from "../../constants/abandonedCart";
 
 export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agentUuid: string, code: AgentCommerce['code'], formData: SettingsFormData }) {
   const projectUuid = store.getState().project.project_uuid;
@@ -13,7 +14,7 @@ export async function agentsSettingsUpdate({ agentUuid, code, formData }: { agen
   const orderStatusRestriction = formData?.order_status_restriction;
 
   const integrationSettings =
-    code === "abandoned_cart"
+    code === ABANDONED_CART_CODES.LEGACY
       ? {
         message_time_restriction: {
           is_active: messageTimeRestriction?.isActive || false,

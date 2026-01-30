@@ -7,13 +7,14 @@ import { convertStringToTimeValue, convertTimeValueToString } from "../../utils/
 import { SettingsContext } from "./SettingsContainer/SettingsContext";
 import { useTranslation } from "react-i18next";
 import { Checkbox } from "../adapters/Checkbox";
+import { isLegacyAbandonedCart } from "../../utils/abandonedCart";
 
 export function PreferencesAbandonedCartActive() {
   const { t } = useTranslation();
 
   const context = useContext(SettingsContext);
   const agentsList = useSelector(agents);
-  const abandonedCartAgent = agentsList.find(agent => agent.origin === 'commerce' && agent.code === 'abandoned_cart');
+  const abandonedCartAgent = agentsList.find(agent => isLegacyAbandonedCart(agent));
   const currentMessageTimeRestrictions = abandonedCartAgent?.restrictMessageTime;
   const [restriction, setRestriction] = useState<boolean>(currentMessageTimeRestrictions?.isActive ?? false);
   const setRestrictionValue = () => {

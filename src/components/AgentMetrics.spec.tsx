@@ -4,6 +4,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AgentMetrics } from './AgentMetrics';
+import { ABANDONED_CART_CODES } from '../constants/abandonedCart';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -32,7 +33,7 @@ const initialState = {
       notificationType: 'active',
       isAssigned: true,
       origin: 'commerce',
-      code: 'abandoned_cart',
+      code: ABANDONED_CART_CODES.LEGACY,
       name: 'Test Agent 2',
     }, {
       uuid: '3333',
@@ -222,7 +223,7 @@ describe('AgentMetrics', () => {
               notificationType: 'active',
               isAssigned: true,
               origin: 'commerce',
-              code: 'abandoned_cart',
+              code: ABANDONED_CART_CODES.LEGACY,
               assignedAgentUuid: 'assigned-abandoned-cart-agent',
             }],
           },

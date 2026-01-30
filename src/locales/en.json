@@ -788,6 +788,7 @@
           "last_28_days": "Last 28 days"
         }
       }
-    }
+    },
+    "error": "Failed to fetch metrics. Please try again later."
   }
 }

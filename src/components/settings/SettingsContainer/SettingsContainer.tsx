@@ -7,6 +7,7 @@ import { SettingsContext, SettingsFormData } from "./SettingsContext";
 import { useSelector } from "react-redux";
 import { updateAgentLoading } from "../../../store/projectSlice";
 import { updateAgentSettings } from "../../../services/agent.service";
+import { ABANDONED_CART_CODES } from "../../../constants/abandonedCart";
 
 export interface SettingsContainerProps {
     open: boolean;
@@ -44,7 +45,7 @@ export function SettingsContainer({ open, toggleOpen, code, agentUuid }: Setting
                     </DrawerHeader>
 
                     {
-                        code === 'abandoned_cart' &&
+                        code === ABANDONED_CART_CODES.LEGACY &&
                         <PreferencesAbandonedCartActive />
                     }
 

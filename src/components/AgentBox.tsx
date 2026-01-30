@@ -15,8 +15,10 @@ import { SettingsContainer } from "./settings/SettingsContainer/SettingsContaine
 import { useTranslation } from "react-i18next";
 import { Button } from "./adapters/Button";
 import { IconGearSix, IconTrash, IconInfo, IconDotsThreeVertical } from "./adapters/Icon";
+import { isLegacyAbandonedCart } from "../utils/abandonedCart";
+import { ABANDONED_CART_CODES } from "../constants/abandonedCart";
 
-type codes = 'abandoned_cart' | 'order_status';
+type codes = ABANDONED_CART_CODES.LEGACY | 'order_status';
 
 export function AgentBoxContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -85,7 +87,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   }
 
   const integrateCurrentFeature = async () => {
-    if (origin === 'commerce' && code === 'abandoned_cart') {
+    if (isLegacyAbandonedCart({origin, code})) {
       setOpenAbandonedCartModal(true);
       return;
     }

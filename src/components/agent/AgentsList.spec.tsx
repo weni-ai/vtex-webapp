@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AgentsList } from './AgentsList';
+import { ABANDONED_CART_CODES } from '../../constants/abandonedCart';
 
 const mocks = vi.hoisted(() => ({
   useSelector: vi.fn(),
@@ -80,7 +81,7 @@ describe('AgentsList', () => {
       isOfficial: true,
       isAssigned: false,
       origin: 'nexus',
-      code: 'abandoned_cart',
+      code: ABANDONED_CART_CODES.LEGACY,
       isInTest: false,
       isConfiguring: false,
       skills: ['skill2'],

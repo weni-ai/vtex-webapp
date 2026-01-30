@@ -29,7 +29,7 @@ export interface AgentsListResponse {
   results: {
     feature_uuid: string;
     category: 'ACTIVE' | 'PASSIVE';
-    code: 'order_status' | 'abandoned_cart';
+    code: 'order_status' | ABANDONED_CART_CODES.LEGACY;
     name: string;
     description: string;
     disclaimer: string;
@@ -52,6 +52,7 @@ export interface AgentsListResponse {
   gallery_agents: {
     uuid: string;
     name: string;
+    slug: string;
     description: string;
     assigned: boolean;
     assigned_agent_uuid: string;
@@ -64,7 +65,7 @@ export interface AgentsListResponse {
       start_condition: string;
       content: string;
       is_valid: boolean;
-      metadata: {};
+      metadata: object;
     }[];
     credentials: {
       [key: string]: {
@@ -135,7 +136,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     name: agent.name,
     description: agent.description,
     notificationType: 'active' as const,
-    code: agent.name.toLowerCase().replace(/ /g, '_'),
+    code: agent.slug,
     isAssigned: agent.assigned,
     isInTest: false,
     credentials: Object.values(agent.credentials).reduce((acc, value) => {

@@ -288,7 +288,7 @@ export function Dashboard() {
                     name={item.name || ''}
                     description={item.description || ''}
                     uuid={item.uuid}
-                    code={item.code as 'order_status' | 'abandoned_cart'}
+                    code={item.code as 'order_status' | ABANDONED_CART_CODES.LEGACY}
                     type={item.notificationType}
                     isIntegrated={item.isAssigned}
                     origin={item.origin || 'commerce'}
