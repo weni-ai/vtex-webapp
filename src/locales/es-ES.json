@@ -156,20 +156,20 @@
                 },
                 "actions": {
                     "enable": {
-                    "success": "Seguimiento de pedidos entregados activado con éxito",
-                    "error": "Error al activar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                        "success": "Seguimiento de pedidos entregados activado con éxito",
+                        "error": "Error al activar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
                     },
                     "disable": {
-                    "success": "Seguimiento de pedidos entregados desactivado con éxito",
-                    "error": "Error al desactivar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                        "success": "Seguimiento de pedidos entregados desactivado con éxito",
+                        "error": "Error al desactivar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
                     }
                 },
                 "fields": {
                     "app_key": {
-                    "label": "App Key"
+                        "label": "App Key"
                     },
                     "app_token": {
-                    "label": "App Token"
+                        "label": "App Token"
                     }
                 },
                 "buttons": {
@@ -783,6 +783,71 @@
                     "last_7_days": "Últimos 7 días",
                     "last_28_days": "Últimos 28 días"
                 }
+            }
+        }
+    },
+    "instructions_drawer": {
+        "open": "Refinar instrucciones",
+        "title": "Instrucciones",
+        "description": "Instrucciones para el agente",
+        "new_custom_instruction": {
+            "title": "Nueva instrucción personalizada",
+            "hint": "Mantén las instrucciones claras, directas e imperativas.",
+            "buttons": {
+                "save": "Guardar instrucción"
+            }
+        },
+        "remove_instruction_confirmation_modal": {
+            "title": "Eliminar instrucción",
+            "description": "¿Estás seguro de querer eliminar la instrucción?",
+            "buttons": {
+                "remove": "Eliminar",
+                "cancel": "Cancelar"
+            }
+        },
+        "instructions_list": {
+            "title": "Lista de instrucciones",
+            "tabs": {
+                "custom": "Personalizado",
+                "default": "Padrão",
+                "safety_topics": "Tópicos de seguridad"
+            },
+            "default_instructions": [
+                "Cuando sea necesario, debes solicitar asistencia especializada a los miembros del equipo, quienes están disponibles para ayudar a resolver el caso.",
+                "NUNCA, bajo NINGUNA CIRCUNSTANCIA, debes discutir temas que estén fuera de tu área de especialización.",
+                "Asegúrate de optimizar la comunicación contactando a MÚLTIPLES agentes al mismo tiempo siempre que sea posible.",
+                "Mantén tu comunicación con otros agentes concisa y directa, sin conversaciones innecesarias.",
+                "Comunícate solo con los agentes necesarios para ayudar con la consulta del Usuario.",
+                "Responde estrictamente con hechos encontrados en el bloque de la base de conocimiento; no uses conocimiento previo, suposiciones ni fuentes externas.",
+                "No infieras detalles no declarados, no generalices más allá de lo escrito, no rellenes vacíos ni especules — incluso si el tema parece obvio."
+            ],
+            "safety_topics": [
+                "Política",
+                "Salud física",
+                "Violencia física o moral",
+                "Contenido sexual",
+                "Prejuicio",
+                "Ódio",
+                "Religión",
+                "Suicidio",
+                "Autolesión",
+                "Crenzas",
+                "Identidad de género",
+                "Relaciones sexuales"
+            ],
+            "no_custom_instructions": "No se han agregado instrucciones personalizadas",
+            "actions": {
+                "edit": "Editar instrucción",
+                "remove": "Eliminar instrucción"
+            },
+            "messages": {
+                "error_retrieving_instructions": "Error al recuperar instrucciones",
+                "success_editing_custom_instruction": "Instrucción personalizada editada",
+                "error_editing_custom_instruction": "Error al editar instrucción personalizada",
+                "success_adding_custom_instruction": "Instrucción personalizada agregada",
+                "error_adding_custom_instruction": "Error al agregar instrucción personalizada",
+                "success_removing_custom_instruction": "Instrucción personalizada eliminada",
+                "error_removing_custom_instruction": "Error al eliminar instrucción personalizada"
             }
         }
     }
