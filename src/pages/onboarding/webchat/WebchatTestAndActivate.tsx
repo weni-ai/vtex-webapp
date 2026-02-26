@@ -22,6 +22,7 @@ import {
 } from '../../../services/onboarding.service';
 import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
+import { Instructions } from '../../../components/manager/Instructions';
 
 type ActivationMode = 'safe' | 'full';
 
@@ -179,10 +180,8 @@ export function WebchatTestAndActivate() {
   );
 
   const belowCards = (
-    <Flex direction="column" gap="$space-6">
-      <Button variant="tertiary">
-        {t('onboarding.onboard_test.scenarios.refine_instructions')}
-      </Button>
+    <Flex direction="column" gap="$space-6" style={{ marginTop: 'var(--sl-space-2)' }}>
+      <Instructions />
 
       <Divider />
 
