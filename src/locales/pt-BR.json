@@ -5,6 +5,7 @@
         "finish_and_save": "Finalizar e salvar",
         "confirm": "Confirmar",
         "save": "Salvar",
+        "close": "Fechar",
         "back": "Voltar",
         "create": "Criar",
         "details": "Ver detalhes",
@@ -28,11 +29,111 @@
         "apply": "Aplicar"
     },
     "onboarding": {
-        "select_agent": {
-            "title": "Atribuir o primeiro agente ao seu time"
+        "channel_selection": {
+            "title": "A plataforma de Experiência Conversacional Inteligente da VTEX para marcas e varejistas.",
+            "subtitle": "Vá além dos chatbots tradicionais. Implante uma arquitetura realmente Agentic IA, capaz de planejar e executar tarefas complexas de forma autônoma. Integre vendas, marketing e suporte em uma solução opinada para impulsionar receita e eficiência operacional.",
+            "recommended": "Recomendado",
+            "webchat": {
+                "title": "Escala suporte e eficiência",
+                "description": "Reduza Chamados, Encante Clientes: Implante Agentes de IA Opinionados para Automação de Atendimento 24/7 através do Webchat.",
+                "benefits": [
+                    "Catalogo Concierges",
+                    "Cancelamentos automatizados",
+                    "Assistente de FAQ inteligente",
+                    "Deflexão de 80% dos tickets rotineiros (incluindo WISMO)",
+                    "Sem código, lançamento rápido"
+                ],
+                "footer": "Tempo de configuração: Aprox. 2~5 min"
+            },
+            "whatsapp": {
+                "title": "WhatsApp Store",
+                "description": "Recupere carrinhos abandonados e envie atualizações de pedido automaticamente para aumentar o seu ROI.",
+                "benefits": [
+                    "Recuperação automática de carrinhos abandonados",
+                    "Automação nativa de Rastreio e Status de Pedidos",
+                    "Aumento a recompra mantendo o cliente engajado em toda a jornada pós-venda",
+                    "One-Click Payment Checkout"
+                ],
+                "footer": "Use uma conta teste ou conecte com sua conta Meta"
+            },
+            "disclaimer": "Você poderá habilitar a outra solução a qualquer momento pelo painel, aproveitando todas as informações e aprendizado já coletados.",
+            "terms": "Ao prosseguir você concorda com os Termos de Uso e Política de Privacidade do <0>VTEX Agentic CX</0>"
         },
-        "build_manager": {
-            "title": "Configurar o perfil do Manager"
+        "select_account_host": {
+            "title": "Conectar sua fonte de dados",
+            "placeholder": "Escolha a URL da sua loja",
+            "help_text": "Confirme sua URL original para que possamos construir uma base de conhecimento precisa para seus agentes."
+        },
+        "onboard_setup": {
+            "title": "Seu time de Agentes de IA está sendo preparado",
+            "test_button": "Testar",
+            "progress": {
+                "stage_prefix": "Etapa {{current}}/{{total}}",
+                "stages": {
+                    "environment_sync": "Sincronização de Ambiente",
+                    "knowledge_building": "Construção de Conhecimento",
+                    "agent_training": "Treinamento & Ativação de Agentes"
+                },
+                "descriptions": {
+                    "syncing_credentials": "Sincronizando credenciais e permissões da conta...",
+                    "configuring_workspace": "Configurando seu workspace de IA...",
+                    "mapping_data_structure": "Mapeando a estrutura de dados da loja para integração...",
+                    "analyzing_catalog": "Analisando o catálogo de produtos e as políticas de venda...",
+                    "extracting_knowledge": "Extraindo insights relevantes da loja para empoderar seus agentes...",
+                    "refining_data": "Refinando dados para uma base de conhecimento de alta performance...",
+                    "assembling_agents": "Montando seu time de agentes dedicados...",
+                    "defining_instructions": "Aplicando regras e instruções de negócio personalizadas e orientações específicas...",
+                    "installing_webchat": "Finalizando a configuração do WebChat... Você está quase pronto!",
+                    "setup_completed": "Configuração concluída! Seus agentes estão treinados e o WebChat está pronto para uso."
+                }
+            },
+            "use_cases": {
+                "title": "Casos de uso em preparação:",
+                "catalog_concierge": {
+                    "title": "Concierge de Catálogo",
+                    "description": "Guiar clientes para os produtos certos para impulsionar vendas."
+                },
+                "cancellations": {
+                    "title": "Agente de Cancelamentos",
+                    "description": "Automatizar casos de cancelamento e fluxos de retenção."
+                },
+                "order_status": {
+                    "title": "Agente de Status de Pedidos",
+                    "description": "Fornecer atualizações em tempo real para deflexão de suporte humano."
+                },
+                "faq_assistant": {
+                    "title": "Agente de FAQ inteligente",
+                    "description": "Responder dúvidas da loja usando sua base de conhecimento."
+                }
+            },
+            "preview": {
+                "banner": "Explore os cenários para ver os agentes em ação. O teste livre com seus agentes treinados estará disponível em breve."
+            }
+        },
+        "onboard_test": {
+            "title": "Teste e ative seu Time de IA",
+            "activate_button": "Ativar na Loja",
+            "completion": {
+                "heading": "Treinamento concluído: Seus agentes estão prontos para ação",
+                "knowledge_base": "Base de conhecimento de varejo criada e otimizada",
+                "business_rules": "Regras de negócio e políticas de varejo totalmente mapeadas",
+                "agents_ready": "Agentes especialistas ativos e prontos"
+            },
+            "scenarios": {
+                "title": "Clique para testar um cenário:",
+                "refine_instructions": "Refinar instruções",
+                "catalog_concierge": "Testar busca inteligente e recomendações de produtos",
+                "cancellations": "Testar logística reversa e fluxos de cancelamento",
+                "order_status": "Validar rastreamento de pedidos e atualizações de entrega",
+                "faq_assistant": "Verificar resolução instantânea para dúvidas comuns"
+            },
+            "activation": {
+                "title": "Pronto para ativação?",
+                "safe_label": "Ativação Segura (Recomendado)",
+                "full_label": "Ativação Completa",
+                "safe_description": "Ative para 10% dos visitantes, ideal para monitorar as interações iniciais sem risco.",
+                "full_description": "Ative em toda a sua loja. Você pode reduzir ou desativar a qualquer momento."
+            }
         }
     },
     "title": "Weni Agentic IA",
@@ -156,20 +257,20 @@
                 },
                 "actions": {
                     "enable": {
-                    "success": "Acompanhamento de pedidos entregues ativado com sucesso",
-                    "error": "Erro ao ativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
+                        "success": "Acompanhamento de pedidos entregues ativado com sucesso",
+                        "error": "Erro ao ativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
                     },
                     "disable": {
-                    "success": "Acompanhamento de pedidos entregues desativado com sucesso",
-                    "error": "Erro ao desativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
+                        "success": "Acompanhamento de pedidos entregues desativado com sucesso",
+                        "error": "Erro ao desativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
                     }
                 },
                 "fields": {
                     "app_key": {
-                    "label": "App Key"
+                        "label": "App Key"
                     },
                     "app_token": {
-                    "label": "App Token"
+                        "label": "App Token"
                     }
                 },
                 "buttons": {
@@ -403,7 +504,7 @@
         "button": "Tentar novamente"
     },
     "terms": {
-        "title": "Termos e Condições",
+        "title": "Terms of Service and Privacy Policy",
         "description1": "A VTEX e o Contratante celebraram um Contrato de Prestação de Serviços Mestre (\"Contrato\"), com o objetivo de estabelecer a autorização de uso e o fornecimento de serviços de suporte e manutenção do software desenvolvido pela VTEX para soluções de comércio eletrônico. A VTEX e o Contratante, juntos, serão aqui referidos como as \"Partes\" e, individualmente, como uma \"Parte\".",
         "description2": "O Admin Master (\"Owner (Admin Super)\") do Contratante na Plataforma VTEX, devidamente autorizado a agir em nome do Contratante, com todos os poderes e obrigações relacionadas a esta autorização, aceita e reconhece as disposições dos presentes Termos e Condições — Plataforma Weni by VTEX (\"T&C\"), vinculando as Partes e seus sucessores a serem governados, em qualquer circunstância, pelas seguintes cláusulas:",
         "definition": {
