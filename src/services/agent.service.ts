@@ -1,5 +1,5 @@
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getManagerRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, removeManagerInstructionRequest, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest, updateManagerInstructionsRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -408,6 +408,21 @@ function updateAssignedAgentProperty(agentUuid: string, replace: Record<string, 
       }
       : agent;
   })));
+}
+
+export async function getManager() {
+  const response = await getManagerRequest();
+  return response;
+}
+
+export async function updateManagerInstructions(instructions: { id?: number, value: string }[]) {
+  const response = await updateManagerInstructionsRequest(instructions);
+  return response;
+}
+
+export async function removeManagerInstruction(instructionId: number) {
+  const response = await removeManagerInstructionRequest(instructionId);
+  return response;
 }
 
 export async function updateAgentGlobalRule(data: {
