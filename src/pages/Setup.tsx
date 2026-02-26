@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useUserSetup } from "./setup/useUserSetup";
+import { useOnboardingSetup } from "./setup/useOnboardingSetup";
 
 export function Setup() {
-    const { initializeProject } = useUserSetup();
+    const { initializeOnboarding } = useOnboardingSetup();
 
     useEffect(() => {
-        initializeProject();
-    }, [initializeProject]);
+        initializeOnboarding();
+    }, [initializeOnboarding]);
 
     return (
         <></>
