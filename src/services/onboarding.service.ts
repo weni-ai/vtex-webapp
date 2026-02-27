@@ -34,11 +34,26 @@ export async function updateDisplayRatio(
   webchatAppUuid: string,
   displayRatio: number,
 ): Promise<UpdateDisplayRatioResponse> {
-  return onboardingAdapter.updateDisplayRatio(webchatAppUuid, displayRatio);
+  // integrations patch currently requires the complete config object
+  // fetch current webchat config
+  const currentConfig = await onboardingAdapter.getWebchatConfig(webchatAppUuid);
+  if (!currentConfig.success) {
+    throw new Error(currentConfig.error);
+  }
+
+  // add new display ratio to current config
+  const newConfig = {
+    ...currentConfig.data?.config,
+    renderPercentage: displayRatio,
+  };
+
+  return onboardingAdapter.updateDisplayRatio(webchatAppUuid, newConfig);
 }
 
 export async function activateInStore(
-  vtex_account: string,
+  channel: CrawlingChannel,
+  appUuid: string,
+  accountId: string,
 ): Promise<ActivateInStoreResponse> {
-  return onboardingAdapter.activateInStore(vtex_account);
+  return onboardingAdapter.activateInStore(channel, appUuid, accountId);
 }

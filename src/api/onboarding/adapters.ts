@@ -5,7 +5,8 @@ import {
   startCrawling, 
   updateOnboarding, 
   updateWebchatDisplayRatio, 
-  activatePixelApp
+  activatePixelApp,
+  getWebchatConfig
 } from "./requests";
 import type { CrawlingChannel } from "../../constants/onboarding";
 
@@ -44,13 +45,20 @@ export interface ActivateInStoreResponse {
   error?: string;
 }
 
+export interface GetWebchatConfigResponse {
+  success: boolean;
+  error?: string;
+  data?: { config: object };
+}
+
 export interface OnboardAdapter {
   getOnboardingStatus(vtex_account: string): Promise<OnboardStatusResponse>;
   ensureProjectAndUser(vtex_account: string, user_email: string): Promise<EnsureProjectAndUserResponse>;
   startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse>;
   updateOnboarding(vtex_account: string, data: { current_page?: string; completed?: boolean }): Promise<UpdateOnboardingResponse>;
-  updateDisplayRatio(webchatAppUuid: string, displayRatio: number): Promise<UpdateDisplayRatioResponse>;
-  activateInStore(vtex_account: string): Promise<ActivateInStoreResponse>;
+  updateDisplayRatio(webchatAppUuid: string, newConfig: object): Promise<UpdateDisplayRatioResponse>;
+  activateInStore(channel: CrawlingChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse>;
+  getWebchatConfig(webchatAppUuid: string): Promise<GetWebchatConfigResponse>;
 }
 
 export class VTEXOnboardAdapter implements OnboardAdapter {
@@ -111,10 +119,10 @@ export class VTEXOnboardAdapter implements OnboardAdapter {
 
   async updateDisplayRatio(
     webchatAppUuid: string,
-    displayRatio: number,
+    newConfig: object,
   ): Promise<UpdateDisplayRatioResponse> {
     try {
-      const response = await updateWebchatDisplayRatio(webchatAppUuid, displayRatio);
+      const response = await updateWebchatDisplayRatio(webchatAppUuid, newConfig);
       if (!response) {
         throw new Error('error updating display ratio.');
       }
@@ -125,12 +133,25 @@ export class VTEXOnboardAdapter implements OnboardAdapter {
     }
   }
 
-  async activateInStore(vtex_account: string): Promise<ActivateInStoreResponse> {
+  async activateInStore(channel: CrawlingChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse> {
     try {
-      await activatePixelApp(vtex_account);
+      await activatePixelApp(channel, appUuid, accountId);
       return { success: true };
     } catch (error) {
       console.error('error activating in store:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
+    }
+  }
+
+  async getWebchatConfig(webchatAppUuid: string): Promise<GetWebchatConfigResponse> {
+    try {
+      const response = await getWebchatConfig(webchatAppUuid);
+      if (!response) {
+        throw new Error('error getting webchat config.');
+      }
+      return { success: true, data: response };
+    } catch (error) {
+      console.error('error getting webchat config:', error);
       return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
     }
   }

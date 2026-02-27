@@ -1,3 +1,5 @@
+import { CrawlingChannel } from "../constants/onboarding";
+
 export interface AuthState {
   token: string;
   base_address: string;
@@ -82,6 +84,7 @@ export interface UserData {
 }
 
 export interface AccountData {
+  id: string;
   accountName: string;
   hosts: string[];
 }
@@ -114,8 +117,10 @@ export interface OnboardStatus {
   current_step?: string;
   crawler_result?: string;
   config?: {
-    integrated_apps: {
-      [key: string]: string | null
+    channels: {
+      [key in CrawlingChannel]: {
+        app_uuid: string | null;
+      } | null
     }
   }
 }
