@@ -3,10 +3,7 @@ import store from "../store/provider.store";
 import { VTEXFetch } from "../utils/VTEXFetch";
 import { updateAgentsList } from "./agent.service";
 import { userAdapters } from "../api/users/adapters";
-import { AccountData, UserData } from "../interfaces/Store";
-import getEnv from "../utils/env";
-import { proxy } from "../api/proxy";
-import { useCache } from "../utils";
+import { UserData } from "../interfaces/Store";
 import { moduleStorage } from "../utils/storage";
 
 export function getUserFromLocalStorage() {
@@ -19,54 +16,7 @@ export async function fetchUserData() {
 }
 
 export async function fetchAccountData() {
-  try {
-    const response = await VTEXFetch<AccountData & { error?: boolean, message?: string }>('/api/license-manager/account');
-
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error fetching account data.');
-    }
-
-    return { success: true, data: response };
-  } catch (error) {
-    console.error('error fetching account data:', error);
-    return { success: false, error: error || 'unknown error' };
-  }
-}
-
-export async function checkProject(vtex_account: string, user_email: string) {
-  const cacheKey: [string, string] = ['GET', `${getEnv('VITE_APP_API_URL')}/v2/commerce/check-project`];
-  const cacheKeyString = `cache_${vtex_account}_${user_email}_${cacheKey.join('_')}`;
-
-  try {
-    const { response, saveCache } = await useCache({
-      cacheKey: cacheKeyString,
-      getResponse: () =>
-        proxy<{
-          project_uuid: string,
-          error?: boolean,
-          message?: string,
-          data: { project_uuid: string, has_project: boolean }
-        }>(
-          ...cacheKey,
-          {
-            headers: {},
-            params: {
-              user_email: user_email || '',
-              vtex_account: vtex_account || '',
-            },
-          },
-        )
-    });
-
-    if (!response || response.error) {
-      throw new Error(response?.message || 'error creating user and project.');
-    }
-
-    return { success: true, data: response, saveCache };
-  } catch (error) {
-    console.error('error when checking project:', error);
-    return { success: false, error: error || 'unknown error' };
-  }
+  return userAdapters.fetchAccountData();
 }
 
 export async function createUserAndProject(userData: UserData) {
