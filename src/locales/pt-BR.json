@@ -37,7 +37,7 @@
                 "title": "Escala suporte e eficiência",
                 "description": "Reduza Chamados, Encante Clientes: Implante Agentes de IA Opinionados para Automação de Atendimento 24/7 através do Webchat.",
                 "benefits": [
-                    "Catalogo Concierges",
+                    "Concierge de catálogo",
                     "Cancelamentos automatizados",
                     "Assistente de FAQ inteligente",
                     "Deflexão de 80% dos tickets rotineiros (incluindo WISMO)",
@@ -85,10 +85,16 @@
                     "defining_instructions": "Aplicando regras e instruções de negócio personalizadas e orientações específicas...",
                     "installing_webchat": "Finalizando a configuração do WebChat... Você está quase pronto!",
                     "setup_completed": "Configuração concluída! Seus agentes estão treinados e o WebChat está pronto para uso."
+                },
+                "failed": {
+                    "title": "Algo deu errado ao preparar seu Time de IA",
+                    "description": "Nossa equipe de suporte está pronta para resolver isso para você. Entre em contato conosco para finalizar a ativação do seu Time de IA.",
+                    "toast_message": "Algo deu errado ao preparar seu Time de IA.",
+                    "contact_support": "Contatar Suporte"
                 }
             },
             "use_cases": {
-                "title": "Casos de uso em preparação:",
+                "title": "Agentes em preparação:",
                 "catalog_concierge": {
                     "title": "Concierge de Catálogo",
                     "description": "Guiar clientes para os produtos certos para impulsionar vendas."
@@ -120,7 +126,7 @@
                 "agents_ready": "Agentes especialistas ativos e prontos"
             },
             "scenarios": {
-                "title": "Clique para testar um cenário:",
+                "title": "Clique para testar um agente:",
                 "refine_instructions": "Refinar instruções",
                 "catalog_concierge": "Testar busca inteligente e recomendações de produtos",
                 "cancellations": "Testar logística reversa e fluxos de cancelamento",
