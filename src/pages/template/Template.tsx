@@ -434,7 +434,7 @@ export function Template({ templateUuid: propTemplateUuid, abandonedCartHeaderIm
 
       await updateTemplates();
       navigateToAgent();
-    } catch (error) {
+    } catch {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
       setIsSaving(false);
@@ -543,7 +543,7 @@ export function Template({ templateUuid: propTemplateUuid, abandonedCartHeaderIm
       if (!isDisabled) {
         await handleSaveTemplate();
       }
-    } catch (error) {
+    } catch {
       toast.critical(`${t('error.title')}! ${t('error.description')}`);
     } finally {
       setIsSaving(false);
