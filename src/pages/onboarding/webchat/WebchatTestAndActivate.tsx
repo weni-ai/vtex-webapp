@@ -13,7 +13,7 @@ import {
   Text,
   useRadioState,
 } from '@vtex/shoreline';
-import { selectUser } from '../../../store/userSlice';
+import { selectAccount, selectUser } from '../../../store/userSlice';
 import { selectOnboardingStatus } from '../../../store/onboardSlice';
 import {
   updateOnboarding,
@@ -23,6 +23,7 @@ import {
 import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
 import { Instructions } from '../../../components/manager/Instructions';
+import { CRAWLING_CHANNEL } from '../../../constants/onboarding';
 
 type ActivationMode = 'safe' | 'full';
 
@@ -110,9 +111,10 @@ export function WebchatTestAndActivate() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const userData = useSelector(selectUser);
+  const accountData = useSelector(selectAccount);
   const onboardingStatus = useSelector(selectOnboardingStatus);
 
-  const webchatAppUuid = onboardingStatus?.config?.integrated_apps?.wwc ?? null;
+  const webchatAppUuid = onboardingStatus?.config?.channels?.wwc?.app_uuid ?? null;
 
   const [activationMode, setActivationMode] = useState<ActivationMode>('safe');
   const [isSkipping, setIsSkipping] = useState(false);
@@ -147,11 +149,12 @@ export function WebchatTestAndActivate() {
 
   const handleActivate = useCallback(async () => {
     const vtexAccount = userData?.account;
-    if (!vtexAccount) return;
+    const vtexAccountId = accountData?.id;
+    if (!vtexAccountId || !webchatAppUuid || !vtexAccount) return;
 
     setIsActivating(true);
     try {
-      const activation = await activateInStore(vtexAccount);
+      const activation = await activateInStore(CRAWLING_CHANNEL.webchat, webchatAppUuid, vtexAccountId);
       if (activation.success) {
         await updateOnboarding(vtexAccount, { completed: true });
         navigate('/dash');
@@ -159,7 +162,7 @@ export function WebchatTestAndActivate() {
     } finally {
       setIsActivating(false);
     }
-  }, [userData?.account, navigate]);
+  }, [accountData?.id, webchatAppUuid, userData?.account, navigate]);
 
   const useCaseDescriptions = useMemo(
     () => Object.fromEntries(
