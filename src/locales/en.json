@@ -948,7 +948,9 @@
       "no_custom_instructions": "No custom instructions added",
       "actions": {
         "edit": "Edit instruction",
-        "remove": "Remove instruction"
+        "remove": "Remove instruction",
+        "save": "Save",
+        "cancel": "Cancel"
       },
       "messages": {
         "error_retrieving_instructions": "Error retrieving instructions",
