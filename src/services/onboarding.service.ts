@@ -7,6 +7,7 @@ import {
   UpdateOnboardingResponse,
   VTEXOnboardAdapter,
 } from "../api/onboarding/adapters";
+import type { CrawlingChannel } from "../constants/onboarding";
 
 const onboardingAdapter = new VTEXOnboardAdapter();
 
@@ -18,8 +19,8 @@ export async function ensureProjectAndUser(vtex_account: string, user_email: str
   return onboardingAdapter.ensureProjectAndUser(vtex_account, user_email);
 }
 
-export async function startCrawling(vtex_account: string, url: string): Promise<StartCrawlingResponse> {
-  return onboardingAdapter.startCrawling(vtex_account, url);
+export async function startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse> {
+  return onboardingAdapter.startCrawling(vtex_account, url, channel);
 }
 
 export async function updateOnboarding(

@@ -1,6 +1,7 @@
 import getEnv from "../../utils/env";
 import { proxy } from "../proxy";
 import { OnboardStatus } from "../../interfaces/Store";
+import type { CrawlingChannel } from "../../constants/onboarding";
 
 export const fetchOnboardingStatus = async (vtex_account: string) => {
   const response = await proxy<OnboardStatus>(
@@ -24,13 +25,14 @@ export const ensureProjectAndUser = async (vtex_account: string, user_email: str
   return response;
 }
 
-export const startCrawling = async (vtex_account: string, url: string) => {
+export const startCrawling = async (vtex_account: string, url: string, channel: CrawlingChannel) => {
   const response = await proxy<{ status: string }>(
     'POST',
     `${getEnv('VITE_APP_COMMERCE_URL')}/api/onboard/${vtex_account}/start-crawling/`,
     {
       data: { 
         crawl_url: `https://${url}`,
+        channel,
       },
     }
   );

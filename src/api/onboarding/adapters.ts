@@ -5,8 +5,9 @@ import {
   startCrawling, 
   updateOnboarding, 
   updateWebchatDisplayRatio, 
-  activatePixelApp 
+  activatePixelApp
 } from "./requests";
+import type { CrawlingChannel } from "../../constants/onboarding";
 
 export interface OnboardStatusResponse {
   success: boolean;
@@ -46,7 +47,7 @@ export interface ActivateInStoreResponse {
 export interface OnboardAdapter {
   getOnboardingStatus(vtex_account: string): Promise<OnboardStatusResponse>;
   ensureProjectAndUser(vtex_account: string, user_email: string): Promise<EnsureProjectAndUserResponse>;
-  startCrawling(vtex_account: string, url: string): Promise<StartCrawlingResponse>;
+  startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse>;
   updateOnboarding(vtex_account: string, data: { current_page?: string; completed?: boolean }): Promise<UpdateOnboardingResponse>;
   updateDisplayRatio(webchatAppUuid: string, displayRatio: number): Promise<UpdateDisplayRatioResponse>;
   activateInStore(vtex_account: string): Promise<ActivateInStoreResponse>;
@@ -79,9 +80,9 @@ export class VTEXOnboardAdapter implements OnboardAdapter {
     }
   }
 
-  async startCrawling(vtex_account: string, url: string): Promise<StartCrawlingResponse> {
+  async startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse> {
     try {
-      const response = await startCrawling(vtex_account, url);
+      const response = await startCrawling(vtex_account, url, channel);
       if (!response) {
         throw new Error('error starting crawling.');
       }

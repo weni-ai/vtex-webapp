@@ -1,3 +1,12 @@
+import type { OnboardChannel } from '../interfaces/Store';
+
+export type CrawlingChannel = 'wwc' | 'wpp-cloud';
+
+export const CRAWLING_CHANNEL: Record<OnboardChannel, CrawlingChannel> = {
+  webchat: 'wwc',
+  whatsapp: 'wpp-cloud',
+} as const;
+
 export const ONBOARDING_PAGES = {
   ONBOARD_CHANNEL_SELECTION: 'ONBOARD_CHANNEL_SELECTION',
   ONBOARD_WEBCHAT_SETUP: 'ONBOARD_WEBCHAT_SETUP',
