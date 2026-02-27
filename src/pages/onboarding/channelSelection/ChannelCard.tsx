@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Flex, Heading, Text, IconCheck, Tag } from "@vtex/shoreline";
 import { useTranslation } from "react-i18next";
 
@@ -10,35 +11,52 @@ export interface ChannelCardProps {
   onClick: () => void;
 }
 
-const baseCardStyle: React.CSSProperties = {
-  padding: "var(--sl-space-5)",
-  border: "var(--sl-border-base)",
-  borderRadius: "var(--sl-radius-2)",
-  cursor: "pointer",
-  background: "var(--sl-bg-base)",
-  boxShadow: "var(--sl-shadow-1)",
-  transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-};
+function getCardStyle(isRecommended: boolean, isHovered: boolean): React.CSSProperties {
+  const base: React.CSSProperties = {
+    padding: "var(--sl-space-5)",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: "var(--sl-radius-2)",
+    cursor: "pointer",
+    boxShadow: "var(--sl-shadow-1)",
+    transition: "border-color 0.15s ease, box-shadow 0.15s ease",
+  };
 
-const recommendedCardStyle: React.CSSProperties = {
-  ...baseCardStyle,
-  border: "var(--sl-border-accent-strong)",
-  background: "var(--sl-bg-informational)",
-};
+  if (isRecommended) {
+    return {
+      ...base,
+      borderColor: isHovered
+        ? "var(--sl-color-blue-11)"
+        : "var(--sl-color-blue-10)",
+      background: "var(--sl-bg-informational)",
+    };
+  }
+
+  return {
+    ...base,
+    borderColor: isHovered
+      ? "var(--sl-color-gray-6)"
+      : "var(--sl-color-gray-3)",
+    background: "var(--sl-bg-base)",
+  };
+}
 
 export function ChannelCard(props: ChannelCardProps) {
   const { title, description, benefits, footer, isRecommended, onClick } = props;
   const { t } = useTranslation();
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Flex
       direction="column"
       gap="$space-4"
-      style={isRecommended ? recommendedCardStyle : baseCardStyle}
+      style={getCardStyle(!!isRecommended, isHovered)}
       role="button"
       tabIndex={0}
       onClick={onClick}
       onKeyDown={(e: React.KeyboardEvent) => e.key === "Enter" && onClick()}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <Flex direction="column" align="flex-start" gap="$space-2" style={{ alignSelf: "stretch" }}>
         <Flex align="center" justify="space-between" style={{ alignSelf: "stretch" }}>

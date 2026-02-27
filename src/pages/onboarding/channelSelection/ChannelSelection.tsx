@@ -90,7 +90,7 @@ export function ChannelSelection() {
       </Flex>
 
       <Grid
-        columns="500px 500px"
+        columns="repeat(2, minmax(0, 500px))"
         gap="$space-6"
         style={{ width: "100%", padding: "0 var(--sl-space-32)", justifyContent: "center" }}
       >
