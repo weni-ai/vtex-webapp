@@ -12,6 +12,7 @@ export interface OnboardProgressResult {
   currentStep: string;
   progress: number;
   isComplete: boolean;
+  isFailed: boolean;
   stepInfo: ProgressStepInfo;
 }
 
@@ -24,6 +25,7 @@ export function useOnboardProgress(): OnboardProgressResult {
 
   const currentStep = onboardingStatus?.current_step ?? '';
   const progress = onboardingStatus?.progress ?? 0;
+  const isFailed = onboardingStatus?.failed === true;
   const backendComplete = isProgressComplete(currentStep, progress);
 
   const { step: animatedStep, progress: animatedProgress } = useAnimatedProgress(currentStep, progress);
@@ -37,14 +39,16 @@ export function useOnboardProgress(): OnboardProgressResult {
       const response = await getOnboardingStatus(vtexAccount);
       if (response.success && response.data) {
         dispatch(setOnboardingStatus(response.data));
+      } else if (onboardingStatus) {
+        dispatch(setOnboardingStatus({ ...onboardingStatus, failed: true }));
       }
     } finally {
       setIsPolling(false);
     }
-  }, [dispatch, userData?.account, isPolling]);
+  }, [dispatch, userData?.account, isPolling, onboardingStatus]);
 
   useEffect(() => {
-    if (backendComplete) {
+    if (backendComplete || isFailed) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -60,12 +64,12 @@ export function useOnboardProgress(): OnboardProgressResult {
         intervalRef.current = null;
       }
     };
-  }, [pollStatus, backendComplete]);
+  }, [pollStatus, backendComplete, isFailed]);
 
   const stepInfo = useMemo(
     () => getProgressStepInfo(animatedStep, animatedProgress),
     [animatedStep, animatedProgress],
   );
 
-  return { currentStep: animatedStep, progress: animatedProgress, isComplete: displayComplete, stepInfo };
+  return { currentStep: animatedStep, progress: animatedProgress, isComplete: displayComplete, isFailed, stepInfo };
 }
