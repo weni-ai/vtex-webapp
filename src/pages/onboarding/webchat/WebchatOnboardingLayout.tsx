@@ -5,6 +5,7 @@ import {
   Button,
   Divider,
   Flex,
+  Grid,
   Heading,
   Page,
   PageContent,
@@ -103,8 +104,9 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
 
             <Flex gap="$space-4" style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
               <Flex direction="column" gap="$space-2" style={{ width: 420, flexShrink: 0 }}>
-                {WEBCHAT_USE_CASES.map((useCase) => (
-                  <UseCaseCard
+                <Grid autoRows="1fr" gap="$space-2">
+                  {WEBCHAT_USE_CASES.map((useCase) => (
+                    <UseCaseCard
                     key={useCase.id}
                     title={t(useCase.titleKey)}
                     icon={useCase.icon}
@@ -112,8 +114,9 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
                     isSelected={selectedUseCase === useCase.id}
                     onClick={() => setSelectedUseCase(useCase.id)}
                     type={type}
-                  />
-                ))} 
+                    />
+                  ))} 
+                </Grid>
 
                 {belowCards}
               </Flex>
