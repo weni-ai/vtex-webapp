@@ -938,7 +938,9 @@
             "no_custom_instructions": "Nenhuma instrução personalizada adicionada",
             "actions": {
                 "edit": "Editar instrução",
-                "remove": "Remover instrução"
+                "remove": "Remover instrução",
+                "save": "Salvar",
+                "cancel": "Cancelar"
             },
             "messages": {
                 "error_retrieving_instructions": "Erro ao recuperar instruções",
