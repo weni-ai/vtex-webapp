@@ -91,6 +91,12 @@
           "defining_instructions": "Applying custom business rules and tailored instructions...",
           "installing_webchat": "Finalizing Webchat setup... You're almost live!",
           "setup_completed": "Setup complete! Your agents are trained and the Webchat is ready to go live."
+        },
+        "failed": {
+          "title": "Something went wrong while preparing your AI Team",
+          "description": "Our support team is standing by to resolve this for you. Reach out to us to finalize your AI Team activation.",
+          "toast_message": "Something went wrong while preparing your AI Team.",
+          "contact_support": "Contact Support"
         }
       },
       "use_cases": {
