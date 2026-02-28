@@ -9,6 +9,8 @@ const UnnnicButton = applyPureVueInReact(unnnic.unnnicButton) as React.Component
   size?: string;
   type?: string;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
+  disabled?: boolean;
 }>;
 
 export function Button({
@@ -18,6 +20,8 @@ export function Button({
   variant = 'secondary',
   children,
   loading = false,
+  style,
+  disabled = false,
   ...props
 }: {
   system?: 'shoreline' | 'unnnic',
@@ -27,6 +31,8 @@ export function Button({
   children: React.ReactNode,
   loading?: boolean,
   'data-testid'?: string,
+  style?: React.CSSProperties,
+  disabled?: boolean,
 }) {
   const designSystem = system || useSelector(selectDesignSystem);
   const dataTestId = props['data-testid'];
@@ -43,6 +49,8 @@ export function Button({
       variant={variantResolved as 'primary' | 'secondary' | 'tertiary' | 'critical' | 'criticalTertiary'}
       loading={loading}
       data-testid={dataTestId}
+      style={style}
+      disabled={disabled}
     > 
       {children}
     </ShorelineButton>;
@@ -67,6 +75,8 @@ export function Button({
     onClick={onClick}
     size={sizeMap[size]}
     type={variantMap[variant]}
+    style={style}
+    disabled={disabled}
   >
     {children}
   </UnnnicButton>;
