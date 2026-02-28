@@ -6,6 +6,7 @@
     "confirm": "Confirm",
     "save": "Save",
     "back": "Back",
+    "close": "Close",
     "create": "Create",
     "details": "View details",
     "manage_settings": "Manage settings",
@@ -33,6 +34,118 @@
     },
     "build_manager": {
       "title": "Setup Manager profile"
+    },
+    "channel_selection": {
+      "title": "The full-stack Agentic Customer Experience Platform for retailers and brands",
+      "subtitle": "Go beyond traditional chatbots. Deploy a truly agentic AI architecture capable of autonomously planning and executing complex tasks. Integrate sales, marketing, and support into a single opinionated solution to drive revenue and operational efficiency.",
+      "recommended": "Recommended",
+      "webchat": {
+        "title": "Scale Support and Efficiency",
+        "description": "Scale Support, Delight Customers: Deploy Opinionated AI Agents for 24/7 Automated Webchat.",
+        "benefits": [
+          "Catalog Concierge",
+          "Automated Cancellations",
+          "Smart FAQ Assistant",
+          "Deflect 80% of routine tickets (including WISMO)",
+          "No-Code, Quick Launch"
+        ],
+        "footer": "Setup time: Approx. 2~5 min"
+      },
+      "whatsapp": {
+        "title": "WhatsApp Store",
+        "description": "Recover abandoned carts and send automated order updates to maximize your ROAS.",
+        "benefits": [
+          "Automated Abandoned Cart Recovery",
+          "Native Order Tracking & Status",
+          "Retention Engine: keep customers engaged throughout the post-purchase journey",
+          "One-Click Payment Checkout."
+        ],
+        "footer": "Use a test account or connect your Meta Business account."
+      },
+      "disclaimer": "You can enable the other solution at any time through your dashboard, leveraging all the insights and learning already gathered.",
+      "terms": "By proceeding, you agree to <0>VTEX Agentic CX</0> Terms of Service and Privacy Policy"
+    },
+    "select_account_host": {
+      "title": "Connect your data source",
+      "placeholder": "Choose your store's URL",
+      "help_text": "Confirm your original URL so we can build a precise knowledge base for your agents."
+    },
+    "onboard_setup": {
+      "title": "Your AI Team is getting ready",
+      "test_button": "Test",
+      "progress": {
+        "stage_prefix": "Stage {{current}}/{{total}}",
+        "stages": {
+          "environment_sync": "Environment Sync",
+          "knowledge_building": "Knowledge Construction",
+          "agent_training": "Agent Training & Activation"
+        },
+        "descriptions": {
+          "syncing_credentials": "Syncing account credentials and permissions...",
+          "configuring_workspace": "Configuring your AI workspace...",
+          "mapping_data_structure": "Mapping your store's data structure for seamless integration...",
+          "analyzing_catalog": "Analyzing product catalog and sales policies...",
+          "extracting_knowledge": "Extracting key store insights to empower your agents...",
+          "refining_data": "Refining data for a high-performance knowledge base...",
+          "assembling_agents": "Assembling your dedicated agent team...",
+          "defining_instructions": "Applying custom business rules and tailored instructions...",
+          "installing_webchat": "Finalizing Webchat setup... You're almost live!",
+          "setup_completed": "Setup complete! Your agents are trained and the Webchat is ready to go live."
+        },
+        "failed": {
+          "title": "Something went wrong while preparing your AI Team",
+          "description": "Our support team is standing by to resolve this for you. Reach out to us to finalize your AI Team activation.",
+          "toast_message": "Something went wrong while preparing your AI Team.",
+          "contact_support": "Contact Support"
+        }
+      },
+      "use_cases": {
+        "title": "Agents in training, preview their main use cases:",
+        "catalog_concierge": {
+          "title": "Catalog Concierge",
+          "description": "Guiding customers to the right products to drive sales"
+        },
+        "cancellations": {
+          "title": "Cancellation Agent",
+          "description": "Automating order cancellations and retention flows"
+        },
+        "order_status": {
+          "title": "Order Status Agent",
+          "description": "Providing real-time updates to deflect human support"
+        },
+        "faq_assistant": {
+          "title": "Smart FAQ Agent",
+          "description": "Answering store questions using your knowledge base"
+        }
+      },
+      "preview": {
+        "banner": "Preview mode: interactive testing will be available once training is complete."
+      }
+    },
+    "onboard_test": {
+      "title": "Test and activate your AI Team",
+      "activate_button": "Activate in Store",
+      "completion": {
+        "heading": "Training complete: Your agents are ready for action",
+        "knowledge_base": "Retail knowledge base created and optimized",
+        "business_rules": "Business rules and retail policies fully mapped",
+        "agents_ready": "Expert agents active and ready"
+      },
+      "scenarios": {
+        "title": "Click to test a scenario:",
+        "refine_instructions": "Refine instructions",
+        "catalog_concierge": "Test smart search and product recommendations",
+        "cancellations": "Test reverse logistics and cancellation flows",
+        "order_status": "Validate order tracking and delivery updates",
+        "faq_assistant": "Check instant resolution for common inquiries"
+      },
+      "activation": {
+        "title": "Ready for activation?",
+        "safe_label": "Safe Activation (Recommended)",
+        "full_label": "Full Activation",
+        "safe_description": "Enable for 10% of visitors, ideal for monitoring initial interactions risk-free.",
+        "full_description": "Enable across your entire store. You can scale down or disable it at any time."
+      }
     }
   },
   "title": "Weni Agentic IA",
