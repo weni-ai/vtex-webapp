@@ -5,12 +5,38 @@ import { getProgressStepInfo } from './progressSteps';
 interface ProgressBarProps {
   currentStep: string;
   progress: number;
+  isFailed?: boolean;
 }
 
 export function ProgressBar(props: ProgressBarProps) {
-  const { currentStep, progress } = props;
+  const { currentStep, progress, isFailed = false } = props;
   const { t } = useTranslation();
   const stepInfo = getProgressStepInfo(currentStep, progress);
+
+  if (isFailed) {
+    return (
+      <Flex direction="column" gap="$space-2">
+        <Flex direction="column" gap="$space-2">
+          <Heading variant="display3">
+            {t('onboarding.onboard_setup.progress.failed.title')}
+          </Heading>
+          <Text variant="body">
+            {t('onboarding.onboard_setup.progress.failed.description')}
+          </Text>
+        </Flex>
+
+        <Flex gap="$space-4" style={{ width: '100%' }}>
+          {stepInfo.segmentFills.map((fill, index) => (
+            <Flex key={index} style={{ flex: 1, height: 12, background: 'var(--sl-color-red-3)', borderRadius: 'var(--sl-radius-2)', overflow: 'hidden' }}>
+              <Flex
+                style={{ height: '100%', background: 'var(--sl-color-red-8)', borderRadius: 'var(--sl-radius-2)', width: `${fill}%` }}
+              />
+            </Flex>
+          ))}
+        </Flex>
+      </Flex>
+    );
+  }
 
   const stageLabel = t(stepInfo.stageLabel);
   const description = t(stepInfo.descriptionKey);
