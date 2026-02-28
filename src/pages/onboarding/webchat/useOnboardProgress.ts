@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectOnboardingStatus, setOnboardingStatus } from '../../../store/onboardSlice';
 import { selectUser } from '../../../store/userSlice';
 import { getOnboardingStatus } from '../../../services/onboarding.service';
+import { ONBOARDING_PAGES } from '../../../constants/onboarding';
 import { getProgressStepInfo, isProgressComplete, ProgressStepInfo } from './progressSteps';
 import { useAnimatedProgress } from './useAnimatedProgress';
+import type { OnboardStatus } from '../../../interfaces/Store';
 
 const POLLING_INTERVAL_MS = 3_000;
 
@@ -14,6 +16,21 @@ export interface OnboardProgressResult {
   isComplete: boolean;
   isFailed: boolean;
   stepInfo: ProgressStepInfo;
+}
+
+function buildFailedStatus(existing: OnboardStatus | null, vtexAccount: string): OnboardStatus {
+  if (existing) {
+    return { ...existing, failed: true };
+  }
+  return {
+    uuid: '',
+    created_on: '',
+    vtex_account: vtexAccount,
+    current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_SETUP,
+    completed: false,
+    failed: true,
+    progress: 0,
+  };
 }
 
 export function useOnboardProgress(): OnboardProgressResult {
@@ -39,9 +56,12 @@ export function useOnboardProgress(): OnboardProgressResult {
       const response = await getOnboardingStatus(vtexAccount);
       if (response.success && response.data) {
         dispatch(setOnboardingStatus(response.data));
-      } else if (onboardingStatus) {
-        dispatch(setOnboardingStatus({ ...onboardingStatus, failed: true }));
+      } else {
+        dispatch(setOnboardingStatus(buildFailedStatus(onboardingStatus, vtexAccount)));
       }
+    } catch {
+      const vtex = userData?.account ?? '';
+      dispatch(setOnboardingStatus(buildFailedStatus(onboardingStatus, vtex)));
     } finally {
       setIsPolling(false);
     }
