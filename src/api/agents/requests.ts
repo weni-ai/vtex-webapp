@@ -70,7 +70,7 @@ export async function agentsList() {
 
   const response = await proxy<AgentsListResponse>(
     'GET',
-    `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
+    `${getEnv('VITE_APP_COMMERCE_URL')}/v2/agents/${projectUuid}/`,
     {
       headers: { 'Project-Uuid': projectUuid, },
       params: {
