@@ -8,7 +8,7 @@ import { selectAccount, selectUser } from "../../../store/userSlice";
 import { startCrawling, updateOnboarding } from "../../../services/onboarding.service";
 import { ChannelCard } from "./ChannelCard";
 import { SelectAccountHostModal } from "./SelectAccountHostModal";
-import { ONBOARDING_PAGES } from "../../../constants/onboarding";
+import { CRAWLING_CHANNEL, ONBOARDING_PAGES } from "../../../constants/onboarding";
 import { TermsAndConditionsModal } from "./TermsAndConditionsModal";
 
 export function ChannelSelection() {
@@ -55,7 +55,7 @@ export function ChannelSelection() {
 
     updateOnboarding(vtexAccount, { current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_SETUP });
 
-    startCrawling(vtexAccount, host);
+    startCrawling(vtexAccount, host, CRAWLING_CHANNEL.webchat);
 
     dispatch(
       setOnboardingStatus({
@@ -90,9 +90,9 @@ export function ChannelSelection() {
       </Flex>
 
       <Grid
-        columns="1fr 1fr"
+        columns="500px 500px"
         gap="$space-6"
-        style={{ width: "100%", padding: "0 var(--sl-space-32)" }}
+        style={{ width: "100%", padding: "0 var(--sl-space-32)", justifyContent: "center" }}
       >
         <ChannelCard
           title={t("onboarding.channel_selection.webchat.title")}
