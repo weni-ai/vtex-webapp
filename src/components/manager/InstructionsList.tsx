@@ -214,11 +214,11 @@ function InstructionItem({
             loading={isSaving}
             disabled={localValue.trim().length === 0 || localValue.trim() === value.trim()}
           >
-            Save
+            {t('instructions_drawer.instructions_list.actions.save')}
           </Button>
 
           <Button variant="tertiary" size="large" onClick={cancelEdit}>
-            Cancel
+            {t('instructions_drawer.instructions_list.actions.cancel')}
           </Button>
         </>
       ) : (

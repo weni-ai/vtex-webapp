@@ -925,7 +925,7 @@
             "title": "Lista de instrucciones",
             "tabs": {
                 "custom": "Personalizado",
-                "default": "Padrão",
+                "default": "Estándar",
                 "safety_topics": "Tópicos de seguridad"
             },
             "default_instructions": [
@@ -943,7 +943,7 @@
                 "Violencia física o moral",
                 "Contenido sexual",
                 "Prejuicio",
-                "Ódio",
+                "Odio",
                 "Religión",
                 "Suicidio",
                 "Autolesión",
@@ -954,7 +954,9 @@
             "no_custom_instructions": "No se han agregado instrucciones personalizadas",
             "actions": {
                 "edit": "Editar instrucción",
-                "remove": "Eliminar instrucción"
+                "remove": "Eliminar instrucción",
+                "save": "Guardar",
+                "cancel": "Cancelar"
             },
             "messages": {
                 "error_retrieving_instructions": "Error al recuperar instrucciones",
