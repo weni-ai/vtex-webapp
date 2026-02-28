@@ -12,6 +12,7 @@ interface UseCaseCardProps {
 
 const baseCardStyle: React.CSSProperties = {
   alignItems: 'center',
+  height: '100%',
   padding: 'var(--sl-space-3)',
   borderWidth: '1px',
   borderStyle: 'solid',
@@ -24,13 +25,9 @@ const baseCardStyle: React.CSSProperties = {
 
 const selectedCardStyle: React.CSSProperties = {
   ...baseCardStyle,
-  borderColor: 'var(--sl-color-blue-10)', 
-};
-
-const selectedWithBackgroundStyle: React.CSSProperties = {
-  ...selectedCardStyle,
-  background: 'var(--sl-bg-informational)',
-};
+  borderColor: 'var(--sl-color-blue-10)',
+  background: 'var(--sl-bg-informational)', 
+}; 
 
 const hoveredCardStyle: React.CSSProperties = {
   ...baseCardStyle,
@@ -43,13 +40,18 @@ export function UseCaseCard(props: UseCaseCardProps) {
   const { title, description, icon, isSelected, onClick, type } = props;
   const [isHovered, setIsHovered] = useState(false);
 
+  const isTestState = type === 'test';
+  const isActive = isSelected || isTestState;
+  const textColor = isActive ? '$fg-base' : '$fg-base-soft';
+  const titleVariant = !isTestState && !isSelected ? 'emphasis' : 'action';
+  const descriptionVariant = !isTestState && !isSelected ? 'caption2' : 'caption1';
+  const descriptionColor = !isTestState && isActive ? '$fg-base' : '$fg-base-soft';
+
   function getCardStyle(): React.CSSProperties {
     if (isSelected) {
-      if (type === 'preview') return selectedWithBackgroundStyle;
       return selectedCardStyle;
     }
-    if (isHovered) return hoveredCardStyle;
-    return baseCardStyle;
+    return isHovered ? hoveredCardStyle : baseCardStyle;
   }
 
   return (
@@ -67,13 +69,13 @@ export function UseCaseCard(props: UseCaseCardProps) {
       <img
         src={icon}
         alt={title}
-        style={{ filter: isSelected ? 'unset' : inactiveIconFilter, transition: 'filter 0.15s ease' }}
+        style={{ filter: isActive ? 'unset' : inactiveIconFilter, transition: 'filter 0.15s ease' }}
       />
       <Flex direction="column" gap="$space-05">
-        <Text variant={isSelected ? 'emphasis' : 'body'} color={isSelected ? '$fg-base' : '$fg-base-soft'}>
+        <Text variant={titleVariant} color={textColor}>
           {title}
         </Text>
-        <Text variant="caption1" color={isSelected ? '$fg-base' : '$fg-base-soft'}>
+        <Text variant={descriptionVariant} color={descriptionColor}>
           {description}
         </Text>
       </Flex>
