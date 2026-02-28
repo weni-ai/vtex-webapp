@@ -57,24 +57,38 @@ export const updateOnboarding = async (
 
 export const updateWebchatDisplayRatio = async (
   webchatAppUuid: string,
-  displayRatio: number,
+  newConfig: object,
 ) => {
   const response = await proxy<{ uuid: string }>(
     'PATCH',
     `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wwc/apps/${webchatAppUuid}/configure/`,
     {
-      data: { config: { displayRatio } },
+      data: { config: newConfig },
     }
   );
 
   return response;
 }
 
-export const activatePixelApp = async (vtex_account: string) => {
-  // TODO: Replace with actual Endpoint 12 URL when backend provides it.
+export const activatePixelApp = async (channel: CrawlingChannel, appUuid: string, accountId: string) => {
   const response = await proxy<{ uuid: string }>(
     'POST',
-    `${getEnv('VITE_APP_COMMERCE_URL')}/api/onboard/${vtex_account}/activate/`,
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/onboard/${channel}/activate/`,
+    {
+      data: {
+        app_uuid: appUuid,
+        account_id: accountId,
+      },
+    }
+  );
+
+  return response;
+}
+
+export const getWebchatConfig = async (webchatAppUuid: string) => {
+  const response = await proxy<{ config: { displayRatio: number } }>(
+    'GET',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wwc/apps/${webchatAppUuid}/`,
     {}
   );
 
