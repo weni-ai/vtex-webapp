@@ -22,6 +22,7 @@ import {
 } from '../../../services/onboarding.service';
 import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
+import { Instructions } from '../../../components/manager/Instructions';
 
 type ActivationMode = 'safe' | 'full';
 
@@ -89,30 +90,19 @@ function ActivationSection(props: ActivationSectionProps) {
     : 'onboarding.onboard_test.activation.full_description';
 
   return (
-    <Flex direction="column" gap="$space-4">
-      
-
-      <Flex direction="column" gap="$space-3">
-        <RadioGroup
-          label={
-            <Text variant="action" color="$fg-base" style={{marginBottom:"var(--sl-space-4)"}}>
-              {t('onboarding.onboard_test.activation.title')}
-            </Text>
-          }
-          horizontal
-          state={radioState}
-        >
-          <Radio value="safe">
-            {t('onboarding.onboard_test.activation.safe_label')}
-          </Radio>
-          <Radio value="full">
-            {t('onboarding.onboard_test.activation.full_label')}
-          </Radio>
-        </RadioGroup>
-
-        <Text variant="body">{t(descriptionKey)}</Text>
-      </Flex>
-    </Flex>
+    <RadioGroup
+      label={t('onboarding.onboard_test.activation.title')}
+      horizontal
+      state={radioState}
+      description={t(descriptionKey)}
+    >
+      <Radio value="safe">
+        {t('onboarding.onboard_test.activation.safe_label')}
+      </Radio>
+      <Radio value="full">
+        {t('onboarding.onboard_test.activation.full_label')}
+      </Radio>
+    </RadioGroup>
   );
 }
 
@@ -179,10 +169,8 @@ export function WebchatTestAndActivate() {
   );
 
   const belowCards = (
-    <Flex direction="column" gap="$space-6">
-      <Button variant="tertiary">
-        {t('onboarding.onboard_test.scenarios.refine_instructions')}
-      </Button>
+    <Flex direction="column" gap="$space-6" style={{ marginTop: 'var(--sl-space-2)' }}>
+      <Instructions />
 
       <Divider />
 

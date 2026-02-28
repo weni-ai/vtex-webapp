@@ -133,7 +133,6 @@
       },
       "scenarios": {
         "title": "Click to test a scenario:",
-        "refine_instructions": "Refine instructions",
         "catalog_concierge": "Test smart search and product recommendations",
         "cancellations": "Test reverse logistics and cancellation flows",
         "order_status": "Validate order tracking and delivery updates",
@@ -900,6 +899,73 @@
           "last_7_days": "Last 7 days",
           "last_28_days": "Last 28 days"
         }
+      }
+    }
+  },
+  "instructions_drawer": {
+    "open": "Refine instructions",
+    "title": "Instructions",
+    "description": "Instructions for the agent",
+    "new_custom_instruction": {
+      "title": "New custom instruction",
+      "hint": "Keep instructions clear, direct, and in the imperative.",
+      "buttons": {
+        "save": "Save instruction"
+      }
+    },
+    "remove_instruction_confirmation_modal": {
+      "title": "Remove instruction",
+      "description": "Are you sure you want to remove the instruction?",
+      "buttons": {
+        "remove": "Remove",
+        "cancel": "Cancel"
+      }
+    },
+    "instructions_list": {
+      "title": "Instructions list",
+      "tabs": {
+        "custom": "Custom",
+        "default": "Default",
+        "safety_topics": "Safety topics"
+      },
+      "default_instructions": [
+        "When necessary, you seek specialized assistance from team members, who are available to help resolve the case.",
+        "You MUST NEVER, under ANY CIRCUMSTANCES, discuss topics that are outside your area of expertise.",
+        "Make sure that you optimize your communication by contacting MULTIPLE agents at the same time whenever possible.",
+        "Keep your communications with other agents concise and terse, do not engage in any chit-chat.",
+        "Only communicate with the agents that are necessary to help with the User's query.",
+        "Answer strictly with facts found in the knowledgebase block; do not rely on prior knowledge, assumptions, or external sources.",
+        "Do not infer unstated details, generalize beyond what is written, fill gaps, or speculate—even if the topic seems obvious."
+      ],
+      "safety_topics": [
+        "Politics",
+        "Physical health",
+        "Physical or moral violence", 
+        "Sexual content",
+        "Prejudice",
+        "Hate",
+        "Religion",
+        "Suicide",
+        "Self-harm",
+        "Beliefs",
+        "Gender identity",
+        "Sex and relationships"
+      ],
+      "no_custom_instructions": "No custom instructions added",
+      "actions": {
+        "edit": "Edit instruction",
+        "remove": "Remove instruction",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "messages": {
+        "error_retrieving_instructions": "Error retrieving instructions",
+        "success_editing_custom_instruction": "Custom instruction edited",
+        "error_editing_custom_instruction": "Error editing custom instruction",
+        "success_adding_custom_instruction": "Custom instruction added",
+        "error_adding_custom_instruction": "Error adding custom instruction",
+        "success_removing_custom_instruction": "Custom instruction removed",
+        "error_removing_custom_instruction": "Error removing custom instruction"
       }
     }
   }

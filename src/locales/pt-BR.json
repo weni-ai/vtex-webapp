@@ -892,5 +892,72 @@
                 }
             }
         }
+    },
+    "instructions_drawer": {
+        "open": "Refinar instruções",
+        "title": "Instruções",
+        "description": "Instruções para o agente",
+        "new_custom_instruction": {
+            "title": "Nova instrução personalizada",
+            "hint": "Mantenha as instruções claras, diretas e imperativas.",
+            "buttons": {
+                "save": "Salvar instrução"
+            }
+        },
+        "remove_instruction_confirmation_modal": {
+            "title": "Remover instrução",
+            "description": "Tem certeza que deseja remover a instrução?",
+            "buttons": {
+                "remove": "Remover",
+                "cancel": "Cancelar"
+            }
+        },
+        "instructions_list": {
+            "title": "Lista de instruções",
+            "tabs": {
+                "custom": "Personalizado",
+                "default": "Padrão",
+                "safety_topics": "Tópicos de segurança"
+            },
+            "default_instructions": [
+                "Quando necessário, você deve buscar assistência especializada com os membros da equipe, que estão disponíveis para ajudar a resolver o caso.",
+                "Você NUNCA, em NENHUMA CIRCUNSTÂNCIA, deve discutir assuntos que estejam fora da sua área de especialização.",
+                "Garanta que a comunicação seja otimizada entrando em contato com MÚLTIPLOS agentes ao mesmo tempo, sempre que possível.",
+                "Mantenha sua comunicação com outros agentes concisa e objetiva, sem conversas paralelas.",
+                "Comunique-se apenas com os agentes necessários para ajudar na solicitação do Usuário.",
+                "Responda estritamente com base nos fatos encontrados no bloco de base de conhecimento; não utilize conhecimento prévio, suposições ou fontes externas.",
+                "Não infira detalhes não declarados, não generalize além do que está escrito, não preencha lacunas nem especule — mesmo que o assunto pareça óbvio."
+            ],
+            "safety_topics": [
+                "Política",
+                "Saúde física",
+                "Violência física ou moral",
+                "Conteúdo sexual",
+                "Preconceito",
+                "Ódio",
+                "Religião",
+                "Suicídio",
+                "Autolesão",
+                "Crenças",
+                "Identidade de gênero",
+                "Relações sexuais"
+            ],
+            "no_custom_instructions": "Nenhuma instrução personalizada adicionada",
+            "actions": {
+                "edit": "Editar instrução",
+                "remove": "Remover instrução",
+                "save": "Salvar",
+                "cancel": "Cancelar"
+            },
+            "messages": {
+                "error_retrieving_instructions": "Erro ao recuperar instruções",
+                "success_editing_custom_instruction": "Instrução personalizada editada",
+                "error_editing_custom_instruction": "Erro ao editar instrução personalizada",
+                "success_adding_custom_instruction": "Instrução personalizada adicionada",
+                "error_adding_custom_instruction": "Erro ao adicionar instrução personalizada",
+                "success_removing_custom_instruction": "Instrução personalizada removida",
+                "error_removing_custom_instruction": "Erro ao remover instrução personalizada"
+            }
+        }
     }
 }
