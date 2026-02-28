@@ -19,16 +19,14 @@ const SETUP_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
   faq_assistant: 'onboarding.onboard_setup.use_cases.faq_assistant.description',
 };
 
+const SUPPORT_EMAIL = 'support.weni@vtex.com';
+
 function FailedToastContent({ message, actionLabel }: { message: string; actionLabel: string }) {
   return (
     <Flex direction="column" gap="$space-1">
       <Text variant="emphasis">{message}</Text>
       <Link
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          console.log('contact support');
-        }}
+        href={`mailto:${SUPPORT_EMAIL}`}
         style={{ fontWeight: 600 }}
       >
         {actionLabel}
@@ -84,7 +82,7 @@ export function WebchatOnboardSetup() {
   }, [userData?.account, onboardingStatus, dispatch]);
 
   const handleContactSupport = useCallback(() => {
-    console.log('contact support');
+    window.location.href = `mailto:${SUPPORT_EMAIL}`;
   }, []);
 
   const useCaseDescriptions = useMemo(
