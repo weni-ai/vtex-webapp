@@ -150,7 +150,6 @@
   "title": "Weni Agentic IA",
   "description": "An AI-based CX business solution for brands and retailers.",
   "improve": {
-    "description": "Connect agents to the Weni platform to access advanced features and customizable options",
     "button": "Connect to Weni"
   },
   "agents": {
