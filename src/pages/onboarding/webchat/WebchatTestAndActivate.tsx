@@ -202,6 +202,7 @@ export function WebchatTestAndActivate() {
       useCasesTitle={t('onboarding.onboard_test.scenarios.title')}
       useCaseDescriptions={useCaseDescriptions}
       belowCards={belowCards}
+      webchatAppUuid={webchatAppUuid}
     />
   );
 }
