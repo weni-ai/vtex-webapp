@@ -34,7 +34,7 @@ export type WebchatOnboardingLayoutType = 'preview' | 'test';
 interface WebchatOnboardingLayoutProps {
   title: string;
   primaryAction: PrimaryActionConfig;
-  skipAction: SkipActionConfig;
+  skipAction?: SkipActionConfig;
   topSection: React.ReactNode;
   useCasesTitle: string;
   useCaseDescriptions: Record<UseCaseId, string>;
@@ -55,7 +55,9 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
   } = props;
 
   const { t } = useTranslation();
-  const [selectedUseCase, setSelectedUseCase] = useState<UseCaseId>(WEBCHAT_USE_CASES[0].id);
+  const [selectedUseCase, setSelectedUseCase] = useState<UseCaseId | null>(
+    type === 'test' ? null : WEBCHAT_USE_CASES[0].id,
+  );
 
   return (
     <Page style={{ height: '100vh', padding: 'var(--sl-space-6)' }}>
@@ -63,16 +65,18 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
         <PageHeaderRow>
           <PageHeading>{title}</PageHeading>
           <Stack space="$space-3" horizontal>
-            <Bleed top="$space-2" bottom="$space-2">
-              <Button
-                variant="secondary"
-                size="large"
-                onClick={skipAction.onClick}
-                disabled={skipAction.disabled}
-              >
-                {t('common.skip')}
-              </Button>
-            </Bleed>
+            {skipAction && (
+              <Bleed top="$space-2" bottom="$space-2">
+                <Button
+                  variant="secondary"
+                  size="large"
+                  onClick={skipAction.onClick}
+                  disabled={skipAction.disabled}
+                >
+                  {t('common.skip')}
+                </Button>
+              </Bleed>
+            )}
             <Bleed top="$space-2" bottom="$space-2">
               <Button
                 variant="primary"

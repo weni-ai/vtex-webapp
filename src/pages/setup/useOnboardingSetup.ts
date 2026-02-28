@@ -4,7 +4,21 @@ import { getOnboardingStatus, ensureProjectAndUser } from '../../services/onboar
 import { initializeUserContext, initializeWeniPlatformContext } from '../../services/setup.service';
 import { setInitialLoading, setProjectUuid } from '../../store/projectSlice';
 import { setOnboardingStatus } from '../../store/onboardSlice';
+import { ONBOARDING_PAGES } from '../../constants/onboarding';
 import store from '../../store/provider.store';
+import type { OnboardStatus } from '../../interfaces/Store';
+
+function buildFailedOnboardStatus(vtexAccount: string): OnboardStatus {
+  return {
+    uuid: '',
+    created_on: '',
+    vtex_account: vtexAccount,
+    current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_SETUP,
+    completed: false,
+    failed: true,
+    progress: 0,
+  };
+}
 
 export function useOnboardingSetup() {
   const navigate = useNavigate();
@@ -33,7 +47,9 @@ export function useOnboardingSetup() {
 
       const onboardingStatus = await getOnboardingStatus(userData.account);
       if (!onboardingStatus.success || !onboardingStatus.data) {
-        throw new Error(onboardingStatus.error || 'error fetching onboarding status.');
+        store.dispatch(setOnboardingStatus(buildFailedOnboardStatus(userData.account)));
+        navigate('/onboarding');
+        return;
       }
 
       store.dispatch(setOnboardingStatus(onboardingStatus.data));

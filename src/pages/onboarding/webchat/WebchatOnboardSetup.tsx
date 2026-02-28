@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Flex, Link, Text, toast } from '@vtex/shoreline';
 import { selectUser } from '../../../store/userSlice';
 import { updateOnboarding } from '../../../services/onboarding.service';
 import { selectOnboardingStatus, setOnboardingStatus } from '../../../store/onboardSlice';
@@ -18,6 +19,22 @@ const SETUP_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
   faq_assistant: 'onboarding.onboard_setup.use_cases.faq_assistant.description',
 };
 
+const SUPPORT_EMAIL = 'support.weni@vtex.com';
+
+function FailedToastContent({ message, actionLabel }: { message: string; actionLabel: string }) {
+  return (
+    <Flex direction="column" gap="$space-1">
+      <Text variant="emphasis">{message}</Text>
+      <Link
+        href={`mailto:${SUPPORT_EMAIL}`}
+        style={{ fontWeight: 600 }}
+      >
+        {actionLabel}
+      </Link>
+    </Flex>
+  );
+}
+
 export function WebchatOnboardSetup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -25,9 +42,22 @@ export function WebchatOnboardSetup() {
 
   const userData = useSelector(selectUser);
   const onboardingStatus = useSelector(selectOnboardingStatus);
-  const { currentStep, progress, isComplete } = useOnboardProgress();
+  const { currentStep, progress, isComplete, isFailed } = useOnboardProgress();
 
   const [isTesting, setIsTesting] = useState(false);
+  const hasShownFailedToast = useRef(false);
+
+  useEffect(() => {
+    if (isFailed && !hasShownFailedToast.current) {
+      hasShownFailedToast.current = true;
+      toast.critical(
+        <FailedToastContent
+          message={t('onboarding.onboard_setup.progress.failed.toast_message')}
+          actionLabel={t('onboarding.onboard_setup.progress.failed.contact_support')}
+        />,
+      );
+    }
+  }, [isFailed, t]);
 
   const handleSkip = useCallback(async () => {
     const vtexAccount = userData?.account;
@@ -51,6 +81,10 @@ export function WebchatOnboardSetup() {
     ));
   }, [userData?.account, onboardingStatus, dispatch]);
 
+  const handleContactSupport = useCallback(() => {
+    window.location.href = `mailto:${SUPPORT_EMAIL}`;
+  }, []);
+
   const useCaseDescriptions = useMemo(
     () => Object.fromEntries(
       Object.entries(SETUP_DESCRIPTION_KEYS).map(([id, key]) => [id, t(key)]),
@@ -58,20 +92,28 @@ export function WebchatOnboardSetup() {
     [t],
   );
 
+  const primaryAction = isFailed
+    ? {
+        label: t('onboarding.onboard_setup.progress.failed.contact_support'),
+        onClick: handleContactSupport,
+      }
+    : {
+        label: t('onboarding.onboard_setup.test_button'),
+        onClick: handleTest,
+        disabled: !isComplete || isTesting,
+      };
+
+  const skipAction = isFailed
+    ? undefined
+    : { onClick: handleSkip, disabled: !isComplete };
+
   return (
     <WebchatOnboardingLayout
       type="preview"
       title={t('onboarding.onboard_setup.title')}
-      primaryAction={{
-        label: t('onboarding.onboard_setup.test_button'),
-        onClick: handleTest,
-        disabled: !isComplete || isTesting,
-      }}
-      skipAction={{
-        onClick: handleSkip,
-        disabled: !isComplete,
-      }}
-      topSection={<ProgressBar currentStep={currentStep} progress={progress} />}
+      primaryAction={primaryAction}
+      skipAction={skipAction}
+      topSection={<ProgressBar currentStep={currentStep} progress={progress} isFailed={isFailed} />}
       useCasesTitle={t('onboarding.onboard_setup.use_cases.title')}
       useCaseDescriptions={useCaseDescriptions}
     />
