@@ -134,7 +134,8 @@
                 "description": "Offers superior comfort and extreme softness, ideal for maintaining thermal balance. Ideal size 1.50m x 1.20m. When folded, it is the size of a small cushion. A comfort item that lasts a lifetime."
               }
             }
-          }
+          },
+          "example_start_message": "Surprise me with a recommendation."
         },
         "cancellations": {
           "title": "Cancellation Agent",
@@ -156,7 +157,8 @@
                 "description": "Top-rated energy efficiency and performance. Inverter technology makes the refrigerator quieter and speeds up freezing, providing higher energy efficiency."
               }
             }
-          }
+          },
+          "example_start_message": "I want to cancel my order."
         },
         "order_status": {
           "title": "Order Status Agent",
@@ -166,7 +168,8 @@
             "user_asks_order_status": "Hi. I'd like to know where my order #98754 is. The deadline is almost up.",
             "agent_confirms_carrier": "Certainly, Bruno. I've found it: your order is already with our partner carrier.",
             "agent_provides_tracking_and_deadline": "[...] you can access their portal and provide your Tax ID. I'll leave the direct link here to make it easier: The delivery deadline remains Thursday."
-          }
+          },
+          "example_start_message": "Where is my order?"
         },
         "faq_assistant": {
           "title": "Smart FAQ Agent",
@@ -183,7 +186,8 @@
                 "description": "Ideal for boosting game and movie resolution. Supports HDTV resolutions up to 1080p. Gold-plated connectors and Plug & Play feature. Length: 1.8 meters."
               }
             }
-          }
+          },
+          "example_start_message": "What if I don't like my order?"
         }
       },
       "preview": {

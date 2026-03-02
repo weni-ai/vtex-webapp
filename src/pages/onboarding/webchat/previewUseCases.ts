@@ -45,6 +45,8 @@ export interface WebChat {
   simulateMessageReceived(payload: WebChatSimulateMessagePayload): void;
   clear(): void;
   destroy(): void;
+  clearPageHistory(): void;
+  send(message: string): void;
 }
 
 declare global {
@@ -111,8 +113,18 @@ export function getTextByUseCase(useCase: string, text: string) {
   return i18n.t(`onboarding.onboard_setup.use_cases.${useCase}.preview.${text}`);
 }
 
-async function runStep(steps, stepIndex) {
+/** Incremented on start() and stop(); any run with runId < currentRunId is cancelled. */
+let currentRunId = 0;
+
+async function runStep(
+  steps: any[],
+  stepIndex: number,
+  runId: number
+): Promise<void> {
+  if (runId !== currentRunId) return;
+
   const step = steps[stepIndex];
+  if (!step) return;
 
   if (step.type === 'sent') {
     WebChat.simulateMessageSent(step.data);
@@ -129,39 +141,54 @@ async function runStep(steps, stepIndex) {
       WebChat.simulateMessageReceived({ type: 'message', message: step.data });
     }
   } else if (step.type === 'streaming-received') {
-    await simulateStreaming(step.data);
+    await simulateStreaming(step.data, runId);
+    if (runId !== currentRunId) return;
   } else if (step.type === 'typing') {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (runId !== currentRunId) return;
     WebChat.simulateMessageReceived({
-      "type":"typing_start",
-      "from":"ai-assistant",
+      type: 'typing_start',
+      from: 'ai-assistant',
     });
   } else if (step.type === 'delay') {
-    await new Promise(resolve => setTimeout(resolve, step.data));
+    await new Promise((resolve) => setTimeout(resolve, step.data));
+    if (runId !== currentRunId) return;
   } else if (step.type === 'animate') {
     await step.function();
+    if (runId !== currentRunId) return;
   }
 
+  if (runId !== currentRunId) return;
   if (stepIndex + 1 < steps.length) {
-    runStep(steps, stepIndex + 1);
+    runStep(steps, stepIndex + 1, runId);
   }
 }
 
-export async function start(steps) {  
+export function start(steps: any[]): { stop: () => void } {
+  currentRunId += 1;
+  cursor.remove();
+  const runId = currentRunId;
+
+  WebChat.clearPageHistory();
   WebChat.clear();
+  runStep(steps, 0, runId);
 
-  let stepIndex = 0;
-
-  WebChat.clear();
-
-  await runStep(steps, stepIndex);
+  return {
+    stop: () => {
+      currentRunId += 1;
+      cursor.remove();
+    },
+  };
 }
 
-export async function simulateStreaming(text) {
+export async function simulateStreaming(
+  text: string,
+  runId?: number
+): Promise<void> {
   const messageId = Math.random().toString(36).substring(2, 15);
 
   let missingText = text;
-  const chunks = [];
+  const chunks: { seq: number; text: string; delay: number }[] = [];
 
   while (missingText.length > 0) {
     const chunk = missingText.slice(0, Math.floor(Math.random() * 7) + 1);
@@ -179,7 +206,9 @@ export async function simulateStreaming(text) {
   });
 
   for (const chunk of chunks) {
-    await new Promise(resolve => setTimeout(resolve, chunk.delay));
+    if (runId !== undefined && runId !== currentRunId) return;
+    await new Promise((resolve) => setTimeout(resolve, chunk.delay));
+    if (runId !== undefined && runId !== currentRunId) return;
 
     WebChat.simulateMessageReceived({
       type: 'delta',
@@ -189,6 +218,7 @@ export async function simulateStreaming(text) {
     });
   }
 
+  if (runId !== undefined && runId !== currentRunId) return;
   WebChat.simulateMessageReceived({
     type: 'stream_end',
     message: { messageId },
