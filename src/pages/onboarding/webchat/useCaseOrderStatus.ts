@@ -1,12 +1,18 @@
-export const useCaseOrderStatusSteps = [{
+import { getTextByUseCase } from "./previewUseCases";
+
+function getText(key: string) {
+  return getTextByUseCase('order_status', key);
+}
+
+export const useCaseOrderStatusSteps = () => [{
   type: 'streaming-received',
-  data: 'Olá, Bruno! Como posso te ajudar com seu pedido hoje?',
+  data: getText('agent_greeting_order'),
 }, {
   type: 'delay',
   data: 3000,
 }, {
   type: 'sent',
-  data: 'Oi. Queria saber onde está meu pedido #98754. O prazo está quase vencendo.',
+  data: getText('user_asks_order_status'),
 }, {
   type: 'typing',
 }, {
@@ -14,7 +20,7 @@ export const useCaseOrderStatusSteps = [{
   data: 3000,
 }, {
   type: 'streaming-received',
-  data: 'Com certeza, Bruno. Localizei aqui: seu pedido já está com a transportadora parceira.\n\nPara acompanhar o trajeto detalhado passo a passo, você pode acessar o portal deles e informar o número do seu CPF. Vou deixar o link direto aqui para facilitar:',
+  data: getText('agent_confirms_carrier'),
 }, {
   type: 'typing',
 }, {
@@ -22,5 +28,5 @@ export const useCaseOrderStatusSteps = [{
   data: 3000,
 }, {
   type: 'streaming-received',
-  data: 'O prazo final de entrega continua sendo quinta-feira. Mais alguma dúvida sobre o envio?',
+  data: getText('agent_provides_tracking_and_deadline'),
 }];

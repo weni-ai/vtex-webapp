@@ -1,14 +1,18 @@
-import { cursor } from './previewUseCases';
+import { cursor, getTextByUseCase } from './previewUseCases';
 
-export const useCaseCancellationsSteps = [{
+function getText(key: string) {
+  return getTextByUseCase('cancellations', key);
+}
+
+export const useCaseCancellationsSteps = () => [{
   type: 'streaming-received',
-  data: 'Olá! Tudo bem? Sou o assistente da [Loja]. Antes de começarmos: posso te ajudar hoje Marcos?',
+  data: getText('agent_greeting'),
 }, {
   type: 'delay',
   data: 3000,
 }, {
   type: 'sent',
-  data: 'Aqui é o Marcos. Quero cancelar o pedido da geladeira que fiz ontem. Comprei a voltagem errada, peguei 110v e aqui em casa é tudo 220v.',
+  data: getText('user_requests_cancellation_wrong_voltage'),
 }, {
   type: 'typing',
 }, {
@@ -16,13 +20,13 @@ export const useCaseCancellationsSteps = [{
   data: 3000,
 }, {
   type: 'streaming-received',
-  data: 'Entendo perfeitamente, Marcos. Acontece muito! Para eu localizar sua compra e te ajudar com isso, você poderia me informar o **número do pedido**?',
+  data: getText('agent_asks_order_number'),
 }, {
   type: 'delay',
   data: 3000,
 }, {
   type: 'sent',
-  data: 'É o pedido #98754.',
+  data: getText('user_provides_order_number'),
 }, {
   type: 'typing',
 }, {
@@ -30,7 +34,7 @@ export const useCaseCancellationsSteps = [{
   data: 3000,
 }, {
   type: 'streaming-received',
-  data: 'Localizei aqui: Geladeira Inverse 420L Inox (110v). Antes de seguirmos com o cancelamento e você ter que esperar o estorno, eu posso **trocar a voltagem no seu pedido** agora mesmo, se tivermos em estoque. Deixa eu checar...',
+  data: getText('agent_check_stock'),
 }, {
   type: 'typing',
 }, {
@@ -39,7 +43,7 @@ export const useCaseCancellationsSteps = [{
 }, {
   type: 'received',
   data: {
-    text: 'Marcos, infelizmente o modelo 420L está esgotado em 220v. Tenho um modelo de 460L da mesma linha disponível em 220v para entrega imediata. Gostaria de considerar essa troca?',
+    text: getText('agent_offers_alternative_model'),
     interactive: {
       type: 'product_list',
       header: { text: 'Our Catalog' },
@@ -52,10 +56,10 @@ export const useCaseCancellationsSteps = [{
             product_items: [{
               product_retailer_id: 'best-1',
               image: 'https://cdn.cloud.weni.ai/VTEXApp/webchat-preview/geladeira-inverse-frost-free-inverter-460-aco-escovado.png',
-              name: 'Geladeira Inverse Frost Free Inverter 460L Aço Escovado',
+              name: getText('products.fridge_420l_inox.name'),
               price: '3999.90',
               currency: 'BRL',
-              description: 'Máxima classificação em economia de energia e performance\n\nAs geladeiras Panasonic estão entre as mais eficientes do Brasil, com classificação A na nova tabela de eficiência energética do Inmetro, garantindo mais economia e ajudando a reduzir o valor da conta de luz.\n\nGeladeira econômica, silenciosa e com o congelamento mais rápido com Inverter\n\nAlém de economizar energia, a tecnologia Inverter torna a geladeira mais silenciosa e acelera o congelamento por meio da regulagem do compressor, proporcionando maior eficiência',
+              description: getText('products.fridge_420l_inox.description'),
               seller_id: 'seller-1',
             }],
           },
@@ -93,7 +97,7 @@ export const useCaseCancellationsSteps = [{
   data: 3000,
 }, {
   type: 'sent',
-  data: 'Putz, não. Eu pesquisei muito sobre essa de 420L e ela encaixa perfeito no meu armário. Se não tem ela em 220v, prefiro cancelar mesmo.',
+  data: getText('user_declines_alternative_confirms_cancellation'),
 }, {
   type: 'typing',
 }, {
@@ -101,7 +105,7 @@ export const useCaseCancellationsSteps = [{
   data: 3000,
 }, {
   type: 'streaming-received',
-  data: 'Compreendo, Marcos. Quando o móvel é sob medida, a precisão é tudo. Já que a troca não atende, vou priorizar o cancelamento do pedido #98754 agora mesmo. Aguarde um momento por favor.',
+  data: getText('agent_confirms_cancellation_process'),
 }, {
   type: 'typing',
 }, {
@@ -109,11 +113,11 @@ export const useCaseCancellationsSteps = [{
   data: 3000,
 }, {
   type: 'streaming-received',
-  data: 'Tudo certo, Marcos. O estorno deve aparecer na sua próxima fatura. Posso te ajudar em algo mais?',
+  data: getText('agent_confirms_cancellation_process_confirmation'),
 }, {
   type: 'delay',
   data: 3000,
 }, {
   type: 'sent',
-  data: 'Não, era só isso mesmo obrigado.',
+  data: getText('user_confirms_cancellation_process_confirmation'),
 }];
