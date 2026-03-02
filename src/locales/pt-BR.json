@@ -128,7 +128,8 @@
                                 "description": "Oferece conforto superior e maciez extrema, ideal para manter o equilíbrio térmico. Tamanho ideal 1,50m x 1,20m. Dobrada, fica do tamanho de uma almofada pequena. É um item que dura a vida toda."
                             }
                         }
-                    }
+                    },
+                    "example_start_message": "Me surpreenda com uma recomendação."
                 },
                 "cancellations": {
                     "title": "Agente de Cancelamentos",
@@ -150,7 +151,8 @@
                                 "description": "Máxima classificação em economia de energia e performance. A tecnologia Inverter torna a geladeira mais silenciosa e acelera o congelamento, proporcionando maior eficiência energética."
                             }
                         }
-                    }
+                    },
+                    "example_start_message": "Quero cancelar meu pedido."
                 },
                 "order_status": {
                     "title": "Agente de Status de Pedidos",
@@ -160,7 +162,8 @@
                         "user_asks_order_status": "Oi. Queria saber onde está meu pedido #98754. O prazo está quase vencendo.",
                         "agent_confirms_carrier": "Com certeza, Bruno. Localizei aqui: seu pedido já está com a transportadora parceira.",
                         "agent_provides_tracking_and_deadline": "[...] você pode acessar o portal deles e informar o número do seu CPF. Vou deixar o link direto aqui para facilitar: O prazo final de entrega continua sendo quinta-feira."
-                    }
+                    },
+                    "example_start_message": "Onde está meu pedido?"
                 },
                 "faq_assistant": {
                     "title": "Agente de FAQ inteligente",
@@ -177,7 +180,8 @@
                                 "description": "Ideal para aumentar a resolução de jogos e filmes. Suporta resoluções de HDTV até 1080p. Conectores banhados a ouro e recurso Plug & Play. Tamanho: 1,8 metros."
                             }
                         }
-                    }
+                    },
+                    "example_start_message": "E se eu não gostar do meu pedido?"
                 }
             },
             "preview": {

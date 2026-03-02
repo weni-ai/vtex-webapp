@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Center, Flex, Text } from '@vtex/shoreline';
 import { WebchatOnboardingLayoutType } from './WebchatOnboardingLayout';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { mountWebchat, start } from './previewUseCases';
 import { useCaseCatalogConciergeSteps } from './useCaseCatalogConcierge';
 import { useCaseCancellationsSteps } from './useCaseCancellations';
@@ -25,6 +25,8 @@ export function WebchatPreviewPlaceholder(props: WebchatPreviewPlaceholderProps)
   const { type, selectedUseCase, webchatAppUuid } = props;
   const { t } = useTranslation();
 
+  const [isAlreadyLive, setIsAlreadyLive] = useState(false);
+
   useEffect(() => {
     if (type === 'preview') {
       mountWebchat({
@@ -44,22 +46,41 @@ export function WebchatPreviewPlaceholder(props: WebchatPreviewPlaceholderProps)
             mode: 'live',
             channelUuid: flowObjectUuid,
           });
+
+          setIsAlreadyLive(true);
         }
       });
     }
   }, [type, webchatAppUuid]);
 
+  const stopPreviewRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
-    if (selectedUseCase === 'catalog_concierge') {
-      start(useCaseCatalogConciergeSteps());
-    } else if (selectedUseCase === 'cancellations') {
-      start(useCaseCancellationsSteps());
-    } else if (selectedUseCase === 'order_status') {
-      start(useCaseOrderStatusSteps());
-    } else if (selectedUseCase === 'faq_assistant') {
-      start(useCaseFAQAssistantSteps());
+    if (type === 'preview') {
+      if (selectedUseCase === 'catalog_concierge') {
+        const { stop } = start(useCaseCatalogConciergeSteps());
+        stopPreviewRef.current = stop;
+      } else if (selectedUseCase === 'cancellations') {
+        const { stop } = start(useCaseCancellationsSteps());
+        stopPreviewRef.current = stop;
+      } else if (selectedUseCase === 'order_status') {
+        const { stop } = start(useCaseOrderStatusSteps());
+        stopPreviewRef.current = stop;
+      } else if (selectedUseCase === 'faq_assistant') {
+        const { stop } = start(useCaseFAQAssistantSteps());
+        stopPreviewRef.current = stop;
+      } else {
+        stopPreviewRef.current = null;
+      }
+    } else if (type === 'test' && isAlreadyLive) {
+      WebChat.send(t(`onboarding.onboard_setup.use_cases.${selectedUseCase}.example_start_message`));
     }
-  }, [selectedUseCase]);
+
+    return () => {
+      stopPreviewRef.current?.();
+      stopPreviewRef.current = null;
+    };
+  }, [type, selectedUseCase]);
 
   return (
     <Flex direction="column" style={{ flex: 1, minWidth: 0, background: 'var(--sl-bg-informational)', borderRadius: 'var(--sl-radius-2)', overflow: 'hidden' }}>

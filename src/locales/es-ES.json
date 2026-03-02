@@ -134,7 +134,8 @@
                                 "description": "Ofrece un confort superior y suavidad extrema, ideal para mantener el equilibrio térmico. Tamaño ideal 1,50m x 1,20m. Doblada, queda del tamaño de una almohada pequeña. Es un artículo que dura toda la vida."
                             }
                         }
-                    }
+                    },
+                    "example_start_message": "Sorpréndeme con una recomendación."
                 },
                 "cancellations": {
                     "title": "Agente de cancelaciones",
@@ -156,7 +157,8 @@
                                 "description": "Máxima calificación en ahorro de energía y rendimiento. La tecnología Inverter hace que la heladera sea más silenciosa y acelera el congelamiento, brindando mayor eficiencia energética."
                             }
                         }
-                    }
+                    },
+                    "example_start_message": "Quiero cancelar mi pedido."
                 },
                 "order_status": {
                     "title": "Agente de estado de pedidos",
@@ -166,7 +168,8 @@
                         "user_asks_order_status": "Hola. Quería saber dónde está mi pedido #98754. El plazo está por vencer.",
                         "agent_confirms_carrier": "Con gusto, Bruno. Lo localicé: tu pedido ya está con la transportadora asociada.",
                         "agent_provides_tracking_and_deadline": "[...] puedes acceder a su portal e informar tu número de identificación fiscal (CPF). Dejaré el enlace directo aquí para facilitarlo: El plazo de entrega sigue siendo el jueves."
-                    }
+                    },
+                    "example_start_message": "¿Dónde está mi pedido?"
                 },
                 "faq_assistant": {
                     "title": "Agente de FAQ inteligente",
@@ -183,7 +186,8 @@
                                 "description": "Ideal para aumentar la resolución de juegos y películas. Soporta resoluciones de HDTV hasta 1080p. Conectores bañados en oro y función Plug & Play. Tamaño: 1,8 metros."
                             }
                         }
-                    }
+                    },
+                    "example_start_message": "¿Y si no me gusta mi pedido?"
                 }
             },
             "preview": {
