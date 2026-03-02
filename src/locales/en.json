@@ -1039,5 +1039,8 @@
         "error_removing_custom_instruction": "Error removing custom instruction"
       }
     }
+  },
+  "dashboard": {
+    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers."
   }
 }
