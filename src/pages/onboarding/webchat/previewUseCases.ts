@@ -107,6 +107,10 @@ export function mountWebchat({
   WebChat.changeLanguage(i18n.language);
 }
 
+export function getTextByUseCase(useCase: string, text: string) {
+  return i18n.t(`onboarding.onboard_setup.use_cases.${useCase}.preview.${text}`);
+}
+
 async function runStep(steps, stepIndex) {
   const step = steps[stepIndex];
 

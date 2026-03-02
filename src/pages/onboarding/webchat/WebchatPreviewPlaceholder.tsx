@@ -51,13 +51,13 @@ export function WebchatPreviewPlaceholder(props: WebchatPreviewPlaceholderProps)
 
   useEffect(() => {
     if (selectedUseCase === 'catalog_concierge') {
-      start(useCaseCatalogConciergeSteps);
+      start(useCaseCatalogConciergeSteps());
     } else if (selectedUseCase === 'cancellations') {
-      start(useCaseCancellationsSteps);
+      start(useCaseCancellationsSteps());
     } else if (selectedUseCase === 'order_status') {
-      start(useCaseOrderStatusSteps);
+      start(useCaseOrderStatusSteps());
     } else if (selectedUseCase === 'faq_assistant') {
-      start(useCaseFAQAssistantSteps);
+      start(useCaseFAQAssistantSteps());
     }
   }, [selectedUseCase]);
 
