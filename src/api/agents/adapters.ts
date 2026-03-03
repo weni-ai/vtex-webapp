@@ -100,19 +100,7 @@ function isConfiguring(config?: AgentConfig) {
 }
 
 export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce | AgentNexus | AgentCLI)[] {
-  const agents: (AgentCommerce | AgentNexus | AgentCLI)[] = response.results.map((agent) => ({
-    origin: 'commerce' as const,
-    isOfficial: true,
-    uuid: agent.feature_uuid,
-    name: agent.name,
-    description: agent.description,
-    notificationType: 'active' as const,
-    code: agent.code,
-    isAssigned: false,
-    isInTest: isInTest(agent.config),
-    isConfiguring: isConfiguring(agent.config),
-    templateSynchronizationStatus: 'unset',
-  }));
+  const agents: (AgentCommerce | AgentNexus | AgentCLI)[] = [];
 
   agents.push(...response.nexus_agents.map((agent) => ({
     origin: 'nexus' as const,

@@ -1,0 +1,23 @@
+#wwc {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-self: end;
+  height: 100%;
+}
+
+#wwc .weni-widget {
+  position: absolute;
+  padding: 0;
+  right: unset;
+  height: 100%;
+}
+
+#wwc .weni-launcher__container {
+  display: none;
+}
+
+#wwc .weni-widget .weni-chat {
+  border-end-end-radius: 0;
+  border-end-start-radius: 0;
+}

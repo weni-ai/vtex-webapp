@@ -147,7 +147,7 @@ export function AgentMetrics() {
       const lines = Math.floor(count / 3);
       const itensByLine = Math.floor(count / lines);
 
-      let data = [];
+      const data = [];
 
       for (let i = 0; i < lines; i += 1) {
         const last = i === lines - 1 ? count : (i + 1) * itensByLine;
