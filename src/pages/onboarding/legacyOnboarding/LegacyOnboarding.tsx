@@ -31,7 +31,7 @@ export function LegacyOnboarding() {
   const { t } = useTranslation();
 
   const [agentUuid, setAgentUuid] = useState('');
-  const [agentOrigin, setAgentOrigin] = useState<'commerce' | 'nexus' | 'CLI'>('CLI');
+  const [agentOrigin, setAgentOrigin] = useState('');
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const agentsList = useSelector(agents);
   const agentBuilder = useSelector(getAgentBuilder);
@@ -269,7 +269,7 @@ export function LegacyOnboarding() {
         {page === 'buildManager' && (<AgentBuilder form={form} setForm={setForm} errors={errors} />)}
 
         <AgentAssignModal
-          origin={agentOrigin}
+          origin={agentOrigin as 'commerce' | 'nexus' | 'CLI'}
           open={isAgentAssignModalOpen}
           agentUuid={agentUuid}
           onClose={() => setIsAgentAssignModalOpen(false)}
