@@ -28,6 +28,7 @@ export interface WebChatInitConfig {
   mode?: string;
   showMode?: boolean;
   showChatAvatar?: boolean;
+  showCloseButton?: boolean;
 }
 
 export type WebChatSimulateMessagePayload =
@@ -103,6 +104,7 @@ export function mountWebchat({
     mode,
     showMode: true,
     showChatAvatar: false,
+    showCloseButton: false,
   });
 
   WebChat.open();
@@ -124,6 +126,8 @@ async function runStep(
 ): Promise<void> {
   if (runId !== currentRunId) return;
 
+  WebChat.open();
+
   const step = steps[stepIndex];
   if (!step) return;
 
@@ -138,7 +142,6 @@ async function runStep(
         },
       });
     } else if (typeof step.data === 'object') {
-      console.log('step.data', step.data);
       WebChat.simulateMessageReceived({ type: 'message', message: step.data });
     }
   } else if (step.type === 'streaming-received') {
