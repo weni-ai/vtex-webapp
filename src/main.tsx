@@ -34,6 +34,11 @@ if (locale) {
   i18n.changeLanguage(language).catch(err => console.error('language change error:', err));
 }
 
+const script = document.createElement('script');
+script.src = 'https://cdn.cloud.weni.ai/webchat-latest.umd.js';
+document.head.appendChild(script);
+
+
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <GrowthBookProvider growthbook={growthbook}>

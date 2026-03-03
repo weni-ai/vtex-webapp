@@ -1,0 +1,12 @@
+.instructions-list {
+  border: var(--sl-border-base);
+  border-radius: var(--sl-radius-2);
+}
+
+.instruction-item {
+  padding: var(--sl-space-4);
+}
+
+.instruction-item:not(:last-child) {
+  border-bottom: var(--sl-border-base);
+}

@@ -1,6 +1,7 @@
-import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
+import { Alert, Bleed, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetails';
 import { AgentAssignModal } from '../components/agent/modals/Assign';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
@@ -17,6 +18,8 @@ import getEnv from '../utils/env';
 import { selectEmbeddedWithin } from '../store/appSlice';
 
 export function Dashboard() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const embeddedWithin = useSelector(selectEmbeddedWithin);
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
   const agentsListOriginal = useSelector(agents)
@@ -36,6 +39,16 @@ export function Dashboard() {
   const [agentUuid, setAgentUuid] = useState('');
   const [agentOrigin, setAgentOrigin] = useState('');
   const [isAssigningAgent, setIsAssigningAgent] = useState(false);
+  const [showOnboardingAlert] = useState(
+    () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding
+  );
+
+  useEffect(() => {
+    const cameFromOnboarding = (location.state as Record<string, unknown> | null)?.fromOnboarding;
+    if (cameFromOnboarding) {
+      navigate('/dash', { replace: true, state: {} });
+    }
+  }, [location.state, navigate]);
 
   const agentsList = useMemo(() => {
     return agentsListOriginal.filter((item) => item.isAssigned);
@@ -166,19 +179,19 @@ export function Dashboard() {
   }
 
   async function handleAssignCLI(data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) {
-    if (data.type === 'passive') {      
+    if (data.type === 'passive') {
       setIsAssigningAgent(true);
 
       await assignPassiveAgent({
         uuid: data.uuid,
       });
-      
+
       setIsAgentAssignModalOpen(false);
       setIsAssigningAgent(false);
 
       return;
     }
-    
+
     try {
       setIsAssigningAgent(true);
 
@@ -221,46 +234,35 @@ export function Dashboard() {
           <PageHeading>
             {t('title')}
           </PageHeading>
+
+          {embeddedWithin === 'VTEX App' && (
+            <Bleed top="$space-2" bottom="$space-2">
+              <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
+                <Text variant='action'> {t('improve.button')}</Text>
+                <IconArrowUpRight
+                  height="1rem"
+                  width="1rem"
+                  display="inline"
+                  style={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    marginLeft: 'var(--sl-space-05)'
+                  }}
+                />
+              </Button>
+            </Bleed>
+          )}
         </PageHeaderRow>
       </PageHeader>
 
       <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
+        {showOnboardingAlert && (
+          <Alert variant="success">
+            <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
+          </Alert>
+        )}
+
         <Flex direction="column" style={{ width: '100%' }} gap="$space-8">
-          {embeddedWithin === 'VTEX App' && (
-            <Alert
-              variant="informational"
-              style={{
-                width: '100%',
-              }}
-            >
-              <Flex
-                align="center"
-                justify="space-between"
-                style={{
-                  width: '100%',
-                }}
-              >
-                <Text variant="emphasis" color="$fg-base">
-                  {t('improve.description')}
-                </Text>
-
-                <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-                  <Text variant='action'> {t('improve.button')}</Text>
-                  <IconArrowUpRight
-                    height="1rem"
-                    width="1rem"
-                    display="inline"
-                    style={{
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      marginLeft: 'var(--sl-space-05)'
-                    }}
-                  />
-                </Button>
-              </Flex>
-            </Alert>
-          )}
-
           <AgentMetrics />
 
           <Flex direction="column" gap="$space-4">

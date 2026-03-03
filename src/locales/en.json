@@ -6,6 +6,7 @@
     "confirm": "Confirm",
     "save": "Save",
     "back": "Back",
+    "close": "Close",
     "create": "Create",
     "details": "View details",
     "manage_settings": "Manage settings",
@@ -33,12 +34,198 @@
     },
     "build_manager": {
       "title": "Setup Manager profile"
+    },
+    "channel_selection": {
+      "title": "The full-stack Agentic Customer Experience Platform for retailers and brands",
+      "subtitle": "Go beyond traditional chatbots. Deploy a truly agentic AI architecture capable of autonomously planning and executing complex tasks. Integrate sales, marketing, and support into a single opinionated solution to drive revenue and operational efficiency.",
+      "recommended": "Recommended",
+      "webchat": {
+        "title": "Scale Support and Efficiency",
+        "description": "Scale Support, Delight Customers: Deploy Opinionated AI Agents for 24/7 Automated Webchat.",
+        "benefits": [
+          "Catalog Concierge",
+          "Automated Cancellations",
+          "Smart FAQ Assistant",
+          "Deflect 80% of routine tickets (including WISMO)",
+          "No-Code, Quick Launch"
+        ],
+        "footer": "Setup time: Approx. 2~5 min"
+      },
+      "whatsapp": {
+        "title": "WhatsApp Store",
+        "description": "Recover abandoned carts and send automated order updates to maximize your ROAS.",
+        "benefits": [
+          "Automated Abandoned Cart Recovery",
+          "Native Order Tracking & Status",
+          "Retention Engine: keep customers engaged throughout the post-purchase journey",
+          "One-Click Payment Checkout."
+        ],
+        "footer": "Use a test account or connect your Meta Business account."
+      },
+      "disclaimer": "You can enable the other solution at any time through your dashboard, leveraging all the insights and learning already gathered.",
+      "terms": "By proceeding, you agree to <0>VTEX Agentic CX</0> Terms of Service and Privacy Policy"
+    },
+    "select_account_host": {
+      "title": "Connect your data source",
+      "placeholder": "Choose your store's URL",
+      "help_text": "Confirm your original URL so we can build a precise knowledge base for your agents."
+    },
+    "onboard_setup": {
+      "title": "Your AI Team is getting ready",
+      "test_button": "Test",
+      "progress": {
+        "stage_prefix": "Stage {{current}}/{{total}}",
+        "stages": {
+          "environment_sync": "Environment Sync",
+          "knowledge_building": "Knowledge Construction",
+          "agent_training": "Agent Training & Activation"
+        },
+        "descriptions": {
+          "syncing_credentials": "Syncing account credentials and permissions...",
+          "configuring_workspace": "Configuring your AI workspace...",
+          "mapping_data_structure": "Mapping your store's data structure for seamless integration...",
+          "analyzing_catalog": "Analyzing product catalog and sales policies...",
+          "extracting_knowledge": "Extracting key store insights to empower your agents...",
+          "refining_data": "Refining data for a high-performance knowledge base...",
+          "assembling_agents": "Assembling your dedicated agent team...",
+          "defining_instructions": "Applying custom business rules and tailored instructions...",
+          "installing_webchat": "Finalizing Webchat setup... You're almost live!",
+          "setup_completed": "Setup complete! Your agents are trained and the Webchat is ready to go live."
+        },
+        "failed": {
+          "title": "Something went wrong while preparing your AI Team",
+          "description": "Our support team is standing by to resolve this for you. Reach out to us to finalize your AI Team activation.",
+          "toast_message": "Something went wrong while preparing your AI Team.",
+          "contact_support": "Contact Support"
+        }
+      },
+      "use_cases": {
+        "title": "Agents in training, preview their main use cases:",
+        "catalog_concierge": {
+          "title": "Catalog Concierge",
+          "description": "Guiding customers to the right products to drive sales",
+          "preview": {
+            "agent_greeting_and_offer_help": "Hi! How are you? I'm the assistant consultant for Store. Before we start: how should I address you and how can I help you today?",
+            "user_request_gift_ideas": "Hi, I'm Bruno. I'm looking for birthday gift ideas for my mom. She's quite picky, and I'd like to avoid the basics, like flowers.",
+            "agent_profiling_question": "I completely understand, Bruno. [...] How does she enjoy her free time? Does she prefer self-care and wellness, or is she more into technology and practicality?",
+            "user_answers_profiling": "She’s in a phase of taking better care of herself; she just started yoga. But she also loves wine and hosting friends at home.",
+            "agent_suggests_initial_items": "Great insights. In that case, I have two interesting paths: one is the Aromatherapy Kit with Diffuser for yoga sessions, or a Forever Classic Glass Set... Which of these options seems to match better?",
+            "user_rejects_and_asks_alternative": "Well, the aromatherapy kit is nice, but I'm not sure she'd use it that much. And the glasses... she already has plenty of kitchen stuff [...] Is there something different that brings these two worlds together?",
+            "agent_suggests_hybrid_items": "[...] Since she likes Yoga (relaxation) and also wine, what do you think about exploring our Sensory Decor line? We have an Electric Wine Opener [...] or an Egyptian Cotton Meditation Blanket.",
+            "user_shows_interest_asks_details": "This Egyptian cotton blanket caught my interest. [...] Is it too large?",
+            "agent_provides_product_details": "It has the ideal size for one person (1.50m x 1.20m), but the fabric is so fine that when folded, it's the size of a small cushion. [...] I suggest the Sand color...",
+            "user_confirms_choice": "Cool, I think I'll go with that one then, thanks.",
+            "agent_provides_checkout_link": "You can complete your purchase via the link below. Just click and choose your payment method: link.checkout.com",
+            "products": {
+              "aromatherapy_kit": {
+                "name": "Aromatherapy Kit with Diffuser",
+                "description": "Transform any room in your home or professional space into a true sanctuary of peace, warmth, and sophistication with this Porcelain Diffuser. More than just a diffuser, this item blends artisanal beauty and functionality."
+              },
+              "forever_classic_set": {
+                "name": "Forever Classic Glass Set",
+                "description": "The perfect model for those already accustomed to the world of wine seeking the ideal glass for each grape and drink type. Contains 06 versatile pieces that can be used for tasting white wines or water."
+              },
+              "wine_opener": {
+                "name": "Ergonomic Electric Wine Opener",
+                "description": "Imagine opening your favorite bottle of wine with a simple touch, effortlessly, in seconds—like a true sommelier. It is an invitation to pleasure, elegance, and the ritual of savoring every glass with more style."
+              },
+              "meditation_blanket": {
+                "name": "Egyptian Cotton Meditation Blanket",
+                "description": "Offers superior comfort and extreme softness, ideal for maintaining thermal balance. Ideal size 1.50m x 1.20m. When folded, it is the size of a small cushion. A comfort item that lasts a lifetime."
+              }
+            }
+          },
+          "example_start_message": "Surprise me with a recommendation."
+        },
+        "cancellations": {
+          "title": "Cancellation Agent",
+          "description": "Automating order cancellations and retention flows",
+          "preview": {
+            "agent_greeting": "Hi! How are you? I'm the assistant for Store. Before we start: how can I help you today, Marcos?",
+            "user_requests_cancellation_wrong_voltage": "I want to cancel the fridge order I placed yesterday. I bought the wrong voltage; I got 110v but everything here is 220v.",
+            "agent_asks_order_number": "I completely understand, Marcos. It happens a lot! To locate your purchase [...] could you provide the order number?",
+            "user_provides_order_number": "It's order #98754.",
+            "agent_check_stock": "I found it here: Inverse 420L Inox (110v) Refrigerator. Before we proceed with the cancellation and you have to wait for the refund, I can **swap the voltage on your order** right now, if we have it in stock. Let me check...",
+            "agent_offers_alternative_model": "Marcos, unfortunately, the 420L model is out of stock in 220v. I have a 460L model from the same line available... Would you like to consider this swap?",
+            "user_declines_alternative_confirms_cancellation": "Darn, no. [...] If you don't have it in 220v, I’d rather just cancel.",
+            "agent_confirms_cancellation_process": "I understand, Marcos. When furniture is custom-made, precision is everything. Since the swap doesn't work, I'll prioritize the cancellation [...]",
+            "agent_confirms_cancellation_process_confirmation": "It's all set, Marcos. The refund should appear on your next bill. Can I help you with anything else?",
+            "user_confirms_cancellation_process_confirmation": "No, that's all, thanks.",
+            "products": {
+              "fridge_420l_inox": {
+                "name": "460L Inverter Bottom Freezer Refrigerator - Brushed Steel",
+                "description": "Top-rated energy efficiency and performance. Inverter technology makes the refrigerator quieter and speeds up freezing, providing higher energy efficiency."
+              }
+            }
+          },
+          "example_start_message": "I want to cancel my order."
+        },
+        "order_status": {
+          "title": "Order Status Agent",
+          "description": "Providing real-time updates to deflect human support",
+          "preview": {
+            "agent_greeting_order": "Hi, Bruno! How can I help you with your order today?",
+            "user_asks_order_status": "Hi. I'd like to know where my order #98754 is. The deadline is almost up.",
+            "agent_confirms_carrier": "Certainly, Bruno. I've found it: your order is already with our partner carrier.",
+            "agent_provides_tracking_and_deadline": "[...] you can access their portal and provide your Tax ID. I'll leave the direct link here to make it easier: The delivery deadline remains Thursday."
+          },
+          "example_start_message": "Where is my order?"
+        },
+        "faq_assistant": {
+          "title": "Smart FAQ Agent",
+          "description": "Answering store questions using your knowledge base",
+          "preview": {
+            "agent_greeting_specs": "Hi! I'm the technical specialist for Store. How can I help you with specifications today?",
+            "user_asks_monitor_hdmi_specs": "Hi. I'm looking at this 34-inch monitor [...] Will its HDMI handle the max resolution, or will it be locked at 30Hz?",
+            "agent_explains_limitation_suggests_cable": "[...] The MacBook Air M1 via HDMI usually limits the refresh rate on Ultra-Wide screens. For this 144Hz monitor, the ideal setup is using the USB-C port with DisplayPort support.",
+            "agent_checks_box_contents": "I've checked: this model only comes with standard HDMI and DisplayPort cables. A high-speed USB-C cable needs to be purchased separately.",
+            "user_confirms_purchase": "Great, thanks for the explanation. I'll take the cable too, just to be safe.",
+            "products": {
+              "usb_c_to_displayport_cable": {
+                "name": "USB-C to DisplayPort Cable 4K/144Hz",
+                "description": "Ideal for boosting game and movie resolution. Supports HDTV resolutions up to 1080p. Gold-plated connectors and Plug & Play feature. Length: 1.8 meters."
+              }
+            }
+          },
+          "example_start_message": "What if I don't like my order?"
+        }
+      },
+      "preview": {
+        "banner": "Preview mode: interactive testing will be available once training is complete.",
+        "webchat": {
+          "title": "Account name",
+          "subtitle": "Specialist in purchases"
+        }
+      }
+    },
+    "onboard_test": {
+      "title": "Test and activate your AI Team",
+      "activate_button": "Activate in Store",
+      "completion": {
+        "heading": "Training complete: Your agents are ready for action",
+        "knowledge_base": "Retail knowledge base created and optimized",
+        "business_rules": "Business rules and retail policies fully mapped",
+        "agents_ready": "Expert agents active and ready"
+      },
+      "scenarios": {
+        "title": "Click to test a scenario:",
+        "catalog_concierge": "Test smart search and product recommendations",
+        "cancellations": "Test reverse logistics and cancellation flows",
+        "order_status": "Validate order tracking and delivery updates",
+        "faq_assistant": "Check instant resolution for common inquiries"
+      },
+      "activation": {
+        "title": "Ready for activation?",
+        "safe_label": "Safe Activation (Recommended)",
+        "full_label": "Full Activation",
+        "safe_description": "Enable for 10% of visitors, ideal for monitoring initial interactions risk-free.",
+        "full_description": "Enable across your entire store. You can scale down or disable it at any time."
+      }
     }
   },
   "title": "Weni Agentic IA",
   "description": "An AI-based CX business solution for brands and retailers.",
   "improve": {
-    "description": "Connect agents to the Weni platform to access advanced features and customizable options",
     "button": "Connect to Weni"
   },
   "agents": {
@@ -796,5 +983,75 @@
         }
       }
     }
+  },
+  "instructions_drawer": {
+    "open": "Refine instructions",
+    "title": "Instructions",
+    "description": "Instructions for the agent",
+    "new_custom_instruction": {
+      "title": "New custom instruction",
+      "hint": "Keep instructions clear, direct, and in the imperative.",
+      "buttons": {
+        "save": "Save instruction"
+      }
+    },
+    "remove_instruction_confirmation_modal": {
+      "title": "Remove instruction",
+      "description": "Are you sure you want to remove the instruction?",
+      "buttons": {
+        "remove": "Remove",
+        "cancel": "Cancel"
+      }
+    },
+    "instructions_list": {
+      "title": "Instructions list",
+      "tabs": {
+        "custom": "Custom",
+        "default": "Default",
+        "safety_topics": "Safety topics"
+      },
+      "default_instructions": [
+        "When necessary, you seek specialized assistance from team members, who are available to help resolve the case.",
+        "You MUST NEVER, under ANY CIRCUMSTANCES, discuss topics that are outside your area of expertise.",
+        "Make sure that you optimize your communication by contacting MULTIPLE agents at the same time whenever possible.",
+        "Keep your communications with other agents concise and terse, do not engage in any chit-chat.",
+        "Only communicate with the agents that are necessary to help with the User's query.",
+        "Answer strictly with facts found in the knowledgebase block; do not rely on prior knowledge, assumptions, or external sources.",
+        "Do not infer unstated details, generalize beyond what is written, fill gaps, or speculate—even if the topic seems obvious."
+      ],
+      "safety_topics": [
+        "Politics",
+        "Physical health",
+        "Physical or moral violence", 
+        "Sexual content",
+        "Prejudice",
+        "Hate",
+        "Religion",
+        "Suicide",
+        "Self-harm",
+        "Beliefs",
+        "Gender identity",
+        "Sex and relationships"
+      ],
+      "no_custom_instructions": "No custom instructions added",
+      "actions": {
+        "edit": "Edit instruction",
+        "remove": "Remove instruction",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "messages": {
+        "error_retrieving_instructions": "Error retrieving instructions",
+        "success_editing_custom_instruction": "Custom instruction edited",
+        "error_editing_custom_instruction": "Error editing custom instruction",
+        "success_adding_custom_instruction": "Custom instruction added",
+        "error_adding_custom_instruction": "Error adding custom instruction",
+        "success_removing_custom_instruction": "Custom instruction removed",
+        "error_removing_custom_instruction": "Error removing custom instruction"
+      }
+    }
+  },
+  "dashboard": {
+    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers."
   }
 }
