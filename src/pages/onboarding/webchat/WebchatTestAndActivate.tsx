@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Button,
   Divider,
   Flex,
   Heading,
@@ -202,6 +201,7 @@ export function WebchatTestAndActivate() {
       useCasesTitle={t('onboarding.onboard_test.scenarios.title')}
       useCaseDescriptions={useCaseDescriptions}
       belowCards={belowCards}
+      webchatAppUuid={webchatAppUuid}
     />
   );
 }

@@ -1,4 +1,4 @@
-import { Alert, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetails';
@@ -163,19 +163,19 @@ export function Dashboard() {
   }
 
   async function handleAssignCLI(data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) {
-    if (data.type === 'passive') {      
+    if (data.type === 'passive') {
       setIsAssigningAgent(true);
 
       await assignPassiveAgent({
         uuid: data.uuid,
       });
-      
+
       setIsAgentAssignModalOpen(false);
       setIsAssigningAgent(false);
 
       return;
     }
-    
+
     try {
       setIsAssigningAgent(true);
 
@@ -218,46 +218,29 @@ export function Dashboard() {
           <PageHeading>
             {t('title')}
           </PageHeading>
+
+          {embeddedWithin === 'VTEX App' && (
+            <Bleed top="$space-2" bottom="$space-2">
+              <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
+                <Text variant='action'> {t('improve.button')}</Text>
+                <IconArrowUpRight
+                  height="1rem"
+                  width="1rem"
+                  display="inline"
+                  style={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    marginLeft: 'var(--sl-space-05)'
+                  }}
+                />
+              </Button>
+            </Bleed>
+          )}
         </PageHeaderRow>
       </PageHeader>
 
       <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
         <Flex direction="column" style={{ width: '100%' }} gap="$space-8">
-          {embeddedWithin === 'VTEX App' && (
-            <Alert
-              variant="informational"
-              style={{
-                width: '100%',
-              }}
-            >
-              <Flex
-                align="center"
-                justify="space-between"
-                style={{
-                  width: '100%',
-                }}
-              >
-                <Text variant="emphasis" color="$fg-base">
-                  {t('improve.description')}
-                </Text>
-
-                <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-                  <Text variant='action'> {t('improve.button')}</Text>
-                  <IconArrowUpRight
-                    height="1rem"
-                    width="1rem"
-                    display="inline"
-                    style={{
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      marginLeft: 'var(--sl-space-05)'
-                    }}
-                  />
-                </Button>
-              </Flex>
-            </Alert>
-          )}
-
           <AgentMetrics />
 
           <Flex direction="column" gap="$space-4">

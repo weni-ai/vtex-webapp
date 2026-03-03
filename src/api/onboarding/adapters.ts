@@ -48,7 +48,10 @@ export interface ActivateInStoreResponse {
 export interface GetWebchatConfigResponse {
   success: boolean;
   error?: string;
-  data?: { config: object };
+  data?: {
+    config: object;
+    flow_object_uuid: string;
+  };
 }
 
 export interface OnboardAdapter {
