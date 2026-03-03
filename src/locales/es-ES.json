@@ -5,6 +5,7 @@
         "finish_and_save": "Finalizar y guardar",
         "confirm": "Confirmar",
         "save": "Guardar",
+        "close": "Cerrar",
         "back": "Atrás",
         "create": "Crear",
         "details": "Ver detalles",
@@ -33,12 +34,199 @@
         },
         "build_manager": {
             "title": "Configurar el perfil del Manager"
+        },
+        "channel_selection": {
+            "title": "La plataforma de Experiencia del Cliente Agentic IA integral para retailers y marcas",
+            "subtitle": "Ve más allá de los chatbots tradicionales. Despliega una arquitectura de IA verdaderamente agentic, capaz de planificar y ejecutar tareas complejas de forma autónoma. Integra ventas, marketing y soporte en una única solución opinada para impulsar los ingresos y la eficiencia operativa.",
+            "recommended": "Recomendado",
+            "webchat": {
+                "title": "Escala el soporte y la eficiencia",
+                "description": "Escala el soporte, deleita a tus clientes: despliega agentes de IA opinados para automatización de Webchat 24/7.",
+                "benefits": [
+                    "Concierge de catálogo",
+                    "Cancelaciones automatizadas",
+                    "Asistente de FAQ inteligente",
+                    "Deflexión del 80% de los tickets rutinarios (incluido WISMO)",
+                    "Sin código, lanzamiento rápido"
+                ],
+                "footer": "Tiempo de configuración: Aprox. 2~5 min"
+            },
+            "whatsapp": {
+                "title": "WhatsApp Store",
+                "description": "Recupera carritos abandonados y envía actualizaciones de pedidos automatizadas para maximizar tu ROAS.",
+                "benefits": [
+                    "Recuperación automática de carritos abandonados",
+                    "Seguimiento y estado de pedidos nativo",
+                    "Motor de retención: mantén a los clientes comprometidos durante toda la jornada posventa",
+                    "Checkout con pago en un clic"
+                ],
+                "footer": "Usa una cuenta de prueba o conecta tu cuenta de Meta Business."
+            },
+            "disclaimer": "Puedes habilitar la otra solución en cualquier momento desde tu panel, aprovechando toda la información y aprendizaje ya recopilados.",
+            "terms": "Al continuar, aceptas los Términos de Servicio y Política de Privacidad de <0>VTEX Agentic CX</0>"
+        },
+        "select_account_host": {
+            "title": "Conecta tu fuente de datos",
+            "placeholder": "Elige la URL de tu tienda",
+            "help_text": "Confirma tu URL original para que podamos construir una base de conocimiento precisa para tus agentes."
+        },
+        "onboard_setup": {
+            "title": "Tu equipo de IA se está preparando",
+            "test_button": "Probar",
+            "progress": {
+                "stage_prefix": "Etapa {{current}}/{{total}}",
+                "stages": {
+                    "environment_sync": "Sincronización de entorno",
+                    "knowledge_building": "Construcción de conocimiento",
+                    "agent_training": "Entrenamiento y activación de agentes"
+                },
+                "descriptions": {
+                    "syncing_credentials": "Sincronizando credenciales y permisos de la cuenta...",
+                    "configuring_workspace": "Configurando tu espacio de trabajo de IA...",
+                    "mapping_data_structure": "Mapeando la estructura de datos de tu tienda para una integración fluida...",
+                    "analyzing_catalog": "Analizando el catálogo de productos y las políticas de venta...",
+                    "extracting_knowledge": "Extrayendo información clave de la tienda para potenciar a tus agentes...",
+                    "refining_data": "Refinando datos para una base de conocimiento de alto rendimiento...",
+                    "assembling_agents": "Ensamblando tu equipo de agentes dedicados...",
+                    "defining_instructions": "Aplicando reglas de negocio personalizadas e instrucciones a medida...",
+                    "installing_webchat": "Finalizando la configuración del Webchat... ¡Ya casi estás en vivo!",
+                    "setup_completed": "¡Configuración completa! Tus agentes están entrenados y el Webchat está listo para salir en vivo."
+                },
+                "failed": {
+                    "title": "Algo salió mal al preparar tu equipo de IA",
+                    "description": "Nuestro equipo de soporte está listo para resolver esto por ti. Contáctanos para finalizar la activación de tu equipo de IA.",
+                    "toast_message": "Algo salió mal al preparar tu equipo de IA.",
+                    "contact_support": "Contactar soporte"
+                }
+            },
+            "use_cases": {
+                "title": "Agentes en entrenamiento, previsualiza sus principales casos de uso:",
+                "catalog_concierge": {
+                    "title": "Concierge de catálogo",
+                    "description": "Guiando a los clientes hacia los productos correctos para impulsar ventas",
+                    "preview": {
+                        "agent_greeting_and_offer_help": "¡Hola! ¿Todo bien? Soy el consultor asistente de Tienda. Antes de empezar: ¿cómo puedo llamarte y cómo puedo ayudarte hoy?",
+                        "user_request_gift_ideas": "Hola, soy Bruno y quiero sugerencias de regalos de cumpleaños para mi mamá. Ella es muy exigente y no quería darle lo básico, como flores.",
+                        "agent_profiling_question": "Te entiendo perfectamente, Bruno. [...] ¿Cómo le gusta disfrutar de su tiempo libre? ¿Prefiere momentos de autocuidado y bienestar o tiene el perfil que ama la tecnología y la practicidad?",
+                        "user_answers_profiling": "Está en una fase de cuidarse más, empezó a hacer yoga ahora. Pero también le gusta mucho el vino y recibir a los amigos en casa.",
+                        "agent_suggests_initial_items": "Excelentes referencias. En ese caso, tengo dos caminos interesantes: uno es el Kit de Aromaterapia con Difusor para las sesiones de yoga, o un Juego de Copas Forever Classic... ¿Cuál de estas opciones parece combinar más?",
+                        "user_rejects_and_asks_alternative": "Pues sí, el kit de aromaterapia es genial, pero no sé si ella lo usaría tanto. Y las copas... ya tiene muchas cosas de cocina [...] ¿Tendrías algo diferente, que junte un poco estos dos mundos?",
+                        "agent_suggests_hybrid_items": "[...] Pensando en que le gusta el Yoga (relajación) y también los vinos, ¿qué te parece si vamos por la línea de Decoración Sensorial? Tenemos un Abridor de Vino Eléctrico [...] o una Manta de Algodón Egipcio para Meditación.",
+                        "user_shows_interest_asks_details": "Esta manta de algodón egipcio me interesó. [...] ¿Es muy grande?",
+                        "agent_provides_product_details": "Tiene el tamaño ideal para una persona (1.50m x 1.20m), pero el tejido es tan noble que doblada queda del tamaño de una almohada pequeña. [...] Sugiero el color Arena...",
+                        "user_confirms_choice": "Genial, creo que voy a elegir esa entonces, gracias.",
+                        "agent_provides_checkout_link": "Puedes finalizar la compra a través del siguiente enlace. Solo haz clic y elige la forma de pago: link.checkout.com",
+                        "products": {
+                            "aromatherapy_kit": {
+                                "name": "Kit de Aromaterapia con Difusor",
+                                "description": "Transforma cualquier ambiente de tu casa o espacio profesional en un verdadero refugio de paz, calidez y sofisticación con el Aromatizador de Porcelana. Mucho más que un aromatizador, este artículo une belleza artesanal y funcionalidad."
+                            },
+                            "forever_classic_set": {
+                                "name": "Juego de Copas Forever Classic",
+                                "description": "El modelo perfecto para quienes ya están habituados al mundo del vino y buscan la copa ideal para cada tipo de uva y bebida. Contiene 06 piezas versátiles que pueden ser usadas para la degustación de vinos blancos o agua."
+                            },
+                            "wine_opener": {
+                                "name": "Abridor de Vino Eléctrico con Diseño Ergonómico",
+                                "description": "Imagina abrir tu botella de vino favorita con un simple toque, sin esfuerzo, en segundos, como un verdadero sommelier. Es una invitación al placer, a la elegancia y al ritual de saborear cada copa con más estilo."
+                            },
+                            "meditation_blanket": {
+                                "name": "Manta de Algodón Egipcio para Meditación",
+                                "description": "Ofrece un confort superior y suavidad extrema, ideal para mantener el equilibrio térmico. Tamaño ideal 1,50m x 1,20m. Doblada, queda del tamaño de una almohada pequeña. Es un artículo que dura toda la vida."
+                            }
+                        }
+                    },
+                    "example_start_message": "Sorpréndeme con una recomendación."
+                },
+                "cancellations": {
+                    "title": "Agente de cancelaciones",
+                    "description": "Automatizando cancelaciones de pedidos y flujos de retención",
+                    "preview": {
+                        "agent_greeting": "¡Hola! ¿Todo bien? Soy el asistente de Tienda. Antes de empezar: ¿puedo ayudarte hoy, Marcos?",
+                        "user_requests_cancellation_wrong_voltage": "Quiero cancelar el pedido de la heladera que hice ayer. Compré el voltaje equivocado, elegí 110v y aquí en casa es todo 220v.",
+                        "agent_asks_order_number": "Entiendo perfectamente, Marcos. ¡Pasa mucho! Para localizar tu compra [...] ¿podrías informarme el número de pedido?",
+                        "user_provides_order_number": "Es el pedido #98754.",
+                        "agent_check_stock": "Localicé aquí: Heladera Inverse Frost Free Inverter 460L Acero Cepillado. Antes de proceder con la cancelación y tener que esperar el reembolso, puedo **cambiar el voltaje en tu pedido** ahora mismo, si tenemos en stock. Dejame revisar...",
+                        "agent_offers_alternative_model": "Marcos, lamentablemente el modelo 420L está agotado en 220v. Tengo un modelo de 460L de la misma línea disponible... ¿Te gustaría considerar este cambio?",
+                        "user_declines_alternative_confirms_cancellation": "Putz, no. [...] Si no la tienen en 220v, prefiero cancelar.",
+                        "agent_confirms_cancellation_process": "Comprendo, Marcos. Cuando el mueble es a medida, la precisión lo es todo. Ya que el cambio no te sirve, voy a priorizar la cancelación [...]",
+                        "agent_confirms_cancellation_process_confirmation": "¡Todo listo, Marcos! El reembolso debería aparecer en tu próxima factura. ¿Puedo ayudarte con algo más?",
+                        "user_confirms_cancellation_process_confirmation": "No, eso es todo, gracias.",
+                        "products": {
+                            "fridge_420l_inox": {
+                                "name": "Heladera Inverse Frost Free Inverter 460L Acero Cepillado",
+                                "description": "Máxima calificación en ahorro de energía y rendimiento. La tecnología Inverter hace que la heladera sea más silenciosa y acelera el congelamiento, brindando mayor eficiencia energética."
+                            }
+                        }
+                    },
+                    "example_start_message": "Quiero cancelar mi pedido."
+                },
+                "order_status": {
+                    "title": "Agente de estado de pedidos",
+                    "description": "Proporcionando actualizaciones en tiempo real para deflexión del soporte humano",
+                    "preview": {
+                        "agent_greeting_order": "¡Hola, Bruno! ¿Cómo puedo ayudarte con tu pedido hoy?",
+                        "user_asks_order_status": "Hola. Quería saber dónde está mi pedido #98754. El plazo está por vencer.",
+                        "agent_confirms_carrier": "Con gusto, Bruno. Lo localicé: tu pedido ya está con la transportadora asociada.",
+                        "agent_provides_tracking_and_deadline": "[...] puedes acceder a su portal e informar tu número de identificación fiscal (CPF). Dejaré el enlace directo aquí para facilitarlo: El plazo de entrega sigue siendo el jueves."
+                    },
+                    "example_start_message": "¿Dónde está mi pedido?"
+                },
+                "faq_assistant": {
+                    "title": "Agente de FAQ inteligente",
+                    "description": "Respondiendo preguntas de la tienda usando tu base de conocimiento",
+                    "preview": {
+                        "agent_greeting_specs": "¡Hola! Soy el especialista técnico de Tienda. ¿Cómo puedo ayudarte con las especificaciones hoy?",
+                        "user_asks_monitor_hdmi_specs": "Hola. Estoy viendo este monitor de 34 pulgadas [...] ¿Su HDMI aguantará la resolución máxima o se quedará trabado en 30Hz?",
+                        "agent_explains_limitation_suggests_cable": "[...] El MacBook Air M1 vía HDMI suele limitar la tasa de refresco en pantallas Ultra-Wide. Para este monitor de 144Hz, lo ideal es usar el puerto USB-C con soporte para DisplayPort.",
+                        "agent_checks_box_contents": "Verifiqué aquí: en la caja de este modelo vienen solo los cables HDMI y DisplayPort estándar. El cable USB-C de alta velocidad debe comprarse por separado.",
+                        "user_confirms_purchase": "Buenísimo, gracias por la explicación. Me llevaré el cable también para no tener errores.",
+                        "products": {
+                            "usb_c_to_displayport_cable": {
+                                "name": "Cable USB-C a DisplayPort 4K/144Hz",
+                                "description": "Ideal para aumentar la resolución de juegos y películas. Soporta resoluciones de HDTV hasta 1080p. Conectores bañados en oro y función Plug & Play. Tamaño: 1,8 metros."
+                            }
+                        }
+                    },
+                    "example_start_message": "¿Y si no me gusta mi pedido?"
+                }
+            },
+            "preview": {
+                "banner": "Modo vista previa: las pruebas interactivas estarán disponibles una vez que se complete el entrenamiento.",
+                "webchat": {
+                    "title": "Nombre de la cuenta",
+                    "subtitle": "Especialista en compras"
+                }
+            }
+        },
+        "onboard_test": {
+            "title": "Prueba y activa tu equipo de IA",
+            "activate_button": "Activar en la tienda",
+            "completion": {
+                "heading": "Entrenamiento completo: tus agentes están listos para la acción",
+                "knowledge_base": "Base de conocimiento de retail creada y optimizada",
+                "business_rules": "Reglas de negocio y políticas de retail completamente mapeadas",
+                "agents_ready": "Agentes expertos activos y listos"
+            },
+            "scenarios": {
+                "title": "Haz clic para probar un escenario:",
+                "refine_instructions": "Refinar instrucciones",
+                "catalog_concierge": "Probar búsqueda inteligente y recomendaciones de productos",
+                "cancellations": "Probar logística inversa y flujos de cancelación",
+                "order_status": "Validar seguimiento de pedidos y actualizaciones de entrega",
+                "faq_assistant": "Verificar resolución instantánea para consultas frecuentes"
+            },
+            "activation": {
+                "title": "¿Listo para la activación?",
+                "safe_label": "Activación segura (Recomendado)",
+                "full_label": "Activación completa",
+                "safe_description": "Habilitar para el 10% de los visitantes, ideal para monitorear las interacciones iniciales sin riesgo.",
+                "full_description": "Habilitar en toda tu tienda. Puedes reducir o desactivar en cualquier momento."
+            }
         }
     },
     "title": "Weni Agentic AI",
     "description": "Una solución empresarial de CX basada en IA para grandes marcas y retailers.",
     "improve": {
-        "description": "Conecta agentes a la plataforma Weni para acceder a recursos avanzados y opciones personalizables",
         "button": "Conectarse con Weni"
     },
     "agents": {
@@ -156,20 +344,20 @@
                 },
                 "actions": {
                     "enable": {
-                    "success": "Seguimiento de pedidos entregados activado con éxito",
-                    "error": "Error al activar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                        "success": "Seguimiento de pedidos entregados activado con éxito",
+                        "error": "Error al activar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
                     },
                     "disable": {
-                    "success": "Seguimiento de pedidos entregados desactivado con éxito",
-                    "error": "Error al desactivar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
+                        "success": "Seguimiento de pedidos entregados desactivado con éxito",
+                        "error": "Error al desactivar el seguimiento de pedidos entregados, inténtalo de nuevo más tarde"
                     }
                 },
                 "fields": {
                     "app_key": {
-                    "label": "App Key"
+                        "label": "App Key"
                     },
                     "app_token": {
-                    "label": "App Token"
+                        "label": "App Token"
                     }
                 },
                 "buttons": {
@@ -231,6 +419,10 @@
                             "to": "A"
                         }
                     }
+                },
+                "active_order_status": {
+                    "title": "Estado de pedido activo",
+                    "description": "Agente responsable de activar plantillas de estado de pedido, basado en el estado recibido de VTEX - Order Status"
                 }
             }
         },
@@ -785,5 +977,75 @@
                 }
             }
         }
+    },
+    "instructions_drawer": {
+        "open": "Refinar instrucciones",
+        "title": "Instrucciones",
+        "description": "Instrucciones para el agente",
+        "new_custom_instruction": {
+            "title": "Nueva instrucción personalizada",
+            "hint": "Mantén las instrucciones claras, directas e imperativas.",
+            "buttons": {
+                "save": "Guardar instrucción"
+            }
+        },
+        "remove_instruction_confirmation_modal": {
+            "title": "Eliminar instrucción",
+            "description": "¿Estás seguro de querer eliminar la instrucción?",
+            "buttons": {
+                "remove": "Eliminar",
+                "cancel": "Cancelar"
+            }
+        },
+        "instructions_list": {
+            "title": "Lista de instrucciones",
+            "tabs": {
+                "custom": "Personalizado",
+                "default": "Estándar",
+                "safety_topics": "Tópicos de seguridad"
+            },
+            "default_instructions": [
+                "Cuando sea necesario, debes solicitar asistencia especializada a los miembros del equipo, quienes están disponibles para ayudar a resolver el caso.",
+                "NUNCA, bajo NINGUNA CIRCUNSTANCIA, debes discutir temas que estén fuera de tu área de especialización.",
+                "Asegúrate de optimizar la comunicación contactando a MÚLTIPLES agentes al mismo tiempo siempre que sea posible.",
+                "Mantén tu comunicación con otros agentes concisa y directa, sin conversaciones innecesarias.",
+                "Comunícate solo con los agentes necesarios para ayudar con la consulta del Usuario.",
+                "Responde estrictamente con hechos encontrados en el bloque de la base de conocimiento; no uses conocimiento previo, suposiciones ni fuentes externas.",
+                "No infieras detalles no declarados, no generalices más allá de lo escrito, no rellenes vacíos ni especules — incluso si el tema parece obvio."
+            ],
+            "safety_topics": [
+                "Política",
+                "Salud física",
+                "Violencia física o moral",
+                "Contenido sexual",
+                "Prejuicio",
+                "Odio",
+                "Religión",
+                "Suicidio",
+                "Autolesión",
+                "Crenzas",
+                "Identidad de género",
+                "Relaciones sexuales"
+            ],
+            "no_custom_instructions": "No se han agregado instrucciones personalizadas",
+            "actions": {
+                "edit": "Editar instrucción",
+                "remove": "Eliminar instrucción",
+                "save": "Guardar",
+                "cancel": "Cancelar"
+            },
+            "messages": {
+                "error_retrieving_instructions": "Error al recuperar instrucciones",
+                "success_editing_custom_instruction": "Instrucción personalizada editada",
+                "error_editing_custom_instruction": "Error al editar instrucción personalizada",
+                "success_adding_custom_instruction": "Instrucción personalizada agregada",
+                "error_adding_custom_instruction": "Error al agregar instrucción personalizada",
+                "success_removing_custom_instruction": "Instrucción personalizada eliminada",
+                "error_removing_custom_instruction": "Error al eliminar instrucción personalizada"
+            }
+        }
+    },
+    "dashboard": {
+        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
     }
 }

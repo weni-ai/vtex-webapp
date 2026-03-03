@@ -1,4 +1,4 @@
-import { UserData } from "../../interfaces/Store";
+import { AccountData, UserData } from "../../interfaces/Store";
 import { VTEXFetch } from "../../utils/VTEXFetch";
 
 interface CreateUserAndProjectPayload {
@@ -14,7 +14,7 @@ export const userRequests = {
   },
 
   fetchAccountData: async () => {
-    return VTEXFetch<{ error?: boolean, message?: string }>('/api/license-manager/account');
+    return VTEXFetch<AccountData & { error?: boolean, message?: string }>('/api/license-manager/account');
   },
 
   createUserAndProject: async (payload: CreateUserAndProjectPayload) => {

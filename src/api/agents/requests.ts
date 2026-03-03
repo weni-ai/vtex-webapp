@@ -70,7 +70,7 @@ export async function agentsList() {
 
   const response = await proxy<AgentsListResponse>(
     'GET',
-    `${getEnv('VITE_APP_COMMERCE_URL')}/v2/feature/${projectUuid}/`,
+    `${getEnv('VITE_APP_COMMERCE_URL')}/v2/agents/${projectUuid}/`,
     {
       headers: { 'Project-Uuid': projectUuid, },
       params: {
@@ -757,6 +757,85 @@ export async function createAssignedAgentTemplateRequest(data: {
   }
 }
 
+type ManagerCustomization = {
+  agent: {
+    name: string;
+    role: string;
+    personality: string;
+    goal: string;
+  };
+  instructions: {
+    id: number;
+    instruction: string;
+  }[];
+  team: {
+    human_support: boolean;
+    human_support_prompt: string;
+  };
+};
+
+class Manager {
+  static get() {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    return proxy<ManagerCustomization>(
+      'GET',
+      `${getEnv('VITE_APP_NEXUS_URL')}/api/${projectUuid}/customization/`,
+      {
+        headers: {
+          'Project-Uuid': projectUuid,
+        },
+        params: {
+          user_email: userEmail || '',
+        },
+      }
+    );
+  }
+
+  static updateInstructions(instructions: { id?: number, value: string }[]) {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+    
+    return proxy<ManagerCustomization>(
+      'PUT',
+      `${getEnv('VITE_APP_NEXUS_URL')}/api/${projectUuid}/customization/`,
+      {
+        headers: {
+          'Project-Uuid': projectUuid,
+        },
+        params: {
+          user_email: userEmail || '',
+        },
+        data: {
+          instructions: instructions.map((instruction) => ({
+            id: instruction.id,
+            instruction: instruction.value,
+          })),
+        },
+      },
+    );
+  }
+
+  static removeInstruction(instructionId: number) {
+    const projectUuid = store.getState().project.project_uuid;
+    const userEmail = store.getState().user.userData?.user;
+
+    return proxy<ManagerCustomization>(
+      'DELETE',
+      `${getEnv('VITE_APP_NEXUS_URL')}/api/${projectUuid}/customization/?id=${instructionId}`,
+      {
+        headers: {
+          'Project-Uuid': projectUuid,
+        },
+        params: {
+          user_email: userEmail || '',
+        },
+      }
+    );
+  }
+}
+
 class AssignedAgent {
   static update(data: {
     projectUuid: string,
@@ -871,6 +950,45 @@ class AssignedAgent {
   }
 }
 
+function adaptManagerCustomization(customization: ManagerCustomization) {
+  return {
+    ...customization.agent,
+    instructions: customization.instructions.map((instruction) => ({
+      id: instruction.id,
+      value: instruction.instruction,
+    })),
+  };
+}
+
+export async function getManagerRequest() {
+  const response = await Manager.get();
+
+  if ('agent' in Object(response)) {
+    return adaptManagerCustomization(response);
+  } else {
+    throw new Error('error retrieving manager');
+  }
+}
+
+export async function updateManagerInstructionsRequest(instructions: { id?: number, value: string }[]) {
+  const response = await Manager.updateInstructions(instructions);
+
+  if ('agent' in Object(response)) {
+    return adaptManagerCustomization(response);
+  } else {
+    throw new Error('error updating manager instructions');
+  }
+}
+
+export async function removeManagerInstructionRequest(instructionId: number) {
+  const response = await Manager.removeInstruction(instructionId);
+
+  if ('agent' in Object(response)) {
+    return adaptManagerCustomization(response);
+  } else {
+    throw new Error('error removing manager instruction');
+  }
+}
 
 export async function updateAgentGlobalRuleRequest(data: {
   agentUuid: string,
