@@ -105,7 +105,15 @@ export function LegacyOnboarding() {
 
   async function handleNextPage() {
     if (isLastPage) {
-      // TODO: need to call updateOnboarding to complete onboarding flow, even for legacy onboarding
+      if (!account) return;
+      // call updateOnboarding to complete onboarding flow, even for legacy onboarding
+      updateOnboarding(account.accountName, { completed: true });
+      dispatch(
+        setOnboardingStatus({
+          ...onboardingStatus!,
+          completed: true,
+        }),
+      );
       await handleSubmit();
       return;
     }
