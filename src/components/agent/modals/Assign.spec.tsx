@@ -171,7 +171,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should render modal with CLI agent information', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       expect(screen.getByText('Assign Test CLI Agent')).toBeInTheDocument();
       expect(screen.getByTestId('assign-about')).toBeInTheDocument();
@@ -179,7 +179,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should show about page initially for CLI agent', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       expect(screen.getByTestId('assign-about')).toBeInTheDocument();
       expect(screen.getByTestId('description')).toHaveTextContent('Test CLI Agent Description');
@@ -188,7 +188,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should navigate to template selection page', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -200,7 +200,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should allow template selection', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -216,7 +216,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should disable next button when no templates are selected', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -233,7 +233,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should enable next button when templates are selected', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -248,7 +248,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should navigate to credentials page', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -268,7 +268,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should handle credentials input', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -289,7 +289,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should disable next button when credentials are empty', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -309,7 +309,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should enable next button when credentials are filled', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -335,7 +335,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should call onAssign with correct data when finished', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -371,7 +371,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should show loading state when isAssigningAgent is true', () => {
-      render(<AgentAssignModal {...defaultProps} isAssigningAgent={true} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' isAssigningAgent={true} />);
 
       const nextButton = screen.getByTestId('next-button');
       expect(nextButton).toHaveAttribute('data-loading', 'true');
@@ -389,14 +389,14 @@ describe('AgentAssignModal', () => {
     });
 
     it('should render modal with Nexus agent information', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='nexus' />);
 
       expect(screen.getByText('Assign Test Nexus Agent')).toBeInTheDocument();
       expect(screen.getByTestId('agent-passive-about')).toBeInTheDocument();
     });
 
     it('should show passive about page for Nexus agent', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='nexus' />);
 
       expect(screen.getByTestId('agent-passive-about')).toBeInTheDocument();
       expect(screen.getByTestId('passive-description')).toHaveTextContent('Test Nexus Agent Description');
@@ -405,7 +405,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should call onAssign immediately for passive Nexus agent', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='nexus' />);
 
       const finishButton = screen.getByTestId('next-button');
       fireEvent.click(finishButton);
@@ -432,7 +432,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should show WhatsApp required page when WhatsApp is not integrated', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -452,7 +452,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should disable next button on WhatsApp required page', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -481,7 +481,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should navigate back to previous page', async () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const nextButton = screen.getByTestId('next-button');
       fireEvent.click(nextButton);
@@ -498,7 +498,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should call onViewAgentsGallery when back button is clicked on first page', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const backButton = screen.getByTestId('back-button');
       fireEvent.click(backButton);
@@ -507,7 +507,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should close modal when dismiss button is clicked', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       const dismissButton = screen.getByTestId('modal-on-close-event');
       fireEvent.click(dismissButton);
@@ -527,7 +527,7 @@ describe('AgentAssignModal', () => {
     });
 
     it('should show "Next" button on non-last pages', () => {
-      render(<AgentAssignModal {...defaultProps} />);
+      render(<AgentAssignModal {...defaultProps} origin='CLI' />);
 
       expect(screen.getByTestId('next-button')).toBeInTheDocument();
     });
@@ -535,15 +535,15 @@ describe('AgentAssignModal', () => {
 
   describe('modal state management', () => {
     it('should not render when open is false', () => {
-      render(<AgentAssignModal {...defaultProps} open={false} />);
+      render(<AgentAssignModal {...defaultProps} open={false} origin='CLI' />);
 
       expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
     });
 
     it('should reset state when modal opens', () => {
-      const { rerender } = render(<AgentAssignModal {...defaultProps} open={false} />);
+      const { rerender } = render(<AgentAssignModal {...defaultProps} open={false} origin='CLI' />);
 
-      rerender(<AgentAssignModal {...defaultProps} open={true} />);
+      rerender(<AgentAssignModal {...defaultProps} open={true} origin='CLI'   />);
 
       expect(screen.getByTestId('assign-about')).toBeInTheDocument();
       expect(screen.getByText('Step 1 of 3')).toBeInTheDocument();
