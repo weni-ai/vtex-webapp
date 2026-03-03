@@ -148,7 +148,7 @@ export function LegacyOnboarding() {
         Object.entries(form).filter(([, value]) => value.trim())
       ) as FormState;
 
-      await buildAgent(payload, true, t('agent.actions.assign.success'));
+      await buildAgent(payload, true, t('agent.actions.assign.success_agent'));
     }
   };
 
