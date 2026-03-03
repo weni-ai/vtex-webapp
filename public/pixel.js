@@ -119,7 +119,8 @@ if (typeof $ === 'function' && typeof $(window) === 'object' && typeof $(window)
 seeOrderForm();
 
 getDetails().then(({ account }) => {
-  const accountId = account.id?.value;
+  const rawAccountId = account.id?.value;
+  const accountId = typeof rawAccountId === 'string' ? rawAccountId.replace(/-/g, '') : rawAccountId;
 
   if (accountId) {
     const script = document.createElement('script');
