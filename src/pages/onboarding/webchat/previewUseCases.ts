@@ -232,7 +232,7 @@ export const cursor = {
   create: async (target: HTMLElement | null) => {
     if (!target) return;
 
-    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#000"><path d="M80-480v-80h120v80H80Zm136 222-56-58 84-84 58 56-86 86Zm28-382-84-84 56-58 86 86-58 56Zm476 480L530-350l-50 150-120-400 400 120-148 52 188 188-80 80ZM400-720v-120h80v120h-80Zm236 80-58-56 86-86 56 56-84 86Z"/></svg>`;
+    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" height="32px" width="32px" viewBox="0 -960 960 960" fill="#3D3D3D" stroke="#FFFFFF"><path d="M80-480v-80h120v80H80Zm136 222-56-58 84-84 58 56-86 86Zm28-382-84-84 56-58 86 86-58 56Zm476 480L530-350l-50 150-120-400 400 120-148 52 188 188-80 80ZM400-720v-120h80v120h-80Zm236 80-58-56 86-86 56 56-84 86Z"/></svg>`;
 
     const parser = new DOMParser();
     const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
@@ -278,8 +278,8 @@ export const cursor = {
     if (!cursor.current) return;
 
     const { left, top, width, height } = element.getBoundingClientRect();
-    cursor.current.style.left = `${left + width / 2 - 24}px`;
-    cursor.current.style.top = `${top + height / 2 - 24}px`;
+    cursor.current.style.left = `${left + width / 2 - 16}px`;
+    cursor.current.style.top = `${top + height / 2 - 16}px`;
   },
 
   click: async (element: HTMLElement | null) => {
