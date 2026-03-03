@@ -58,7 +58,7 @@ export function Select(props: {
 }
 
 export function SelectExamples() {
-  let [value, setValue] = useState('2');
+  const [value, setValue] = useState('2');
 
   return (
     <section>

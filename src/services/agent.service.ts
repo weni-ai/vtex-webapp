@@ -1,59 +1,9 @@
-import { proxy } from "../api/proxy";
 import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest } from "../api/agents/requests";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getManagerRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, removeManagerInstructionRequest, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest, updateManagerInstructionsRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
-import getEnv from "../utils/env";
-import { useCache } from "../utils";
 import * as Sentry from "@sentry/react";
-
-export async function checkAgentIntegration(project_uuid: string) {
-  const integrationsAPI = getEnv('VITE_APP_NEXUS_URL') || '';
-
-  if (!integrationsAPI) {
-    console.error('VITE_APP_NEXUS_URL is not configured');
-    return { success: false, error: 'missing configuration' };
-  }
-
-  const cacheKey: [string, string] = ['GET', `${getEnv('VITE_APP_NEXUS_URL')}/api/commerce/check-exists-agent-builder`];
-  const cacheKeyString = `cache_${project_uuid}_${cacheKey.join('_')}`;
-
-  try {
-    const { response, saveCache } = await useCache({
-      cacheKey: cacheKeyString,
-      getResponse: () =>
-        proxy<{
-          error?: boolean,
-          message?: string,
-          data: {
-            has_agent: boolean,
-            name: string,
-            links: string[],
-            objective: string,
-            occupation: string,
-          },
-        }>(
-          ...cacheKey,
-          {
-            headers: { 'Project-Uuid': project_uuid, },
-            params: {
-              project_uuid: project_uuid,
-            },
-          },
-        )
-    });
-
-    if (!response || response?.error) {
-      throw new Error(response?.message || 'error integrating agents.');
-    }
-
-    return { success: true, data: response, saveCache };
-  } catch (error) {
-    console.error('error in the integration check:', error);
-    return { success: false, error: error || 'unknown error' };
-  }
-}
 
 export async function setAgentBuilder(
   payload: {
@@ -130,8 +80,6 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean,
     params: data.params,
   });
 
-  const statusValues = Object.values(status);
-
   function getTemplateHeader(metadata: { header: { header_type: 'TEXT' | 'IMAGE', text: string } }) {    
     if (typeof metadata.header === 'string') {
       return metadata.header;
@@ -150,7 +98,7 @@ export async function agentCLI(data: { agentUuid: string, forceUpdate?: boolean,
       uuid: template.uuid,
       name: template.display_name,
       startCondition: template.start_condition,
-      status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as typeof statusValues[number],
+      status: template.needs_button_edit ? 'needs-editing' as const : status[template.status] as (typeof status)[keyof typeof status],
       isCustom: template.is_custom,
       variables: template.variables,
       metadata: {
@@ -202,8 +150,6 @@ export async function saveAgentButtonTemplate(data: {
 }) {
   const response = await saveAgentButtonTemplateRequest(data);
 
-  const statusValues = Object.values(status);
-
   const assignedAgents = store.getState().project.assignedAgents;
 
   store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
@@ -213,7 +159,7 @@ export async function saveAgentButtonTemplate(data: {
         if (template.uuid === data.templateUuid) {
           return {
             ...template,
-            status: response.needs_button_edit ? 'needs-editing' as const : status[response.status] as typeof statusValues[number],
+            status: response.needs_button_edit ? 'needs-editing' as const : status[response.status] as (typeof status)[keyof typeof status],
             metadata: {
               ...template.metadata,
               buttons: response.metadata.buttons,
@@ -397,8 +343,6 @@ export async function updateAgentTemplate(data: {
 
   const assignedAgents = store.getState().project.assignedAgents;
 
-  const statusValues = Object.values(status);
-
   store.dispatch(setAssignedAgents(assignedAgents.map((agent) => {
     return {
       ...agent,
@@ -406,7 +350,7 @@ export async function updateAgentTemplate(data: {
         if (template.uuid === response.uuid) {
           return {
             ...template,
-            status: status[response.status] as typeof statusValues[number],
+            status: status[response.status] as (typeof status)[keyof typeof status],
             metadata: {
               ...template.metadata,
               header: response.metadata.header,
@@ -464,6 +408,21 @@ function updateAssignedAgentProperty(agentUuid: string, replace: Record<string, 
       }
       : agent;
   })));
+}
+
+export async function getManager() {
+  const response = await getManagerRequest();
+  return response;
+}
+
+export async function updateManagerInstructions(instructions: { id?: number, value: string }[]) {
+  const response = await updateManagerInstructionsRequest(instructions);
+  return response;
+}
+
+export async function removeManagerInstruction(instructionId: number) {
+  const response = await removeManagerInstructionRequest(instructionId);
+  return response;
 }
 
 export async function updateAgentGlobalRule(data: {
