@@ -31,6 +31,7 @@ export function LegacyOnboarding() {
   const { t } = useTranslation();
 
   const [agentUuid, setAgentUuid] = useState('');
+  const [agentOrigin, setAgentOrigin] = useState<'commerce' | 'nexus' | 'CLI'>('CLI');
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const agentsList = useSelector(agents);
   const agentBuilder = useSelector(getAgentBuilder);
@@ -145,6 +146,12 @@ export function LegacyOnboarding() {
 
   async function handleAssign(uuid: string) {
     const agent = agentsList.find((item) => item.uuid === uuid);
+
+    if (!agent) {
+      return;
+    }
+
+    setAgentOrigin(agent.origin);
 
     if (agent?.origin === 'CLI') {
       setAgentUuid(uuid);
@@ -262,6 +269,7 @@ export function LegacyOnboarding() {
         {page === 'buildManager' && (<AgentBuilder form={form} setForm={setForm} errors={errors} />)}
 
         <AgentAssignModal
+          origin={agentOrigin}
           open={isAgentAssignModalOpen}
           agentUuid={agentUuid}
           onClose={() => setIsAgentAssignModalOpen(false)}
