@@ -43,8 +43,9 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Atribuir agentes",
-            "remove": "Remover agente"
+            "gallery": "Atribuir soluções",
+            "remove_agent": "Desconectar agente",
+            "remove_automation": "Desconectar automação"
         },
         "modals": {
             "gallery": {
@@ -78,7 +79,8 @@
                 "alerts": {
                     "WhatsApp_required": "Canal WhatsApp necessário"
                 },
-                "title": "Atribuir Agente {{name}}",
+                "title_agent": "Atribuir Agente {{name}}",
+                "title_automation": "Conectar {{name}}",
                 "steps": "Passo {{currentPage}} de {{totalPages}}",
                 "about": {
                     "title": "Sobre"
@@ -99,7 +101,7 @@
                 }
             }
         },
-        "title": "Meu time de agentes",
+        "title": "Minhas soluções",
         "list": {
             "empty": {
                 "title": "Nenhum agente atribuído à equipe"
@@ -125,11 +127,11 @@
                 "fields": {
                     "webhook_url": {
                         "label": "URL de Webhook",
-                        "description": "Use esta URL para configurar seu sistema externo para enviar eventos a este agente"
+                        "description": "Use esta URL para configurar seu sistema externo para enviar eventos a esta automação"
                     },
                     "global_rule": {
                         "label": "Prompt global (opcional)",
-                        "description": "Use esta área para definir regras e diretrizes globais para o agente"
+                        "description": "Use esta área para definir regras e diretrizes globais para a automação"
                     },
                     "abandoned_cart": {
                         "abandonment_time_minutes": {
@@ -156,20 +158,20 @@
                 },
                 "actions": {
                     "enable": {
-                    "success": "Acompanhamento de pedidos entregues ativado com sucesso",
-                    "error": "Erro ao ativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
+                        "success": "Acompanhamento de pedidos entregues ativado com sucesso",
+                        "error": "Erro ao ativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
                     },
                     "disable": {
-                    "success": "Acompanhamento de pedidos entregues desativado com sucesso",
-                    "error": "Erro ao desativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
+                        "success": "Acompanhamento de pedidos entregues desativado com sucesso",
+                        "error": "Erro ao desativar o acompanhamento de pedidos entregues, tente novamente mais tarde"
                     }
                 },
                 "fields": {
                     "app_key": {
-                    "label": "App Key"
+                        "label": "App Key"
                     },
                     "app_token": {
-                    "label": "App Token"
+                        "label": "App Token"
                     }
                 },
                 "buttons": {
@@ -240,9 +242,11 @@
                 "error": "Erro ao salvar. Tente novamente mais tarde."
             },
             "disable": {
-                "title": "Remover agente",
-                "description": "Esta ação é irreversível. Tem certeza que deseja remover este agente do seu time?",
-                "success": "{{agent}} removido do seu time de agentes",
+                "title_agent": "Desconectar agente",
+                "title_automation": "Desconectar automação",
+                "description_agent": "Esta ação é irreversível. Tem certeza que deseja remover este agente do seu time?",
+                "description_automation": "Esta ação é irreversível. Tem certeza que deseja desconectar esta automação?",
+                "success": "{{agent}} desconectado do seu time de agentes",
                 "error": "Erro ao remover o agente. Tente novamente mais tarde.",
                 "buttons": {
                     "remove": "Remover",
@@ -250,8 +254,10 @@
                 }
             },
             "add": "Atribuir",
-            "added": "Agente ativo",
-            "view": "Ver agente",
+            "connect": "Conectar",
+            "active": "Ativo",
+            "connected": "Conectado",
+            "view": "Ver detalhes",
             "test": "Agente em teste",
             "configuring": "Configurando agente"
         }
@@ -274,7 +280,8 @@
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} passado para o modo de teste"
             },
             "assign": {
-                "success": "Agente atribuído com sucesso. Não se esqueça de testar e personalizar antes de publicar",
+                "success_agent": "Agente atribuído com sucesso. Não se esqueça de testar e personalizar antes de publicar",
+                "success_automation": "Automação conectada com sucesso. Não se esqueça de testar e personalizar antes de publicar",
                 "error": "Algo saiu errado. Por favor, tente novamente"
             },
             "edit_template": {
@@ -316,7 +323,7 @@
                         }
                     },
                     "preview": {
-                        "title": "Vista previa e teste",
+                        "title": "Pré-visualizar e testar",
                         "description": "Teste seu agente escaneando o código QR abaixo:",
                         "fields": {
                             "url": {
