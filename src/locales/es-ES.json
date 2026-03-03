@@ -1044,5 +1044,8 @@
                 "error_removing_custom_instruction": "Error al eliminar instrucción personalizada"
             }
         }
+    },
+    "dashboard": {
+        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
     }
 }
