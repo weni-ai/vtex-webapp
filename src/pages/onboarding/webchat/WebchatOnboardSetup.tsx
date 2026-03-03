@@ -27,6 +27,8 @@ function FailedToastContent({ message, actionLabel }: { message: string; actionL
       <Text variant="emphasis">{message}</Text>
       <Link
         href={`mailto:${SUPPORT_EMAIL}`}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{ fontWeight: 600 }}
       >
         {actionLabel}
@@ -81,8 +83,13 @@ export function WebchatOnboardSetup() {
     ));
   }, [userData?.account, onboardingStatus, dispatch]);
 
+  // Programmatic anchor click works reliably inside iframes, unlike window.open which can be blocked by popup blockers or sandbox restrictions
   const handleContactSupport = useCallback(() => {
-    window.location.href = `mailto:${SUPPORT_EMAIL}`;
+    const anchor = document.createElement('a');
+    anchor.href = `mailto:${SUPPORT_EMAIL}`;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener noreferrer';
+    anchor.click();
   }, []);
 
   const useCaseDescriptions = useMemo(
