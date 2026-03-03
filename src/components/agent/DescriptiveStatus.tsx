@@ -1,6 +1,8 @@
 import { Flex, IconCheck, IconCode, Text } from "@vtex/shoreline";
 
-export function AgentDescriptiveStatus({ status, style, showLabel = false }: { status: 'test' | 'configuring' | 'integrated', style?: React.CSSProperties, showLabel?: boolean }) {
+export function AgentDescriptiveStatus({ origin, status, style, showLabel = false }: { origin: 'commerce' | 'nexus' | 'CLI', status: 'test' | 'configuring' | 'integrated', style?: React.CSSProperties, showLabel?: boolean }) {
+  const isNexusAgent = origin === 'nexus';
+
   const { color, icon, text } = {
     test: {
       color: '$fg-base-disabled',
@@ -15,7 +17,7 @@ export function AgentDescriptiveStatus({ status, style, showLabel = false }: { s
     integrated: {
       color: '$fg-success',
       icon: <IconCheck />,
-      text: t('agents.common.added'),
+      text: isNexusAgent ? t('agents.common.active') : t('agents.common.connected'),
     },
   }[status];
 

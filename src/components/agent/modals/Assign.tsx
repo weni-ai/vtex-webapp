@@ -15,6 +15,7 @@ export function AgentAssignModal({
   open,
   onClose,
   agentUuid,
+  origin,
   onViewAgentsGallery,
   onAssign,
   isAssigningAgent,
@@ -23,6 +24,7 @@ export function AgentAssignModal({
   open: boolean;
   onClose: () => void;
   agentUuid: string;
+  origin: 'commerce' | 'nexus' | 'CLI';
   onViewAgentsGallery: () => void;
   onAssign: (data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) => void;
   isAssigningAgent: boolean;
@@ -37,6 +39,7 @@ export function AgentAssignModal({
 
   const [currentPage, setCurrentPage] = useState(0);
   const isWppIntegrated = useSelector(isWppIntegratedSelector);
+  const isNexusAgent = origin === 'nexus';
 
   useEffect(() => {
     if (open && agent?.origin === 'CLI') {
@@ -127,7 +130,7 @@ export function AgentAssignModal({
       <ModalHeader>
         <ModalHeading>
           <Flex gap="$space-3" align="center">
-            {t('agents.modals.assign.title', { name: agent?.name })}
+            {isNexusAgent ? t('agents.modals.assign.title_agent', { name: agent?.name }) : t('agents.modals.assign.title_automation', { name: agent?.name })}
 
             {pages.length !== 1 &&
               <Tag size="normal" variant="secondary" color="gray" data-testid="step-tag">

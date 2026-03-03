@@ -21,6 +21,7 @@ export function Onboarding() {
   const { t } = useTranslation();
   
   const [agentUuid, setAgentUuid] = useState('');
+  const [agentOrigin, setAgentOrigin] = useState('');
   const isWppIntegrated = useSelector(isWhatsAppIntegrated);
   const agentsList = useSelector(agents)
   const agentBuilder = useSelector(getAgentBuilder);
@@ -110,12 +111,18 @@ export function Onboarding() {
         Object.entries(form).filter(([, value]) => value.trim())
       ) as FormState;
 
-      await buildAgent(payload, true, t('agent.actions.assign.success'));
+      await buildAgent(payload, true, t('agent.actions.assign.success_agent'));
     }
   };
 
   async function handleAssign(uuid: string) {
     const agent = agentsList.find((item) => item.uuid === uuid);
+
+    if (!agent) {
+      return;
+    }
+
+    setAgentOrigin(agent.origin);
 
     if (agent?.origin === 'CLI') {
       setAgentUuid(uuid);
@@ -236,6 +243,7 @@ export function Onboarding() {
         <AgentAssignModal
           open={isAgentAssignModalOpen}
           agentUuid={agentUuid}
+          origin={agentOrigin as 'commerce' | 'nexus' | 'CLI'}
           onClose={() => setIsAgentAssignModalOpen(false)}
           onViewAgentsGallery={() => {
             setIsAgentAssignModalOpen(false);
