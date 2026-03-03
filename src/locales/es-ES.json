@@ -191,7 +191,11 @@
                 }
             },
             "preview": {
-                "banner": "Modo vista previa: las pruebas interactivas estarán disponibles una vez que se complete el entrenamiento."
+                "banner": "Modo vista previa: las pruebas interactivas estarán disponibles una vez que se complete el entrenamiento.",
+                "webchat": {
+                    "title": "Nombre de la cuenta",
+                    "subtitle": "Especialista en compras"
+                }
             }
         },
         "onboard_test": {

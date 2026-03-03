@@ -191,7 +191,11 @@
         }
       },
       "preview": {
-        "banner": "Preview mode: interactive testing will be available once training is complete."
+        "banner": "Preview mode: interactive testing will be available once training is complete.",
+        "webchat": {
+          "title": "Account name",
+          "subtitle": "Specialist in purchases"
+        }
       }
     },
     "onboard_test": {
