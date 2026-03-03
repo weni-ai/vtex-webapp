@@ -230,8 +230,9 @@
   },
   "agents": {
     "buttons": {
-      "gallery": "Assign agents",
-      "remove": "Remove agent"
+      "gallery": "Assign solutions",
+      "remove_agent": "Disconnect agent",
+      "remove_automation": "Disconnect automation"
     },
     "modals": {
       "gallery": {
@@ -265,7 +266,8 @@
         "alerts": {
           "WhatsApp_required": "WhatsApp Channel required"
         },
-        "title": "Assign {{name}} Agent",
+        "title_agent": "Assign {{name}} Agent",
+        "title_automation": "Connect {{name}}",
         "steps": "Step {{currentPage}} of {{totalPages}}",
         "about": {
           "title": "About"
@@ -286,7 +288,7 @@
         }
       }
     },
-    "title": "My agents team",
+    "title": "My solutions",
     "list": {
       "empty": {
         "title": "No agent assigned to team"
@@ -312,11 +314,11 @@
         "fields": {
           "webhook_url": {
             "label": "Webhook URL",
-            "description": "Use this URL to configure your external system to send events to this agent"
+            "description": "Use this URL to configure your external system to send events to this automation"
           },
           "global_rule": {
             "label": "Global prompt (optional)",
-            "description": "Use this area to define global rules and guidelines for the agent"
+            "description": "Use this area to define global rules and guidelines for the automation"
           },
           "abandoned_cart": {
             "abandonment_time_minutes": {
@@ -431,9 +433,11 @@
         "error": "Error while saving. Try again later."
       },
       "disable": {
-        "title": "Remove agent",
-        "description": "This action is irreversible. Are you sure you want to remove this agent from your team?",
-        "success": "{{agent}} removed from your agents team",
+        "title_agent": "Disconnect agent",
+        "title_automation": "Disconnect automation",
+        "description_agent": "This action is irreversible. Are you sure you want to remove this agent from your team?",
+        "description_automation": "This action is irreversible. Are you sure you want to disconnect this automation?",
+        "success": "{{agent}} disconnected from your agents team",
         "error": "Error removing the agent. Try again later.",
         "buttons": {
           "remove": "Remove",
@@ -441,8 +445,10 @@
         }
       },
       "add": "Assign",
-      "added": "Agent in production",
-      "view": "View agent",
+      "connect": "Connect",
+      "active": "Active",
+      "connected": "Connected",
+      "view": "View details",
       "test": "Agent in test",
       "configuring": "Configuring agent"
     }
@@ -465,7 +471,8 @@
         "success": "{{agentName, lowerCase, firstLetterUpperCase}} switched to test mode"
       },
       "assign": {
-        "success": "Agent successfully assigned! Don’t forget to test and customize before publishing",
+        "success_agent": "Agent successfully assigned! Don’t forget to test and customize before publishing",
+        "success_automation": "Automation successfully connected! Don’t forget to test and customize before publishing",
         "error": "Something went wrong. Please try again"
       },
       "edit_template": {
