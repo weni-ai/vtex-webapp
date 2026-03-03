@@ -107,6 +107,7 @@ export function mountWebchat({
 
   WebChat.open();
   WebChat.changeLanguage(i18n.language);
+  WebChat.clear();
 }
 
 export function getTextByUseCase(useCase: string, text: string) {
