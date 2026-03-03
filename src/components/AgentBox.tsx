@@ -176,7 +176,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
       }
 
       items.push({
-        label: t('agents.buttons.remove'),
+        label: isNexusAgent ? t('agents.buttons.remove_agent') : t('agents.buttons.remove_automation'),
         icon: <IconTrash size="20" />,
         onClick: openDisableModal,
         testId: 'agent-remove-button',
@@ -266,7 +266,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
           ].includes(status) && !isUpdateAgentLoading ?
             (
               <Flex align="center" gap="$space-4" justify="space-between">
-                <AgentDescriptiveStatus status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
+                <AgentDescriptiveStatus origin={origin} status={status as 'test' | 'configuring' | 'integrated'} style={{ padding: 'var(--sl-space-3)' }} />
 
                 {canSeeAgent && (
                   <Button
@@ -281,7 +281,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
               </Flex>
             ) : (
               <Button variant="primary" onClick={integrateCurrentFeature} size="large" loading={isUpdateAgentLoading} data-testid="agent-add-button">
-                <Text>{t('agents.common.add')}</Text>
+                <Text>{ isNexusAgent ? t('agents.common.add') : t('agents.common.connect')}</Text>
               </Button>
             )
         }

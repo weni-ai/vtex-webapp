@@ -37,6 +37,7 @@ export function Dashboard() {
   const [agentDescription, setAgentDescription] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
   const [agentUuid, setAgentUuid] = useState('');
+  const [agentOrigin, setAgentOrigin] = useState('');
   const [isAssigningAgent, setIsAssigningAgent] = useState(false);
   const [showOnboardingAlert] = useState(
     () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding
@@ -124,6 +125,8 @@ export function Dashboard() {
       return;
     }
 
+    setAgentOrigin(agent.origin);
+
     if (agent.origin === 'CLI') {
       setAgentUuid(uuid);
       setIsAgentAssignModalOpen(true);
@@ -200,7 +203,7 @@ export function Dashboard() {
 
       setIsAgentAssignModalOpen(false);
 
-      toast.success(t('agent.actions.assign.success'));
+      toast.success(agentOrigin === 'nexus' ? t('agent.actions.assign.success_automation') : t('agent.actions.assign.success_agent'));
     } catch {
       toast.critical(<GenericErrorToast />);
     } finally {
@@ -332,6 +335,7 @@ export function Dashboard() {
         <AgentAssignModal
           open={isAgentAssignModalOpen}
           agentUuid={agentUuid}
+          origin={agentOrigin as 'commerce' | 'nexus' | 'CLI'}
           onClose={() => setIsAgentAssignModalOpen(false)}
           onViewAgentsGallery={() => {
             setIsAgentAssignModalOpen(false);

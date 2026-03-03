@@ -231,8 +231,9 @@
     },
     "agents": {
         "buttons": {
-            "gallery": "Asignar agentes",
-            "remove": "Eliminar agente"
+            "gallery": "Asignar soluções",
+            "remove_agent": "Desconectar agente",
+            "remove_automation": "Desconectar automação"
         },
         "modals": {
             "gallery": {
@@ -266,7 +267,8 @@
                 "alerts": {
                     "WhatsApp_required": "Canal WhatsApp necesario"
                 },
-                "title": "Asignar Agente {{name}}",
+                "title_agent": "Asignar Agente {{name}}",
+                "title_automation": "Conectar {{name}}",
                 "steps": "Paso {{currentPage}} de {{totalPages}}",
                 "about": {
                     "title": "Acerca de"
@@ -287,7 +289,7 @@
                 }
             }
         },
-        "title": "Mi equipo de agentes",
+        "title": "Mis soluciones",
         "list": {
             "empty": {
                 "title": "Ningún agente asignado al equipo"
@@ -313,11 +315,11 @@
                 "fields": {
                     "webhook_url": {
                         "label": "URL de Webhook",
-                        "description": "Usa esta URL para configurar tu sistema externo para enviar eventos a este agente"
+                        "description": "Usa esta URL para configurar tu sistema externo para enviar eventos a esta automação"
                     },
                     "global_rule": {
                         "label": "Prompt global (opcional)",
-                        "description": "Usa esta área para definir reglas y directrices globales para el agente"
+                        "description": "Usa esta área para definir reglas y directrices globales para la automação"
                     },
                     "abandoned_cart": {
                         "abandonment_time_minutes": {
@@ -432,9 +434,11 @@
                 "error": "Error al guardar. Vuelve a intentarlo más tarde."
             },
             "disable": {
-                "title": "Eliminar agente",
-                "description": "Esta acción es irreversible. ¿Estás seguro de querer eliminar este agente de tu equipo?",
-                "success": "{{agent}} eliminado de tu equipo de agentes",
+                "title_agent": "Desconectar agente",
+                "title_automation": "Desconectar automação",
+                "description_agent": "Esta acción es irreversible. ¿Estás seguro de querer eliminar este agente de tu equipo?",
+                "description_automation": "Esta acción es irreversible. ¿Estás seguro de querer desconectar esta automação?",
+                "success": "{{agent}} desconectado de tu equipo de agentes",
                 "error": "Error eliminando el agente. Inténtalo de nuevo más tarde.",
                 "buttons": {
                     "remove": "Eliminar",
@@ -442,8 +446,10 @@
                 }
             },
             "add": "Asignar",
-            "added": "Agente activo",
-            "view": "Ver agente",
+            "connect": "Conectar",
+            "active": "Activo",
+            "connected": "Conectado",
+            "view": "Ver detalles",
             "test": "Agente en prueba",
             "configuring": "Configurando agente"
         }
@@ -466,7 +472,8 @@
                 "success": "{{agentName, lowerCase, firstLetterUpperCase}} pasado a modo de prueba"
             },
             "assign": {
-                "success": "Agente asignado con éxito. No olvides probar y personalizar antes de publicar",
+                "success_agent": "Agente asignado con éxito. No olvides probar y personalizar antes de publicar",
+                "success_automation": "Automação conectada com sucesso. Não se esqueça de testar e personalizar antes de publicar",
                 "error": "Algo salió mal. Por favor, inténtalo de nuevo"
             },
             "edit_template": {

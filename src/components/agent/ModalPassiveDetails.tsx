@@ -102,7 +102,7 @@ export function ModalAgentPassiveDetails({ open, onClose, agentName, agentDescri
         <Flex direction="column" gap="$space-5">
           <Flex direction="column" gap="$space-4">
             <AgentPassiveAbout description={agentDescription} skills={skills} />
-            <AgentDescriptiveStatus status="integrated" showLabel={true} />
+            <AgentDescriptiveStatus origin={'nexus'} status="integrated" showLabel={true} />
           </Flex>
 
           <Divider />
