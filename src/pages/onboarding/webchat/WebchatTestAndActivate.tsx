@@ -156,7 +156,7 @@ export function WebchatTestAndActivate() {
       const activation = await activateInStore(CRAWLING_CHANNEL.webchat, webchatAppUuid, vtexAccountId);
       if (activation.success) {
         await updateOnboarding(vtexAccount, { completed: true });
-        navigate('/dash');
+        navigate('/dash', { state: { fromOnboarding: true } });
       }
     } finally {
       setIsActivating(false);
