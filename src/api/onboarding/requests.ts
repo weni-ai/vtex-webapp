@@ -86,7 +86,10 @@ export const activatePixelApp = async (channel: CrawlingChannel, appUuid: string
 }
 
 export const getWebchatConfig = async (webchatAppUuid: string) => {
-  const response = await proxy<{ config: { displayRatio: number } }>(
+  const response = await proxy<{
+    config: { displayRatio: number; title: string; subtitle: string };
+    flow_object_uuid: string;
+  }>(
     'GET',
     `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wwc/apps/${webchatAppUuid}/`,
     {}

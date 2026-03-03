@@ -103,23 +103,99 @@
                 "title": "Agentes en entrenamiento, previsualiza sus principales casos de uso:",
                 "catalog_concierge": {
                     "title": "Concierge de catálogo",
-                    "description": "Guiando a los clientes hacia los productos correctos para impulsar ventas"
+                    "description": "Guiando a los clientes hacia los productos correctos para impulsar ventas",
+                    "preview": {
+                        "agent_greeting_and_offer_help": "¡Hola! ¿Todo bien? Soy el consultor asistente de Tienda. Antes de empezar: ¿cómo puedo llamarte y cómo puedo ayudarte hoy?",
+                        "user_request_gift_ideas": "Hola, soy Bruno y quiero sugerencias de regalos de cumpleaños para mi mamá. Ella es muy exigente y no quería darle lo básico, como flores.",
+                        "agent_profiling_question": "Te entiendo perfectamente, Bruno. [...] ¿Cómo le gusta disfrutar de su tiempo libre? ¿Prefiere momentos de autocuidado y bienestar o tiene el perfil que ama la tecnología y la practicidad?",
+                        "user_answers_profiling": "Está en una fase de cuidarse más, empezó a hacer yoga ahora. Pero también le gusta mucho el vino y recibir a los amigos en casa.",
+                        "agent_suggests_initial_items": "Excelentes referencias. En ese caso, tengo dos caminos interesantes: uno es el Kit de Aromaterapia con Difusor para las sesiones de yoga, o un Juego de Copas Forever Classic... ¿Cuál de estas opciones parece combinar más?",
+                        "user_rejects_and_asks_alternative": "Pues sí, el kit de aromaterapia es genial, pero no sé si ella lo usaría tanto. Y las copas... ya tiene muchas cosas de cocina [...] ¿Tendrías algo diferente, que junte un poco estos dos mundos?",
+                        "agent_suggests_hybrid_items": "[...] Pensando en que le gusta el Yoga (relajación) y también los vinos, ¿qué te parece si vamos por la línea de Decoración Sensorial? Tenemos un Abridor de Vino Eléctrico [...] o una Manta de Algodón Egipcio para Meditación.",
+                        "user_shows_interest_asks_details": "Esta manta de algodón egipcio me interesó. [...] ¿Es muy grande?",
+                        "agent_provides_product_details": "Tiene el tamaño ideal para una persona (1.50m x 1.20m), pero el tejido es tan noble que doblada queda del tamaño de una almohada pequeña. [...] Sugiero el color Arena...",
+                        "user_confirms_choice": "Genial, creo que voy a elegir esa entonces, gracias.",
+                        "agent_provides_checkout_link": "Puedes finalizar la compra a través del siguiente enlace. Solo haz clic y elige la forma de pago: link.checkout.com",
+                        "products": {
+                            "aromatherapy_kit": {
+                                "name": "Kit de Aromaterapia con Difusor",
+                                "description": "Transforma cualquier ambiente de tu casa o espacio profesional en un verdadero refugio de paz, calidez y sofisticación con el Aromatizador de Porcelana. Mucho más que un aromatizador, este artículo une belleza artesanal y funcionalidad."
+                            },
+                            "forever_classic_set": {
+                                "name": "Juego de Copas Forever Classic",
+                                "description": "El modelo perfecto para quienes ya están habituados al mundo del vino y buscan la copa ideal para cada tipo de uva y bebida. Contiene 06 piezas versátiles que pueden ser usadas para la degustación de vinos blancos o agua."
+                            },
+                            "wine_opener": {
+                                "name": "Abridor de Vino Eléctrico con Diseño Ergonómico",
+                                "description": "Imagina abrir tu botella de vino favorita con un simple toque, sin esfuerzo, en segundos, como un verdadero sommelier. Es una invitación al placer, a la elegancia y al ritual de saborear cada copa con más estilo."
+                            },
+                            "meditation_blanket": {
+                                "name": "Manta de Algodón Egipcio para Meditación",
+                                "description": "Ofrece un confort superior y suavidad extrema, ideal para mantener el equilibrio térmico. Tamaño ideal 1,50m x 1,20m. Doblada, queda del tamaño de una almohada pequeña. Es un artículo que dura toda la vida."
+                            }
+                        }
+                    },
+                    "example_start_message": "Sorpréndeme con una recomendación."
                 },
                 "cancellations": {
                     "title": "Agente de cancelaciones",
-                    "description": "Automatizando cancelaciones de pedidos y flujos de retención"
+                    "description": "Automatizando cancelaciones de pedidos y flujos de retención",
+                    "preview": {
+                        "agent_greeting": "¡Hola! ¿Todo bien? Soy el asistente de Tienda. Antes de empezar: ¿puedo ayudarte hoy, Marcos?",
+                        "user_requests_cancellation_wrong_voltage": "Quiero cancelar el pedido de la heladera que hice ayer. Compré el voltaje equivocado, elegí 110v y aquí en casa es todo 220v.",
+                        "agent_asks_order_number": "Entiendo perfectamente, Marcos. ¡Pasa mucho! Para localizar tu compra [...] ¿podrías informarme el número de pedido?",
+                        "user_provides_order_number": "Es el pedido #98754.",
+                        "agent_check_stock": "Localicé aquí: Heladera Inverse Frost Free Inverter 460L Acero Cepillado. Antes de proceder con la cancelación y tener que esperar el reembolso, puedo **cambiar el voltaje en tu pedido** ahora mismo, si tenemos en stock. Dejame revisar...",
+                        "agent_offers_alternative_model": "Marcos, lamentablemente el modelo 420L está agotado en 220v. Tengo un modelo de 460L de la misma línea disponible... ¿Te gustaría considerar este cambio?",
+                        "user_declines_alternative_confirms_cancellation": "Putz, no. [...] Si no la tienen en 220v, prefiero cancelar.",
+                        "agent_confirms_cancellation_process": "Comprendo, Marcos. Cuando el mueble es a medida, la precisión lo es todo. Ya que el cambio no te sirve, voy a priorizar la cancelación [...]",
+                        "agent_confirms_cancellation_process_confirmation": "¡Todo listo, Marcos! El reembolso debería aparecer en tu próxima factura. ¿Puedo ayudarte con algo más?",
+                        "user_confirms_cancellation_process_confirmation": "No, eso es todo, gracias.",
+                        "products": {
+                            "fridge_420l_inox": {
+                                "name": "Heladera Inverse Frost Free Inverter 460L Acero Cepillado",
+                                "description": "Máxima calificación en ahorro de energía y rendimiento. La tecnología Inverter hace que la heladera sea más silenciosa y acelera el congelamiento, brindando mayor eficiencia energética."
+                            }
+                        }
+                    },
+                    "example_start_message": "Quiero cancelar mi pedido."
                 },
                 "order_status": {
                     "title": "Agente de estado de pedidos",
-                    "description": "Proporcionando actualizaciones en tiempo real para deflexión del soporte humano"
+                    "description": "Proporcionando actualizaciones en tiempo real para deflexión del soporte humano",
+                    "preview": {
+                        "agent_greeting_order": "¡Hola, Bruno! ¿Cómo puedo ayudarte con tu pedido hoy?",
+                        "user_asks_order_status": "Hola. Quería saber dónde está mi pedido #98754. El plazo está por vencer.",
+                        "agent_confirms_carrier": "Con gusto, Bruno. Lo localicé: tu pedido ya está con la transportadora asociada.",
+                        "agent_provides_tracking_and_deadline": "[...] puedes acceder a su portal e informar tu número de identificación fiscal (CPF). Dejaré el enlace directo aquí para facilitarlo: El plazo de entrega sigue siendo el jueves."
+                    },
+                    "example_start_message": "¿Dónde está mi pedido?"
                 },
                 "faq_assistant": {
                     "title": "Agente de FAQ inteligente",
-                    "description": "Respondiendo preguntas de la tienda usando tu base de conocimiento"
+                    "description": "Respondiendo preguntas de la tienda usando tu base de conocimiento",
+                    "preview": {
+                        "agent_greeting_specs": "¡Hola! Soy el especialista técnico de Tienda. ¿Cómo puedo ayudarte con las especificaciones hoy?",
+                        "user_asks_monitor_hdmi_specs": "Hola. Estoy viendo este monitor de 34 pulgadas [...] ¿Su HDMI aguantará la resolución máxima o se quedará trabado en 30Hz?",
+                        "agent_explains_limitation_suggests_cable": "[...] El MacBook Air M1 vía HDMI suele limitar la tasa de refresco en pantallas Ultra-Wide. Para este monitor de 144Hz, lo ideal es usar el puerto USB-C con soporte para DisplayPort.",
+                        "agent_checks_box_contents": "Verifiqué aquí: en la caja de este modelo vienen solo los cables HDMI y DisplayPort estándar. El cable USB-C de alta velocidad debe comprarse por separado.",
+                        "user_confirms_purchase": "Buenísimo, gracias por la explicación. Me llevaré el cable también para no tener errores.",
+                        "products": {
+                            "usb_c_to_displayport_cable": {
+                                "name": "Cable USB-C a DisplayPort 4K/144Hz",
+                                "description": "Ideal para aumentar la resolución de juegos y películas. Soporta resoluciones de HDTV hasta 1080p. Conectores bañados en oro y función Plug & Play. Tamaño: 1,8 metros."
+                            }
+                        }
+                    },
+                    "example_start_message": "¿Y si no me gusta mi pedido?"
                 }
             },
             "preview": {
-                "banner": "Modo vista previa: las pruebas interactivas estarán disponibles una vez que se complete el entrenamiento."
+                "banner": "Modo vista previa: las pruebas interactivas estarán disponibles una vez que se complete el entrenamiento.",
+                "webchat": {
+                    "title": "Nombre de la cuenta",
+                    "subtitle": "Especialista en compras"
+                }
             }
         },
         "onboard_test": {
@@ -151,7 +227,6 @@
     "title": "Weni Agentic AI",
     "description": "Una solución empresarial de CX basada en IA para grandes marcas y retailers.",
     "improve": {
-        "description": "Conecta agentes a la plataforma Weni para acceder a recursos avanzados y opciones personalizables",
         "button": "Conectarse con Weni"
     },
     "agents": {

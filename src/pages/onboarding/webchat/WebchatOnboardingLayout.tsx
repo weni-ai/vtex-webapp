@@ -40,7 +40,8 @@ interface WebchatOnboardingLayoutProps {
   useCasesTitle: string;
   useCaseDescriptions: Record<UseCaseId, string>;
   belowCards?: React.ReactNode;
-  type: WebchatOnboardingLayoutType
+  type: WebchatOnboardingLayoutType;
+  webchatAppUuid?: string | null;
 }
 
 export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
@@ -53,6 +54,7 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
     useCaseDescriptions,
     belowCards,
     type,
+    webchatAppUuid,
   } = props;
 
   const { t } = useTranslation();
@@ -123,7 +125,7 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
                 {belowCards}
               </Flex>
 
-              <WebchatPreviewPlaceholder selectedUseCase={selectedUseCase} type={type} />
+              <WebchatPreviewPlaceholder selectedUseCase={selectedUseCase} type={type} webchatAppUuid={webchatAppUuid} />
             </Flex>
           </Flex>
         </Flex>
