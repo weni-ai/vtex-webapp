@@ -185,7 +185,11 @@
                 }
             },
             "preview": {
-                "banner": "Explore os cenários para ver os agentes em ação. O teste livre com seus agentes treinados estará disponível em breve."
+                "banner": "Explore os cenários para ver os agentes em ação. O teste livre com seus agentes treinados estará disponível em breve.",
+                "webchat": {
+                    "title": "Nome da conta",
+                    "subtitle": "Especialista em compras"
+                }
             }
         },
         "onboard_test": {

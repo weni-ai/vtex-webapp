@@ -32,8 +32,8 @@ export function WebchatPreviewPlaceholder(props: WebchatPreviewPlaceholderProps)
       mountWebchat({
         selector: '#wwc',
         mode: 'preview',
-        title: 'Account name',
-        subtitle: 'Especialista em compras',
+        title: t('onboarding.onboard_setup.preview.webchat.title'),
+        subtitle: t('onboarding.onboard_setup.preview.webchat.subtitle'),
       });
     } else if (type === 'test' && webchatAppUuid) {
       onboardingAdapter.getWebchatConfig(webchatAppUuid).then((result) => {
