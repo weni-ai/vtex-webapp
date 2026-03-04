@@ -119,9 +119,9 @@ export interface OnboardStatus {
   crawler_result?: string;
   config?: {
     channels: {
-      [key in CrawlingChannel]: {
+      [key in CrawlingChannel]?: {
         app_uuid: string | null;
-      } | null
+      }
     }
   }
 }

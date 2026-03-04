@@ -50,7 +50,7 @@ export function SkippedOnboardingBanner() {
       gap="$space-4"
       style={{
         border: 'var(--sl-border-base)',
-        borderRadius: 'var(--sl-radius-4)',
+        borderRadius: 'var(--sl-radius-3)',
         padding: 'var(--sl-space-4)',
       }}
     >
