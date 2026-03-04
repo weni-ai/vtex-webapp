@@ -1053,6 +1053,10 @@
         }
     },
     "dashboard": {
-        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
+        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes.",
+        "skipped_onboarding": {
+            "title": "Tu equipo de IA se está preparando",
+            "start_activation": "Iniciar activación"
+        }
     }
 }

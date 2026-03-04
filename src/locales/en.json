@@ -1052,6 +1052,10 @@
     }
   },
   "dashboard": {
-    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers."
+    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers.",
+    "skipped_onboarding": {
+      "title": "Your AI Team is getting ready",
+      "start_activation": "Start activation"
+    }
   }
 }

@@ -59,7 +59,7 @@ export function useOnboardingSetup() {
         store.dispatch(setProjectUuid(projectUuid));
       }
 
-      if (onboardingStatus.data.completed) {
+      if (onboardingStatus.data.completed || onboardingStatus.data.skipped) {
         navigate('/dash');
         return;
       }
