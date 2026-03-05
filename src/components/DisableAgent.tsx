@@ -15,6 +15,7 @@ export interface AboutAgentProps {
 export function DisableAgent({ open, agent: agentName, agentUuid, toggleModal, agentOrigin }: Readonly<AboutAgentProps>) {
   const [isDisabling, setIsDisabling] = useState(false);
   const projectUuid = useSelector(selectProject);
+  const isNexusAgent = agentOrigin === 'nexus';
 
   async function disable() {
     setIsDisabling(true);
@@ -44,17 +45,20 @@ export function DisableAgent({ open, agent: agentName, agentUuid, toggleModal, a
     setIsDisabling(false);
   }
 
+  const title = isNexusAgent ? t('agents.common.disable.title_agent') : t('agents.common.disable.title_automation');
+  const description = isNexusAgent ? t('agents.common.disable.description_agent') : t('agents.common.disable.description_automation');
+
   return (
     <Modal open={open} onClose={toggleModal} style={{ width: '368px' }}>
       <ModalHeader>
         <Flex>
-          <ModalHeading>{t('agents.common.disable.title')}</ModalHeading>
+          <ModalHeading>{title}</ModalHeading>
         </Flex>
         <ModalDismiss />
       </ModalHeader>
       <ModalContent>
         <Flex style={{ padding: 'var(--space-2, 8px) 0 var(--space-6, 24px) 0' }}>
-          <Text variant='body'>{t('agents.common.disable.description')}</Text>
+          <Text variant='body'>{description}</Text>
         </Flex>
         <Flex style={{ width: '100%', justifyContent: 'center' }}>
           <Button size="large" style={{ width: '100%' }} onClick={toggleModal}>{t('agents.common.disable.buttons.cancel')}</Button>
