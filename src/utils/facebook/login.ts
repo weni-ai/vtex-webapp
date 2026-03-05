@@ -1,4 +1,5 @@
-import { createChannel } from "../../services/channel.service";
+import { createChannel, fetchPreVerifiedPhoneIds } from "../../services/channel.service";
+import type { FBLoginOptions } from "../../interfaces/Facebook";
 import getEnv from "../env";
 
 function initFacebookSDK(appId: string, loginCallback: () => void) {
@@ -6,7 +7,7 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
     if (existingScript) {
         existingScript.remove();
     }
-    
+
     window.fbAsyncInit = function () {
         FB.init({
             appId,
@@ -52,7 +53,7 @@ export function startFacebookLogin(project_uuid: string) {
         return;
     }
 
-    const loginCallback = () => {
+    const loginCallback = async () => {
         console.log("Facebook SDK is initialized.");
         let wabaId = '';
         let phoneId = '';
@@ -84,6 +85,29 @@ export function startFacebookLogin(project_uuid: string) {
 
         window.addEventListener("message", sessionInfoListener);
 
+        const preVerifiedIds = await fetchPreVerifiedPhoneIds(project_uuid);
+
+        const loginOptions: FBLoginOptions = {
+            config_id: configId ?? "",
+            response_type: "code",
+            override_default_response_type: true,
+            extras: {
+                featureType: "whatsapp_business_app_onboarding",
+                sessionInfoVersion: 3,
+                features: [
+                    {
+                        name: "marketing_messages_lite",
+                    },
+                ],
+                setup: {
+                    preVerifiedPhone: {
+                        ids: preVerifiedIds.length > 0 ? preVerifiedIds : [""],
+                    },
+                },
+                version: "v3",
+            },
+        };
+
         FB.login(
             (response) => {
                 if (response.authResponse) {
@@ -94,14 +118,7 @@ export function startFacebookLogin(project_uuid: string) {
                     console.error("Login canceled or not fully authorized.");
                 }
             },
-            {
-                config_id: configId ?? "",
-                response_type: "code",
-                override_default_response_type: true,
-                extras: {
-                    sessionInfoVersion: 2,
-                },
-            }
+            loginOptions
         );
     };
 

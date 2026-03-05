@@ -1,5 +1,6 @@
 import { toast } from "@vtex/shoreline";
 import { VTEXWhatsAppAdapter } from "../api/channels/adapters";
+import { getPreVerifiedPhoneIds } from "../api/channels/requests";
 import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { setAgentBuilderIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from "../store/userSlice";
@@ -9,6 +10,26 @@ const whatsappAdapter = new VTEXWhatsAppAdapter();
 
 export async function checkWppIntegration(project_uuid: string) {
   return whatsappAdapter.checkIntegration(project_uuid);
+}
+
+/**
+ * Fetches IDs of pre-verified phone numbers from another service (which calls Meta).
+ * Used in Embedded Signup to fill setup.preVerifiedPhone.ids.
+ * Returns an empty array if the endpoint is not configured or fails.
+ */
+export async function fetchPreVerifiedPhoneIds(_project_uuid: string): Promise<string[]> {
+  try {
+    const response = await getPreVerifiedPhoneIds();
+    if (response?.error) {
+      console.warn("Pre-verified phones fetch failed:", response.error);
+      return [];
+    }
+    const data = response?.data;
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.warn("Pre-verified phones fetch error:", err);
+    return [];
+  }
 }
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string): Promise<{ success: boolean, error?: unknown }> {

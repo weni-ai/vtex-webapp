@@ -2,6 +2,29 @@ import getEnv from "../../utils/env";
 import store from "../../store/provider.store";
 import { proxy } from "../proxy";
 
+/** GET pre-verified phone number IDs from integrations (calls Meta). Auth via proxy. No params or body. */
+export const getPreVerifiedPhoneIds = async () => {
+  const baseUrl = getEnv('VITE_APP_INTEGRATIONS_URL');
+  if (!baseUrl) {
+    return { data: [] };
+  }
+
+  const response = await proxy<{
+    error?: string;
+    message?: string;
+    data: string[];
+  }>(
+    'GET',
+    `${baseUrl}/api/v1/commerce/preverified-phone-number`,
+    {
+      headers: {},
+      params: {},
+    },
+  );
+
+  return response;
+};
+
 export const checkWhatsAppIntegration = async (projectUUID: string) => {
   const userEmail = store.getState().user.userData?.user;
 
