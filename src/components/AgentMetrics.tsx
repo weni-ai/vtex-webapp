@@ -1,9 +1,10 @@
-import { Button, Flex, Grid, IconCaretDown, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Skeleton, Text, useRadioState } from "@vtex/shoreline";
+import { Button, Flex, IconCaretDown, MenuPopover, MenuProvider, MenuSeparator, MenuTrigger, Radio, RadioGroup, Text, useRadioState } from "@vtex/shoreline";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../interfaces/Store";
 import { agentCLI, agentMetrics, getSkillMetrics } from "../services/agent.service";
 import { DashboardItem } from "./DashboardItem";
+import { MetricGrid } from "./MetricGrid";
 import { useTranslation } from "react-i18next";
 import { createSelector } from "@reduxjs/toolkit";
 import { getPeriodDates } from "../utils";
@@ -393,40 +394,19 @@ export function AgentMetrics() {
         </Flex>
       </Flex>
 
-      {isDataLoading && <Skeleton width="100%" height={skeletonLoadingHeight(dataRows)} />}
-
-      <Flex
-        data-testid="metrics-details-container"
-        direction="column"
-        gap="$space-0"
-        style={{
-          border: 'var(--sl-border-base)',
-          borderRadius: 'var(--sl-radius-2)',
-          display: data.length > 0 ? 'block' : 'none',
-        }}
-      >
-        {data.map((line, indexOfLine) => (
-          <Grid
-            key={`line-${indexOfLine}`}
-            columns={`repeat(${line.length}, 1fr)`}
-            gap="$space-0"
-            style={{
-              borderBottom: indexOfLine !== data.length - 1 ? 'var(--sl-border-base)' : undefined,
-            }}
-          >
-            {line.map((detail, indexOfDetail) => (
-              <DashboardItem
-                key={`detail-${indexOfLine}-${indexOfDetail}`}
-                title={getDashboardTitleById(detail.title)}
-                value={detail.value}
-                style={{
-                  borderRight: indexOfDetail !== line.length - 1 ? 'var(--sl-border-base)' : undefined,
-                }}
-              />
-            ))}
-          </Grid>
-        ))}
-      </Flex>
+      <div data-testid="metrics-details-container">
+        <MetricGrid
+          rows={data}
+          isLoading={isDataLoading}
+          loadingHeight={skeletonLoadingHeight(dataRows)}
+          renderItem={(detail) => (
+            <DashboardItem
+              title={getDashboardTitleById(detail.title)}
+              value={detail.value}
+            />
+          )}
+        />
+      </div>
     </Flex>
   )
 }

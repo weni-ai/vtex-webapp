@@ -1053,5 +1053,24 @@
   },
   "dashboard": {
     "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers."
+  },
+  "ai_team_performance": {
+    "title": "AI Team Performance",
+    "total_engagements": {
+      "label": "Total engagements",
+      "description": "All customer interactions handled by AI"
+    },
+    "resolution_rate": {
+      "label": "Resolution Rate",
+      "description": "{{count}} engagements"
+    },
+    "revenue": {
+      "label": "Revenue",
+      "description": "{{count}} orders placed"
+    },
+    "customer_satisfaction": {
+      "label": "Customer Satisfaction",
+      "description": "Based on {{count}} customer ratings"
+    }
   }
 }

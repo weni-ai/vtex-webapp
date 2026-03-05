@@ -1054,5 +1054,24 @@
     },
     "dashboard": {
         "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
+    },
+    "ai_team_performance": {
+        "title": "Rendimiento del Equipo de IA",
+        "total_engagements": {
+            "label": "Total de interacciones",
+            "description": "Todas las interacciones gestionadas por IA"
+        },
+        "resolution_rate": {
+            "label": "Tasa de resolución",
+            "description": "{{count}} interacciones"
+        },
+        "revenue": {
+            "label": "Ingresos",
+            "description": "{{count}} pedidos realizados"
+        },
+        "customer_satisfaction": {
+            "label": "Satisfacción del cliente",
+            "description": "Basado en {{count}} calificaciones de clientes"
+        }
     }
 }
