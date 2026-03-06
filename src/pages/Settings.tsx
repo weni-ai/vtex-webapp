@@ -17,7 +17,7 @@ import { selectUser } from "../store/userSlice";
 import getEnv from '../utils/env';
 import { selectEmbeddedWithin } from '../store/appSlice';
 
-export function Dashboard() {
+export function Settings() {
   const location = useLocation();
   const navigate = useNavigate();
   const embeddedWithin = useSelector(selectEmbeddedWithin);
