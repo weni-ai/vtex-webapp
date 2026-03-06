@@ -3,8 +3,14 @@ import {
   getConversationTotalsRequest,
   getRevenueRequest,
   getCSATRequest,
+  getMessagesAnalyticsRequest,
 } from '../api/insights/requests';
-import type { ConversationTotals, Revenue, CSATData } from '../api/insights/adapters';
+import type {
+  ConversationTotals,
+  Revenue,
+  CSATData,
+  MessagesAnalytics,
+} from '../api/insights/adapters';
 
 export async function getConversationTotals(
   startDate: string,
@@ -69,6 +75,31 @@ export async function getCSAT(
       tags: {
         service: 'insights.service',
         function: 'getCSAT',
+      },
+      extra: {
+        startDate,
+        endDate,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+      },
+    });
+    throw error;
+  }
+}
+
+export async function getMessagesAnalytics(
+  startDate: string,
+  endDate: string,
+): Promise<MessagesAnalytics> {
+  try {
+    return await getMessagesAnalyticsRequest({ startDate, endDate });
+  } catch (error: unknown) {
+    Sentry.captureEvent({
+      message: 'getMessagesAnalytics error',
+      level: 'error',
+      tags: {
+        service: 'insights.service',
+        function: 'getMessagesAnalytics',
       },
       extra: {
         startDate,

@@ -1063,5 +1063,13 @@
             "label": "Satisfação do cliente",
             "description": "Baseado em {{count}} avaliações de clientes"
         }
+    },
+    "notification_performance": {
+        "title": "Desempenho das notificações",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "clicked": "Cliques",
+        "read_tooltip": "Mensagens que foram abertas e lidas pelo destinatário"
     }
 }

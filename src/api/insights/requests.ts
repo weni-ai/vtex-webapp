@@ -5,9 +5,11 @@ import {
   type ConversationTotalsResponse,
   type RevenueResponse,
   type CSATResponse,
+  type MessagesAnalyticsResponse,
   adaptConversationTotals,
   adaptRevenue,
   adaptCSAT,
+  adaptMessagesAnalytics,
 } from './adapters';
 
 const UTM_SOURCE = 'weni-ai-agent';
@@ -75,4 +77,25 @@ export async function getCSATRequest(params: {
   );
 
   return adaptCSAT(response);
+}
+
+export async function getMessagesAnalyticsRequest(params: {
+  startDate: string;
+  endDate: string;
+}) {
+  const projectUuid = store.getState().project.project_uuid;
+
+  const response = await proxy<MessagesAnalyticsResponse>(
+    'GET',
+    `${getEnv('VITE_APP_INSIGHTS_URL')}/api/v1/metrics/meta/internal/whatsapp-message-templates/messages-analytics/`,
+    {
+      params: {
+        project_uuid: projectUuid,
+        start_date: params.startDate,
+        end_date: params.endDate,
+      },
+    },
+  );
+
+  return adaptMessagesAnalytics(response);
 }

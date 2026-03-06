@@ -1022,7 +1022,7 @@
       "safety_topics": [
         "Politics",
         "Physical health",
-        "Physical or moral violence", 
+        "Physical or moral violence",
         "Sexual content",
         "Prejudice",
         "Hate",
@@ -1072,5 +1072,13 @@
       "label": "Customer Satisfaction",
       "description": "Based on {{count}} customer ratings"
     }
+  },
+  "notification_performance": {
+    "title": "Notification performance",
+    "sent": "Sent",
+    "delivered": "Delivered",
+    "read": "Read",
+    "clicked": "Clicks",
+    "read_tooltip": "Messages that were opened and read by the recipient"
   }
 }
