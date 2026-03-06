@@ -114,7 +114,6 @@ export interface OnboardStatus {
   completed: boolean;
   skipped?: boolean;
   failed?: boolean;
-  skipped?: boolean;
   progress: number;
   current_step?: string;
   crawler_result?: string;
