@@ -65,7 +65,7 @@ export function WebchatOnboardSetup() {
     const vtexAccount = userData?.account;
     if (!vtexAccount) return;
 
-    updateOnboarding(vtexAccount, { completed: true });
+    updateOnboarding(vtexAccount, { skipped: true });
     navigate('/dash');
   }, [userData?.account, navigate]);
 

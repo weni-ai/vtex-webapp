@@ -83,7 +83,7 @@ export function useOnboardingSetup() {
 
       }
 
-      if (onboardingStatus.data.completed) {
+      if (onboardingStatus.data.completed || onboardingStatus.data.skipped) {
         navigate('/dash');
         return;
       }
