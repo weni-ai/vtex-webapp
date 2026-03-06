@@ -1080,5 +1080,35 @@
         "converted_sales": "Vendas Convertidas",
         "conversion_rate": "Taxa de Conversão",
         "average_order_value": "Ticket Médio"
+    },
+    "recent_activity": {
+        "title": "Atividade Recente",
+        "view_details": "Ver detalhes",
+        "unnamed_contact": "[Contato sem nome]",
+        "resolution": {
+            "ai_assisted": "Assistido por IA",
+            "other_conclusion": "Não assistido",
+            "in_progress": "Em andamento",
+            "unclassified": "Não classificado",
+            "transferred": "Transferido"
+        },
+        "csat": {
+            "very_unsatisfied": "Muito Insatisfeito",
+            "unsatisfied": "Insatisfeito",
+            "neutral": "Neutro",
+            "satisfied": "Satisfeito",
+            "very_satisfied": "Muito Satisfeito"
+        },
+        "empty": {
+            "skipped": {
+                "title": "Seu Time de IA ainda não está ativo",
+                "description": "Após a ativação, você verá os registros de interação em tempo real e os insights de desempenho aqui.",
+                "button": "Iniciar ativação"
+            },
+            "no_data": {
+                "title": "Seu Time de IA está ativo",
+                "description": "Estamos monitorando sua loja em tempo real. Os registros de interação e insights de desempenho aparecerão aqui assim que acontecerem."
+            }
+        }
     }
 }
