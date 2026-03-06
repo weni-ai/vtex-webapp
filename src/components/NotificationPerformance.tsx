@@ -4,14 +4,9 @@ import { useTranslation } from 'react-i18next';
 import type { MessagesAnalytics } from '../api/insights/adapters';
 import { getMessagesAnalytics } from '../services/insights.service';
 import { getLast3MonthsDates } from '../utils';
+import { formatNumber } from '../utils/formatters';
 
 const MAX_BAR_HEIGHT = 137;
-
-const LOCALE_MAP: Record<string, string> = {
-  en: 'en-US',
-  pt: 'pt-BR',
-  es: 'es-ES',
-};
 
 interface MetricConfig {
   key: keyof MessagesAnalytics;
@@ -48,11 +43,6 @@ const METRICS_CONFIG: MetricConfig[] = [
     borderRadius: '0 var(--sl-radius-1) var(--sl-radius-1) 0',
   },
 ];
-
-function formatNumber(value: number, language: string): string {
-  const locale = LOCALE_MAP[language] ?? 'en-US';
-  return new Intl.NumberFormat(locale).format(value);
-}
 
 function computeBarHeight(value: number, maxValue: number): number {
   if (maxValue === 0) return 0;

@@ -11,6 +11,7 @@ import type {
   CSATData,
   MessagesAnalytics,
 } from '../api/insights/adapters';
+import { dedupRequest } from '../utils/requestDedup';
 
 export async function getConversationTotals(
   startDate: string,
@@ -37,29 +38,31 @@ export async function getConversationTotals(
   }
 }
 
-export async function getRevenue(
+export function getRevenue(
   startDate: string,
   endDate: string,
 ): Promise<Revenue> {
-  try {
-    return await getRevenueRequest({ startDate, endDate });
-  } catch (error: unknown) {
-    Sentry.captureEvent({
-      message: 'getRevenue error',
-      level: 'error',
-      tags: {
-        service: 'insights.service',
-        function: 'getRevenue',
-      },
-      extra: {
-        startDate,
-        endDate,
-        errorMessage: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-      },
-    });
-    throw error;
-  }
+  return dedupRequest(`getRevenue-${startDate}-${endDate}`, async () => {
+    try {
+      return await getRevenueRequest({ startDate, endDate });
+    } catch (error: unknown) {
+      Sentry.captureEvent({
+        message: 'getRevenue error',
+        level: 'error',
+        tags: {
+          service: 'insights.service',
+          function: 'getRevenue',
+        },
+        extra: {
+          startDate,
+          endDate,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+        },
+      });
+      throw error;
+    }
+  });
 }
 
 export async function getCSAT(
@@ -87,27 +90,33 @@ export async function getCSAT(
   }
 }
 
-export async function getMessagesAnalytics(
+export function getMessagesAnalytics(
   startDate: string,
   endDate: string,
 ): Promise<MessagesAnalytics> {
-  try {
-    return await getMessagesAnalyticsRequest({ startDate, endDate });
-  } catch (error: unknown) {
-    Sentry.captureEvent({
-      message: 'getMessagesAnalytics error',
-      level: 'error',
-      tags: {
-        service: 'insights.service',
-        function: 'getMessagesAnalytics',
-      },
-      extra: {
-        startDate,
-        endDate,
-        errorMessage: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-      },
-    });
-    throw error;
-  }
+  return dedupRequest(
+    `getMessagesAnalytics-${startDate}-${endDate}`,
+    async () => {
+      try {
+        return await getMessagesAnalyticsRequest({ startDate, endDate });
+      } catch (error: unknown) {
+        Sentry.captureEvent({
+          message: 'getMessagesAnalytics error',
+          level: 'error',
+          tags: {
+            service: 'insights.service',
+            function: 'getMessagesAnalytics',
+          },
+          extra: {
+            startDate,
+            endDate,
+            errorMessage:
+              error instanceof Error ? error.message : String(error),
+            errorStack: error instanceof Error ? error.stack : undefined,
+          },
+        });
+        throw error;
+      }
+    },
+  );
 }
