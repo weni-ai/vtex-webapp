@@ -1,10 +1,15 @@
 import { createChannel, fetchPreVerifiedPhoneIds } from "../../services/channel.service";
 import type { FBLoginOptions } from "../../interfaces/Facebook";
 import getEnv from "../env";
+import { setWppLoading } from "../../store/projectSlice";
+import store from "../../store/provider.store";
 
-function initFacebookSDK(appId: string, loginCallback: () => void) {
+const LOGIN_TIMEOUT_MS = 10 * 60 * 1000;
+
+function initFacebookSDK(appId: string, loginCallback: () => Promise<void>) {
     const existingScript = document.getElementById("facebook-jssdk");
     if (existingScript) {
+        console.log("Facebook SDK already loaded, removing it.");
         existingScript.remove();
     }
 
@@ -15,16 +20,17 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
             version: "v18.0",
         });
 
-        loginCallback();
+        loginCallback().catch((error) => {
+            console.error("Facebook login callback failed:", error);
+            resetLoginState();
+        });
     };
 
     (function (id) {
-        const script = document.getElementById(id);
-        if (script) script.remove();
-    })("facebook-jssdk");
-
-    (function (id) {
-        if (document.getElementById(id)) return;
+        if (document.getElementById(id)) {
+            console.log("Facebook SDK already loaded, returning.");
+            return;
+        }
 
         const js = document.createElement("script");
         js.setAttribute("id", id);
@@ -44,6 +50,31 @@ function initFacebookSDK(appId: string, loginCallback: () => void) {
     })("facebook-jssdk");
 }
 
+let activeSessionInfoListener: ((event: MessageEvent) => void) | null = null;
+let loginInProgress = false;
+let loginTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+function cleanupSessionInfoListener() {
+    if (activeSessionInfoListener) {
+        window.removeEventListener("message", activeSessionInfoListener);
+        activeSessionInfoListener = null;
+    }
+}
+
+function clearLoginTimeout() {
+    if (loginTimeoutId !== null) {
+        clearTimeout(loginTimeoutId);
+        loginTimeoutId = null;
+    }
+}
+
+function resetLoginState() {
+    cleanupSessionInfoListener();
+    clearLoginTimeout();
+    loginInProgress = false;
+    store.dispatch(setWppLoading(false));
+}
+
 export function startFacebookLogin(project_uuid: string) {
     const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
     const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
@@ -53,6 +84,14 @@ export function startFacebookLogin(project_uuid: string) {
         return;
     }
 
+    if (loginInProgress) {
+        console.warn("Facebook login already in progress.");
+        return;
+    }
+
+    loginInProgress = true;
+    cleanupSessionInfoListener();
+
     const loginCallback = async () => {
         console.log("Facebook SDK is initialized.");
         let wabaId = '';
@@ -60,7 +99,6 @@ export function startFacebookLogin(project_uuid: string) {
 
         const sessionInfoListener = (event: MessageEvent) => {
             if (!event.origin || !event.origin.endsWith("facebook.com")) {
-                console.error("Invalid event origin:", event.origin);
                 return;
             }
 
@@ -83,8 +121,10 @@ export function startFacebookLogin(project_uuid: string) {
             }
         };
 
+        activeSessionInfoListener = sessionInfoListener;
         window.addEventListener("message", sessionInfoListener);
 
+        store.dispatch(setWppLoading(true));
         const preVerifiedIds = await fetchPreVerifiedPhoneIds(project_uuid);
 
         const loginOptions: FBLoginOptions = {
@@ -108,14 +148,29 @@ export function startFacebookLogin(project_uuid: string) {
             },
         };
 
+        loginTimeoutId = setTimeout(() => {
+            console.warn("Facebook login timed out, cleaning up.");
+            resetLoginState();
+        }, LOGIN_TIMEOUT_MS);
+
         FB.login(
-            (response) => {
-                if (response.authResponse) {
-                    const code = response.authResponse.code;
-                    console.log("Login Successful.");
-                    createChannel(code, project_uuid, wabaId, phoneId);
-                } else {
-                    console.error("Login canceled or not fully authorized.");
+            async (response) => {
+                clearLoginTimeout();
+                cleanupSessionInfoListener();
+
+                try {
+                    if (response.authResponse) {
+                        const code = response.authResponse.code;
+                        console.log("Login Successful.");
+                        await createChannel(code, project_uuid, wabaId, phoneId);
+                    } else {
+                        console.error("Login canceled or not fully authorized.");
+                    }
+                } catch (error) {
+                    console.error("Failed to create channel:", error);
+                } finally {
+                    loginInProgress = false;
+                    store.dispatch(setWppLoading(false));
                 }
             },
             loginOptions
@@ -124,5 +179,3 @@ export function startFacebookLogin(project_uuid: string) {
 
     initFacebookSDK(fbAppId, loginCallback);
 }
-
-
