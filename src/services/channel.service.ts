@@ -1,14 +1,19 @@
 import { toast } from "@vtex/shoreline";
-import { VTEXWhatsAppAdapter } from "../api/channels/adapters";
+import { VTEXWebChatAdapter, VTEXWhatsAppAdapter } from "../api/channels/adapters";
 import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { setAgentBuilderIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from "../store/userSlice";
 import { VTEXFetch } from "../utils/VTEXFetch";
 
 const whatsappAdapter = new VTEXWhatsAppAdapter();
+const webchatAdapter = new VTEXWebChatAdapter();
 
 export async function checkWppIntegration(project_uuid: string) {
   return whatsappAdapter.checkIntegration(project_uuid);
+}
+
+export async function checkWebchatIntegration(project_uuid: string) {
+  return webchatAdapter.checkIntegration(project_uuid);
 }
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string): Promise<{ success: boolean, error?: unknown }> {

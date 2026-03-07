@@ -1,4 +1,4 @@
-import { Alert, Bleed, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
+import { Alert, Bleed, Button, Flex, Heading, IconArrowLeft, IconArrowUpRight, IconButton, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -232,7 +232,21 @@ export function Settings() {
       <PageHeader>
         <PageHeaderRow style={{ height: '44px' }}>
           <PageHeading>
-            {t('title')}
+            <Flex align="center">
+              <Bleed top="$space-2" bottom="$space-2">
+                <IconButton
+                  label={t('common.return')}
+                  asChild
+                  variant="tertiary"
+                  size="large"
+                  onClick={() => navigate('/dash')}
+                  data-testid="back-button"
+                >
+                  <IconArrowLeft />
+                </IconButton>
+              </Bleed>
+              {t('title')}
+            </Flex>
           </PageHeading>
 
           {embeddedWithin === 'VTEX App' && (

@@ -95,6 +95,7 @@ export interface UserState {
   accountData: AccountData | null;
   loadingWhatsAppIntegration: boolean;
   isWhatsAppIntegrated: boolean;
+  isWebChatIntegrated: boolean;
   isAgentBuilderIntegrated: boolean;
   whatsAppError: string | null;
   WhatsAppPhoneNumber: string | null;

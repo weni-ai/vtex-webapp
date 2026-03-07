@@ -1052,6 +1052,13 @@
     }
   },
   "dashboard": {
+    "title": "Agentic CX",
+    "view_on_store": "View on store",
+    "settings": "Settings",
+    "tabs": {
+      "agent_performance": "Agent team performance",
+      "whatsapp_store": "WhatsApp Store"
+    },
     "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers.",
     "skipped_onboarding": {
       "title": "Your AI Team is getting ready",

@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { getOnboardingStatus, ensureProjectAndUser } from '../../services/onboarding.service';
 import { initializeUserContext, initializeWeniPlatformContext } from '../../services/setup.service';
 import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
-import { setWhatsAppPhoneNumber } from '../../store/userSlice';
+import { setWhatsAppPhoneNumber, setWhatsAppIntegrated, setWebChatIntegrated } from '../../store/userSlice';
 import { setOnboardingStatus } from '../../store/onboardSlice';
 import store from '../../store/provider.store';
-import { checkWppIntegration } from '../../services/channel.service';
-import { setWhatsAppIntegrated } from '../../store/userSlice';
+import { checkWppIntegration, checkWebchatIntegration } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
 
 export function useOnboardingSetup() {
@@ -46,8 +45,12 @@ export function useOnboardingSetup() {
       if (projectUuid) {
         store.dispatch(setProjectUuid(projectUuid));
 
-        // TODO: check in the future if this will be needed when we have the new dashboard and settings page
-        const wppIntegrationResponse = await checkWppIntegration(projectUuid);
+        const [wppIntegrationResponse, webchatIntegrationResponse, agentIntegrationResponse] = await Promise.all([
+          checkWppIntegration(projectUuid),
+          checkWebchatIntegration(projectUuid),
+          checkAgentIntegration(projectUuid),
+        ]);
+
         if (!wppIntegrationResponse.success || wppIntegrationResponse?.error) {
           throw new Error(JSON.stringify(wppIntegrationResponse.error))
         }
@@ -59,8 +62,13 @@ export function useOnboardingSetup() {
           store.dispatch(setWhatsAppPhoneNumber(phone_number ? phone_number.replace(/\D/g, '') : null));
         }
 
-        // TODO: check in the future if this will be needed when we have the new dashboard and settings page
-        const agentIntegrationResponse = await checkAgentIntegration(projectUuid);
+        if (!webchatIntegrationResponse.success || webchatIntegrationResponse?.error) {
+          throw new Error(JSON.stringify(webchatIntegrationResponse.error))
+        }
+        const { has_webchat = false } = webchatIntegrationResponse.data || {};
+        if (has_webchat) {
+          store.dispatch(setWebChatIntegrated(true));
+        }
         if (agentIntegrationResponse?.error || !agentIntegrationResponse.data) {
           throw new Error(JSON.stringify(agentIntegrationResponse.error))
         }

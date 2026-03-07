@@ -155,7 +155,7 @@ export function NotificationPerformance() {
   }, []);
 
   if (isLoading) {
-    return <Skeleton width="100%" height="256px" />;
+    return <Skeleton height="100%" />;
   }
 
   const maxValue = data?.sent ?? 0;

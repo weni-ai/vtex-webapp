@@ -28,3 +28,30 @@ export const checkWhatsAppIntegration = async (projectUUID: string) => {
 
   return response;
 };
+
+
+export const checkWebChatIntegration = async (projectUUID: string) => {
+  const userEmail = store.getState().user.userData?.user;
+
+  const response = await proxy<{
+    error?: string,
+    message?: string,
+    data: {
+      has_webchat: boolean,
+      webchat_app_uuid: string,
+      flows_channel_uuid: string,
+    },
+  }>(
+    'GET',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/commerce/check-webchat-integration`,
+    {
+      headers: { 'Project-Uuid': projectUUID, },
+      params: {
+        user_email: userEmail || '',
+        project_uuid: projectUUID,
+      },
+    },
+  );
+
+  return response;
+};
