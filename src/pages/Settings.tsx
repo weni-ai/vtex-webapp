@@ -1,7 +1,7 @@
-import { Alert, Bleed, Button, Flex, Heading, IconArrowLeft, IconArrowUpRight, IconButton, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
+import { Bleed, Button, Flex, Heading, IconArrowLeft, IconArrowUpRight, IconButton, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetails';
 import { AgentAssignModal } from '../components/agent/modals/Assign';
 import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
@@ -18,7 +18,6 @@ import getEnv from '../utils/env';
 import { selectEmbeddedWithin } from '../store/appSlice';
 
 export function Settings() {
-  const location = useLocation();
   const navigate = useNavigate();
   const embeddedWithin = useSelector(selectEmbeddedWithin);
   const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
@@ -39,16 +38,6 @@ export function Settings() {
   const [agentUuid, setAgentUuid] = useState('');
   const [agentOrigin, setAgentOrigin] = useState('');
   const [isAssigningAgent, setIsAssigningAgent] = useState(false);
-  const [showOnboardingAlert] = useState(
-    () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding
-  );
-
-  useEffect(() => {
-    const cameFromOnboarding = (location.state as Record<string, unknown> | null)?.fromOnboarding;
-    if (cameFromOnboarding) {
-      navigate('/dash', { replace: true, state: {} });
-    }
-  }, [location.state, navigate]);
 
   const agentsList = useMemo(() => {
     return agentsListOriginal.filter((item) => item.isAssigned);
@@ -270,12 +259,6 @@ export function Settings() {
       </PageHeader>
 
       <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
-        {showOnboardingAlert && (
-          <Alert variant="success">
-            <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
-          </Alert>
-        )}
-
         <Flex direction="column" style={{ width: '100%' }} gap="$space-8">
           <AgentMetrics />
 

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Flex,
   Grid,
@@ -11,10 +12,12 @@ import {
   TabList,
   TabPanel,
   TabProvider,
+  Text,
   useTabStore,
 } from '@vtex/shoreline';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { selectOnboardingStatus } from '../store/onboardSlice';
 import { isWhatsAppIntegrated, isWebChatIntegrated } from '../store/userSlice';
@@ -66,11 +69,22 @@ function DashboardTabbedContent() {
 
 export function Dashboard() {
   const { t } = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const hasWhatsApp = useSelector(isWhatsAppIntegrated);
   const hasWebchat = useSelector(isWebChatIntegrated);
   const onboardingStatus = useSelector(selectOnboardingStatus);
+
+  const [showOnboardingAlert] = useState(
+    () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding,
+  );
+
+  useEffect(() => {
+    if ((location.state as Record<string, unknown> | null)?.fromOnboarding) {
+      navigate('/dash', { replace: true, state: {} });
+    }
+  }, [location.state, navigate]);
 
   const hasBothChannels = hasWebchat && hasWhatsApp;
   const isOnboardingSkipped =
@@ -109,6 +123,12 @@ export function Dashboard() {
 
       <PageContent>
         <Flex direction="column" gap="$space-5">
+          {showOnboardingAlert && (
+            <Alert variant="success">
+              <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
+            </Alert>
+          )}
+
           {isOnboardingSkipped && <SkippedOnboardingBanner />}
 
           {hasBothChannels ? (
