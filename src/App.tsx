@@ -15,6 +15,7 @@ import { Template } from './pages/template/Template';
 import { AgentIndex } from './pages/agent/Index';
 import { Onboarding } from './pages/Onboarding';
 import { Adapters } from './pages/Adapters';
+import { BillingPlans } from './pages/billing/BillingPlans';
 
 function App() {
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ function App() {
             <Route path='/agents/:assignedAgentUuid/templates/:templateUuid/edit' element={<Template />}></Route>
             <Route path='/onboarding' element={<Onboarding />}></Route>
             <Route path='/adapters' element={<Adapters />}></Route>
+            <Route path='/billing-plans' element={<BillingPlans />}></Route>
           </Routes>
         </Router>
       )}
