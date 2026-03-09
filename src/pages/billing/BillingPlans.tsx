@@ -122,14 +122,12 @@ function PlanCard(props: { plan: typeof PLANS[number] }) {
 }
 
 function FeatureIcon(props: { isIncluded: boolean }) {
-  const color = props.isIncluded ? '$fg-success' : '$fg-critical';
+  const color = props.isIncluded ? '$fg-informational' : '$fg-critical';
+  const Icon = props.isIncluded ? IconCheck : IconX;
 
   return (
     <Text variant="body" color={color} style={{ minWidth: 'fit-content' }}>
-      {props.isIncluded ?
-        <IconCheck height={20} width={20} /> :
-        <IconX height={20} width={20} />
-      }
+      <Icon height={20} width={20} />
     </Text>
   );
 }
