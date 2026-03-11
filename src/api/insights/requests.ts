@@ -65,7 +65,7 @@ export async function getCSATRequest(params: {
 
   const response = await proxy<CSATResponse>(
     'GET',
-    `${getEnv('VITE_APP_INSIGHTS_URL')}/v1/metrics/conversations/csat/`,
+    `${getEnv('VITE_APP_INSIGHTS_URL')}/v1/internal/metrics/conversations/project-ai-csat-metrics`,
     {
       params: {
         project_uuid: projectUuid,

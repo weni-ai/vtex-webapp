@@ -1083,3 +1083,18 @@ export async function disableDeliveredOrderTrackingRequest(data: {
     throw new Error(errorText || t('agents.details.delivered_order_tracking.actions.disable.error'));
   }
 }
+
+export async function assignNexusAgent(agentUuid: string, assign: boolean) {
+  const projectUuid = store.getState().project.project_uuid;
+  const userEmail = store.getState().user.userData?.user;
+
+  return proxy<{ status: string }>(
+    'POST',
+    `${getEnv('VITE_APP_NEXUS_URL')}/api/${projectUuid}/agent/${agentUuid}/assign`,
+    {
+      headers: { 'Project-Uuid': projectUuid },
+      data: { assign },
+      params: { user_email: userEmail },
+    }
+  );
+}

@@ -2,7 +2,6 @@ import { Flex, Grid, IconButton, IconXCircle, MenuItem, MenuPopover, MenuProvide
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../interfaces/Store";
 import { agentsLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
 import { AboutAgent } from "./AboutAgent";
@@ -16,14 +15,11 @@ import { useTranslation } from "react-i18next";
 import { Button } from "./adapters/Button";
 import { IconGearSix, IconTrash, IconInfo, IconDotsThreeVertical } from "./adapters/Icon";
 
-type codes = 'abandoned_cart' | 'order_status';
-
 export function AgentBoxContainer({ children }: { children: React.ReactNode }) {
   return (
     <Grid
       columns="repeat(auto-fill, minmax(21.5rem, 1fr))"
-      rows="192px"
-      autoRows="var(--sl-grid-rows)"
+      autoRows="$grid-rows"
     >
       {children}
     </Grid>
@@ -61,7 +57,7 @@ export function AgentBoxEmpty() {
   )
 }
 
-export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: codes, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
+export function AgentBox({ origin, name, description, uuid, code, type, isIntegrated, isInTest, isConfiguring, skills, onAssign }: { origin: 'commerce' | 'nexus' | 'CLI', name: string, description: string, uuid: string, code: string, type: 'active' | 'passive', isIntegrated: boolean, isInTest: boolean, isConfiguring: boolean, skills: string[], onAssign: (uuid: string) => void }) {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -71,8 +67,6 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
   const [openAbandonedCartModal, setOpenAbandonedCartModal] = useState(false)
   const isUpdateAgentLoading = useSelector(agentsLoading).find(loading => loading.agent_uuid === uuid)?.isLoading || false;
   const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
-  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
-
   const openDetailsModal = () => {
     setOpenAbout((o) => !o)
   }
@@ -125,7 +119,7 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
     }
 
     return type === 'passive' || origin === 'CLI';
-  }, [isIntegrated, type, isWppIntegrated]);
+  }, [isIntegrated, type, origin]);
 
   const handleSeeAgent = () => {
     if (type === 'passive') {
@@ -289,14 +283,14 @@ export function AgentBox({ origin, name, description, uuid, code, type, isIntegr
 
       <AboutAgent
         open={openAbout}
-        code={code}
+        code={code as AgentCommerce['code']}
         category={type}
         toggleModal={openDetailsModal}
       />
 
       <SettingsContainer
         open={isPreferencesOpen}
-        code={code}
+        code={code as AgentCommerce['code']}
         agentUuid={uuid}
         toggleOpen={toggleIsPreferencesOpen}
       />

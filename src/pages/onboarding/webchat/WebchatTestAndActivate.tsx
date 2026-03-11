@@ -7,10 +7,7 @@ import {
   Flex,
   Heading,
   IconCheckCircleFill,
-  Radio,
-  RadioGroup,
   Text,
-  useRadioState,
 } from '@vtex/shoreline';
 import { selectAccount, selectUser } from '../../../store/userSlice';
 import { selectOnboardingStatus } from '../../../store/onboardSlice';
@@ -23,13 +20,9 @@ import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
 import { Instructions } from '../../../components/manager/Instructions';
 import { CRAWLING_CHANNEL } from '../../../constants/onboarding';
-
-type ActivationMode = 'safe' | 'full';
-
-const DISPLAY_RATIO: Record<ActivationMode, number> = {
-  safe: 10,
-  full: 100,
-};
+import { ActivationSection } from '../../../components/shared/ActivationSection';
+import { DISPLAY_RATIO } from '../../../components/shared/activationConstants';
+import type { ActivationMode } from '../../../components/shared/activationConstants';
 
 const TEST_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
   catalog_concierge: 'onboarding.onboard_test.scenarios.catalog_concierge',
@@ -64,45 +57,6 @@ function CompletionBanner() {
         ))}
       </Flex>
     </Flex>
-  );
-}
-
-interface ActivationSectionProps {
-  activationMode: ActivationMode;
-  onModeChange: (mode: ActivationMode) => void;
-}
-
-function ActivationSection(props: ActivationSectionProps) {
-  const { activationMode, onModeChange } = props;
-  const { t } = useTranslation();
-
-  const radioState = useRadioState({
-    defaultValue: activationMode,
-    setValue: (value) => {
-      if (value === 'safe' || value === 'full') {
-        onModeChange(value);
-      }
-    },
-  });
-
-  const descriptionKey = activationMode === 'safe'
-    ? 'onboarding.onboard_test.activation.safe_description'
-    : 'onboarding.onboard_test.activation.full_description';
-
-  return (
-    <RadioGroup
-      label={t('onboarding.onboard_test.activation.title')}
-      horizontal
-      state={radioState}
-      description={t(descriptionKey)}
-    >
-      <Radio value="safe">
-        {t('onboarding.onboard_test.activation.safe_label')}
-      </Radio>
-      <Radio value="full">
-        {t('onboarding.onboard_test.activation.full_label')}
-      </Radio>
-    </RadioGroup>
   );
 }
 

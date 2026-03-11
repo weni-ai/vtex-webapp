@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getOnboardingStatus, ensureProjectAndUser } from '../../services/onboarding.service';
 import { initializeUserContext, initializeWeniPlatformContext } from '../../services/setup.service';
 import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
-import { setWhatsAppPhoneNumber, setWhatsAppIntegrated, setWebChatIntegrated } from '../../store/userSlice';
+import { setWhatsAppPhoneNumber, setWhatsAppIntegrated, setWebChatIntegrated, setWebChatAppUuid } from '../../store/userSlice';
 import { setOnboardingStatus } from '../../store/onboardSlice';
 import store from '../../store/provider.store';
 import { checkWppIntegration, checkWebchatIntegration } from '../../services/channel.service';
@@ -65,9 +65,12 @@ export function useOnboardingSetup() {
         if (!webchatIntegrationResponse.success || webchatIntegrationResponse?.error) {
           throw new Error(JSON.stringify(webchatIntegrationResponse.error))
         }
-        const { has_webchat = false } = webchatIntegrationResponse.data || {};
+        const { has_webchat = false, webchat_app_uuid = '' } = webchatIntegrationResponse.data || {};
         if (has_webchat) {
           store.dispatch(setWebChatIntegrated(true));
+          if (webchat_app_uuid) {
+            store.dispatch(setWebChatAppUuid(webchat_app_uuid));
+          }
         }
         if (agentIntegrationResponse?.error || !agentIntegrationResponse.data) {
           throw new Error(JSON.stringify(agentIntegrationResponse.error))

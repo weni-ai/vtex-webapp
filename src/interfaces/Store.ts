@@ -99,6 +99,7 @@ export interface UserState {
   isAgentBuilderIntegrated: boolean;
   whatsAppError: string | null;
   WhatsAppPhoneNumber: string | null;
+  webchatAppUuid: string | null;
 }
 
 export interface AppState {

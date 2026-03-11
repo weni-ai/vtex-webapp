@@ -1,7 +1,14 @@
 import { AgentsList } from "../AgentsList";
 import { Modal } from "../../adapters/Modal";
 
-export function AgentsGalleryModal({ open, onClose, onAssign }: { open: boolean, onClose: () => void, onAssign: (uuid: string) => void }) {
+interface AgentsGalleryModalProps {
+  open: boolean;
+  onClose: () => void;
+  onAssign: (uuid: string) => void;
+  originFilter?: 'nexus' | 'commerce' | 'CLI';
+}
+
+export function AgentsGalleryModal({ open, onClose, onAssign, originFilter }: AgentsGalleryModalProps) {
   function handleAssign(uuid: string) {
     onAssign(uuid);
     onClose();
@@ -15,7 +22,7 @@ export function AgentsGalleryModal({ open, onClose, onAssign }: { open: boolean,
       size="large"
       header={t('agents.modals.gallery.title')}
     >
-      <AgentsList onAssign={handleAssign} />
+      <AgentsList onAssign={handleAssign} originFilter={originFilter} />
     </Modal>
   )
 }

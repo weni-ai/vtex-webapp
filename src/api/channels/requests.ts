@@ -2,6 +2,30 @@ import getEnv from "../../utils/env";
 import store from "../../store/provider.store";
 import { proxy } from "../proxy";
 
+interface WhatsAppConfigResponse {
+  code: string;
+  uuid: string;
+  created_by: string;
+  created_on: string;
+  modified_by: string;
+  config: {
+    title: string;
+    waba: {
+      id: string;
+      name: string;
+      timezone: string;
+      namespace: string;
+    };
+    phone_number: {
+      display_name: string;
+      display_phone_number: string;
+    },
+    wa_business_id: string;
+    mmlite_status: string;
+    has_calling: string;
+  };
+}
+
 export const checkWhatsAppIntegration = async (projectUUID: string) => {
   const userEmail = store.getState().user.userData?.user;
 
@@ -55,3 +79,21 @@ export const checkWebChatIntegration = async (projectUUID: string) => {
 
   return response;
 };
+
+export const getWhatsAppConfig = async (wppCloudAppUuid: string, projectUUID: string) => {
+  const response = await proxy<{
+    error?: string,
+    message?: string,
+    data: {
+      config: WhatsAppConfigResponse,
+    },
+  }>(
+    'GET',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-cloud/apps/${wppCloudAppUuid}/`,
+    {
+      headers: { 'Project-Uuid': projectUUID, },
+    }
+  );
+
+  return response;
+}
