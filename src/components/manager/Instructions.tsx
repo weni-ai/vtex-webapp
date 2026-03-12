@@ -14,7 +14,6 @@ import {
 import { Button } from '../adapters/Button';
 import { useState } from 'react';
 
-import './Instructions.css';
 import { getManager, removeManagerInstruction, updateManagerInstructions } from '../../services/agent.service';
 import { InstructionsList } from './InstructionsList';
 

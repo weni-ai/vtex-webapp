@@ -11,7 +11,6 @@ import { FormVariables } from "./FormVariables";
 import { MessagePreview } from "./MessagePreview";
 import { AddingVariableModal } from "./modals/AddingVariable";
 import { ProcessModal } from "./modals/Process";
-import './Template.style.css';
 import { cleanURL } from "../../utils";
 
 function normalizeItems(language: string, items: string[]) {

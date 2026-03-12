@@ -52,7 +52,7 @@ export function Select(props: {
     data-testid={dataTestId}
     modelValue={props.options.filter(option => option.value === props.value)}
     options={props.options}
-    onUpdate:modelValue={onValue}
+    {...{ 'onUpdate:modelValue': onValue }}
     size={sizeMap[size as keyof typeof sizeMap]}
   />;
 }
