@@ -12,7 +12,7 @@ interface FetchOptions {
 }
 
 export async function VTEXFetch<T = unknown>(url: string, options?: FetchOptions): Promise<T> {
-  const response = await fetcher(`/api/proxy/myvtex/${url}`, options);
+  const response = await fetcher(`/api/proxy/myvtex${url.startsWith('/') ? url : `/${url}`}`, options);
 
   return response as T;
 }

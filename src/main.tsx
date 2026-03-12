@@ -1,6 +1,4 @@
-import "@weni/unnnic-system/dist/style.css";
 import './plugins/sentry';
-import { createRoot } from 'react-dom/client';
 import '@vtex/shoreline/css';
 import App from './App.tsx';
 import { Provider } from 'react-redux';
@@ -38,11 +36,13 @@ script.src = 'https://cdn.cloud.weni.ai/webchat-latest.umd.js';
 document.head.appendChild(script);
 
 
-createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <GrowthBookProvider growthbook={growthbook}>
-      <App />
-      <ToastStack />
-    </GrowthBookProvider>
-  </Provider>
-);
+export default function Main() {
+  return (
+    <Provider store={store}>
+      <GrowthBookProvider growthbook={growthbook}>
+        <App />
+        <ToastStack />
+      </GrowthBookProvider>
+    </Provider>
+  );
+}
