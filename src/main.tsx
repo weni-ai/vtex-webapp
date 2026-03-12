@@ -1,7 +1,6 @@
 import "@weni/unnnic-system/dist/style.css";
 import './plugins/sentry';
 import { createRoot } from 'react-dom/client';
-import './main.css';
 import '@vtex/shoreline/css';
 import App from './App.tsx';
 import { Provider } from 'react-redux';

@@ -14,8 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { Tag } from '../../components/adapters/Tag';
 import { AgentTemplateDeliveredOrderProvider, useAgentTemplateDeliveredOrderContext } from './AgentTemplateDeliveredOrderContext';
 
-import './Index.style.css';
-
 interface AbandonedCartConfig {
   abandonmentTimeMinutes: number;
   minimumCartValue: number;
