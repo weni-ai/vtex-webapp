@@ -107,7 +107,12 @@ function DropdownMenu({ label, noneSelected, value, setValue, options, testId }:
 const agentsSelector = (state: RootState) => state.project.agents;
 const hasTheFirstLoadOfTheAgentsHappenedSelector = (state: RootState) => state.project.hasTheFirstLoadOfTheAgentsHappened;
 
-export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
+interface AgentsListProps {
+  onAssign: (uuid: string) => void;
+  originFilter?: 'nexus' | 'commerce' | 'CLI';
+}
+
+export function AgentsList({ onAssign, originFilter }: AgentsListProps) {
   const { t } = useTranslation();
   const embeddedWithin = useSelector(selectEmbeddedWithin);
 
@@ -115,6 +120,7 @@ export function AgentsList({ onAssign }: { onAssign: (uuid: string) => void }) {
     if (embeddedWithin === 'Weni Platform') {
       return agent.notificationType === 'active' && !agent.isAssigned;
     }
+    if (originFilter && agent.origin !== originFilter) return false;
 
     return !agent.isAssigned;
   });
