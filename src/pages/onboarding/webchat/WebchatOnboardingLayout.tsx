@@ -68,15 +68,12 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
         <PageHeaderRow>
           <PageHeading>{title}</PageHeading>
           <Stack space="$space-3" horizontal>
-            {/* TODO: Skip action always disabled for this first version */}
-            {/* eslint-disable-next-line no-constant-binary-expression */} 
-            {(false && skipAction) && (
+            {skipAction && (
               <Bleed top="$space-2" bottom="$space-2">
                 <Button
                   variant="secondary"
                   size="large"
                   onClick={skipAction?.onClick}
-                  disabled={skipAction?.disabled}
                 >
                   {t('common.skip')}
                 </Button>

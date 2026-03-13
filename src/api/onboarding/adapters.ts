@@ -6,8 +6,9 @@ import {
   updateOnboarding, 
   updateWebchatDisplayRatio, 
   activatePixelApp,
-  getWebchatConfig
+  getWebchatConfig,
 } from "./requests";
+import type { WebchatConfigResponse } from "./requests";
 import type { CrawlingChannel } from "../../constants/onboarding";
 
 export interface OnboardStatusResponse {
@@ -49,7 +50,7 @@ export interface GetWebchatConfigResponse {
   success: boolean;
   error?: string;
   data?: {
-    config: object;
+    config: WebchatConfigResponse;
     flow_object_uuid: string;
   };
 }

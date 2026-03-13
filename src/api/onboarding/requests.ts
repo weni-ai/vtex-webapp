@@ -3,6 +3,15 @@ import { proxy } from "../proxy";
 import { OnboardStatus } from "../../interfaces/Store";
 import type { CrawlingChannel } from "../../constants/onboarding";
 
+export interface WebchatConfigResponse {
+  displayRatio: number;
+  title: string;
+  subtitle: string;
+  inputTextFieldHint?: string;
+  renderPercentage?: number;
+  profileAvatar: string;
+}
+
 export const fetchOnboardingStatus = async (vtex_account: string) => {
   const response = await proxy<OnboardStatus>(
     'GET',
@@ -87,7 +96,7 @@ export const activatePixelApp = async (channel: CrawlingChannel, appUuid: string
 
 export const getWebchatConfig = async (webchatAppUuid: string) => {
   const response = await proxy<{
-    config: { displayRatio: number; title: string; subtitle: string };
+    config: WebchatConfigResponse;
     flow_object_uuid: string;
   }>(
     'GET',
