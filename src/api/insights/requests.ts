@@ -5,14 +5,12 @@ import {
   type ConversationTotalsResponse,
   type RevenueResponse,
   type CSATResponse,
-  type MessagesAnalyticsResponse,
   adaptConversationTotals,
   adaptRevenue,
   adaptCSAT,
-  adaptMessagesAnalytics,
 } from './adapters';
 
-const UTM_SOURCE = 'weni-ai-agent';
+const UTM_SOURCE = 'weniabandonedcart';
 
 export async function getConversationTotalsRequest(params: {
   startDate: string;
@@ -65,7 +63,7 @@ export async function getCSATRequest(params: {
 
   const response = await proxy<CSATResponse>(
     'GET',
-    `${getEnv('VITE_APP_INSIGHTS_URL')}/v1/metrics/conversations/csat/`,
+    `${getEnv('VITE_APP_INSIGHTS_URL')}/v1/internal/metrics/conversations/project-ai-csat-metrics`,
     {
       params: {
         project_uuid: projectUuid,
@@ -77,25 +75,4 @@ export async function getCSATRequest(params: {
   );
 
   return adaptCSAT(response);
-}
-
-export async function getMessagesAnalyticsRequest(params: {
-  startDate: string;
-  endDate: string;
-}) {
-  const projectUuid = store.getState().project.project_uuid;
-
-  const response = await proxy<MessagesAnalyticsResponse>(
-    'GET',
-    `${getEnv('VITE_APP_INSIGHTS_URL')}/api/v1/metrics/meta/internal/whatsapp-message-templates/messages-analytics/`,
-    {
-      params: {
-        project_uuid: projectUuid,
-        start_date: params.startDate,
-        end_date: params.endDate,
-      },
-    },
-  );
-
-  return adaptMessagesAnalytics(response);
 }
