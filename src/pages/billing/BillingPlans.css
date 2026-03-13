@@ -1,0 +1,15 @@
+.billing-plans {
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.billing-plans .billing-plan-card {
+  border: var(--sl-border-base);
+  border-radius: var(--sl-radius-2);
+  padding: var(--sl-space-6);
+}
+
+.billing-plans .billing-plan-card--recommended {
+  border: var(--sl-border-accent-strong);
+  background: var(--sl-bg-informational);
+}
