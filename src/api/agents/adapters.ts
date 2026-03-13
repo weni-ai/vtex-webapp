@@ -46,6 +46,7 @@ export interface AgentsListResponse {
     name: string;
     description: string;
     assigned: boolean;
+    active: boolean;
     slug: string;
     skills: { name: string; }[];
   }[];
@@ -111,6 +112,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     notificationType: 'passive' as const,
     code: agent.slug,
     isAssigned: agent.assigned,
+    isActive: agent.active,
     isInTest: false,
     skills: agent.skills.map((skill) => skill.name),
   })));
@@ -125,6 +127,7 @@ export function adapterAgentsList(response: AgentsListResponse): (AgentCommerce 
     notificationType: 'active' as const,
     code: agent.name.toLowerCase().replace(/ /g, '_'),
     isAssigned: agent.assigned,
+    isActive: false, // TODO: in the future handle gallery agents active status
     isInTest: false,
     credentials: Object.values(agent.credentials).reduce((acc, value) => {
       acc[value.key] = {
@@ -156,6 +159,7 @@ export interface IntegratedAgentsListResponse {
     globals: { name: string; value: boolean }[];
     config?: AgentConfig;
     sectors: string[];
+    active: boolean;
   }[]
 };
 
@@ -169,6 +173,7 @@ export function adapterIntegratedAgentsList(response: IntegratedAgentsListRespon
       notificationType: 'active' as const,
       code: agent.code,
       isAssigned: true,
+      isActive: agent.active ?? false,
       isInTest: isInTest(agent.config),
       isConfiguring: isConfiguring(agent.config),
       templateSynchronizationStatus: agent.config?.templates_synchronization_status || 'unset' as const,
@@ -270,7 +275,13 @@ export function adaptUpdateAgentSettingsResponse(response: UpdateAgentSettingsRe
     };
 }
 
-export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse) {
+export interface SkillMetricsData {
+  message: string;
+  error: string;
+  data: { title: string; value: string }[];
+}
+
+export function adaptGetSkillMetricsResponse(response: GetSkillMetricsResponse): SkillMetricsData {
   return {
       message: response.message,
       error: response.error,

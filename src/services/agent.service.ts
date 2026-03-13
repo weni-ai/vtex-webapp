@@ -1,6 +1,7 @@
+import { toast } from "@vtex/shoreline";
 import { proxy } from "../api/proxy";
-import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, UpdateAgentSettingsData } from "../api/agents/adapters";
-import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getManagerRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, removeManagerInstructionRequest, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest, updateManagerInstructionsRequest } from "../api/agents/requests";
+import { adaptGetSkillMetricsResponse, GetSkillMetricsResponse, SkillMetricsData, UpdateAgentSettingsData } from "../api/agents/adapters";
+import { agentCLIRequest, agentMetricsRequest, agentsList, assignAgentCLIRequest, changeNexusAgentActiveStatus, createAgentBuilderRequest, createAssignedAgentTemplateRequest, disableAssignedAgentTemplateRequest, disableDeliveredOrderTrackingRequest, disableFeatureRequest, enableDeliveredOrderTrackingRequest, getManagerRequest, getSkillMetricsRequest, getWhatsAppURLRequest, integrateAgentRequest, integratedAgentsList, removeManagerInstructionRequest, saveAgentButtonTemplateRequest, unassignAgentCLIRequest, updateAgentGlobalRuleRequest, updateAgentTemplateRequest, updateManagerInstructionsRequest } from "../api/agents/requests";
 import { agentsSettingsUpdate } from "../api/agentsSettings/requests";
 import { addAssignedAgent, setAgents, setAgentsLoading, setAssignedAgents, setDisableAgentLoading, setHasTheFirstLoadOfTheAgentsHappened, setUpdateAgentLoading, setWhatsAppURL } from "../store/projectSlice";
 import store from "../store/provider.store";
@@ -319,7 +320,7 @@ export async function disableAgent(project_uuid: string, feature_uuid: string, a
   }
 }
 
-export async function getSkillMetrics(data: { startDate: string, endDate: string }) {
+export async function getSkillMetrics(data: { startDate: string, endDate: string }): Promise<SkillMetricsData | { success: false; error: string }> {
   try {
     const response = await getSkillMetricsRequest(data) as GetSkillMetricsResponse;
     if (!response.data) {
@@ -510,4 +511,29 @@ export async function disableDeliveredOrderTracking(data: {
 }) {
   const response = await disableDeliveredOrderTrackingRequest(data);
   return response;
+}
+
+export async function toggleNexusAgentActive(agentUuid: string, active: boolean) {
+  const agents = store.getState().project.agents;
+
+  store.dispatch(setAgents(agents.map((item) => {
+    if (item.origin === 'nexus' && item.uuid === agentUuid) {
+      return { ...item, isActive: active };
+    }
+    return item;
+  })));
+
+  try {
+    await changeNexusAgentActiveStatus(agentUuid, active);
+  } catch {
+    store.dispatch(setAgents(agents.map((item) => {
+      if (item.origin === 'nexus' && item.uuid === agentUuid) {
+        return { ...item, isActive: !active };
+      }
+      return item;
+    })));
+
+    toast.critical(t('common.errors.unexpected_error'));
+    throw new Error('Failed to toggle agent assignment');
+  }
 }
