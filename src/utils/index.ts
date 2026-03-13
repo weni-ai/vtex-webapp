@@ -33,6 +33,8 @@ export function getLast3MonthsDates(): { startDate: string; endDate: string } {
   const end = new Date();
   const start = new Date();
   start.setMonth(start.getMonth() - 3);
+  // add 1 day to the start date
+  start.setDate(start.getDate() + 1);
 
   return {
     startDate: toISODate(start),
