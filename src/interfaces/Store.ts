@@ -18,6 +18,20 @@ export interface Loading {
   isLoading: boolean
 }
 
+export interface OrganizationBilling {
+  plan: string;
+  trial_end_date: string;
+  days_till_trial_end: number;
+}
+
+export interface ProjectDetail {
+  uuid: string;
+  name: string;
+  created_at: string;
+  status: string;
+  organization_billing: OrganizationBilling;
+}
+
 export interface ProjectState {
   project_uuid: string;
   wpp_cloud_app_uuid: string;
@@ -35,6 +49,7 @@ export interface ProjectState {
   storeType: string;
   initialLoading: boolean;
   WhatsAppURL: string;
+  projectDetail: ProjectDetail | null;
   assignedAgents: {
     uuid: string;
     webhookUrl: string;
@@ -99,6 +114,7 @@ export interface UserState {
   isAgentBuilderIntegrated: boolean;
   whatsAppError: string | null;
   WhatsAppPhoneNumber: string | null;
+  webchatAppUuid: string | null;
 }
 
 export interface AppState {
