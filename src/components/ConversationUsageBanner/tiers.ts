@@ -1,12 +1,12 @@
 export type UsageTier = 'informational' | 'warning' | 'danger' | 'critical';
 
-export const TRIAL_CONVERSATIONS_LIMIT = 1000;
+export const TRIAL_CONVERSATIONS_LIMIT = 100;
 export const MINUTES_SAVED_PER_CONVERSATION = 6;
 
 const TIER_THRESHOLDS = {
-  informational: 300,
-  warning: 700,
-  danger: 999,
+  informational: 30,
+  warning: 70,
+  danger: 99,
 } as const;
 
 interface TierStyles {
@@ -74,4 +74,23 @@ export function getTimeSaved(count: number): TimeSaved {
   const roundedHours = hours % 1 === 0 ? hours : parseFloat(hours.toFixed(1));
 
   return { value: roundedHours, unit: 'hours' };
+}
+
+export function getRemainingDaysEstimate(count: number, limit: number, creationDate: Date): number {
+  const dayInMilliseconds = 1000 * 60 * 60 * 24;
+  const now = new Date();
+  const daysSinceCreation = Math.floor((now.getTime() - creationDate.getTime()) / dayInMilliseconds);
+  const remainingTrialDays = Math.ceil((creationDate.getTime() + 30 * dayInMilliseconds - now.getTime()) / dayInMilliseconds);
+
+  if (count >= limit || remainingTrialDays <= 0) {
+    return 0;
+  }
+
+  if (count <= 0 || daysSinceCreation <= 0) {
+    return remainingTrialDays;
+  }
+
+  const dailyRate = count / daysSinceCreation;
+  const daysUntilLimit = Math.ceil((limit - count) / dailyRate);
+  return Math.min(daysUntilLimit, remainingTrialDays);
 }

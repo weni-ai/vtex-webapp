@@ -1,20 +1,18 @@
 import { Flex, Text } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ConversationTotals, Revenue, CSATData } from '../api/insights/adapters';
+import type { ConversationTotals, CSATData } from '../api/insights/adapters';
 import {
   getConversationTotals,
-  getRevenue,
   getCSAT,
 } from '../services/insights.service';
 import { getLast3MonthsDates } from '../utils';
-import { formatCurrency, formatNumber } from '../utils/formatters';
+import { formatNumber } from '../utils/formatters';
 import { MetricCard, type MetricCardProps } from './MetricCard';
 import { MetricGrid } from './MetricGrid';
 
 function buildMetrics(
   conversationTotals: ConversationTotals | null,
-  revenue: Revenue | null,
   csat: CSATData | null,
   t: (key: string, options?: Record<string, unknown>) => string,
   language: string,
@@ -39,17 +37,6 @@ function buildMetrics(
         : undefined,
     },
     {
-      label: t('ai_team_performance.revenue.label'),
-      value: revenue
-        ? formatCurrency(revenue.value, revenue.currencyCode, language)
-        : '-',
-      description: revenue
-        ? t('ai_team_performance.revenue.description', {
-            count: formatNumber(revenue.ordersPlaced.value, language),
-          })
-        : undefined,
-    },
-    {
       label: t('ai_team_performance.customer_satisfaction.label'),
       value: csat ? `${csat.highestLabelScore}%` : '-',
       description: csat
@@ -67,7 +54,6 @@ export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
   const [isLoading, setIsLoading] = useState(true);
   const [conversationTotals, setConversationTotals] =
     useState<ConversationTotals | null>(null);
-  const [revenue, setRevenue] = useState<Revenue | null>(null);
   const [csat, setCsat] = useState<CSATData | null>(null);
 
   useEffect(() => {
@@ -78,7 +64,6 @@ export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
 
       const results = await Promise.allSettled([
         getConversationTotals(startDate, endDate),
-        getRevenue(startDate, endDate),
         getCSAT(startDate, endDate),
       ]);
 
@@ -87,11 +72,7 @@ export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
       }
 
       if (results[1].status === 'fulfilled') {
-        setRevenue(results[1].value);
-      }
-
-      if (results[2].status === 'fulfilled') {
-        setCsat(results[2].value);
+        setCsat(results[1].value);
       }
 
       setIsLoading(false);
@@ -102,7 +83,6 @@ export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
 
   const metrics = buildMetrics(
     conversationTotals,
-    revenue,
     csat,
     t,
     i18n.language,
@@ -118,9 +98,9 @@ export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
 
       <MetricGrid
         items={metrics}
-        columns={4}
+        columns={3}
         isLoading={isLoading}
-        loadingHeight="110px"
+        loadingHeight="122px"
         renderItem={(item) => (
           <MetricCard
             label={item.label}

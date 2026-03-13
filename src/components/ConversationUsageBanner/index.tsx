@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Text } from '@vtex/shoreline';
+import { Button, Flex, Heading, Skeleton, Text } from '@vtex/shoreline';
 import { useTranslation } from 'react-i18next';
 import { useConversationUsage } from './useConversationUsage';
 import {
@@ -6,6 +6,7 @@ import {
   getTierStyles,
   getUsagePercentage,
   getTimeSaved,
+  getRemainingDaysEstimate,
   TRIAL_CONVERSATIONS_LIMIT,
 } from './tiers';
 
@@ -15,9 +16,13 @@ interface ConversationUsageBannerProps {
 
 export function ConversationUsageBanner({ onViewPlans }: ConversationUsageBannerProps) {
   const { t } = useTranslation();
-  const { conversationsCount, isLoading, error } = useConversationUsage();
+  const { conversationsCount, isLoading, error, createdAt } = useConversationUsage();
 
-  if (isLoading || error || conversationsCount === null) {
+  if (isLoading || conversationsCount === null) {
+    return <Skeleton height="100px" width="100%" />;
+  }
+
+  if (error) {
     return null;
   }
 
@@ -28,12 +33,17 @@ export function ConversationUsageBanner({ onViewPlans }: ConversationUsageBanner
 
   const timeSaved = getTimeSaved(conversationsCount);
 
+  const estimatedDays = createdAt
+    ? getRemainingDaysEstimate(conversationsCount, TRIAL_CONVERSATIONS_LIMIT, createdAt)
+    : null;
+
   const interpolationValues: Record<string, string | number> = {
     count: conversationsCount.toLocaleString(),
     remaining: remaining.toLocaleString(),
     limit: TRIAL_CONVERSATIONS_LIMIT.toLocaleString(),
     percentage: Math.round(percentage),
     timeSaved: t(`conversation_usage.time.${timeSaved.unit}`, { value: timeSaved.value }),
+    estimatedDays: estimatedDays ?? 0,
   };
 
   return (

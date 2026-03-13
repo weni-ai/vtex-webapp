@@ -8,6 +8,7 @@ import {
   PageHeader,
   PageHeaderRow,
   PageHeading,
+  Spinner,
   Tab,
   TabList,
   TabPanel,
@@ -27,6 +28,9 @@ import { AbandonedCartRecovery } from '../components/AbandonedCartRecovery';
 import { RecentActivity } from '../components/RecentActivity/RecentActivity';
 import { SkippedOnboardingBanner } from '../components/SkippedOnboardingBanner';
 import { ConversationUsageBanner } from '../components/ConversationUsageBanner';
+import { selectProject, selectProjectDetail } from '../store/projectSlice';
+import { refreshChannelIntegrations } from '../services/channel.service';
+import { loadProjectDetail } from '../services/project.service';
 
 function WebchatDashboardContent({ showTitle }: { showTitle: boolean }) {
   return <AITeamPerformance showTitle={showTitle} />;
@@ -34,7 +38,7 @@ function WebchatDashboardContent({ showTitle }: { showTitle: boolean }) {
 
 function WhatsAppDashboardContent() {
   return (
-    <Grid columns="3fr 2fr" gap="$space-5">
+    <Grid columns="3fr 2fr" gap="$space-5" style={{ minHeight: '302px' }}>
       <NotificationPerformance />   
       <AbandonedCartRecovery />
     </Grid>
@@ -67,11 +71,26 @@ function DashboardTabbedContent() {
   );
 }
 
+function DashboardLoading() {
+  return (
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
+      style={{ height: '100%' }}
+    >
+      <Spinner size={32} description="loading" style={{ color: 'var(--sl-color-blue-10)' }} />
+    </Flex>
+  );
+}
+
 export function Dashboard() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
+  const projectUuid = useSelector(selectProject);
+  const projectDetail = useSelector(selectProjectDetail);
   const hasWhatsApp = useSelector(isWhatsAppIntegrated);
   const hasWebchat = useSelector(isWebChatIntegrated);
   const onboardingStatus = useSelector(selectOnboardingStatus);
@@ -86,12 +105,27 @@ export function Dashboard() {
     }
   }, [location.state, navigate]);
 
+  const [isDashboardReady, setIsDashboardReady] = useState(
+    () => projectDetail !== null,
+  );
+
+  useEffect(() => {
+    if (!projectUuid) return;
+
+    Promise.all([
+      refreshChannelIntegrations(projectUuid),
+      loadProjectDetail(),
+    ]).finally(() => {
+      setIsDashboardReady(true);
+    });
+  }, [projectUuid]);
+
   const hasBothChannels = hasWebchat && hasWhatsApp;
   const isOnboardingSkipped =
     onboardingStatus?.skipped === true &&
     onboardingStatus?.completed !== true;
 
-  const isTrialPlan = true;
+  const isTrialPlan = projectDetail?.organization_billing?.plan === 'trial';
   const displayConversationUsageBanner = !isOnboardingSkipped && isTrialPlan;
 
   const handleViewOnStore = () => {
@@ -103,7 +137,7 @@ export function Dashboard() {
   };
 
   return (
-    <Page>
+    <Page style={{ height: '100vh' }}>
       <PageHeader>
         <PageHeaderRow style={{ height: '44px' }}>
           <PageHeading>{t('dashboard.title')}</PageHeading>
@@ -121,30 +155,34 @@ export function Dashboard() {
         </PageHeaderRow>
       </PageHeader>
 
-      <PageContent>
-        <Flex direction="column" gap="$space-5">
-          {showOnboardingAlert && (
-            <Alert variant="success">
-              <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
-            </Alert>
-          )}
+      <PageContent style={{ height: '100%', marginBottom: '0' }}>
+        {isDashboardReady ? (
+          <Flex direction="column" gap="$space-5">
+            {showOnboardingAlert && (
+              <Alert variant="success">
+                <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
+              </Alert>
+            )}
 
-          {isOnboardingSkipped && <SkippedOnboardingBanner />}
+            {isOnboardingSkipped && <SkippedOnboardingBanner />}
 
-          {hasBothChannels ? (
-            <DashboardTabbedContent />
-          ) : hasWhatsApp ? (
-            <WhatsAppDashboardContent />
-          ) : (
-            <WebchatDashboardContent showTitle={true} />
-          )}
+            {hasBothChannels ? (
+              <DashboardTabbedContent />
+            ) : hasWhatsApp ? (
+              <WhatsAppDashboardContent />
+            ) : (
+              <WebchatDashboardContent showTitle={true} />
+            )}
 
-          {displayConversationUsageBanner && (
-            <ConversationUsageBanner onViewPlans={handleViewPlans} />
-          )}
+            {displayConversationUsageBanner && (
+              <ConversationUsageBanner onViewPlans={handleViewPlans} />
+            )}
 
-          <RecentActivity />
-        </Flex>
+            <RecentActivity />
+          </Flex>
+        ) : (
+          <DashboardLoading />
+        )}
       </PageContent>
     </Page>
   );

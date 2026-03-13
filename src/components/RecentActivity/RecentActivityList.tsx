@@ -8,7 +8,7 @@ interface RecentActivityListProps {
 
 export function RecentActivityList({ conversations }: RecentActivityListProps) {
   return (
-    <Flex direction="column" style={{ maxHeight: '540px', overflowY: 'auto' }} gap="$space-0">
+    <Flex direction="column" gap="$space-0">
       {conversations.map((conversation, index) => (
         <Flex direction="column" key={conversation.uuid} gap="$space-0">
           <RecentActivityItem conversation={conversation} />

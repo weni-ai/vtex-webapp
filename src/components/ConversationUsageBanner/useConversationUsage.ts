@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectProject } from '../../store/projectSlice';
+import { selectProject, selectProjectDetail } from '../../store/projectSlice';
 import { getConversationsCount } from '../../api/conversations/requests';
 
 interface ConversationUsageState {
@@ -11,6 +11,7 @@ interface ConversationUsageState {
 
 export function useConversationUsage() {
   const projectUuid = useSelector(selectProject);
+  const projectDetail = useSelector(selectProjectDetail);
 
   const [state, setState] = useState<ConversationUsageState>({
     conversationsCount: null,
@@ -41,5 +42,10 @@ export function useConversationUsage() {
     fetchConversationsCount();
   }, [projectUuid, fetchConversationsCount]);
 
-  return state;
+  const createdAt = useMemo(() => {
+    if (!projectDetail?.created_at) return null;
+    return new Date(projectDetail.created_at);
+  }, [projectDetail?.created_at]);
+
+  return { ...state, createdAt };
 }

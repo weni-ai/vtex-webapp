@@ -1068,7 +1068,7 @@
         },
         "warning": {
             "title": "Com {{count}} interações resolvidas, seu Time de IA já economizou {{timeSaved}} de horas de suporte humano.",
-            "description": "Considere um plano ilimitado para manter seu ritmo de crescimento."
+            "description": "Nesse ritmo, sua avaliação gratuita durará aproximadamente {{estimatedDays}} dias. Considere um plano ilimitado para manter seu ritmo de crescimento."
         },
         "danger": {
             "title": "Atenção: Você está se aproximando do limite de interações.",

@@ -1078,7 +1078,7 @@
         },
         "warning": {
             "title": "Con {{count}} interacciones resueltas, tu Equipo de IA ya ha ahorrado {{timeSaved}} de horas de soporte humano.",
-            "description": "Considera un plan ilimitado para mantener tu impulso de crecimiento."
+            "description": "A este ritmo, tu prueba gratuita durará aproximadamente {{estimatedDays}} días. Considera un plan ilimitado para mantener tu impulso de crecimiento."
         },
         "danger": {
             "title": "Atención: Te estás acercando al límite de interacciones.",

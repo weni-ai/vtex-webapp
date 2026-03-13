@@ -1,12 +1,16 @@
 import { Flex, Skeleton, Text } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Revenue, MessagesAnalytics } from '../api/insights/adapters';
+import type { SkillMetricsData } from '../api/agents/adapters';
+import type { Revenue } from '../api/insights/adapters';
 import type { MetaPricing } from '../api/billing/adapters';
-import { getRevenue, getMessagesAnalytics } from '../services/insights.service';
+import { getRevenue } from '../services/insights.service';
+import { getSkillMetrics } from '../services/agent.service';
 import { getMetaPricing } from '../services/billing.service';
 import { getLast3MonthsDates } from '../utils';
 import { formatCurrency, formatNumber } from '../utils/formatters';
+
+const DEFAULT_CURRENCY_CODE = 'BRL';
 
 interface AbandonedCartMetrics {
   recoveredRevenue: number;
@@ -21,13 +25,13 @@ interface AbandonedCartMetrics {
 
 function computeMetrics(
   revenue: Revenue,
-  messages: MessagesAnalytics,
+  messages: SkillMetricsData,
   pricing: MetaPricing,
 ): AbandonedCartMetrics {
   const recoveredRevenue = revenue.value;
-  const currencyCode = revenue.currencyCode;
+  const currencyCode = revenue.currencyCode ?? DEFAULT_CURRENCY_CODE;
   const convertedSales = revenue.ordersPlaced.value;
-  const totalSends = messages.sent;
+  const totalSends = Number(messages.data.find((item) => item.title === 'sent-messages')?.value ?? 0);
 
   const averageOrderValue =
     convertedSales > 0 ? recoveredRevenue / convertedSales : 0;
@@ -63,16 +67,19 @@ function useAbandonedCartData() {
 
       const results = await Promise.allSettled([
         getRevenue(startDate, endDate),
-        getMessagesAnalytics(startDate, endDate),
+        getSkillMetrics({ startDate, endDate }),
         getMetaPricing(),
       ]);
 
       const revenue =
         results[0].status === 'fulfilled' ? results[0].value : null;
-      const messages =
+      const messagesResult =
         results[1].status === 'fulfilled' ? results[1].value : null;
       const pricing =
         results[2].status === 'fulfilled' ? results[2].value : null;
+
+      const messages =
+        messagesResult && !('success' in messagesResult) ? messagesResult : null;
 
       if (revenue && messages && pricing) {
         setMetrics(computeMetrics(revenue, messages, pricing));

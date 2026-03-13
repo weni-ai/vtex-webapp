@@ -1077,7 +1077,7 @@
     },
     "warning": {
       "title": "With {{count}} interactions resolved, your AI Team has already saved {{timeSaved}} of human support hours.",
-      "description": "Consider an unlimited plan to keep your growth momentum."
+      "description": "At this rate, your free trial will last approximately {{estimatedDays}} days. Consider an unlimited plan to keep your growth momentum."
     },
     "danger": {
       "title": "Attention: You are approaching your interaction limit.",

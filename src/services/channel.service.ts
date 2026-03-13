@@ -32,11 +32,9 @@ export async function refreshChannelIntegrations(projectUuid: string) {
     }
   }
 
-  console.log('webchatResponse', webchatResponse);
   if (webchatResponse.success && !webchatResponse.error) {
     const { has_webchat = false, webchat_app_uuid = '' } = webchatResponse.data || {};
     if (has_webchat) {
-      console.log('has_webchat', has_webchat);
       store.dispatch(setWebChatIntegrated(true));
       if (webchat_app_uuid) {
         store.dispatch(setWebChatAppUuid(webchat_app_uuid));
