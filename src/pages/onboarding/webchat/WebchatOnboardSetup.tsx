@@ -66,8 +66,12 @@ export function WebchatOnboardSetup() {
     if (!vtexAccount) return;
 
     updateOnboarding(vtexAccount, { skipped: true });
+    dispatch(setOnboardingStatus({
+      ...onboardingStatus!,
+      skipped: true,
+    }));
     navigate('/dash');
-  }, [userData?.account, navigate]);
+  }, [userData?.account, navigate, dispatch, onboardingStatus]);
 
   const handleTest = useCallback(async () => {
     const vtexAccount = userData?.account;
