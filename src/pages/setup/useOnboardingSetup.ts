@@ -2,23 +2,13 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOnboardingStatus, ensureProjectAndUser } from '../../services/onboarding.service';
 import { initializeUserContext, initializeWeniPlatformContext } from '../../services/setup.service';
-import { setInitialLoading, setProjectUuid } from '../../store/projectSlice';
+import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
+import { setWhatsAppPhoneNumber } from '../../store/userSlice';
 import { setOnboardingStatus } from '../../store/onboardSlice';
-import { ONBOARDING_PAGES } from '../../constants/onboarding';
 import store from '../../store/provider.store';
-import type { OnboardStatus } from '../../interfaces/Store';
-
-function buildFailedOnboardStatus(vtexAccount: string): OnboardStatus {
-  return {
-    uuid: '',
-    created_on: '',
-    vtex_account: vtexAccount,
-    current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_SETUP,
-    completed: false,
-    failed: true,
-    progress: 0,
-  };
-}
+import { checkWppIntegration } from '../../services/channel.service';
+import { setWhatsAppIntegrated } from '../../store/userSlice';
+import { checkAgentIntegration } from '../../services/agent.service';
 
 export function useOnboardingSetup() {
   const navigate = useNavigate();
@@ -47,9 +37,7 @@ export function useOnboardingSetup() {
 
       const onboardingStatus = await getOnboardingStatus(userData.account);
       if (!onboardingStatus.success || !onboardingStatus.data) {
-        store.dispatch(setOnboardingStatus(buildFailedOnboardStatus(userData.account)));
-        navigate('/onboarding');
-        return;
+        throw new Error(JSON.stringify(onboardingStatus.error))
       }
 
       store.dispatch(setOnboardingStatus(onboardingStatus.data));
@@ -57,6 +45,42 @@ export function useOnboardingSetup() {
       const projectUuid = onboardingStatus.data.project_uuid;
       if (projectUuid) {
         store.dispatch(setProjectUuid(projectUuid));
+
+        // TODO: check in the future if this will be needed when we have the new dashboard and settings page
+        const wppIntegrationResponse = await checkWppIntegration(projectUuid);
+        if (!wppIntegrationResponse.success || wppIntegrationResponse?.error) {
+          throw new Error(JSON.stringify(wppIntegrationResponse.error))
+        }
+        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null, phone_number = null } = wppIntegrationResponse.data || {};
+        if (has_whatsapp && wpp_cloud_app_uuid && flows_channel_uuid) {
+          store.dispatch(setWhatsAppIntegrated(true));
+          store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
+          store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
+          store.dispatch(setWhatsAppPhoneNumber(phone_number ? phone_number.replace(/\D/g, '') : null));
+        }
+
+        // TODO: check in the future if this will be needed when we have the new dashboard and settings page
+        const agentIntegrationResponse = await checkAgentIntegration(projectUuid);
+        if (agentIntegrationResponse?.error || !agentIntegrationResponse.data) {
+          throw new Error(JSON.stringify(agentIntegrationResponse.error))
+        }
+
+        const { name = '', links = [], objective = '', occupation = '' } = agentIntegrationResponse.data.data;
+
+        if (name) {
+          agentIntegrationResponse.saveCache?.();
+
+          store.dispatch(
+            setAgentBuilder({
+              name,
+              links,
+              objective,
+              occupation,
+              channel: '',
+            })
+          );
+        }
+
       }
 
       if (onboardingStatus.data.completed || onboardingStatus.data.skipped) {
