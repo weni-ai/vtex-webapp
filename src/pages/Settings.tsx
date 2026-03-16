@@ -37,7 +37,7 @@ export function Settings() {
   return (
     <Page>
       <PageHeader>
-        <PageHeaderRow style={{ height: '44px' }}>
+        <PageHeaderRow>
           <PageHeading>
             <Flex align="center">
               <Bleed top="$space-2" bottom="$space-2">
@@ -56,23 +56,9 @@ export function Settings() {
             </Flex>
           </PageHeading>
         </PageHeaderRow>
-
-        {/* <TabProvider store={tabStore}>
-          <TabList>
-            <Tab id="customer-service">
-              {t('settings.tabs.customer_service')}
-            </Tab>
-         
-            {hasWhatsApp && (
-              <Tab id="whatsapp">
-                {t('settings.tabs.whatsapp')}
-              </Tab>
-            )}
-          </TabList>
-        </TabProvider> */}
       </PageHeader>
 
-      <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
+      <PageContent>
         <TabProvider store={tabStore}>
           <TabList>
             <Tab id="customer-service">
