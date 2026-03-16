@@ -1107,6 +1107,14 @@
       "description": "Based on {{count}} customer ratings"
     }
   },
+  "notification_performance": {
+    "title": "Notification performance",
+    "sent": "Sent",
+    "delivered": "Delivered",
+    "read": "Read",
+    "clicked": "Clicks",
+    "read_tooltip": "Messages that were opened and read by the recipient"
+  },
   "conversation_usage": {
     "view_plans": "View Plans",
     "time": {

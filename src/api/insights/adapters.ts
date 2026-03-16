@@ -111,3 +111,30 @@ export function adaptCSAT(response: CSATResponse): CSATData {
     totalRatings,
   };
 }
+
+export interface MessagesAnalyticsResponse {
+  status_count: {
+    sent: { value: number };
+    delivered: { value: number };
+    read: { value: number };
+    clicked: { value: number };
+  };
+}
+
+export interface MessagesAnalytics {
+  sent: number;
+  delivered: number;
+  read: number;
+  clicked: number;
+}
+
+export function adaptMessagesAnalytics(
+  response: MessagesAnalyticsResponse,
+): MessagesAnalytics {
+  return {
+    sent: response.status_count.sent.value,
+    delivered: response.status_count.delivered.value,
+    read: response.status_count.read.value,
+    clicked: response.status_count.clicked.value,
+  };
+}
