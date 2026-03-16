@@ -8,6 +8,7 @@ import { getUserFromLocalStorage } from './services/user.service';
 import { AgentDetails } from './pages/agent/Details';
 import { Setup } from './pages/Setup';
 import { Dashboard } from './pages/Dashboard';
+import { Settings } from './pages/Settings';
 import { Grid, Spinner } from '@vtex/shoreline';
 import { initialLoading } from './store/projectSlice';
 import { TermsAndConditions } from './pages/TermsAndConditions';
@@ -48,6 +49,7 @@ function App() {
             <Route path='/terms-and-conditions' element={<TermsAndConditions />}></Route>
             <Route path='/setup-error' element={<SetupError />}></Route>
             <Route path='/dash' element={<Dashboard />}></Route>
+            <Route path='/settings' element={<Settings />}></Route>
             <Route path='/agents/:assignedAgentUuid' element={<AgentIndex />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/create' element={<Template />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/:templateUuid/edit' element={<Template />}></Route>

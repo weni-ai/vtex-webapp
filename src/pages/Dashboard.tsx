@@ -1,350 +1,151 @@
-import { Alert, Bleed, Button, Flex, Heading, IconArrowUpRight, IconPlus, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from '@vtex/shoreline';
-import { useEffect, useMemo, useState } from 'react';
+import {
+  Alert,
+  Button,
+  Flex,
+  Grid,
+  Page,
+  PageContent,
+  PageHeader,
+  PageHeaderRow,
+  PageHeading,
+  Tab,
+  TabList,
+  TabPanel,
+  TabProvider,
+  Text,
+  useTabStore,
+} from '@vtex/shoreline';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ModalAgentPassiveDetails } from '../components/agent/ModalPassiveDetails';
-import { AgentAssignModal } from '../components/agent/modals/Assign';
-import { AgentsGalleryModal } from '../components/agent/modals/Gallery';
-import { WhatsAppRequiredModal } from '../components/agent/modals/WhatsAppRequired';
-import { AgentBox, AgentBoxContainer, AgentBoxEmpty, AgentBoxSkeleton } from '../components/AgentBox';
-import { GenericErrorToast } from '../components/GenericErrorToast';
-import { AgentMetrics } from '../components/AgentMetrics';
-import { RootState } from "../interfaces/Store";
-import { assignAgentCLI, disableAgent, integrateAgent, updateAgentsList } from '../services/agent.service';
-import { agents, hasTheFirstLoadOfTheAgentsHappened, selectProject, setAgents } from '../store/projectSlice';
-import store from '../store/provider.store';
-import { selectUser } from "../store/userSlice";
-import getEnv from '../utils/env';
-import { selectEmbeddedWithin } from '../store/appSlice';
+import { useTranslation } from 'react-i18next';
+import { selectOnboardingStatus } from '../store/onboardSlice';
+import { isWhatsAppIntegrated, isWebChatIntegrated } from '../store/userSlice';
+import { AITeamPerformance } from '../components/AITeamPerformance';
+import { NotificationPerformance } from '../components/NotificationPerformance';
+import { AbandonedCartRecovery } from '../components/AbandonedCartRecovery';
+import { RecentActivity } from '../components/RecentActivity/RecentActivity';
+import { SkippedOnboardingBanner } from '../components/SkippedOnboardingBanner';
+import { ConversationUsageBanner } from '../components/ConversationUsageBanner';
+
+function WebchatDashboardContent({ showTitle }: { showTitle: boolean }) {
+  return <AITeamPerformance showTitle={showTitle} />;
+}
+
+function WhatsAppDashboardContent() {
+  return (
+    <Grid columns="3fr 2fr" gap="$space-5">
+      <NotificationPerformance />   
+      <AbandonedCartRecovery />
+    </Grid>
+  );
+}
+
+function DashboardTabbedContent() {
+  const { t } = useTranslation();
+  const tabStore = useTabStore();
+
+  return (
+    <TabProvider store={tabStore}>
+      <TabList>
+        <Tab id="agent-performance">
+          {t('dashboard.tabs.agent_performance')}
+        </Tab>
+        <Tab id="whatsapp-store">
+          {t('dashboard.tabs.whatsapp_store')}
+        </Tab>
+      </TabList>
+
+      <TabPanel tabId="agent-performance" style={{ padding: '0' }} >
+        <WebchatDashboardContent showTitle={false} />
+      </TabPanel>
+
+      <TabPanel tabId="whatsapp-store" style={{ padding: '0' }}>
+        <WhatsAppDashboardContent />
+      </TabPanel>
+    </TabProvider>
+  );
+}
 
 export function Dashboard() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const embeddedWithin = useSelector(selectEmbeddedWithin);
-  const hasTheFirstLoadHappened = useSelector(hasTheFirstLoadOfTheAgentsHappened);
-  const agentsListOriginal = useSelector(agents)
-  const project_uuid = useSelector(selectProject)
-  const userData = useSelector(selectUser);
-  const projectUuid = useSelector((state: RootState) => state.project.project_uuid);
-  const isWppIntegrated = useSelector((state: RootState) => state.user.isWhatsAppIntegrated);
-  const [agentsRemoving, setAgentsRemoving] = useState<string[]>([]);
-  const [updateAgentsListTimeout, setUpdateAgentsListTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
-  const [isPassiveDetailsModalOpen, setIsPassiveDetailsModalOpen] = useState(false);
-  const [isWhatsAppRequiredModalOpen, setIsWhatsAppRequiredModalOpen] = useState(false);
-  const [isAgentAssignModalOpen, setIsAgentAssignModalOpen] = useState(false);
-  const [agentName, setAgentName] = useState('');
-  const [agentDescription, setAgentDescription] = useState('');
-  const [skills, setSkills] = useState<string[]>([]);
-  const [agentUuid, setAgentUuid] = useState('');
-  const [agentOrigin, setAgentOrigin] = useState('');
-  const [isAssigningAgent, setIsAssigningAgent] = useState(false);
+
+  const hasWhatsApp = useSelector(isWhatsAppIntegrated);
+  const hasWebchat = useSelector(isWebChatIntegrated);
+  const onboardingStatus = useSelector(selectOnboardingStatus);
+
   const [showOnboardingAlert] = useState(
-    () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding
+    () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding,
   );
 
   useEffect(() => {
-    const cameFromOnboarding = (location.state as Record<string, unknown> | null)?.fromOnboarding;
-    if (cameFromOnboarding) {
+    if ((location.state as Record<string, unknown> | null)?.fromOnboarding) {
       navigate('/dash', { replace: true, state: {} });
     }
   }, [location.state, navigate]);
 
-  const agentsList = useMemo(() => {
-    return agentsListOriginal.filter((item) => item.isAssigned);
-  }, [agentsListOriginal]);
+  const hasBothChannels = hasWebchat && hasWhatsApp;
+  const isOnboardingSkipped =
+    onboardingStatus?.skipped === true &&
+    onboardingStatus?.completed !== true;
 
-  function navigateToAgent() {
-    const dash = new URL(`/projects/${project_uuid}`, getEnv("VITE_APP_DASH_URL"));
+  const isTrialPlan = true;
+  const displayConversationUsageBanner = !isOnboardingSkipped && isTrialPlan;
 
-    const VTEXAppParams = new URLSearchParams();
+  const handleViewOnStore = () => {
+    // TODO: implement "View on store" navigation
+  };
 
-    if (userData?.user) {
-      VTEXAppParams.append('email', userData.user);
-    }
-
-    dash.searchParams.append('vtex_app', VTEXAppParams.toString());
-
-    window.open(dash.toString(), '_blank');
-  }
-
-  function assignedCommerceAgents() {
-    return agentsList
-      .filter((item) => item.isAssigned)
-      .filter((item) => item.origin === 'commerce')
-  }
-
-  useEffect(() => {
-    updateAgentsList();
-  }, []);
-
-  useEffect(() => {
-    const rejectedAgents = assignedCommerceAgents().filter((item) => item.templateSynchronizationStatus === 'rejected');
-
-    rejectedAgents.forEach(({ uuid }) => {
-      tryRemoveAgent(uuid);
-    });
-  }, [agentsList]);
-
-  useEffect(() => {
-    const pendingAgents = assignedCommerceAgents().filter((item) => item.templateSynchronizationStatus === 'pending');
-
-    if (pendingAgents.length > 0) {
-      updateAgentsListSoon();
-    }
-  }, [agentsList]);
-
-  async function tryRemoveAgent(uuid: string) {
-    if (agentsRemoving.includes(uuid)) {
-      return;
-    }
-
-    setAgentsRemoving((prev) => [...prev, uuid]);
-
-    toast.critical(t('template_synchronization.rejected'));
-
-    await disableAgent(project_uuid, uuid, 'commerce');
-
-    setAgentsRemoving((prev) => prev.filter((item) => item !== uuid));
-  }
-
-  function updateAgentsListSoon() {
-    if (updateAgentsListTimeout) {
-      clearTimeout(updateAgentsListTimeout);
-    }
-
-    setUpdateAgentsListTimeout(setTimeout(async () => {
-      await updateAgentsList();
-    }, 3000));
-  }
-
-  async function handleAssign(uuid: string) {
-    const agent = agentsListOriginal.find((item) => item.uuid === uuid);
-
-    if (!agent) {
-      return;
-    }
-
-    setAgentOrigin(agent.origin);
-
-    if (agent.origin === 'CLI') {
-      setAgentUuid(uuid);
-      setIsAgentAssignModalOpen(true);
-    }
-
-    if (agent.origin === 'commerce' && agent.notificationType === 'active') {
-      if (isWppIntegrated) {
-        integrateAgentInside(uuid);
-      } else {
-        setAgentUuid(uuid);
-        setIsWhatsAppRequiredModalOpen(true);
-      }
-    }
-
-    if (agent.origin === 'nexus' && agent.notificationType === 'passive') {
-      setAgentUuid(uuid);
-      setIsAgentAssignModalOpen(true);
-    }
-  }
-
-  async function assignPassiveAgent(data: { uuid: string, }) {
-    const agent = agentsListOriginal.find((item) => item.uuid === data.uuid);
-
-    if (!agent) {
-      return;
-    }
-
-    await integrateAgentInside(data.uuid);
-
-    const agentAfterIntegration = store.getState().project.agents.find((item) => item.uuid === data.uuid);
-
-    if (agentAfterIntegration?.isAssigned && !isWppIntegrated) {
-      const agentKeyPrefix = `agents.categories.${agentAfterIntegration.notificationType}.${agentAfterIntegration.code}`;
-
-      const agentName =
-        t(`${agentKeyPrefix}.title`) === `${agentKeyPrefix}.title`
-          ? agent.name
-          : t(`${agentKeyPrefix}.title`);
-
-      const agentDescription =
-        t(`${agentKeyPrefix}.description`) === `${agentKeyPrefix}.description`
-          ? agent.description
-          : t(`${agentKeyPrefix}.description`);
-
-      setAgentName(agentName);
-      setAgentDescription(agentDescription);
-      setSkills(agent.skills || []);
-      setIsPassiveDetailsModalOpen(true);
-    }
-  }
-
-  async function handleAssignCLI(data: { uuid: string, type: 'active' | 'passive', templatesUuids: string[], credentials: Record<string, string> }) {
-    if (data.type === 'passive') {
-      setIsAssigningAgent(true);
-
-      await assignPassiveAgent({
-        uuid: data.uuid,
-      });
-
-      setIsAgentAssignModalOpen(false);
-      setIsAssigningAgent(false);
-
-      return;
-    }
-
-    try {
-      setIsAssigningAgent(true);
-
-      await assignAgentCLI({
-        uuid: data.uuid,
-        templatesUuids: data.templatesUuids,
-        credentials: data.credentials,
-      });
-
-      setIsAgentAssignModalOpen(false);
-
-      toast.success(agentOrigin === 'nexus' ? t('agent.actions.assign.success_automation') : t('agent.actions.assign.success_agent'));
-    } catch {
-      toast.critical(<GenericErrorToast />);
-    } finally {
-      setIsAssigningAgent(false);
-    }
-  }
-
-  async function integrateAgentInside(uuid: string) {
-    store.dispatch(setAgents(agentsListOriginal.map((item) => ({
-      ...item,
-      isAssigned: item.uuid === uuid || item.isAssigned,
-      isConfiguring: (item.origin === 'commerce' && item.uuid === uuid) || !!item.isConfiguring,
-    }))));
-
-    const result = await integrateAgent(uuid, projectUuid);
-
-    if (result.error) {
-      toast.critical(t('integration.error'));
-    } else {
-      toast.success(t('integration.success'));
-    }
-  }
+  const handleViewPlans = () => {
+    // TODO: implement "View Plans" navigation
+  };
 
   return (
     <Page>
       <PageHeader>
         <PageHeaderRow style={{ height: '44px' }}>
-          <PageHeading>
-            {t('title')}
-          </PageHeading>
+          <PageHeading>{t('dashboard.title')}</PageHeading>
 
-          {embeddedWithin === 'VTEX App' && (
-            <Bleed top="$space-2" bottom="$space-2">
-              <Button variant="tertiary" style={{ flex: 'none', }} onClick={navigateToAgent}>
-                <Text variant='action'> {t('improve.button')}</Text>
-                <IconArrowUpRight
-                  height="1rem"
-                  width="1rem"
-                  display="inline"
-                  style={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    marginLeft: 'var(--sl-space-05)'
-                  }}
-                />
+          {!isOnboardingSkipped && (
+            <Flex gap="$space-2">
+              <Button variant="tertiary" onClick={handleViewOnStore}>
+                {t('dashboard.view_on_store')}
               </Button>
-            </Bleed>
+              <Button variant="secondary" onClick={() => navigate('/settings')}>
+                {t('dashboard.settings')}
+              </Button>
+            </Flex>
           )}
         </PageHeaderRow>
       </PageHeader>
 
-      <PageContent style={{ margin: '0', maxWidth: '100vw' }}>
-        {showOnboardingAlert && (
-          <Alert variant="success">
-            <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
-          </Alert>
-        )}
+      <PageContent>
+        <Flex direction="column" gap="$space-5">
+          {showOnboardingAlert && (
+            <Alert variant="success">
+              <Text variant="body">{t('dashboard.onboarding_complete_alert')}</Text>
+            </Alert>
+          )}
 
-        <Flex direction="column" style={{ width: '100%' }} gap="$space-8">
-          <AgentMetrics />
+          {isOnboardingSkipped && <SkippedOnboardingBanner />}
 
-          <Flex direction="column" gap="$space-4">
-            <Flex gap="$space-4" align="center" justify="space-between">
-              <Heading
-                variant="display2"
-              >
-                {t('agents.title')}
-              </Heading>
+          {hasBothChannels ? (
+            <DashboardTabbedContent />
+          ) : hasWhatsApp ? (
+            <WhatsAppDashboardContent />
+          ) : (
+            <WebchatDashboardContent showTitle={true} />
+          )}
 
-              <Button variant="secondary" size="large" onClick={() => setIsGalleryModalOpen(true)}>
-                <IconPlus />
-                {t('agents.buttons.gallery')}
-              </Button>
-            </Flex>
+          {displayConversationUsageBanner && (
+            <ConversationUsageBanner onViewPlans={handleViewPlans} />
+          )}
 
-            {hasTheFirstLoadHappened && agentsList.length === 0 && <AgentBoxEmpty />}
-
-            <AgentBoxContainer>
-              {!hasTheFirstLoadHappened && (
-                <AgentBoxSkeleton count={2} />
-              )}
-
-              {hasTheFirstLoadHappened && (
-                agentsList.map((item) => (
-                  <AgentBox
-                    key={item.uuid}
-                    name={item.name || ''}
-                    description={item.description || ''}
-                    uuid={item.uuid}
-                    code={item.code as 'order_status' | 'abandoned_cart'}
-                    type={item.notificationType}
-                    isIntegrated={item.isAssigned}
-                    origin={item.origin || 'commerce'}
-                    isInTest={item.isInTest}
-                    isConfiguring={item.isConfiguring || false}
-                    skills={item.skills || []}
-                    onAssign={handleAssign}
-                  />
-                ))
-              )}
-            </AgentBoxContainer>
-          </Flex>
+          <RecentActivity />
         </Flex>
-
-        <AgentsGalleryModal
-          open={isGalleryModalOpen}
-          onClose={() => setIsGalleryModalOpen(false)}
-          onAssign={handleAssign}
-        />
-
-        <WhatsAppRequiredModal
-          open={isWhatsAppRequiredModalOpen}
-          onClose={() => setIsWhatsAppRequiredModalOpen(false)}
-          isLoading={false}
-          onConfirm={() => {
-            integrateAgentInside(agentUuid);
-            setIsWhatsAppRequiredModalOpen(false);
-          }}
-        />
-
-        <ModalAgentPassiveDetails
-          open={isPassiveDetailsModalOpen}
-          onClose={() => setIsPassiveDetailsModalOpen(false)}
-          agentName={agentName}
-          agentDescription={agentDescription}
-          skills={skills}
-        />
-
-        <AgentAssignModal
-          open={isAgentAssignModalOpen}
-          agentUuid={agentUuid}
-          origin={agentOrigin as 'commerce' | 'nexus' | 'CLI'}
-          onClose={() => setIsAgentAssignModalOpen(false)}
-          onViewAgentsGallery={() => {
-            setIsAgentAssignModalOpen(false);
-            setIsGalleryModalOpen(true);
-          }}
-          onAssign={handleAssignCLI}
-          isAssigningAgent={isAssigningAgent}
-        />
       </PageContent>
     </Page>
-  )
+  );
 }

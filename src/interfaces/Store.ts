@@ -95,6 +95,7 @@ export interface UserState {
   accountData: AccountData | null;
   loadingWhatsAppIntegration: boolean;
   isWhatsAppIntegrated: boolean;
+  isWebChatIntegrated: boolean;
   isAgentBuilderIntegrated: boolean;
   whatsAppError: string | null;
   WhatsAppPhoneNumber: string | null;
@@ -114,7 +115,6 @@ export interface OnboardStatus {
   completed: boolean;
   skipped?: boolean;
   failed?: boolean;
-  skipped?: boolean;
   progress: number;
   current_step?: string;
   crawler_result?: string;

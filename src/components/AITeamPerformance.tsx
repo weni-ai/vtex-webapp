@@ -61,7 +61,7 @@ function buildMetrics(
   ];
 }
 
-export function AITeamPerformance() {
+export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
   const { t, i18n } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -110,9 +110,11 @@ export function AITeamPerformance() {
 
   return (
     <Flex direction="column" gap="$space-4">
-      <Text variant="display2">
-        {t('ai_team_performance.title')}
-      </Text>
+      {showTitle && (
+        <Text variant="display2">
+          {t('ai_team_performance.title')}
+        </Text>
+      )}
 
       <MetricGrid
         items={metrics}

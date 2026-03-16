@@ -123,7 +123,7 @@ export function AbandonedCartRecovery() {
   const language = i18n.language;
 
   if (isLoading) {
-    return <Skeleton width="100%" height="230px" />;
+    return <Skeleton height="100%" />;
   }
 
   const recoveredRevenue = metrics
