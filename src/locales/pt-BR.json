@@ -1043,7 +1043,11 @@
         }
     },
     "dashboard": {
-        "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes."
+        "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes.",
+        "skipped_onboarding": {
+            "title": "Seu Time de IA está sendo preparado",
+            "start_activation": "Iniciar ativação"
+        }
     },
     "conversation_usage": {
         "view_plans": "Ver Planos",

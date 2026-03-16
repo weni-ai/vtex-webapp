@@ -112,15 +112,16 @@ export interface OnboardStatus {
   project_uuid?: string;
   current_page?: string;
   completed: boolean;
+  skipped?: boolean;
   failed?: boolean;
   progress: number;
   current_step?: string;
   crawler_result?: string;
   config?: {
     channels: {
-      [key in CrawlingChannel]: {
+      [key in CrawlingChannel]?: {
         app_uuid: string | null;
-      } | null
+      }
     }
   }
 }
