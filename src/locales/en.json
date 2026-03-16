@@ -1058,6 +1058,56 @@
       "start_activation": "Start activation"
     }
   },
+  "billing": {
+    "plans": {
+      "title": "VTEX Agentic CX Platform Pricing",
+      "recommended": "Recommended",
+      "princing": {
+        "per_conversation": "per conversation",
+        "limited_to": "Limited to {{number}} /mo"
+      },
+      "features": {
+        "unlimited_users": {
+          "title": "Unlimited users"
+        },
+        "ready_to_use_ai_agents": {
+          "title": "Ready-to-Use AI Agents³"
+        },
+        "custom_ai_agents_builder": {
+          "title": "Custom AI Agents Builder⁴",
+          "description": "(Certified Sl)"
+        },
+        "on_demand_marketing_and_utility_messages": {
+          "title": "On-demand Marketing and Utility messages",
+          "description": "WhatsApp daily window costs included"
+        },
+        "workflows": {
+          "title": "Workflows",
+          "description": "(Certified Sl)"
+        },
+        "events_data_api": {
+          "title": "Events Data API",
+          "description": "($ 1000.00/mo per data model)"
+        }
+      },
+      "actions": {
+        "start_with": "Start with {{plan}}"
+      },
+      "starter": {
+        "title": "Starter"
+      },
+      "corporate": {
+        "title": "Corporate"
+      },
+      "enterprise": {
+        "title": "Enterprise"
+      },
+      "notes": {
+        "explanations": "(1) Cloud hosting, Continuous Delivery and Rolling Upgrades, Maintenance, Monitoring and Technical Support;\n(2) $0.49 for each additional conversation (without a package);\n(3) The pre-built AI manager agent includes up to 30 instructions;\n(4) Each custom agent tool includes the processing of up to 10,000 tokens;",
+        "conversation_definition": "A Conversation is the core billing unit, defined as a single, continuous exchange of messages (either inbound from the customer or initiated outbound by an agent/system) that occurs under the following constraints:\n•⁠ ⁠Duration Limit (Daily Reset): A conversation is measured within a single calendar day (from 12:00 AM to 11:59 PM). If an active conversation crosses midnight, it is automatically counted as two separate conversations—one ending on the first day and a new one beginning on the second day.\n•⁠ ⁠Channel Specificity: A conversation is exclusively tied to the channel through which it was started (e.g., WhatsApp, Webchat). If the same customer initiates a new interaction using a different channel (e.g., moving from Webchat to WhatsApp), this will be counted as a separate and distinct conversation."
+      }
+    }
+  },
   "recent_activity": {
     "title": "Recent Activity",
     "view_details": "View details",
