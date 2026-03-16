@@ -1054,5 +1054,28 @@
     },
     "dashboard": {
         "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
+    },
+    "conversation_usage": {
+        "view_plans": "Ver Planes",
+        "time": {
+            "minutes": "{{value}} minutos",
+            "hours": "{{value}} horas"
+        },
+        "informational": {
+            "title": "Tu Inteligencia de Ventas con IA funciona sin problemas",
+            "description": "Los agentes han gestionado {{count}} interacciones hasta ahora, brindando soporte rápido y preciso. Todavía tienes {{remaining}} interacciones gratuitas para explorar todo el potencial de tu equipo."
+        },
+        "warning": {
+            "title": "Con {{count}} interacciones resueltas, tu Equipo de IA ya ha ahorrado {{timeSaved}} de horas de soporte humano.",
+            "description": "Considera un plan ilimitado para mantener tu impulso de crecimiento."
+        },
+        "danger": {
+            "title": "Atención: Te estás acercando al límite de interacciones.",
+            "description": "Has usado el {{percentage}}% de tu cuota gratuita. Elige un plan ahora para asegurar que tus clientes no se queden sin soporte cuando se alcance el límite."
+        },
+        "critical": {
+            "title": "Límite gratuito de {{limit}} interacciones alcanzado. Tu Equipo de IA está en pausa.",
+            "description": "No dejes a tus clientes esperando: suscríbete a un plan para reactivar tus agentes y seguir convirtiendo visitantes en compradores ahora mismo."
+        }
     }
 }
