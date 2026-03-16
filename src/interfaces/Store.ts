@@ -30,6 +30,9 @@ export interface ProjectDetail {
   created_at: string;
   status: string;
   organization_billing: OrganizationBilling;
+  config: {
+    vtex_host_store: string;
+  }
 }
 
 export interface ProjectState {

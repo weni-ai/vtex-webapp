@@ -39,7 +39,7 @@ function WebchatDashboardContent({ showTitle }: { showTitle: boolean }) {
 function WhatsAppDashboardContent() {
   return (
     <Grid columns="3fr 2fr" gap="$space-5" style={{ minHeight: '302px' }}>
-      <NotificationPerformance />   
+      <NotificationPerformance />
       <AbandonedCartRecovery />
     </Grid>
   );
@@ -127,13 +127,14 @@ export function Dashboard() {
 
   const isTrialPlan = projectDetail?.organization_billing?.plan === 'trial';
   const displayConversationUsageBanner = !isOnboardingSkipped && isTrialPlan;
+  const vtexHostStore = projectDetail?.config.vtex_host_store;
 
   const handleViewOnStore = () => {
-    // TODO: implement "View on store" navigation
+    window.open(vtexHostStore, '_blank');
   };
 
   const handleViewPlans = () => {
-    // TODO: implement "View Plans" navigation
+    navigate('/billing-plans');
   };
 
   return (
@@ -144,9 +145,11 @@ export function Dashboard() {
 
           {!isOnboardingSkipped && (
             <Flex gap="$space-2">
-              <Button variant="tertiary" onClick={handleViewOnStore}>
-                {t('dashboard.view_on_store')}
-              </Button>
+              {vtexHostStore && (
+                <Button variant="tertiary" onClick={handleViewOnStore}>
+                  {t('dashboard.view_on_store')}
+                </Button>
+              )}
               <Button variant="secondary" onClick={() => navigate('/settings')}>
                 {t('dashboard.settings')}
               </Button>

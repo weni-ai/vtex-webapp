@@ -9,7 +9,9 @@ interface ProjectDetailResponse {
   description: string | null;
   timezone: string;
   date_format: string;
-  config: Record<string, unknown>;
+  config: {
+    vtex_host_store: string;
+  };
   created_at: string;
   status: string;
   project_type: number;
@@ -32,6 +34,9 @@ function toProjectDetail(response: ProjectDetailResponse): ProjectDetail {
       plan: response.organization_billing.plan,
       trial_end_date: response.organization_billing.trial_end_date,
       days_till_trial_end: response.organization_billing.days_till_trial_end,
+    },
+    config: {
+      vtex_host_store: response.config.vtex_host_store,
     },
   };
 }

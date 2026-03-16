@@ -1236,6 +1236,10 @@
             "enterprise": {
                 "title": "Empresarial"
             },
+            "lead": {
+                "success": "Tu solicitud de plan ha sido enviada con éxito. Nuestro equipo de ventas se pondrá en contacto contigo pronto con los siguientes pasos.",
+                "error": "No pudimos enviar tu solicitud de plan. Por favor, inténtalo de nuevo."
+            },
             "notes": {
                 "explanations": "(1) Hospedaje en la nube, Entregas y Actualizaciones Continuas, Mantenimiento, Monitoreo y Soporte Técnico;\n(2) $0.49 para cada conversa adicional (sin paquete);\n(3) El agente de gestión de IA preconstruido incluye hasta 30 instrucciones;\n(4) Cada herramienta de agente personalizado incluye el procesamiento de hasta 10,000 tokens;",
                 "conversation_definition": "Una Conversa es la unidad de facturación central, definida como un único y continuo intercambio de mensajes (ya sea entrante del cliente o iniciado saliente por un agente/sistema) que ocurre bajo las siguientes restricciones:\n•⁠ ⁠Límite de Duración (Reinicio Diario): Una conversa se mide dentro de un solo día (de 12:00 AM a 11:59 PM). Si una conversa activa cruza la medianoche, se cuenta automáticamente como dos conversas separadas—una terminando el primer día y una nueva iniciando el segundo día.\n•⁠ ⁠Especificidad de Canal: Una conversa está exclusivamente vinculada al canal a través del cual se inició (por ejemplo, WhatsApp, Webchat). Si el mismo cliente inicia una nueva interacción utilizando un canal diferente (por ejemplo, cambiando de Webchat a WhatsApp), esto se contará como una conversa separada y distinta."
