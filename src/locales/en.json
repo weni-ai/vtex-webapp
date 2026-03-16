@@ -1058,6 +1058,36 @@
       "start_activation": "Start activation"
     }
   },
+  "recent_activity": {
+    "title": "Recent Activity",
+    "view_details": "View details",
+    "unnamed_contact": "[Unnamed contact]",
+    "resolution": {
+      "ai_assisted": "AI-assisted",
+      "other_conclusion": "Not assisted",
+      "in_progress": "In progress",
+      "unclassified": "Unclassified",
+      "transferred": "Transferred"
+    },
+    "csat": {
+      "very_unsatisfied": "Very Unsatisfied",
+      "unsatisfied": "Unsatisfied",
+      "neutral": "Neutral",
+      "satisfied": "Satisfied",
+      "very_satisfied": "Very Satisfied"
+    },
+    "empty": {
+      "skipped": {
+        "title": "Your AI Team is not live yet",
+        "description": "Once activated, you'll see real-time interaction logs and performance insights here.",
+        "button": "Start activation"
+      },
+      "no_data": {
+        "title": "Your AI Team is now live",
+        "description": "We are monitoring your store in real-time. Interaction logs and performance insights will appear here as soon as they happen."
+      }
+    }
+  },
   "ai_team_performance": {
     "title": "AI Team Performance",
     "total_engagements": {

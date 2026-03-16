@@ -1059,6 +1059,36 @@
             "start_activation": "Iniciar activación"
         }
     },
+    "recent_activity": {
+        "title": "Actividad Reciente",
+        "view_details": "Ver detalles",
+        "unnamed_contact": "[Contacto sin nombre]",
+        "resolution": {
+            "ai_assisted": "Asistido por IA",
+            "other_conclusion": "No asistido",
+            "in_progress": "En progreso",
+            "unclassified": "Sin clasificar",
+            "transferred": "Transferido"
+        },
+        "csat": {
+            "very_unsatisfied": "Muy Insatisfecho",
+            "unsatisfied": "Insatisfecho",
+            "neutral": "Neutral",
+            "satisfied": "Satisfecho",
+            "very_satisfied": "Muy Satisfecho"
+        },
+        "empty": {
+            "skipped": {
+                "title": "Tu Equipo de IA aún no está activo",
+                "description": "Una vez activado, verás los registros de interacción en tiempo real y los insights de rendimiento aquí.",
+                "button": "Iniciar activación"
+            },
+            "no_data": {
+                "title": "Tu Equipo de IA está activo",
+                "description": "Estamos monitoreando tu tienda en tiempo real. Los registros de interacción y los insights de rendimiento aparecerán aquí tan pronto como ocurran."
+            }
+        }
+    },
     "ai_team_performance": {
         "title": "Rendimiento del Equipo de IA",
         "total_engagements": {
