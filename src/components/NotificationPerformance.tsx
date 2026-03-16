@@ -136,6 +136,13 @@ export function NotificationPerformance() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<SkillMetricsData | null>(null);
 
+  const calculateSentMessages = (data: SkillMetricsData | null) => {
+    if (!data || !data.data) return 0;
+    if (!data.data) return 0;
+
+    return Number(data.data.find((item) => item.title === 'sent-messages')?.value ?? 0);
+  }
+
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
@@ -164,11 +171,7 @@ export function NotificationPerformance() {
     return <Skeleton height="100%"/>;
   }
 
-  if (!data || !data.data) {
-    return <Skeleton height="100%" />;
-  }
-
-  const sentMessages = data.data.find((item) => item.title === 'sent-messages')?.value ?? 0;
+  const sentMessages = calculateSentMessages(data);
   const maxValue = Number(sentMessages ?? 0);
 
   return (
