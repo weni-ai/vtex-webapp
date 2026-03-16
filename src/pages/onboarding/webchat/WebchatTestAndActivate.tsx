@@ -134,7 +134,7 @@ export function WebchatTestAndActivate() {
 
     setIsSkipping(true);
     try {
-      const result = await updateOnboarding(vtexAccount, { completed: true });
+      const result = await updateOnboarding(vtexAccount, { skipped: true });
       if (!result.success) {
         setIsSkipping(false);
         return;

@@ -1053,7 +1053,11 @@
         }
     },
     "dashboard": {
-        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
+        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes.",
+        "skipped_onboarding": {
+            "title": "Tu equipo de IA se está preparando",
+            "start_activation": "Iniciar activación"
+        }
     },
     "billing": {
         "plans": {
@@ -1103,6 +1107,95 @@
                 "explanations": "(1) Hospedaje en la nube, Entregas y Actualizaciones Continuas, Mantenimiento, Monitoreo y Soporte Técnico;\n(2) $0.49 para cada conversa adicional (sin paquete);\n(3) El agente de gestión de IA preconstruido incluye hasta 30 instrucciones;\n(4) Cada herramienta de agente personalizado incluye el procesamiento de hasta 10,000 tokens;",
                 "conversation_definition": "Una Conversa es la unidad de facturación central, definida como un único y continuo intercambio de mensajes (ya sea entrante del cliente o iniciado saliente por un agente/sistema) que ocurre bajo las siguientes restricciones:\n•⁠ ⁠Límite de Duración (Reinicio Diario): Una conversa se mide dentro de un solo día (de 12:00 AM a 11:59 PM). Si una conversa activa cruza la medianoche, se cuenta automáticamente como dos conversas separadas—una terminando el primer día y una nueva iniciando el segundo día.\n•⁠ ⁠Especificidad de Canal: Una conversa está exclusivamente vinculada al canal a través del cual se inició (por ejemplo, WhatsApp, Webchat). Si el mismo cliente inicia una nueva interacción utilizando un canal diferente (por ejemplo, cambiando de Webchat a WhatsApp), esto se contará como una conversa separada y distinta."
             }
+        }
+    },
+    "recent_activity": {
+        "title": "Actividad Reciente",
+        "view_details": "Ver detalles",
+        "unnamed_contact": "[Contacto sin nombre]",
+        "resolution": {
+            "ai_assisted": "Asistido por IA",
+            "other_conclusion": "No asistido",
+            "in_progress": "En progreso",
+            "unclassified": "Sin clasificar",
+            "transferred": "Transferido"
+        },
+        "csat": {
+            "very_unsatisfied": "Muy Insatisfecho",
+            "unsatisfied": "Insatisfecho",
+            "neutral": "Neutral",
+            "satisfied": "Satisfecho",
+            "very_satisfied": "Muy Satisfecho"
+        },
+        "empty": {
+            "skipped": {
+                "title": "Tu Equipo de IA aún no está activo",
+                "description": "Una vez activado, verás los registros de interacción en tiempo real y los insights de rendimiento aquí.",
+                "button": "Iniciar activación"
+            },
+            "no_data": {
+                "title": "Tu Equipo de IA está activo",
+                "description": "Estamos monitoreando tu tienda en tiempo real. Los registros de interacción y los insights de rendimiento aparecerán aquí tan pronto como ocurran."
+            }
+        }
+    },
+    "ai_team_performance": {
+        "title": "Rendimiento del Equipo de IA",
+        "total_engagements": {
+            "label": "Total de interacciones",
+            "description": "Todas las interacciones gestionadas por IA"
+        },
+        "resolution_rate": {
+            "label": "Tasa de resolución",
+            "description": "{{count}} interacciones"
+        },
+        "revenue": {
+            "label": "Ingresos",
+            "description": "{{count}} pedidos realizados"
+        },
+        "customer_satisfaction": {
+            "label": "Satisfacción del cliente",
+            "description": "Basado en {{count}} calificaciones de clientes"
+        }
+    },
+    "notification_performance": {
+        "title": "Rendimiento de notificaciones",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "read": "Leídos",
+        "clicked": "Clics",
+        "read_tooltip": "Mensajes que fueron abiertos y leídos por el destinatario"
+    },
+    "abandoned_cart_recovery": {
+        "title": "Recuperación de Carrito Abandonado",
+        "recovered_revenue": "Ingresos Recuperados",
+        "roi": "ROI",
+        "total_sends": "Total de Envíos",
+        "converted_sales": "Ventas Convertidas",
+        "conversion_rate": "Tasa de Conversión",
+        "average_order_value": "Valor Promedio del Pedido"
+    },
+    "conversation_usage": {
+        "view_plans": "Ver Planes",
+        "time": {
+            "minutes": "{{value}} minutos",
+            "hours": "{{value}} horas"
+        },
+        "informational": {
+            "title": "Tu Inteligencia de Ventas con IA funciona sin problemas",
+            "description": "Los agentes han gestionado {{count}} interacciones hasta ahora, brindando soporte rápido y preciso. Todavía tienes {{remaining}} interacciones gratuitas para explorar todo el potencial de tu equipo."
+        },
+        "warning": {
+            "title": "Con {{count}} interacciones resueltas, tu Equipo de IA ya ha ahorrado {{timeSaved}} de horas de soporte humano.",
+            "description": "Considera un plan ilimitado para mantener tu impulso de crecimiento."
+        },
+        "danger": {
+            "title": "Atención: Te estás acercando al límite de interacciones.",
+            "description": "Has usado el {{percentage}}% de tu cuota gratuita. Elige un plan ahora para asegurar que tus clientes no se queden sin soporte cuando se alcance el límite."
+        },
+        "critical": {
+            "title": "Límite gratuito de {{limit}} interacciones alcanzado. Tu Equipo de IA está en pausa.",
+            "description": "No dejes a tus clientes esperando: suscríbete a un plan para reactivar tus agentes y seguir convirtiendo visitantes en compradores ahora mismo."
         }
     }
 }

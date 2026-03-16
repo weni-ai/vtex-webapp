@@ -25,7 +25,7 @@ export async function startCrawling(vtex_account: string, url: string, channel: 
 
 export async function updateOnboarding(
   vtex_account: string,
-  data: { current_page?: string; completed?: boolean },
+  data: { current_page?: string; completed?: boolean; skipped?: boolean },
 ): Promise<UpdateOnboardingResponse> {
   return onboardingAdapter.updateOnboarding(vtex_account, data);
 }
