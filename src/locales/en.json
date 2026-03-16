@@ -291,7 +291,7 @@
     "title": "My solutions",
     "list": {
       "empty": {
-        "title": "No agent assigned to team"
+        "title": "No agent available"
       }
     },
     "details": {
@@ -1147,10 +1147,6 @@
     "resolution_rate": {
       "label": "Resolution Rate",
       "description": "{{count}} engagements"
-    },
-    "revenue": {
-      "label": "Revenue",
-      "description": "{{count}} orders placed"
     },
     "customer_satisfaction": {
       "label": "Customer Satisfaction",

@@ -13,6 +13,10 @@ export function formatCurrency(
   currencyCode: string,
   language: string,
 ): string {
+  if (!currencyCode) {
+    return String(value);
+  }
+
   return new Intl.NumberFormat(resolveLocale(language), {
     style: 'currency',
     currency: currencyCode,

@@ -46,18 +46,18 @@ export function adaptConversationTotals(
 export interface RevenueResponse {
   revenue: {
     value: number;
-    currency_code: string;
+    currency_code: string | null;
     increase_percentage: number;
-    orders_placed: {
-      value: number;
-      increase_percentage: number;
-    };
+  };
+  orders_placed: {
+    value: number;
+    increase_percentage: number;
   };
 }
 
 export interface Revenue {
   value: number;
-  currencyCode: string;
+  currencyCode: string | null;
   increasePercentage: number;
   ordersPlaced: {
     value: number;
@@ -71,8 +71,8 @@ export function adaptRevenue(response: RevenueResponse): Revenue {
     currencyCode: response.revenue.currency_code,
     increasePercentage: response.revenue.increase_percentage,
     ordersPlaced: {
-      value: response.revenue.orders_placed.value,
-      increasePercentage: response.revenue.orders_placed.increase_percentage,
+      value: response.orders_placed.value,
+      increasePercentage: response.orders_placed.increase_percentage,
     },
   };
 }
@@ -109,32 +109,5 @@ export function adaptCSAT(response: CSATResponse): CSATData {
   return {
     highestLabelScore: highestLabel.value,
     totalRatings,
-  };
-}
-
-export interface MessagesAnalyticsResponse {
-  status_count: {
-    sent: { value: number };
-    delivered: { value: number };
-    read: { value: number };
-    clicked: { value: number };
-  };
-}
-
-export interface MessagesAnalytics {
-  sent: number;
-  delivered: number;
-  read: number;
-  clicked: number;
-}
-
-export function adaptMessagesAnalytics(
-  response: MessagesAnalyticsResponse,
-): MessagesAnalytics {
-  return {
-    sent: response.status_count.sent.value,
-    delivered: response.status_count.delivered.value,
-    read: response.status_count.read.value,
-    clicked: response.status_count.clicked.value,
   };
 }

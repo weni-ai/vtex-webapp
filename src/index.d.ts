@@ -5,6 +5,7 @@ interface AgentNext {
   notificationType: 'active' | 'passive';
   code: string;
   isAssigned: boolean;
+  isActive: boolean;
   isInTest: boolean;
   origin: 'nexus' | 'commerce';
   isOfficial: boolean;

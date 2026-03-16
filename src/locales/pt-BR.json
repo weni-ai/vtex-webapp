@@ -286,7 +286,7 @@
         "title": "Minhas soluções",
         "list": {
             "empty": {
-                "title": "Nenhum agente atribuído à equipe"
+                "title": "Nenhum agente disponível"
             }
         },
         "details": {
@@ -1138,10 +1138,6 @@
         "resolution_rate": {
             "label": "Taxa de resolução",
             "description": "{{count}} interações"
-        },
-        "revenue": {
-            "label": "Receita",
-            "description": "{{count}} pedidos realizados"
         },
         "customer_satisfaction": {
             "label": "Satisfação do cliente",
