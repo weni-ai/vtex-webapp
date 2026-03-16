@@ -140,7 +140,7 @@ export function Dashboard() {
   return (
     <Page style={{ height: '100vh' }}>
       <PageHeader>
-        <PageHeaderRow style={{ height: '44px' }}>
+        <PageHeaderRow>
           <PageHeading>{t('dashboard.title')}</PageHeading>
 
           {!isOnboardingSkipped && (
