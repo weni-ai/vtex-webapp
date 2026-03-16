@@ -1052,7 +1052,41 @@
     }
   },
   "dashboard": {
-    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers."
+    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers.",
+    "skipped_onboarding": {
+      "title": "Your AI Team is getting ready",
+      "start_activation": "Start activation"
+    }
+  },
+  "recent_activity": {
+    "title": "Recent Activity",
+    "view_details": "View details",
+    "unnamed_contact": "[Unnamed contact]",
+    "resolution": {
+      "ai_assisted": "AI-assisted",
+      "other_conclusion": "Not assisted",
+      "in_progress": "In progress",
+      "unclassified": "Unclassified",
+      "transferred": "Transferred"
+    },
+    "csat": {
+      "very_unsatisfied": "Very Unsatisfied",
+      "unsatisfied": "Unsatisfied",
+      "neutral": "Neutral",
+      "satisfied": "Satisfied",
+      "very_satisfied": "Very Satisfied"
+    },
+    "empty": {
+      "skipped": {
+        "title": "Your AI Team is not live yet",
+        "description": "Once activated, you'll see real-time interaction logs and performance insights here.",
+        "button": "Start activation"
+      },
+      "no_data": {
+        "title": "Your AI Team is now live",
+        "description": "We are monitoring your store in real-time. Interaction logs and performance insights will appear here as soon as they happen."
+      }
+    }
   },
   "ai_team_performance": {
     "title": "AI Team Performance",
@@ -1080,5 +1114,28 @@
     "read": "Read",
     "clicked": "Clicks",
     "read_tooltip": "Messages that were opened and read by the recipient"
+  },
+  "conversation_usage": {
+    "view_plans": "View Plans",
+    "time": {
+      "minutes": "{{value}} minutes",
+      "hours": "{{value}} hours"
+    },
+    "informational": {
+      "title": "Your AI Sales Intelligence is running smoothly",
+      "description": "Agents have handled {{count}} interactions so far, providing fast and accurate support. You still have {{remaining}} free interactions to explore the full potential of your team."
+    },
+    "warning": {
+      "title": "With {{count}} interactions resolved, your AI Team has already saved {{timeSaved}} of human support hours.",
+      "description": "Consider an unlimited plan to keep your growth momentum."
+    },
+    "danger": {
+      "title": "Attention: You are approaching your interaction limit.",
+      "description": "You've used {{percentage}}% of your free quota. Choose a plan now to ensure your customers aren't left without support when the limit is reached."
+    },
+    "critical": {
+      "title": "Free limit of {{limit}} interactions reached. Your AI Team is now on pause.",
+      "description": "Don't let your customers wait: subscribe to a plan to reactivate your agents and resume converting visitors into buyers right now."
+    }
   }
 }
