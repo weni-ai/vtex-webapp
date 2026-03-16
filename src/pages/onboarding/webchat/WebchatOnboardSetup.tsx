@@ -6,7 +6,7 @@ import { Flex, Link, Text, toast } from '@vtex/shoreline';
 import { selectUser } from '../../../store/userSlice';
 import { updateOnboarding } from '../../../services/onboarding.service';
 import { selectOnboardingStatus, setOnboardingStatus } from '../../../store/onboardSlice';
-import { ONBOARDING_PAGES } from '../../../constants/onboarding';
+import { ONBOARDING_PAGES, SUPPORT_EMAIL } from '../../../constants/onboarding';
 import { useOnboardProgress } from './useOnboardProgress';
 import { ProgressBar } from './ProgressBar';
 import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
@@ -18,8 +18,6 @@ const SETUP_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
   order_status: 'onboarding.onboard_setup.use_cases.order_status.description',
   faq_assistant: 'onboarding.onboard_setup.use_cases.faq_assistant.description',
 };
-
-const SUPPORT_EMAIL = 'support.weni@vtex.com';
 
 function FailedToastContent({ message, actionLabel }: { message: string; actionLabel: string }) {
   return (

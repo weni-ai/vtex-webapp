@@ -1062,6 +1062,7 @@
     "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers.",
     "skipped_onboarding": {
       "title": "Your AI Team is getting ready",
+      "failed_title": "Something went wrong while preparing your AI Team",
       "start_activation": "Start activation"
     }
   },

@@ -6,7 +6,7 @@ import { Button, Flex, Heading } from '@vtex/shoreline';
 import { selectUser } from '../store/userSlice';
 import { selectOnboardingStatus, setOnboardingStatus } from '../store/onboardSlice';
 import { updateOnboarding } from '../services/onboarding.service';
-import { ONBOARDING_PAGES } from '../constants/onboarding';
+import { ONBOARDING_PAGES, SUPPORT_EMAIL } from '../constants/onboarding';
 import { useOnboardProgress } from '../pages/onboarding/webchat/useOnboardProgress';
 import { ProgressBar } from '../pages/onboarding/webchat/ProgressBar';
 
@@ -17,7 +17,7 @@ export function SkippedOnboardingBanner() {
 
   const userData = useSelector(selectUser);
   const onboardingStatus = useSelector(selectOnboardingStatus);
-  const { currentStep, progress, isComplete } = useOnboardProgress();
+  const { currentStep, progress, isComplete, isFailed } = useOnboardProgress();
 
   const [isActivating, setIsActivating] = useState(false);
 
@@ -44,6 +44,18 @@ export function SkippedOnboardingBanner() {
     }
   }, [userData?.account, onboardingStatus, dispatch, navigate]);
 
+  const handleContactSupport = useCallback(() => {
+    const anchor = document.createElement('a');
+    anchor.href = `mailto:${SUPPORT_EMAIL}`;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener noreferrer';
+    anchor.click();
+  }, []);
+
+  const title = isFailed
+    ? t('dashboard.skipped_onboarding.failed_title')
+    : t('dashboard.skipped_onboarding.title');
+
   return (
     <Flex
       direction="column"
@@ -56,20 +68,30 @@ export function SkippedOnboardingBanner() {
     >
       <Flex justify="space-between" align="center">
         <Heading variant="display2">
-          {t('dashboard.skipped_onboarding.title')}
+          {title}
         </Heading>
-        <Button
-          variant="primary"
-          size="normal"
-          onClick={handleStartActivation}
-          disabled={!isComplete || isActivating}
-          loading={isActivating}
-        >
-          {t('dashboard.skipped_onboarding.start_activation')}
-        </Button>
+        {isFailed ? (
+          <Button
+            variant="primary"
+            size="normal"
+            onClick={handleContactSupport}
+          >
+            {t('onboarding.onboard_setup.progress.failed.contact_support')}
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            size="normal"
+            onClick={handleStartActivation}
+            disabled={!isComplete || isActivating}
+            loading={isActivating}
+          >
+            {t('dashboard.skipped_onboarding.start_activation')}
+          </Button>
+        )}
       </Flex>
 
-      <ProgressBar currentStep={currentStep} progress={progress} />
+      <ProgressBar currentStep={currentStep} progress={progress} isFailed={isFailed} />
     </Flex>
   );
 }

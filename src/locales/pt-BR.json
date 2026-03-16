@@ -1053,6 +1053,7 @@
         "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes.",
         "skipped_onboarding": {
             "title": "Seu Time de IA está sendo preparado",
+            "failed_title": "Algo deu errado ao preparar seu Time de IA",
             "start_activation": "Iniciar ativação"
         }
     },
