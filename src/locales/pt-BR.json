@@ -1190,5 +1190,45 @@
                 "description": "Estamos monitorando sua loja em tempo real. Os registros de interação e insights de desempenho aparecerão aqui assim que acontecerem."
             }
         }
+    },
+    "settings": {
+        "title": "Configurações",
+        "tabs": {
+            "customer_service": "Atendimento ao Cliente",
+            "whatsapp": "WhatsApp"
+        },
+        "webchat": {
+            "title": "Webchat",
+            "appearance": {
+                "title": "Aparência e Comportamento",
+                "edit": "Editar"
+            },
+            "traffic_rollout": {
+                "title": "Distribuição de Tráfego",
+                "safe_label": "10% (Canário / Validação)",
+                "full_label": "100% (Lançamento Completo)",
+                "safe_description": "Habilite para uma amostra de 10% para validar respostas e monitorar interações iniciais em um ambiente de baixo risco.",
+                "full_description": "Habilite em toda a sua loja. Você pode reduzir ou desativar a qualquer momento."
+            }
+        },
+        "whatsapp": {
+            "profile": {
+                "title": "Perfil do WhatsApp",
+                "edit": "Editar"
+            },
+            "automations": {
+                "title": "Automações",
+                "connect": "Conectar automações"
+            }
+        },
+        "agents_team": {
+            "title": "Equipe de agentes",
+            "edit_instructions": "Editar instruções",
+            "assign_agents": "Atribuir agentes",
+            "manager_tag": "Gerente",
+            "edit": "Editar",
+            "official_tag": "Oficial",
+            "custom_tag": "Personalizado"
+        }
     }
 }

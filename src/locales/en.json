@@ -1199,5 +1199,45 @@
         "description": "We are monitoring your store in real-time. Interaction logs and performance insights will appear here as soon as they happen."
       }
     }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "customer_service": "Customer Service",
+      "whatsapp": "WhatsApp"
+    },
+    "webchat": {
+      "title": "Webchat",
+      "appearance": {
+        "title": "Appearance & Behavior",
+        "edit": "Edit"
+      },
+      "traffic_rollout": {
+        "title": "Traffic Rollout",
+        "safe_label": "10% (Canary / Validation)",
+        "full_label": "100% (Full Rollout)",
+        "safe_description": "Enable for a 10% sample to validate responses and monitor initial interactions in a low-risk environment.",
+        "full_description": "Enable across your entire store. You can scale down or disable it at any time."
+      }
+    },
+    "whatsapp": {
+      "profile": {
+        "title": "WhatsApp profile",
+        "edit": "Edit"
+      },
+      "automations": {
+        "title": "Automations",
+        "connect": "Connect automations"
+      }
+    },
+    "agents_team": {
+      "title": "Agents team",
+      "edit_instructions": "Edit instructions",
+      "assign_agents": "Assign agents",
+      "manager_tag": "Manager",
+      "edit": "Edit",
+      "official_tag": "Official",
+      "custom_tag": "Custom"
+    }
   }
 }
