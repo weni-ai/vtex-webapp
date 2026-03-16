@@ -41,9 +41,11 @@ function NoConversationsEmpty() {
 export function RecentActivity() {
   const { state, conversations, isActivationEnabled } = useRecentActivity();
 
+  const showViewDetailsButton = state === 'data' && conversations.length > 0;
+
   return (
     <Flex direction="column" gap="$space-4">
-      <RecentActivityHeader />
+      <RecentActivityHeader showViewDetailsButton={showViewDetailsButton} />
 
       {state === 'loading' && <RecentActivitySkeleton />}
       {state === 'onboarding_skipped' && <SkippedOnboardingEmpty isActivationEnabled={isActivationEnabled} />}
