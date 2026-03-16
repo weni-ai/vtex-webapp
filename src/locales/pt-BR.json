@@ -1043,7 +1043,11 @@
         }
     },
     "dashboard": {
-        "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes."
+        "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes.",
+        "skipped_onboarding": {
+            "title": "Seu Time de IA está sendo preparado",
+            "start_activation": "Iniciar ativação"
+        }
     },
     "ai_team_performance": {
         "title": "Desempenho do Time de IA",
@@ -1062,6 +1066,29 @@
         "customer_satisfaction": {
             "label": "Satisfação do cliente",
             "description": "Baseado em {{count}} avaliações de clientes"
+        }
+    },
+    "conversation_usage": {
+        "view_plans": "Ver Planos",
+        "time": {
+            "minutes": "{{value}} minutos",
+            "hours": "{{value}} horas"
+        },
+        "informational": {
+            "title": "Sua Inteligência de Vendas com IA está funcionando perfeitamente",
+            "description": "Os agentes já atenderam {{count}} interações, oferecendo suporte rápido e preciso. Você ainda tem {{remaining}} interações gratuitas para explorar todo o potencial da sua equipe."
+        },
+        "warning": {
+            "title": "Com {{count}} interações resolvidas, seu Time de IA já economizou {{timeSaved}} de horas de suporte humano.",
+            "description": "Considere um plano ilimitado para manter seu ritmo de crescimento."
+        },
+        "danger": {
+            "title": "Atenção: Você está se aproximando do limite de interações.",
+            "description": "Você já usou {{percentage}}% da sua cota gratuita. Escolha um plano agora para garantir que seus clientes não fiquem sem suporte quando o limite for atingido."
+        },
+        "critical": {
+            "title": "Limite gratuito de {{limit}} interações atingido. Seu Time de IA está pausado.",
+            "description": "Não deixe seus clientes esperando: assine um plano para reativar seus agentes e voltar a converter visitantes em compradores agora mesmo."
         }
     }
 }
