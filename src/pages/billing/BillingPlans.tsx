@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { Tag } from '../../components/adapters/Tag';
 import { Button } from '../../components/adapters/Button';
-import { Bleed, Divider, Flex, Grid, IconArrowLeft, IconButton, IconCheck, IconX, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text } from "@vtex/shoreline";
+import { Bleed, Divider, Flex, Grid, IconArrowLeft, IconButton, IconCheck, IconX, Page, PageContent, PageHeader, PageHeaderRow, PageHeading, Text, toast } from "@vtex/shoreline";
 
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { requestPlanLead } from '../../services/lead.service';
 
 import './BillingPlans.css';
 
 export function BillingPlans() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   function goBack() {
@@ -60,7 +63,8 @@ export function BillingPlans() {
 
 function PlanCard(props: { plan: typeof PLANS[number] }) {
   const { plan } = props;
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [isRequesting, setIsRequesting] = useState(false);
 
   function formatPrice(currency: string, price: number) {
     return new Intl.NumberFormat(i18n.language, {
@@ -72,6 +76,19 @@ function PlanCard(props: { plan: typeof PLANS[number] }) {
 
   function formatNumber(number: number) {
     return new Intl.NumberFormat(i18n.language).format(number);
+  }
+
+  async function requestBillingPlan(planKey: string) {
+    setIsRequesting(true);
+
+    try {
+      await requestPlanLead(planKey);
+      toast.success(t('billing.plans.lead.success'));
+    } catch {
+      toast.critical(t('billing.plans.lead.error'));
+    } finally {
+      setIsRequesting(false);
+    }
   }
 
   return (
@@ -114,7 +131,13 @@ function PlanCard(props: { plan: typeof PLANS[number] }) {
         ))}
       </Flex>
 
-      <Button variant="primary" size="large">
+      <Button
+        variant="primary"
+        size="large"
+        onClick={() => requestBillingPlan(plan.key)}
+        loading={isRequesting}
+        disabled={isRequesting}
+      >
         {t('billing.plans.actions.start_with', { plan: t(`billing.plans.${plan.key}.title`) })}
       </Button>
     </Flex>
