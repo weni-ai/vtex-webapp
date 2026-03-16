@@ -1053,7 +1053,11 @@
         }
     },
     "dashboard": {
-        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes."
+        "onboarding_complete_alert": "¡Todo listo! Tus agentes están activos y listos para convertir visitantes en clientes.",
+        "skipped_onboarding": {
+            "title": "Tu equipo de IA se está preparando",
+            "start_activation": "Iniciar activación"
+        }
     },
     "recent_activity": {
         "title": "Actividad Reciente",
@@ -1083,6 +1087,48 @@
                 "title": "Tu Equipo de IA está activo",
                 "description": "Estamos monitoreando tu tienda en tiempo real. Los registros de interacción y los insights de rendimiento aparecerán aquí tan pronto como ocurran."
             }
+        }
+    },
+    "ai_team_performance": {
+        "title": "Rendimiento del Equipo de IA",
+        "total_engagements": {
+            "label": "Total de interacciones",
+            "description": "Todas las interacciones gestionadas por IA"
+        },
+        "resolution_rate": {
+            "label": "Tasa de resolución",
+            "description": "{{count}} interacciones"
+        },
+        "revenue": {
+            "label": "Ingresos",
+            "description": "{{count}} pedidos realizados"
+        },
+        "customer_satisfaction": {
+            "label": "Satisfacción del cliente",
+            "description": "Basado en {{count}} calificaciones de clientes"
+        }
+    },
+    "conversation_usage": {
+        "view_plans": "Ver Planes",
+        "time": {
+            "minutes": "{{value}} minutos",
+            "hours": "{{value}} horas"
+        },
+        "informational": {
+            "title": "Tu Inteligencia de Ventas con IA funciona sin problemas",
+            "description": "Los agentes han gestionado {{count}} interacciones hasta ahora, brindando soporte rápido y preciso. Todavía tienes {{remaining}} interacciones gratuitas para explorar todo el potencial de tu equipo."
+        },
+        "warning": {
+            "title": "Con {{count}} interacciones resueltas, tu Equipo de IA ya ha ahorrado {{timeSaved}} de horas de soporte humano.",
+            "description": "Considera un plan ilimitado para mantener tu impulso de crecimiento."
+        },
+        "danger": {
+            "title": "Atención: Te estás acercando al límite de interacciones.",
+            "description": "Has usado el {{percentage}}% de tu cuota gratuita. Elige un plan ahora para asegurar que tus clientes no se queden sin soporte cuando se alcance el límite."
+        },
+        "critical": {
+            "title": "Límite gratuito de {{limit}} interacciones alcanzado. Tu Equipo de IA está en pausa.",
+            "description": "No dejes a tus clientes esperando: suscríbete a un plan para reactivar tus agentes y seguir convirtiendo visitantes en compradores ahora mismo."
         }
     }
 }
