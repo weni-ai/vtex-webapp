@@ -1,15 +1,15 @@
 import { ContextualHelp, Flex, Skeleton, Text } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { MessagesAnalytics } from '../api/insights/adapters';
-import { getMessagesAnalytics } from '../services/insights.service';
+import type { SkillMetricsData } from '../api/agents/adapters';
+import { getSkillMetrics } from '../services/agent.service';
 import { getLast3MonthsDates } from '../utils';
 import { formatNumber } from '../utils/formatters';
 
 const MAX_BAR_HEIGHT = 137;
 
 interface MetricConfig {
-  key: keyof MessagesAnalytics;
+  apiKey: string;
   labelKey: string;
   color: string;
   tooltipKey?: string;
@@ -18,26 +18,26 @@ interface MetricConfig {
 
 const METRICS_CONFIG: MetricConfig[] = [
   {
-    key: 'sent',
+    apiKey: 'sent-messages',
     labelKey: 'notification_performance.sent',
     color: 'var(--sl-color-blue-2)',
     borderRadius: 'var(--sl-radius-1) var(--sl-radius-1) 0 var(--sl-radius-1)',
   },
   {
-    key: 'delivered',
+    apiKey: 'delivered-messages',
     labelKey: 'notification_performance.delivered',
     color: 'var(--sl-color-blue-4)',
     borderRadius: '0 var(--sl-radius-1) 0 0',
   },
   {
-    key: 'read',
+    apiKey: 'read-messages',
     labelKey: 'notification_performance.read',
     color: 'var(--sl-color-blue-6)',
     tooltipKey: 'notification_performance.read_tooltip',
     borderRadius: '0 var(--sl-radius-1) 0 0',
   },
   {
-    key: 'clicked',
+    apiKey: 'interactions',
     labelKey: 'notification_performance.clicked',
     color: 'var(--sl-color-blue-8)',
     borderRadius: '0 var(--sl-radius-1) var(--sl-radius-1) 0',
@@ -134,7 +134,7 @@ export function NotificationPerformance() {
   const { t, i18n } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<MessagesAnalytics | null>(null);
+  const [data, setData] = useState<SkillMetricsData | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -142,7 +142,13 @@ export function NotificationPerformance() {
 
       try {
         const { startDate, endDate } = getLast3MonthsDates();
-        const result = await getMessagesAnalytics(startDate, endDate);
+        const result = await getSkillMetrics({ startDate, endDate });
+
+        if ('success' in result) {
+          setData(null);
+          return;
+        }
+
         setData(result);
       } catch {
         setData(null);
@@ -155,10 +161,15 @@ export function NotificationPerformance() {
   }, []);
 
   if (isLoading) {
+    return <Skeleton height="100%"/>;
+  }
+
+  if (!data || !data.data) {
     return <Skeleton height="100%" />;
   }
 
-  const maxValue = data?.sent ?? 0;
+  const sentMessages = data.data.find((item) => item.title === 'sent-messages')?.value ?? 0;
+  const maxValue = Number(sentMessages ?? 0);
 
   return (
     <Flex
@@ -180,17 +191,17 @@ export function NotificationPerformance() {
         gap="$space-0"
       >
         {METRICS_CONFIG.map((metric, index) => {
-          const rawValue = data?.[metric.key] ?? 0;
+          const rawValue = Number(data?.data.find((item) => item.title === metric.apiKey)?.value ?? 0);
           const formattedValue = data
-            ? formatNumber(rawValue, i18n.language)
+            ? formatNumber(Number(rawValue), i18n.language)
             : '-';
 
           return (
             <NotificationMetricColumn
-              key={metric.key}
+              key={metric.apiKey}
               label={t(metric.labelKey)}
               value={formattedValue}
-              barHeight={computeBarHeight(rawValue, maxValue)}
+              barHeight={computeBarHeight(Number(rawValue), maxValue)}
               barColor={metric.color}
               barBorderRadius={metric.borderRadius}
               tooltipText={

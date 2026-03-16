@@ -43,7 +43,7 @@ export function RecentActivity() {
 
   return (
     <Flex direction="column" gap="$space-4">
-      <RecentActivityHeader showViewDetails={state === 'data'} />
+      <RecentActivityHeader />
 
       {state === 'loading' && <RecentActivitySkeleton />}
       {state === 'onboarding_skipped' && <SkippedOnboardingEmpty isActivationEnabled={isActivationEnabled} />}
