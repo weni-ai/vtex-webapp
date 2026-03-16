@@ -14,6 +14,8 @@ export const ONBOARDING_PAGES = {
   ONBOARD_LEGACY: 'ONBOARD_LEGACY',
 } as const;
 
+export const SUPPORT_EMAIL = 'support.weni@vtex.com';
+
 export const ONBOARDING_STEPS = {
   PROJECT_CONFIG: 'PROJECT_CONFIG',
   CRAWL: 'CRAWL',
