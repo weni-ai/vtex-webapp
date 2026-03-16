@@ -1115,6 +1115,15 @@
     "clicked": "Clicks",
     "read_tooltip": "Messages that were opened and read by the recipient"
   },
+  "abandoned_cart_recovery": {
+    "title": "Abandoned Cart Recovery",
+    "recovered_revenue": "Recovered Revenue",
+    "roi": "ROI",
+    "total_sends": "Total Sends",
+    "converted_sales": "Converted Sales",
+    "conversion_rate": "Conversion Rate",
+    "average_order_value": "Average Order Value"
+  },
   "conversation_usage": {
     "view_plans": "View Plans",
     "time": {

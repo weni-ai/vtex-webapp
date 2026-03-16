@@ -1106,6 +1106,15 @@
         "clicked": "Cliques",
         "read_tooltip": "Mensagens que foram abertas e lidas pelo destinatário"
     },
+    "abandoned_cart_recovery": {
+        "title": "Recuperação de Carrinho Abandonado",
+        "recovered_revenue": "Receita Recuperada",
+        "roi": "ROI",
+        "total_sends": "Total de Envios",
+        "converted_sales": "Vendas Convertidas",
+        "conversion_rate": "Taxa de Conversão",
+        "average_order_value": "Ticket Médio"
+    },
     "conversation_usage": {
         "view_plans": "Ver Planos",
         "time": {

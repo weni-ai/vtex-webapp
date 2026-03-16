@@ -8,32 +8,9 @@ import {
   getCSAT,
 } from '../services/insights.service';
 import { getLast3MonthsDates } from '../utils';
+import { formatCurrency, formatNumber } from '../utils/formatters';
 import { MetricCard, type MetricCardProps } from './MetricCard';
 import { MetricGrid } from './MetricGrid';
-
-const LOCALE_MAP: Record<string, string> = {
-  en: 'en-US',
-  pt: 'pt-BR',
-  es: 'es-ES',
-};
-
-function formatCurrency(
-  value: number,
-  currencyCode: string,
-  language: string,
-): string {
-  const locale = LOCALE_MAP[language] ?? 'en-US';
-
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: currencyCode,
-  }).format(value);
-}
-
-function formatNumber(value: number, language: string): string {
-  const locale = LOCALE_MAP[language] ?? 'en-US';
-  return new Intl.NumberFormat(locale).format(value);
-}
 
 function buildMetrics(
   conversationTotals: ConversationTotals | null,
