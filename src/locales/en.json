@@ -1058,6 +1058,25 @@
       "start_activation": "Start activation"
     }
   },
+  "ai_team_performance": {
+    "title": "AI Team Performance",
+    "total_engagements": {
+      "label": "Total engagements",
+      "description": "All customer interactions handled by AI"
+    },
+    "resolution_rate": {
+      "label": "Resolution Rate",
+      "description": "{{count}} engagements"
+    },
+    "revenue": {
+      "label": "Revenue",
+      "description": "{{count}} orders placed"
+    },
+    "customer_satisfaction": {
+      "label": "Customer Satisfaction",
+      "description": "Based on {{count}} customer ratings"
+    }
+  },
   "conversation_usage": {
     "view_plans": "View Plans",
     "time": {

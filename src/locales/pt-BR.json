@@ -1049,6 +1049,25 @@
             "start_activation": "Iniciar ativação"
         }
     },
+    "ai_team_performance": {
+        "title": "Desempenho do Time de IA",
+        "total_engagements": {
+            "label": "Total de interações",
+            "description": "Todas as interações gerenciadas pela IA"
+        },
+        "resolution_rate": {
+            "label": "Taxa de resolução",
+            "description": "{{count}} interações"
+        },
+        "revenue": {
+            "label": "Receita",
+            "description": "{{count}} pedidos realizados"
+        },
+        "customer_satisfaction": {
+            "label": "Satisfação do cliente",
+            "description": "Baseado em {{count}} avaliações de clientes"
+        }
+    },
     "conversation_usage": {
         "view_plans": "Ver Planos",
         "time": {

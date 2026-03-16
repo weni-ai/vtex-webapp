@@ -27,6 +27,19 @@ export function getPeriodDates(period: 'today' | 'yesterday' | 'last 7 days' | '
   return periodMap[period]();
 }
 
+export function getLast3MonthsDates(): { startDate: string; endDate: string } {
+  const toISODate = (date: Date) => date.toISOString().split('T')[0];
+
+  const end = new Date();
+  const start = new Date();
+  start.setMonth(start.getMonth() - 3);
+
+  return {
+    startDate: toISODate(start),
+    endDate: toISODate(end),
+  };
+}
+
 export async function fileToBase64(file: File) {
   return new Promise((resolve: (result: string) => void, reject: (error: Error) => void) => {
     const reader = new FileReader();
