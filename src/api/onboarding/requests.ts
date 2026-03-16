@@ -42,7 +42,7 @@ export const startCrawling = async (vtex_account: string, url: string, channel: 
 
 export const updateOnboarding = async (
   vtex_account: string,
-  data: { current_page?: string; completed?: boolean },
+  data: { current_page?: string; completed?: boolean; skipped?: boolean },
 ) => {
   const response = await proxy<OnboardStatus>(
     'PATCH',
