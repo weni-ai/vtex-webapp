@@ -20,8 +20,9 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { SkillMetricsData } from '../api/agents/adapters';
 import { selectOnboardingStatus } from '../store/onboardSlice';
-import { isWhatsAppIntegrated, isWebChatIntegrated } from '../store/userSlice';
+import { isWhatsAppIntegrated } from '../store/userSlice';
 import { AITeamPerformance } from '../components/AITeamPerformance';
 import { NotificationPerformance } from '../components/NotificationPerformance';
 import { AbandonedCartRecovery } from '../components/AbandonedCartRecovery';
@@ -31,41 +32,65 @@ import { ConversationUsageBanner } from '../components/ConversationUsageBanner';
 import { selectProject, selectProjectDetail } from '../store/projectSlice';
 import { refreshChannelIntegrations } from '../services/channel.service';
 import { loadProjectDetail } from '../services/project.service';
+import { useSkillMetrics } from '../components/WhatsAppDashboard/useSkillMetrics';
 
-function WebchatDashboardContent({ showTitle }: { showTitle: boolean }) {
-  return <AITeamPerformance showTitle={showTitle} />;
+function PerformanceSectionHeader({ title }: { title: string }) {
+  return (
+    <Flex justify="space-between" align="center">
+      <Text variant="display2">{title}</Text>
+
+      {/* TODO: Add filters in the near future */}
+    </Flex>
+  );
 }
 
-function WhatsAppDashboardContent() {
+function WebchatDashboardContent() {
+  const { t } = useTranslation();
+
+  return (
+    <Flex direction="column" gap="$space-4">
+      <PerformanceSectionHeader title={t('ai_team_performance.title')} />
+      <AITeamPerformance />
+    </Flex>
+  );
+}
+
+function WhatsAppDashboardContent({ skillMetricsData }: { skillMetricsData: SkillMetricsData }) {
   return (
     <Grid columns="3fr 2fr" gap="$space-5" style={{ minHeight: '302px' }}>
-      <NotificationPerformance />
-      <AbandonedCartRecovery />
+      <NotificationPerformance data={skillMetricsData} />
+      <AbandonedCartRecovery skillMetricsData={skillMetricsData} />
     </Grid>
   );
 }
 
-function DashboardTabbedContent() {
+function DashboardTabbedContent({ skillMetricsData }: { skillMetricsData: SkillMetricsData }) {
   const { t } = useTranslation();
   const tabStore = useTabStore();
 
   return (
     <TabProvider store={tabStore}>
       <TabList>
+        <Tab id="abandoned-cart-recovery">
+          {t('dashboard.tabs.abandoned_cart_recovery')}
+        </Tab>
         <Tab id="agent-performance">
           {t('dashboard.tabs.agent_performance')}
         </Tab>
-        <Tab id="whatsapp-store">
-          {t('dashboard.tabs.whatsapp_store')}
-        </Tab>
       </TabList>
 
-      <TabPanel tabId="agent-performance" style={{ padding: '0' }} >
-        <WebchatDashboardContent showTitle={false} />
+      <TabPanel tabId="abandoned-cart-recovery" style={{ padding: '0' }}>
+        <Flex direction="column" gap="$space-4">
+          <PerformanceSectionHeader title={t('dashboard.performance')} />
+          <WhatsAppDashboardContent skillMetricsData={skillMetricsData} />
+        </Flex>
       </TabPanel>
 
-      <TabPanel tabId="whatsapp-store" style={{ padding: '0' }}>
-        <WhatsAppDashboardContent />
+      <TabPanel tabId="agent-performance" style={{ padding: '0' }}>
+        <Flex direction="column" gap="$space-4">
+          <PerformanceSectionHeader title={t('dashboard.performance')} />
+          <AITeamPerformance />
+        </Flex>
       </TabPanel>
     </TabProvider>
   );
@@ -92,8 +117,8 @@ export function Dashboard() {
   const projectUuid = useSelector(selectProject);
   const projectDetail = useSelector(selectProjectDetail);
   const hasWhatsApp = useSelector(isWhatsAppIntegrated);
-  const hasWebchat = useSelector(isWebChatIntegrated);
   const onboardingStatus = useSelector(selectOnboardingStatus);
+  const skillMetrics = useSkillMetrics();
 
   const [showOnboardingAlert] = useState(
     () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding,
@@ -105,7 +130,7 @@ export function Dashboard() {
     }
   }, [location.state, navigate]);
 
-  const [isDashboardReady, setIsDashboardReady] = useState(
+  const [isProjectReady, setIsProjectReady] = useState(
     () => projectDetail !== null,
   );
 
@@ -116,11 +141,12 @@ export function Dashboard() {
       refreshChannelIntegrations(projectUuid),
       loadProjectDetail(),
     ]).finally(() => {
-      setIsDashboardReady(true);
+      setIsProjectReady(true);
     });
   }, [projectUuid]);
 
-  const hasBothChannels = hasWebchat && hasWhatsApp;
+  const showWhatsAppContent = hasWhatsApp && skillMetrics.hasValidData;
+  const isDashboardReady = isProjectReady && (!hasWhatsApp || !skillMetrics.isLoading);
   const isOnboardingSkipped =
     onboardingStatus?.skipped === true &&
     onboardingStatus?.completed !== true;
@@ -169,12 +195,10 @@ export function Dashboard() {
 
             {isOnboardingSkipped && <SkippedOnboardingBanner />}
 
-            {hasBothChannels ? (
-              <DashboardTabbedContent />
-            ) : hasWhatsApp ? (
-              <WhatsAppDashboardContent />
+            {showWhatsAppContent && skillMetrics.data ? (
+              <DashboardTabbedContent skillMetricsData={skillMetrics.data} />
             ) : (
-              <WebchatDashboardContent showTitle={true} />
+              <WebchatDashboardContent />
             )}
 
             {displayConversationUsageBanner && (

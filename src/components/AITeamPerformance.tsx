@@ -1,4 +1,4 @@
-import { Flex, Text } from '@vtex/shoreline';
+import { Flex } from '@vtex/shoreline';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ConversationTotals, CSATData } from '../api/insights/adapters';
@@ -48,7 +48,7 @@ function buildMetrics(
   ];
 }
 
-export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
+export function AITeamPerformance() {
   const { t, i18n } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -90,12 +90,6 @@ export function AITeamPerformance({ showTitle }: { showTitle: boolean }) {
 
   return (
     <Flex direction="column" gap="$space-4">
-      {showTitle && (
-        <Text variant="display2">
-          {t('ai_team_performance.title')}
-        </Text>
-      )}
-
       <MetricGrid
         items={metrics}
         columns={3}

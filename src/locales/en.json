@@ -1055,9 +1055,10 @@
     "title": "Agentic CX",
     "view_on_store": "View on store",
     "settings": "Settings",
+    "performance": "Performance",
     "tabs": {
       "agent_performance": "Agent team performance",
-      "whatsapp_store": "WhatsApp Store"
+      "abandoned_cart_recovery": "Abandoned cart recovery"
     },
     "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers.",
     "skipped_onboarding": {
