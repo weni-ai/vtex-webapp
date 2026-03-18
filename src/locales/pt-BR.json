@@ -970,7 +970,9 @@
                     "today": "Hoje",
                     "yesterday": "Ontem",
                     "last_7_days": "Últimos 7 dias",
-                    "last_28_days": "Últimos 28 dias"
+                    "last_28_days": "Últimos 28 dias",
+                    "last_30_days": "Últimos 30 dias",
+                    "this_month": "Este mês"
                 }
             }
         }

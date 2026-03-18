@@ -979,7 +979,9 @@
           "today": "Today",
           "yesterday": "Yesterday",
           "last_7_days": "Last 7 days",
-          "last_28_days": "Last 28 days"
+          "last_28_days": "Last 28 days",
+          "last_30_days": "Last 30 days",
+          "this_month": "This month"
         }
       }
     }
