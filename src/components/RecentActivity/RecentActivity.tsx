@@ -2,7 +2,7 @@ import { Button, EmptyState, EmptyStateActions, Flex, Heading, Text } from '@vte
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { RecentActivityHeader } from './RecentActivityHeader';
-import { RecentActivityList } from './RecentActivityList';
+import { RecentActivityTable } from './RecentActivityTable';
 import { RecentActivitySkeleton } from './RecentActivitySkeleton';
 import { useRecentActivity } from './useRecentActivity';
 
@@ -50,7 +50,7 @@ export function RecentActivity() {
       {state === 'loading' && <RecentActivitySkeleton />}
       {state === 'onboarding_skipped' && <SkippedOnboardingEmpty isActivationEnabled={isActivationEnabled} />}
       {state === 'empty' && <NoConversationsEmpty />}
-      {state === 'data' && <RecentActivityList conversations={conversations} />}
+      {state === 'data' && <RecentActivityTable conversations={conversations} />}
     </Flex>
   );
 }

@@ -1,31 +1,72 @@
-import { Divider, Flex, Skeleton } from '@vtex/shoreline';
+import {
+  Flex,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+} from '@vtex/shoreline';
+import { TABLE_COLUMN_WIDTHS } from './constants';
 
 const SKELETON_ROW_COUNT = 5;
 
 function SkeletonRow() {
   return (
-    <Flex align="center" justify="space-between" style={{ padding: 'var(--sl-space-2) var(--sl-space-4)' }}>
-      <Flex align="center" gap="$space-4">
-        <Flex direction="column" gap="$space-0">
+    <TableRow>
+      <TableCell>
+        <Flex direction="column" gap="$space-1">
           <Skeleton style={{ width: '120px', height: '20px' }} />
           <Skeleton style={{ width: '100px', height: '16px' }} />
         </Flex>
+      </TableCell>
+
+      <TableCell>
         <Skeleton style={{ width: '80px', height: '24px', borderRadius: '9999px' }} />
-      </Flex>
-      <Skeleton style={{ width: '100px', height: '20px' }} />
-    </Flex>
+      </TableCell>
+
+      <TableCell>
+        <Skeleton style={{ width: '140px', height: '20px' }} />
+      </TableCell>
+
+      <TableCell>
+        <Skeleton style={{ width: '80px', height: '20px' }} />
+      </TableCell>
+
+      <TableCell>
+        <Skeleton style={{ width: '40px', height: '20px' }} />
+      </TableCell>
+    </TableRow>
   );
 }
 
 export function RecentActivitySkeleton() {
   return (
-    <Flex direction="column" gap="$space-0">
-      {Array.from({ length: SKELETON_ROW_COUNT }).map((_, index) => (
-        <Flex direction="column" key={index} gap="$space-0">
-          <SkeletonRow />
-          {index < SKELETON_ROW_COUNT - 1 && <Divider />}
-        </Flex>
-      ))}
-    </Flex>
+    <Table columnWidths={TABLE_COLUMN_WIDTHS}>
+      <TableHeader>
+        <TableHeaderCell>
+          <Skeleton style={{ width: '40px', height: '16px' }} />
+        </TableHeaderCell>
+        <TableHeaderCell>
+          <Skeleton style={{ width: '90px', height: '16px' }} />
+        </TableHeaderCell>
+        <TableHeaderCell>
+          <Skeleton style={{ width: '35px', height: '16px' }} />
+        </TableHeaderCell>
+        <TableHeaderCell>
+          <Skeleton style={{ width: '30px', height: '16px' }} />
+        </TableHeaderCell>
+        <TableHeaderCell>
+          <Skeleton style={{ width: '30px', height: '16px' }} />
+        </TableHeaderCell>
+      </TableHeader>
+
+      <TableBody>
+        {Array.from({ length: SKELETON_ROW_COUNT }).map((_, index) => (
+          <SkeletonRow key={index} />
+        ))}
+      </TableBody>
+    </Table>
   );
 }

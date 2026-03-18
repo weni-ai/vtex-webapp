@@ -33,3 +33,5 @@ export const CSAT_CONFIG: Record<CsatScore, CsatConfig> = {
 export function isValidCsatScore(value: number): value is CsatScore {
   return value >= 1 && value <= 5 && Number.isInteger(value);
 }
+
+export const TABLE_COLUMN_WIDTHS = ['1fr', '1fr', '1fr', '120px', '120px'];
