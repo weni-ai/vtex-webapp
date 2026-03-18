@@ -1,4 +1,4 @@
-import { ContextualHelp, Flex, Text } from '@vtex/shoreline';
+import { ContextualHelp, Flex, Skeleton, Text } from '@vtex/shoreline';
 import { useTranslation } from 'react-i18next';
 import type { SkillMetricsData } from '../api/agents/adapters';
 import { formatNumber } from '../utils/formatters';
@@ -129,10 +129,15 @@ function NotificationMetricColumn({
 
 interface NotificationPerformanceProps {
   data: SkillMetricsData;
+  isLoading: boolean;
 }
 
-export function NotificationPerformance({ data }: NotificationPerformanceProps) {
+export function NotificationPerformance({ data, isLoading }: NotificationPerformanceProps) {
   const { t, i18n } = useTranslation();
+
+  if (isLoading) {
+    return <Skeleton height="100%" />;
+  }
 
   const maxValue = Number(
     data.data.find((item) => item.title === 'sent-messages')?.value ?? 0,

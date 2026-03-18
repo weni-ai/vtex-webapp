@@ -27,14 +27,54 @@ export function getPeriodDates(period: 'today' | 'yesterday' | 'last 7 days' | '
   return periodMap[period]();
 }
 
-export function getLast3MonthsDates(): { startDate: string; endDate: string } {
+export interface DateRange {
+  startDate: string;
+  endDate: string;
+}
+
+export type DashboardPeriod = 'today' | 'yesterday' | 'last_7_days' | 'last_30_days' | 'this_month';
+
+export const DASHBOARD_PERIOD_DEFAULT: DashboardPeriod = 'last_7_days';
+
+export function getDashboardDateRange(period: DashboardPeriod): DateRange {
+  const toISODate = (date: Date) => date.toISOString().split('T')[0];
+  const now = new Date();
+
+  switch (period) {
+    case 'today': {
+      const dateStr = toISODate(now);
+      return { startDate: dateStr, endDate: dateStr };
+    }
+    case 'yesterday': {
+      const yesterday = new Date(now);
+      yesterday.setDate(now.getDate() - 1);
+      const dateStr = toISODate(yesterday);
+      return { startDate: dateStr, endDate: dateStr };
+    }
+    case 'last_7_days': {
+      const start = new Date(now);
+      start.setDate(now.getDate() - 7);
+      return { startDate: toISODate(start), endDate: toISODate(now) };
+    }
+    case 'last_30_days': {
+      const start = new Date(now);
+      start.setDate(now.getDate() - 30);
+      return { startDate: toISODate(start), endDate: toISODate(now) };
+    }
+    case 'this_month': {
+      const start = new Date(now.getFullYear(), now.getMonth(), 1);
+      return { startDate: toISODate(start), endDate: toISODate(now) };
+    }
+  }
+}
+
+export function getLast3MonthsDates(): DateRange {
   const toISODate = (date: Date) => date.toISOString().split('T')[0];
 
   const end = new Date();
   const start = new Date();
-  start.setMonth(start.getMonth() - 3);
-  // add 1 day to the start date
-  start.setDate(start.getDate() + 1);
+  // -89 (3 months) due to the fact that the start date is inclusive and the end date is exclusive
+  start.setDate(start.getDate() - 89);
 
   return {
     startDate: toISODate(start),

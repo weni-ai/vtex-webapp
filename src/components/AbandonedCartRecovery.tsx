@@ -6,7 +6,7 @@ import type { Revenue } from '../api/insights/adapters';
 import type { MetaPricing } from '../api/billing/adapters';
 import { getRevenue } from '../services/insights.service';
 import { getMetaPricing } from '../services/billing.service';
-import { getLast3MonthsDates } from '../utils';
+import type { DateRange } from '../utils';
 import { formatCurrency, formatNumber } from '../utils/formatters';
 
 const DEFAULT_CURRENCY_CODE = 'BRL';
@@ -54,20 +54,31 @@ function computeMetrics(
   };
 }
 
-function useAbandonedCartData(skillMetricsData: SkillMetricsData) {
+function useAbandonedCartData(
+  skillMetricsData: SkillMetricsData,
+  dateRange: DateRange,
+  isSkillMetricsLoading: boolean,
+) {
   const [isLoading, setIsLoading] = useState(true);
   const [metrics, setMetrics] = useState<AbandonedCartMetrics | null>(null);
 
   useEffect(() => {
+    if (isSkillMetricsLoading) {
+      setIsLoading(true);
+      return;
+    }
+
+    let cancelled = false;
+
     async function fetchData() {
       setIsLoading(true);
 
-      const { startDate, endDate } = getLast3MonthsDates();
-
       const results = await Promise.allSettled([
-        getRevenue(startDate, endDate),
+        getRevenue(dateRange.startDate, dateRange.endDate),
         getMetaPricing(),
       ]);
+
+      if (cancelled) return;
 
       const revenue =
         results[0].status === 'fulfilled' ? results[0].value : null;
@@ -82,7 +93,11 @@ function useAbandonedCartData(skillMetricsData: SkillMetricsData) {
     }
 
     fetchData();
-  }, [skillMetricsData]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isSkillMetricsLoading, skillMetricsData, dateRange.startDate, dateRange.endDate]);
 
   return { isLoading, metrics };
 }
@@ -119,11 +134,21 @@ function SecondaryMetric({ label, value }: SecondaryMetricProps) {
 
 interface AbandonedCartRecoveryProps {
   skillMetricsData: SkillMetricsData;
+  dateRange: DateRange;
+  isSkillMetricsLoading: boolean;
 }
 
-export function AbandonedCartRecovery({ skillMetricsData }: AbandonedCartRecoveryProps) {
+export function AbandonedCartRecovery({
+  skillMetricsData,
+  dateRange,
+  isSkillMetricsLoading,
+}: AbandonedCartRecoveryProps) {
   const { t, i18n } = useTranslation();
-  const { isLoading, metrics } = useAbandonedCartData(skillMetricsData);
+  const { isLoading, metrics } = useAbandonedCartData(
+    skillMetricsData,
+    dateRange,
+    isSkillMetricsLoading,
+  );
   const language = i18n.language;
 
   if (isLoading) {

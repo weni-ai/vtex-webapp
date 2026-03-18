@@ -1,6 +1,8 @@
 import {
   Alert,
   Button,
+  Filter,
+  FilterItem,
   Flex,
   Grid,
   Page,
@@ -16,7 +18,7 @@ import {
   Text,
   useTabStore,
 } from '@vtex/shoreline';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -33,38 +35,135 @@ import { selectProject, selectProjectDetail } from '../store/projectSlice';
 import { refreshChannelIntegrations } from '../services/channel.service';
 import { loadProjectDetail } from '../services/project.service';
 import { useSkillMetrics } from '../components/WhatsAppDashboard/useSkillMetrics';
+import { useDashboardDateRange } from '../hooks/useDashboardDateRange';
+import type { DateRange, DashboardPeriod } from '../utils';
 
-function PerformanceSectionHeader({ title }: { title: string }) {
+const PERIOD_FILTER_OPTIONS: { value: DashboardPeriod; labelKey: string }[] = [
+  { value: 'today', labelKey: 'metrics.fields.period.options.today' },
+  { value: 'yesterday', labelKey: 'metrics.fields.period.options.yesterday' },
+  { value: 'last_7_days', labelKey: 'metrics.fields.period.options.last_7_days' },
+  { value: 'last_30_days', labelKey: 'metrics.fields.period.options.last_30_days' },
+  { value: 'this_month', labelKey: 'metrics.fields.period.options.this_month' },
+];
+
+interface PeriodFilterProps {
+  isFilterVisible: boolean;
+  period: DashboardPeriod;
+  onPeriodChange: (period: DashboardPeriod) => void;
+}
+
+interface PerformanceSectionHeaderProps extends PeriodFilterProps {
+  title: string;
+}
+
+function PerformanceSectionHeader({
+  title,
+  isFilterVisible,
+  period,
+  onPeriodChange,
+}: PerformanceSectionHeaderProps) {
+  const { t } = useTranslation();
+
+  const periodLabel = useMemo(() => {
+    const match = PERIOD_FILTER_OPTIONS.find((option) => option.value === period);
+    return match ? t(match.labelKey) : '';
+  }, [period, t]);
+
+  const handlePeriodChange = useMemo(() => {
+    return ((value: React.SetStateAction<string>) => {
+      const resolvedLabel = typeof value === 'function' ? value(periodLabel) : value;
+      const match = PERIOD_FILTER_OPTIONS.find(
+        (option) => t(option.labelKey) === resolvedLabel,
+      );
+      if (match) {
+        onPeriodChange(match.value);
+      }
+    }) as React.Dispatch<React.SetStateAction<string>>;
+  }, [periodLabel, onPeriodChange, t]);
+
   return (
     <Flex justify="space-between" align="center">
       <Text variant="display2">{title}</Text>
 
-      {/* TODO: Add filters in the near future */}
+      {isFilterVisible && (
+        <Filter
+          label={t('metrics.fields.period.label')}
+          value={periodLabel}
+          setValue={handlePeriodChange}
+        >
+          {PERIOD_FILTER_OPTIONS.map((option) => (
+            <FilterItem key={option.value} value={t(option.labelKey)}>
+              {t(option.labelKey)}
+            </FilterItem>
+          ))}
+        </Filter>
+      )}
     </Flex>
   );
 }
 
-function WebchatDashboardContent() {
+interface WebchatDashboardContentProps extends PeriodFilterProps {
+  dateRange: DateRange;
+}
+
+function WebchatDashboardContent({
+  dateRange,
+  isFilterVisible,
+  period,
+  onPeriodChange,
+}: WebchatDashboardContentProps) {
   const { t } = useTranslation();
 
   return (
     <Flex direction="column" gap="$space-4">
-      <PerformanceSectionHeader title={t('ai_team_performance.title')} />
-      <AITeamPerformance />
+      <PerformanceSectionHeader
+        title={t('ai_team_performance.title')}
+        isFilterVisible={isFilterVisible}
+        period={period}
+        onPeriodChange={onPeriodChange}
+      />
+      <AITeamPerformance dateRange={dateRange} />
     </Flex>
   );
 }
 
-function WhatsAppDashboardContent({ skillMetricsData }: { skillMetricsData: SkillMetricsData }) {
+interface WhatsAppDashboardContentProps {
+  skillMetricsData: SkillMetricsData;
+  dateRange: DateRange;
+  isSkillMetricsLoading: boolean;
+}
+
+function WhatsAppDashboardContent({
+  skillMetricsData,
+  dateRange,
+  isSkillMetricsLoading,
+}: WhatsAppDashboardContentProps) {
   return (
     <Grid columns="3fr 2fr" gap="$space-5" style={{ minHeight: '302px' }}>
-      <NotificationPerformance data={skillMetricsData} />
-      <AbandonedCartRecovery skillMetricsData={skillMetricsData} />
+      <NotificationPerformance data={skillMetricsData} isLoading={isSkillMetricsLoading} />
+      <AbandonedCartRecovery
+        skillMetricsData={skillMetricsData}
+        dateRange={dateRange}
+        isSkillMetricsLoading={isSkillMetricsLoading}
+      />
     </Grid>
   );
 }
 
-function DashboardTabbedContent({ skillMetricsData }: { skillMetricsData: SkillMetricsData }) {
+interface DashboardTabbedContentProps extends PeriodFilterProps {
+  skillMetricsData: SkillMetricsData;
+  dateRange: DateRange;
+  isSkillMetricsLoading: boolean;
+}
+
+function DashboardTabbedContent({
+  skillMetricsData,
+  dateRange,
+  isSkillMetricsLoading,
+  isFilterVisible,
+  period,
+  onPeriodChange,
+}: DashboardTabbedContentProps) {
   const { t } = useTranslation();
   const tabStore = useTabStore();
 
@@ -81,15 +180,29 @@ function DashboardTabbedContent({ skillMetricsData }: { skillMetricsData: SkillM
 
       <TabPanel tabId="abandoned-cart-recovery" style={{ padding: '0' }}>
         <Flex direction="column" gap="$space-4">
-          <PerformanceSectionHeader title={t('dashboard.performance')} />
-          <WhatsAppDashboardContent skillMetricsData={skillMetricsData} />
+          <PerformanceSectionHeader
+            title={t('dashboard.performance')}
+            isFilterVisible={isFilterVisible}
+            period={period}
+            onPeriodChange={onPeriodChange}
+          />
+          <WhatsAppDashboardContent
+            skillMetricsData={skillMetricsData}
+            dateRange={dateRange}
+            isSkillMetricsLoading={isSkillMetricsLoading}
+          />
         </Flex>
       </TabPanel>
 
       <TabPanel tabId="agent-performance" style={{ padding: '0' }}>
         <Flex direction="column" gap="$space-4">
-          <PerformanceSectionHeader title={t('dashboard.performance')} />
-          <AITeamPerformance />
+          <PerformanceSectionHeader
+            title={t('dashboard.performance')}
+            isFilterVisible={isFilterVisible}
+            period={period}
+            onPeriodChange={onPeriodChange}
+          />
+          <AITeamPerformance dateRange={dateRange} />
         </Flex>
       </TabPanel>
     </TabProvider>
@@ -118,7 +231,14 @@ export function Dashboard() {
   const projectDetail = useSelector(selectProjectDetail);
   const hasWhatsApp = useSelector(isWhatsAppIntegrated);
   const onboardingStatus = useSelector(selectOnboardingStatus);
-  const skillMetrics = useSkillMetrics();
+  const isTrialPlan = !projectDetail || projectDetail.organization_billing?.plan === 'trial';
+  const {
+    dateRange,
+    period,
+    setPeriod,
+    isFilterVisible,
+  } = useDashboardDateRange(isTrialPlan);
+  const skillMetrics = useSkillMetrics(dateRange);
 
   const [showOnboardingAlert] = useState(
     () => !!(location.state as Record<string, unknown> | null)?.fromOnboarding,
@@ -146,12 +266,11 @@ export function Dashboard() {
   }, [projectUuid]);
 
   const showWhatsAppContent = hasWhatsApp && skillMetrics.hasValidData;
-  const isDashboardReady = isProjectReady && (!hasWhatsApp || !skillMetrics.isLoading);
+  const isDashboardReady = isProjectReady && (!hasWhatsApp || !skillMetrics.isInitialLoading);
   const isOnboardingSkipped =
     onboardingStatus?.skipped === true &&
     onboardingStatus?.completed !== true;
 
-  const isTrialPlan = projectDetail?.organization_billing?.plan === 'trial';
   const displayConversationUsageBanner = !isOnboardingSkipped && isTrialPlan;
   const vtexHostStore = projectDetail?.config.vtex_host_store;
 
@@ -196,9 +315,21 @@ export function Dashboard() {
             {isOnboardingSkipped && <SkippedOnboardingBanner />}
 
             {showWhatsAppContent && skillMetrics.data ? (
-              <DashboardTabbedContent skillMetricsData={skillMetrics.data} />
+              <DashboardTabbedContent
+                skillMetricsData={skillMetrics.data}
+                dateRange={dateRange}
+                isSkillMetricsLoading={skillMetrics.isLoading}
+                isFilterVisible={isFilterVisible}
+                period={period}
+                onPeriodChange={setPeriod}
+              />
             ) : (
-              <WebchatDashboardContent />
+              <WebchatDashboardContent
+                dateRange={dateRange}
+                isFilterVisible={isFilterVisible}
+                period={period}
+                onPeriodChange={setPeriod}
+              />
             )}
 
             {displayConversationUsageBanner && (

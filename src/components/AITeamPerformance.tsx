@@ -6,7 +6,7 @@ import {
   getConversationTotals,
   getCSAT,
 } from '../services/insights.service';
-import { getLast3MonthsDates } from '../utils';
+import type { DateRange } from '../utils';
 import { formatNumber } from '../utils/formatters';
 import { MetricCard, type MetricCardProps } from './MetricCard';
 import { MetricGrid } from './MetricGrid';
@@ -48,7 +48,11 @@ function buildMetrics(
   ];
 }
 
-export function AITeamPerformance() {
+interface AITeamPerformanceProps {
+  dateRange: DateRange;
+}
+
+export function AITeamPerformance({ dateRange }: AITeamPerformanceProps) {
   const { t, i18n } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -60,11 +64,9 @@ export function AITeamPerformance() {
     async function fetchMetrics() {
       setIsLoading(true);
 
-      const { startDate, endDate } = getLast3MonthsDates();
-
       const results = await Promise.allSettled([
-        getConversationTotals(startDate, endDate),
-        getCSAT(startDate, endDate),
+        getConversationTotals(dateRange.startDate, dateRange.endDate),
+        getCSAT(dateRange.startDate, dateRange.endDate),
       ]);
 
       if (results[0].status === 'fulfilled') {
@@ -79,7 +81,7 @@ export function AITeamPerformance() {
     }
 
     fetchMetrics();
-  }, []);
+  }, [dateRange.startDate, dateRange.endDate]);
 
   const metrics = buildMetrics(
     conversationTotals,
