@@ -1,9 +1,6 @@
-import { ContextualHelp, Flex, Skeleton, Text } from '@vtex/shoreline';
-import { useEffect, useState } from 'react';
+import { ContextualHelp, Flex, Text } from '@vtex/shoreline';
 import { useTranslation } from 'react-i18next';
 import type { SkillMetricsData } from '../api/agents/adapters';
-import { getSkillMetrics } from '../services/agent.service';
-import { getLast3MonthsDates } from '../utils';
 import { formatNumber } from '../utils/formatters';
 
 const MAX_BAR_HEIGHT = 137;
@@ -130,49 +127,16 @@ function NotificationMetricColumn({
   );
 }
 
-export function NotificationPerformance() {
+interface NotificationPerformanceProps {
+  data: SkillMetricsData;
+}
+
+export function NotificationPerformance({ data }: NotificationPerformanceProps) {
   const { t, i18n } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<SkillMetricsData | null>(null);
-
-  const calculateSentMessages = (data: SkillMetricsData | null) => {
-    if (!data || !data.data) return 0;
-    if (!data.data) return 0;
-
-    return Number(data.data.find((item) => item.title === 'sent-messages')?.value ?? 0);
-  }
-
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-
-      try {
-        const { startDate, endDate } = getLast3MonthsDates();
-        const result = await getSkillMetrics({ startDate, endDate });
-
-        if ('success' in result) {
-          setData(null);
-          return;
-        }
-
-        setData(result);
-      } catch {
-        setData(null);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return <Skeleton height="100%"/>;
-  }
-
-  const sentMessages = calculateSentMessages(data);
-  const maxValue = Number(sentMessages ?? 0);
+  const maxValue = Number(
+    data.data.find((item) => item.title === 'sent-messages')?.value ?? 0,
+  );
 
   return (
     <Flex
@@ -194,17 +158,17 @@ export function NotificationPerformance() {
         gap="$space-0"
       >
         {METRICS_CONFIG.map((metric, index) => {
-          const rawValue = Number(data?.data.find((item) => item.title === metric.apiKey)?.value ?? 0);
-          const formattedValue = data
-            ? formatNumber(Number(rawValue), i18n.language)
-            : '-';
+          const rawValue = Number(
+            data.data.find((item) => item.title === metric.apiKey)?.value ?? 0,
+          );
+          const formattedValue = data ? formatNumber(rawValue, i18n.language) : '0';
 
           return (
             <NotificationMetricColumn
               key={metric.apiKey}
               label={t(metric.labelKey)}
               value={formattedValue}
-              barHeight={computeBarHeight(Number(rawValue), maxValue)}
+              barHeight={computeBarHeight(rawValue, maxValue)}
               barColor={metric.color}
               barBorderRadius={metric.borderRadius}
               tooltipText={
