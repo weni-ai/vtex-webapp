@@ -3,7 +3,7 @@ import getEnv from "../../utils/env";
 import { proxy } from "../proxy";
 import { adaptSupervisorResponse, SupervisorApiResponse } from "./adapters";
 
-const MAX_RESULTS = 50;
+const MAX_RESULTS = 20;
 
 export async function fetchSupervisorConversations() {
   const projectUuid = store.getState().project.project_uuid;

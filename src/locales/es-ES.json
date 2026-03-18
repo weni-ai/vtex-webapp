@@ -1207,6 +1207,13 @@
                 "title": "Tu Equipo de IA está activo",
                 "description": "Estamos monitoreando tu tienda en tiempo real. Los registros de interacción y los insights de rendimiento aparecerán aquí tan pronto como ocurran."
             }
+        },
+        "table": {
+            "name": "Nombre",
+            "classification": "Clasificación",
+            "csat": "CSAT",
+            "date": "Fecha",
+            "hour": "Hora"
         }
     },
     "settings": {

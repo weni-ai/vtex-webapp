@@ -1206,6 +1206,13 @@
         "title": "Your AI Team is now live",
         "description": "We are monitoring your store in real-time. Interaction logs and performance insights will appear here as soon as they happen."
       }
+    },
+    "table": {
+      "name": "Name",
+      "classification": "Classification",
+      "csat": "CSAT",
+      "date": "Date",
+      "hour": "Hour"
     }
   },
   "settings": {
