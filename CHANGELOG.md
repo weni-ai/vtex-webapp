@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.4.0] - 2026-03-19
+
+### Added
+- feat: pre-verified phone numbers in whatsapp embedded signup
+
+### Changed
+- feat(audit): rename RecentActivity to Audit and refactor components to match the new name
+
+### Fixed
+- fix(CLIAgentCard): add textWrap style to caption for better layout
+
 ## [2.3.0] - 2026-03-18
 
 ### Added
