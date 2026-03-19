@@ -286,7 +286,7 @@
         "title": "Minhas soluções",
         "list": {
             "empty": {
-                "title": "Nenhum agente atribuído à equipe"
+                "title": "Nenhum agente disponível"
             }
         },
         "details": {
@@ -970,7 +970,9 @@
                     "today": "Hoje",
                     "yesterday": "Ontem",
                     "last_7_days": "Últimos 7 dias",
-                    "last_28_days": "Últimos 28 dias"
+                    "last_28_days": "Últimos 28 dias",
+                    "last_30_days": "Últimos 30 dias",
+                    "this_month": "Este mês"
                 }
             }
         }
@@ -1043,6 +1045,206 @@
         }
     },
     "dashboard": {
+        "title": "Agentic CX",
+        "view_on_store": "Ver na loja",
+        "settings": "Configurações",
+        "performance": "Desempenho",
+        "tabs": {
+            "agent_performance": "Desempenho do time de agentes",
+            "abandoned_cart_recovery": "Recuperação de carrinho abandonado"
+        },
+        "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes.",
+        "skipped_onboarding": {
+            "title": "Seu Time de IA está sendo preparado",
+            "failed_title": "Algo deu errado ao preparar seu Time de IA",
+            "start_activation": "Iniciar ativação"
+        }
+    },
+    "billing": {
+        "plans": {
+            "title": "Preços da Plataforma Agentic CX da VTEX",
+            "recommended": "Recomendado",
+            "princing": {
+                "per_conversation": "por conversa",
+                "limited_to": "Limitado a {{number}} /mês"
+            },
+            "features": {
+                "unlimited_users": {
+                    "title": "Usuários ilimitados"
+                },
+                "ready_to_use_ai_agents": {
+                    "title": "Agentes de IA prontos para usar³"
+                },
+                "custom_ai_agents_builder": {
+                    "title": "Construtor de Agentes de IA personalizados⁴",
+                    "description": "(Certificado Sl)"
+                },
+                "on_demand_marketing_and_utility_messages": {
+                    "title": "Mensagens de marketing e utilitárias sob demanda",
+                    "description": "Custos de janela diária do WhatsApp incluídos"
+                },
+                "workflows": {
+                    "title": "Fluxos",
+                    "description": "(Certificado Sl)"
+                },
+                "events_data_api": {
+                    "title": "API de Eventos de Dados",
+                    "description": "($ 1000.00/mês por modelo de dados)"
+                }
+            },
+            "actions": {
+                "start_with": "Iniciar com {{plan}}"
+            },
+            "starter": {
+                "title": "Iniciante"
+            },
+            "corporate": {
+                "title": "Corporativo"
+            },
+            "enterprise": {
+                "title": "Empresarial"
+            },
+            "lead": {
+                "success": "Sua solicitação de plano foi enviada com sucesso. Nosso time de vendas entrará em contato com você brevemente com os próximos passos.",
+                "error": "Não conseguimos enviar sua solicitação de plano. Por favor, tente novamente."
+            },
+            "notes": {
+                "explanations": "(1) Hospedagem em nuvem, Entregas e Atualizações Contínuas, Manutenção, Monitoramento e Suporte Técnico;\n(2) $0.49 para cada conversa adicional (sem pacote);\n(3) O agente de gerenciamento de IA pré-construído inclui até 30 instruções;\n(4) Cada ferramenta de agente personalizado inclui o processamento de até 10,000 tokens;",
+                "conversation_definition": "Uma Conversa é a unidade de faturamento central, definida como um único e contínuo intercâmbio de mensagens (seja de entrada do cliente ou de saída iniciado por um agente/sistema) que ocorre sob as seguintes restrições:\n•⁠ ⁠Limite de Duração (Reset Diário): Uma conversa é medida dentro de um único dia (de 12:00 AM a 11:59 PM). Se uma conversa ativa cruzar a meia-noite, ela é automaticamente contada como duas conversas separadas—uma terminando no primeiro dia e uma nova iniciando no segundo dia.\n•⁠ ⁠Especificidade de Canal: Uma conversa é exclusivamente vinculada ao canal pelo qual foi iniciada (ex: WhatsApp, Webchat). Se o mesmo cliente iniciar uma nova interação usando um canal diferente (ex: mudando de Webchat para WhatsApp), isso será contado como uma conversa separada e distinta."
+            }
+        }
+    },
+    "conversation_usage": {
+        "view_plans": "Ver Planos",
+        "time": {
+            "minutes": "{{value}} minutos",
+            "hours": "{{value}} horas"
+        },
+        "informational": {
+            "title": "Sua Inteligência de Vendas com IA está funcionando perfeitamente",
+            "description": "Os agentes já atenderam {{count}} interações, oferecendo suporte rápido e preciso. Você ainda tem {{remaining}} interações gratuitas para explorar todo o potencial da sua equipe."
+        },
+        "warning": {
+            "title": "Com {{count}} interações resolvidas, seu Time de IA já economizou {{timeSaved}} de horas de suporte humano.",
+            "description": "Nesse ritmo, sua avaliação gratuita durará aproximadamente {{estimatedDays}} dias. Considere um plano ilimitado para manter seu ritmo de crescimento."
+        },
+        "danger": {
+            "title": "Atenção: Você está se aproximando do limite de interações.",
+            "description": "Você já usou {{percentage}}% da sua cota gratuita. Escolha um plano agora para garantir que seus clientes não fiquem sem suporte quando o limite for atingido."
+        },
+        "critical": {
+            "title": "Limite gratuito de {{limit}} interações atingido. Seu Time de IA está pausado.",
+            "description": "Não deixe seus clientes esperando: assine um plano para reativar seus agentes e voltar a converter visitantes em compradores agora mesmo."
+        }
+    },
+    "ai_team_performance": {
+        "title": "Desempenho do Time de IA",
+        "total_engagements": {
+            "label": "Total de interações",
+            "description": "Todas as interações gerenciadas pela IA"
+        },
+        "resolution_rate": {
+            "label": "Taxa de resolução",
+            "description": "{{count}} interações"
+        },
+        "customer_satisfaction": {
+            "label": "Satisfação do cliente",
+            "description": "Baseado em {{count}} avaliações de clientes"
+        }
+    },
+    "notification_performance": {
+        "title": "Desempenho das notificações",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "clicked": "Cliques",
+        "read_tooltip": "Mensagens que foram abertas e lidas pelo destinatário"
+    },
+    "abandoned_cart_recovery": {
+        "title": "Recuperação de Carrinho Abandonado",
+        "recovered_revenue": "Receita Recuperada",
+        "roi": "ROI",
+        "total_sends": "Total de Envios",
+        "converted_sales": "Vendas Convertidas",
+        "conversion_rate": "Taxa de Conversão",
+        "average_order_value": "Ticket Médio"
+    },
+    "recent_activity": {
+        "title": "Atividade Recente",
+        "view_details": "Ver detalhes",
+        "unnamed_contact": "[Contato sem nome]",
+        "resolution": {
+            "ai_assisted": "Assistido por IA",
+            "other_conclusion": "Não assistido",
+            "in_progress": "Em andamento",
+            "unclassified": "Não classificado",
+            "transferred": "Transferido"
+        },
+        "csat": {
+            "very_unsatisfied": "Muito Insatisfeito",
+            "unsatisfied": "Insatisfeito",
+            "neutral": "Neutro",
+            "satisfied": "Satisfeito",
+            "very_satisfied": "Muito Satisfeito"
+        },
+        "empty": {
+            "skipped": {
+                "title": "Seu Time de IA ainda não está ativo",
+                "description": "Após a ativação, você verá os registros de interação em tempo real e os insights de desempenho aqui.",
+                "button": "Iniciar ativação"
+            },
+            "no_data": {
+                "title": "Seu Time de IA está ativo",
+                "description": "Estamos monitorando sua loja em tempo real. Os registros de interação e insights de desempenho aparecerão aqui assim que acontecerem."
+            }
+        },
+        "table": {
+            "name": "Nome",
+            "classification": "Classificação",
+            "csat": "CSAT",
+            "date": "Data",
+            "hour": "Hora"
+        }
+    },
+    "settings": {
+        "title": "Configurações",
+        "tabs": {
+            "customer_service": "Atendimento ao Cliente",
+            "whatsapp": "WhatsApp"
+        },
+        "webchat": {
+            "title": "Webchat",
+            "appearance": {
+                "title": "Aparência e Comportamento",
+                "edit": "Editar"
+            },
+            "traffic_rollout": {
+                "title": "Distribuição de Tráfego",
+                "safe_label": "10% (Canário / Validação)",
+                "full_label": "100% (Lançamento Completo)",
+                "safe_description": "Habilite para uma amostra de 10% para validar respostas e monitorar interações iniciais em um ambiente de baixo risco.",
+                "full_description": "Habilite em toda a sua loja. Você pode reduzir ou desativar a qualquer momento."
+            }
+        },
+        "whatsapp": {
+            "profile": {
+                "title": "Perfil do WhatsApp",
+                "edit": "Editar"
+            },
+            "automations": {
+                "title": "Automações",
+                "connect": "Conectar automações"
+            }
+        },
+        "agents_team": {
+            "title": "Equipe de agentes",
+            "edit_instructions": "Editar instruções",
+            "assign_agents": "Atribuir agentes",
+            "manager_tag": "Gerente",
+            "edit": "Editar",
+            "official_tag": "Oficial",
+            "custom_tag": "Personalizado"
+        },
         "onboarding_complete_alert": "Tudo pronto! Seus agentes estão ativos e prontos para transformar visitantes em clientes."
     }
 }

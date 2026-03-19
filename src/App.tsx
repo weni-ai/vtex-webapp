@@ -8,6 +8,7 @@ import { getUserFromLocalStorage } from './services/user.service';
 import { AgentDetails } from './pages/agent/Details';
 import { Setup } from './pages/Setup';
 import { Dashboard } from './pages/Dashboard';
+import { Settings } from './pages/Settings';
 import { Grid, Spinner } from '@vtex/shoreline';
 import { initialLoading } from './store/projectSlice';
 import { TermsAndConditions } from './pages/TermsAndConditions';
@@ -15,6 +16,7 @@ import { Template } from './pages/template/Template';
 import { AgentIndex } from './pages/agent/Index';
 import { Onboarding } from './pages/Onboarding';
 import { Adapters } from './pages/Adapters';
+import { BillingPlans } from './pages/billing/BillingPlans';
 
 function App() {
   const dispatch = useDispatch();
@@ -47,11 +49,13 @@ function App() {
             <Route path='/terms-and-conditions' element={<TermsAndConditions />}></Route>
             <Route path='/setup-error' element={<SetupError />}></Route>
             <Route path='/dash' element={<Dashboard />}></Route>
+            <Route path='/settings' element={<Settings />}></Route>
             <Route path='/agents/:assignedAgentUuid' element={<AgentIndex />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/create' element={<Template />}></Route>
             <Route path='/agents/:assignedAgentUuid/templates/:templateUuid/edit' element={<Template />}></Route>
             <Route path='/onboarding' element={<Onboarding />}></Route>
             <Route path='/adapters' element={<Adapters />}></Route>
+            <Route path='/billing-plans' element={<BillingPlans />}></Route>
           </Routes>
         </Router>
       )}

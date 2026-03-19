@@ -7,13 +7,10 @@ import {
   Flex,
   Heading,
   IconCheckCircleFill,
-  Radio,
-  RadioGroup,
   Text,
-  useRadioState,
 } from '@vtex/shoreline';
 import { selectAccount, selectUser } from '../../../store/userSlice';
-import { selectOnboardingStatus } from '../../../store/onboardSlice';
+import { selectOnboardingStatus, setOnboardingStatus } from '../../../store/onboardSlice';
 import {
   updateOnboarding,
   updateDisplayRatio,
@@ -23,13 +20,10 @@ import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
 import { Instructions } from '../../../components/manager/Instructions';
 import { CRAWLING_CHANNEL } from '../../../constants/onboarding';
-
-type ActivationMode = 'safe' | 'full';
-
-const DISPLAY_RATIO: Record<ActivationMode, number> = {
-  safe: 10,
-  full: 100,
-};
+import { ActivationSection } from '../../../components/shared/ActivationSection';
+import { DISPLAY_RATIO } from '../../../components/shared/activationConstants';
+import type { ActivationMode } from '../../../components/shared/activationConstants';
+import { useDispatch } from 'react-redux';
 
 const TEST_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
   catalog_concierge: 'onboarding.onboard_test.scenarios.catalog_concierge',
@@ -67,52 +61,14 @@ function CompletionBanner() {
   );
 }
 
-interface ActivationSectionProps {
-  activationMode: ActivationMode;
-  onModeChange: (mode: ActivationMode) => void;
-}
-
-function ActivationSection(props: ActivationSectionProps) {
-  const { activationMode, onModeChange } = props;
-  const { t } = useTranslation();
-
-  const radioState = useRadioState({
-    defaultValue: activationMode,
-    setValue: (value) => {
-      if (value === 'safe' || value === 'full') {
-        onModeChange(value);
-      }
-    },
-  });
-
-  const descriptionKey = activationMode === 'safe'
-    ? 'onboarding.onboard_test.activation.safe_description'
-    : 'onboarding.onboard_test.activation.full_description';
-
-  return (
-    <RadioGroup
-      label={t('onboarding.onboard_test.activation.title')}
-      horizontal
-      state={radioState}
-      description={t(descriptionKey)}
-    >
-      <Radio value="safe">
-        {t('onboarding.onboard_test.activation.safe_label')}
-      </Radio>
-      <Radio value="full">
-        {t('onboarding.onboard_test.activation.full_label')}
-      </Radio>
-    </RadioGroup>
-  );
-}
-
 export function WebchatTestAndActivate() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const userData = useSelector(selectUser);
   const accountData = useSelector(selectAccount);
   const onboardingStatus = useSelector(selectOnboardingStatus);
-
+  const dispatch = useDispatch();
+  
   const webchatAppUuid = onboardingStatus?.config?.channels?.wwc?.app_uuid ?? null;
 
   const [activationMode, setActivationMode] = useState<ActivationMode>('safe');
@@ -134,17 +90,23 @@ export function WebchatTestAndActivate() {
 
     setIsSkipping(true);
     try {
-      const result = await updateOnboarding(vtexAccount, { completed: true });
+      const result = await updateOnboarding(vtexAccount, { skipped: true });
       if (!result.success) {
         setIsSkipping(false);
         return;
       }
 
+      // update onboarding status to skipped
+      dispatch(setOnboardingStatus({
+        ...onboardingStatus!,
+        skipped: true,
+      }));
+
       navigate('/dash');
     } catch {
       setIsSkipping(false);
     }
-  }, [userData?.account, navigate]);
+  }, [userData?.account, navigate, dispatch, onboardingStatus]);
 
   const handleActivate = useCallback(async () => {
     const vtexAccount = userData?.account;
@@ -156,12 +118,16 @@ export function WebchatTestAndActivate() {
       const activation = await activateInStore(CRAWLING_CHANNEL.webchat, webchatAppUuid, vtexAccountId);
       if (activation.success) {
         await updateOnboarding(vtexAccount, { completed: true });
+        dispatch(setOnboardingStatus({
+          ...onboardingStatus!,
+          completed: true,
+        }));
         navigate('/dash', { state: { fromOnboarding: true } });
       }
     } finally {
       setIsActivating(false);
     }
-  }, [accountData?.id, webchatAppUuid, userData?.account, navigate]);
+  }, [accountData?.id, webchatAppUuid, userData?.account, navigate, dispatch, onboardingStatus]);
 
   const useCaseDescriptions = useMemo(
     () => Object.fromEntries(

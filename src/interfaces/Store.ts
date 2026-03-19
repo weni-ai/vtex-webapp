@@ -18,6 +18,23 @@ export interface Loading {
   isLoading: boolean
 }
 
+export interface OrganizationBilling {
+  plan: string;
+  trial_end_date: string;
+  days_till_trial_end: number;
+}
+
+export interface ProjectDetail {
+  uuid: string;
+  name: string;
+  created_at: string;
+  status: string;
+  organization_billing: OrganizationBilling;
+  config: {
+    vtex_host_store: string;
+  }
+}
+
 export interface ProjectState {
   project_uuid: string;
   wpp_cloud_app_uuid: string;
@@ -35,6 +52,7 @@ export interface ProjectState {
   storeType: string;
   initialLoading: boolean;
   WhatsAppURL: string;
+  projectDetail: ProjectDetail | null;
   assignedAgents: {
     uuid: string;
     webhookUrl: string;
@@ -95,9 +113,11 @@ export interface UserState {
   accountData: AccountData | null;
   loadingWhatsAppIntegration: boolean;
   isWhatsAppIntegrated: boolean;
+  isWebChatIntegrated: boolean;
   isAgentBuilderIntegrated: boolean;
   whatsAppError: string | null;
   WhatsAppPhoneNumber: string | null;
+  webchatAppUuid: string | null;
 }
 
 export interface AppState {
@@ -112,15 +132,16 @@ export interface OnboardStatus {
   project_uuid?: string;
   current_page?: string;
   completed: boolean;
+  skipped?: boolean;
   failed?: boolean;
   progress: number;
   current_step?: string;
   crawler_result?: string;
   config?: {
     channels: {
-      [key in CrawlingChannel]: {
+      [key in CrawlingChannel]?: {
         app_uuid: string | null;
-      } | null
+      }
     }
   }
 }

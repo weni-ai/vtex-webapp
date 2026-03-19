@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Agent, Loading, ProjectState, RootState } from 'src/interfaces/Store';
+import { Agent, Loading, ProjectDetail, ProjectState, RootState } from 'src/interfaces/Store';
 import { cleanURL } from '../utils';
 
 const initialState: ProjectState = {
@@ -22,6 +22,7 @@ const initialState: ProjectState = {
   },
   hasTheFirstLoadOfTheAgentsHappened: false,
   agents: [],
+  projectDetail: null,
   storeType: '',
   initialLoading: false,
   WhatsAppURL: '',
@@ -126,6 +127,9 @@ const projectSlice = createSlice({
     setAssignedAgents: (state, action: PayloadAction<AssignedAgent[]>) => {
       state.assignedAgents = action.payload;
     },
+    setProjectDetail: (state, action: PayloadAction<ProjectDetail | null>) => {
+      state.projectDetail = action.payload;
+    },
   }
 })
 
@@ -148,6 +152,7 @@ export const {
   setWhatsAppURL,
   addAssignedAgent,
   setAssignedAgents,
+  setProjectDetail,
 } = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project.project_uuid
@@ -165,4 +170,5 @@ export const agentsLoading = (state: RootState) => state.project.agentsLoading
 export const updateAgentLoading = (state: RootState) => state.project.updateAgentLoading
 export const disableAgentLoading = (state: RootState) => state.project.disableAgentLoading
 export const initialLoading = (state: RootState) => state.project.initialLoading
+export const selectProjectDetail = (state: RootState) => state.project.projectDetail
 export default projectSlice.reducer;

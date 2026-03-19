@@ -63,20 +63,17 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
   );
 
   return (
-    <Page style={{ height: '100vh', padding: 'var(--sl-space-6)' }}>
-      <PageHeader style={{ padding: 'var(--sl-space-5)' }}>
+    <Page style={{ height: '100vh' }}>
+      <PageHeader>
         <PageHeaderRow>
           <PageHeading>{title}</PageHeading>
           <Stack space="$space-3" horizontal>
-            {/* TODO: Skip action always disabled for this first version */}
-            {/* eslint-disable-next-line no-constant-binary-expression */} 
-            {(false && skipAction) && (
+            {skipAction && (
               <Bleed top="$space-2" bottom="$space-2">
                 <Button
                   variant="secondary"
                   size="large"
                   onClick={skipAction?.onClick}
-                  disabled={skipAction?.disabled}
                 >
                   {t('common.skip')}
                 </Button>
@@ -97,7 +94,7 @@ export function WebchatOnboardingLayout(props: WebchatOnboardingLayoutProps) {
         </PageHeaderRow>
       </PageHeader>
 
-      <PageContent style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: 'var(--sl-space-5) 0 0 0', margin: '0' }}>
+      <PageContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <Flex direction="column" gap="$space-5" grow={1}>
           {topSection}
 
