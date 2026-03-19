@@ -25,6 +25,30 @@ export const getPreVerifiedPhoneIds = async () => {
   return response;
 };
 
+interface WhatsAppConfigResponse {
+  code: string;
+  uuid: string;
+  created_by: string;
+  created_on: string;
+  modified_by: string;
+  config: {
+    title: string;
+    waba: {
+      id: string;
+      name: string;
+      timezone: string;
+      namespace: string;
+    };
+    phone_number: {
+      display_name: string;
+      display_phone_number: string;
+    },
+    wa_business_id: string;
+    mmlite_status: string;
+    has_calling: string;
+  };
+}
+
 export const checkWhatsAppIntegration = async (projectUUID: string) => {
   const userEmail = store.getState().user.userData?.user;
 
@@ -51,3 +75,38 @@ export const checkWhatsAppIntegration = async (projectUUID: string) => {
 
   return response;
 };
+
+
+export const checkWebChatIntegration = async (projectUUID: string) => {
+  const userEmail = store.getState().user.userData?.user;
+
+  const response = await proxy<{
+    has_webchat: boolean,
+    webchat_app_uuid: string,
+    flows_channel_uuid: string,
+  }>(
+    'GET',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/gallery/check-webchat-integration`,
+    {
+      headers: { 'Project-Uuid': projectUUID, },
+      params: {
+        user_email: userEmail || '',
+        project_uuid: projectUUID,
+      },
+    },
+  );
+
+  return response;
+};
+
+export const getWhatsAppConfig = async (wppCloudAppUuid: string, projectUUID: string) => {
+  const response = await proxy<WhatsAppConfigResponse>(
+    'GET',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-cloud/apps/${wppCloudAppUuid}/`,
+    {
+      headers: { 'Project-Uuid': projectUUID, },
+    }
+  );
+
+  return response;
+}

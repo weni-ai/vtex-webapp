@@ -1,35 +1,49 @@
 import { toast } from "@vtex/shoreline";
-import { VTEXWhatsAppAdapter } from "../api/channels/adapters";
+import { VTEXWebChatAdapter, VTEXWhatsAppAdapter } from "../api/channels/adapters";
 import { getPreVerifiedPhoneIds } from "../api/channels/requests";
 import { setFlowsChannelUuid, setWppCloudAppUuid, setWppLoading } from "../store/projectSlice";
 import store from "../store/provider.store";
-import { setAgentBuilderIntegrated, setLoadingWhatsAppIntegration, setWhatsAppError, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from "../store/userSlice";
+import { setAgentBuilderIntegrated, setLoadingWhatsAppIntegration, setWebChatAppUuid, setWebChatIntegrated, setWhatsAppError, setWhatsAppIntegrated, setWhatsAppPhoneNumber } from "../store/userSlice";
 import { VTEXFetch } from "../utils/VTEXFetch";
 
 const whatsappAdapter = new VTEXWhatsAppAdapter();
+const webchatAdapter = new VTEXWebChatAdapter();
 
 export async function checkWppIntegration(project_uuid: string) {
   return whatsappAdapter.checkIntegration(project_uuid);
 }
 
-/**
- * Fetches IDs of pre-verified phone numbers from another service (which calls Meta).
- * Used in Embedded Signup to fill setup.preVerifiedPhone.ids.
- * Returns an empty array if the endpoint is not configured or fails.
- */
-export async function fetchPreVerifiedPhoneIds(): Promise<string[]> {
-  try {
-    const response = await getPreVerifiedPhoneIds();
-    if (response?.error) {
-      console.warn("Pre-verified phones fetch failed:", response.error);
-      return [];
+export async function checkWebchatIntegration(project_uuid: string) {
+  return webchatAdapter.checkIntegration(project_uuid);
+}
+
+export async function refreshChannelIntegrations(projectUuid: string) {
+  const [wppResponse, webchatResponse] = await Promise.all([
+    checkWppIntegration(projectUuid),
+    checkWebchatIntegration(projectUuid),
+  ]);
+
+  if (wppResponse.success && !wppResponse.error) {
+    const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null, phone_number = null } = wppResponse.data || {};
+    if (has_whatsapp && wpp_cloud_app_uuid && flows_channel_uuid) {
+      store.dispatch(setWhatsAppIntegrated(true));
+      store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
+      store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
+      store.dispatch(setWhatsAppPhoneNumber(phone_number ? phone_number.replace(/\D/g, '') : null));
     }
-    const data = response?.data;
-    return Array.isArray(data) ? data : [];
-  } catch (err) {
-    console.warn("Pre-verified phones fetch error:", err);
-    return [];
   }
+
+  if (webchatResponse.success && !webchatResponse.error) {
+    const { has_webchat = false, webchat_app_uuid = '' } = webchatResponse.data || {};
+    if (has_webchat) {
+      store.dispatch(setWebChatIntegrated(true));
+      if (webchat_app_uuid) {
+        store.dispatch(setWebChatAppUuid(webchat_app_uuid));
+      }
+    }
+  }
+
+  return { wppResponse, webchatResponse };
 }
 
 export async function createChannel(code: string, project_uuid: string, wabaId: string, phoneId: string): Promise<{ success: boolean, error?: unknown }> {
@@ -82,5 +96,25 @@ export async function createChannel(code: string, project_uuid: string, wabaId: 
     return { success: false, error: error };
   } finally {
     store.dispatch(setWppLoading(false))
+  }
+}
+
+/**
+ * Fetches IDs of pre-verified phone numbers from another service (which calls Meta).
+ * Used in Embedded Signup to fill setup.preVerifiedPhone.ids.
+ * Returns an empty array if the endpoint is not configured or fails.
+ */
+export async function fetchPreVerifiedPhoneIds(): Promise<string[]> {
+  try {
+    const response = await getPreVerifiedPhoneIds();
+    if (response?.error) {
+      console.warn("Pre-verified phones fetch failed:", response.error);
+      return [];
+    }
+    const data = response?.data;
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.warn("Pre-verified phones fetch error:", err);
+    return [];
   }
 }

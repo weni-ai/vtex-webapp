@@ -543,7 +543,7 @@ export function AgentIndex() {
                   asChild
                   variant="tertiary"
                   size="large"
-                  onClick={() => navigate('/dash')}
+                  onClick={() => navigate('/settings')}
                   data-testid="back-button"
                 >
                   <IconArrowLeft />

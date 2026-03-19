@@ -291,7 +291,7 @@
     "title": "My solutions",
     "list": {
       "empty": {
-        "title": "No agent assigned to team"
+        "title": "No agent available"
       }
     },
     "details": {
@@ -979,7 +979,9 @@
           "today": "Today",
           "yesterday": "Yesterday",
           "last_7_days": "Last 7 days",
-          "last_28_days": "Last 28 days"
+          "last_28_days": "Last 28 days",
+          "last_30_days": "Last 30 days",
+          "this_month": "This month"
         }
       }
     }
@@ -1022,7 +1024,7 @@
       "safety_topics": [
         "Politics",
         "Physical health",
-        "Physical or moral violence", 
+        "Physical or moral violence",
         "Sexual content",
         "Prejudice",
         "Hate",
@@ -1052,6 +1054,206 @@
     }
   },
   "dashboard": {
+    "title": "Agentic CX",
+    "view_on_store": "View on store",
+    "settings": "Settings",
+    "performance": "Performance",
+    "tabs": {
+      "agent_performance": "Agent team performance",
+      "abandoned_cart_recovery": "Abandoned cart recovery"
+    },
+    "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers.",
+    "skipped_onboarding": {
+      "title": "Your AI Team is getting ready",
+      "failed_title": "Something went wrong while preparing your AI Team",
+      "start_activation": "Start activation"
+    }
+  },
+  "billing": {
+    "plans": {
+      "title": "VTEX Agentic CX Platform Pricing",
+      "recommended": "Recommended",
+      "princing": {
+        "per_conversation": "per conversation",
+        "limited_to": "Limited to {{number}} /mo"
+      },
+      "features": {
+        "unlimited_users": {
+          "title": "Unlimited users"
+        },
+        "ready_to_use_ai_agents": {
+          "title": "Ready-to-Use AI Agents³"
+        },
+        "custom_ai_agents_builder": {
+          "title": "Custom AI Agents Builder⁴",
+          "description": "(Certified Sl)"
+        },
+        "on_demand_marketing_and_utility_messages": {
+          "title": "On-demand Marketing and Utility messages",
+          "description": "WhatsApp daily window costs included"
+        },
+        "workflows": {
+          "title": "Workflows",
+          "description": "(Certified Sl)"
+        },
+        "events_data_api": {
+          "title": "Events Data API",
+          "description": "($ 1000.00/mo per data model)"
+        }
+      },
+      "actions": {
+        "start_with": "Start with {{plan}}"
+      },
+      "starter": {
+        "title": "Starter"
+      },
+      "corporate": {
+        "title": "Corporate"
+      },
+      "enterprise": {
+        "title": "Enterprise"
+      },
+      "lead": {
+        "success": "Your plan request was submitted successfully. Our sales team will contact you soon with the next steps.",
+        "error": "We couldn't submit your plan request. Please try again."
+      },
+      "notes": {
+        "explanations": "(1) Cloud hosting, Continuous Delivery and Rolling Upgrades, Maintenance, Monitoring and Technical Support;\n(2) $0.49 for each additional conversation (without a package);\n(3) The pre-built AI manager agent includes up to 30 instructions;\n(4) Each custom agent tool includes the processing of up to 10,000 tokens;",
+        "conversation_definition": "A Conversation is the core billing unit, defined as a single, continuous exchange of messages (either inbound from the customer or initiated outbound by an agent/system) that occurs under the following constraints:\n•⁠ ⁠Duration Limit (Daily Reset): A conversation is measured within a single calendar day (from 12:00 AM to 11:59 PM). If an active conversation crosses midnight, it is automatically counted as two separate conversations—one ending on the first day and a new one beginning on the second day.\n•⁠ ⁠Channel Specificity: A conversation is exclusively tied to the channel through which it was started (e.g., WhatsApp, Webchat). If the same customer initiates a new interaction using a different channel (e.g., moving from Webchat to WhatsApp), this will be counted as a separate and distinct conversation."
+      }
+    }
+  },
+  "conversation_usage": {
+    "view_plans": "View Plans",
+    "time": {
+      "minutes": "{{value}} minutes",
+      "hours": "{{value}} hours"
+    },
+    "informational": {
+      "title": "Your AI Sales Intelligence is running smoothly",
+      "description": "Agents have handled {{count}} interactions so far, providing fast and accurate support. You still have {{remaining}} free interactions to explore the full potential of your team."
+    },
+    "warning": {
+      "title": "With {{count}} interactions resolved, your AI Team has already saved {{timeSaved}} of human support hours.",
+      "description": "At this rate, your free trial will last approximately {{estimatedDays}} days. Consider an unlimited plan to keep your growth momentum."
+    },
+    "danger": {
+      "title": "Attention: You are approaching your interaction limit.",
+      "description": "You've used {{percentage}}% of your free quota. Choose a plan now to ensure your customers aren't left without support when the limit is reached."
+    },
+    "critical": {
+      "title": "Free limit of {{limit}} interactions reached. Your AI Team is now on pause.",
+      "description": "Don't let your customers wait: subscribe to a plan to reactivate your agents and resume converting visitors into buyers right now."
+    }
+  },
+  "ai_team_performance": {
+    "title": "AI Team Performance",
+    "total_engagements": {
+      "label": "Total engagements",
+      "description": "All customer interactions handled by AI"
+    },
+    "resolution_rate": {
+      "label": "Resolution Rate",
+      "description": "{{count}} engagements"
+    },
+    "customer_satisfaction": {
+      "label": "Customer Satisfaction",
+      "description": "Based on {{count}} customer ratings"
+    }
+  },
+  "notification_performance": {
+    "title": "Notification performance",
+    "sent": "Sent",
+    "delivered": "Delivered",
+    "read": "Read",
+    "clicked": "Clicks",
+    "read_tooltip": "Messages that were opened and read by the recipient"
+  },
+  "abandoned_cart_recovery": {
+    "title": "Abandoned Cart Recovery",
+    "recovered_revenue": "Recovered Revenue",
+    "roi": "ROI",
+    "total_sends": "Total Sends",
+    "converted_sales": "Converted Sales",
+    "conversion_rate": "Conversion Rate",
+    "average_order_value": "Average Order Value"
+  },
+  "recent_activity": {
+    "title": "Recent Activity",
+    "view_details": "View details",
+    "unnamed_contact": "[Unnamed contact]",
+    "resolution": {
+      "ai_assisted": "AI-assisted",
+      "other_conclusion": "Not assisted",
+      "in_progress": "In progress",
+      "unclassified": "Unclassified",
+      "transferred": "Transferred"
+    },
+    "csat": {
+      "very_unsatisfied": "Very Unsatisfied",
+      "unsatisfied": "Unsatisfied",
+      "neutral": "Neutral",
+      "satisfied": "Satisfied",
+      "very_satisfied": "Very Satisfied"
+    },
+    "empty": {
+      "skipped": {
+        "title": "Your AI Team is not live yet",
+        "description": "Once activated, you'll see real-time interaction logs and performance insights here.",
+        "button": "Start activation"
+      },
+      "no_data": {
+        "title": "Your AI Team is now live",
+        "description": "We are monitoring your store in real-time. Interaction logs and performance insights will appear here as soon as they happen."
+      }
+    },
+    "table": {
+      "name": "Name",
+      "classification": "Classification",
+      "csat": "CSAT",
+      "date": "Date",
+      "hour": "Hour"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "customer_service": "Customer Service",
+      "whatsapp": "WhatsApp"
+    },
+    "webchat": {
+      "title": "Webchat",
+      "appearance": {
+        "title": "Appearance & Behavior",
+        "edit": "Edit"
+      },
+      "traffic_rollout": {
+        "title": "Traffic Rollout",
+        "safe_label": "10% (Canary / Validation)",
+        "full_label": "100% (Full Rollout)",
+        "safe_description": "Enable for a 10% sample to validate responses and monitor initial interactions in a low-risk environment.",
+        "full_description": "Enable across your entire store. You can scale down or disable it at any time."
+      }
+    },
+    "whatsapp": {
+      "profile": {
+        "title": "WhatsApp profile",
+        "edit": "Edit"
+      },
+      "automations": {
+        "title": "Automations",
+        "connect": "Connect automations"
+      }
+    },
+    "agents_team": {
+      "title": "Agents team",
+      "edit_instructions": "Edit instructions",
+      "assign_agents": "Assign agents",
+      "manager_tag": "Manager",
+      "edit": "Edit",
+      "official_tag": "Official",
+      "custom_tag": "Custom"
+    },
     "onboarding_complete_alert": "All set! Your agents are now live and ready to turn visitors into customers."
   }
 }

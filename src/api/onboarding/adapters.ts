@@ -6,8 +6,9 @@ import {
   updateOnboarding, 
   updateWebchatDisplayRatio, 
   activatePixelApp,
-  getWebchatConfig
+  getWebchatConfig,
 } from "./requests";
+import type { WebchatConfigResponse } from "./requests";
 import type { CrawlingChannel } from "../../constants/onboarding";
 
 export interface OnboardStatusResponse {
@@ -49,7 +50,7 @@ export interface GetWebchatConfigResponse {
   success: boolean;
   error?: string;
   data?: {
-    config: object;
+    config: WebchatConfigResponse;
     flow_object_uuid: string;
   };
 }
@@ -58,7 +59,7 @@ export interface OnboardAdapter {
   getOnboardingStatus(vtex_account: string): Promise<OnboardStatusResponse>;
   ensureProjectAndUser(vtex_account: string, user_email: string): Promise<EnsureProjectAndUserResponse>;
   startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse>;
-  updateOnboarding(vtex_account: string, data: { current_page?: string; completed?: boolean }): Promise<UpdateOnboardingResponse>;
+  updateOnboarding(vtex_account: string, data: { current_page?: string; completed?: boolean; skipped?: boolean }): Promise<UpdateOnboardingResponse>;
   updateDisplayRatio(webchatAppUuid: string, newConfig: object): Promise<UpdateDisplayRatioResponse>;
   activateInStore(channel: CrawlingChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse>;
   getWebchatConfig(webchatAppUuid: string): Promise<GetWebchatConfigResponse>;
@@ -106,7 +107,7 @@ export class VTEXOnboardAdapter implements OnboardAdapter {
 
   async updateOnboarding(
     vtex_account: string,
-    data: { current_page?: string; completed?: boolean },
+    data: { current_page?: string; completed?: boolean; skipped?: boolean },
   ): Promise<UpdateOnboardingResponse> {
     try {
       const response = await updateOnboarding(vtex_account, data);

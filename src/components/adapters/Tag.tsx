@@ -10,6 +10,7 @@ const UnnnicTag = applyPureVueInReact(unnnic.unnnicTag) as React.ComponentType<{
   'data-testid'?: string;
   type?: string;
   text?: string;
+  style?: React.CSSProperties;
 }>;
 
 export function Tag(props: {
@@ -25,12 +26,14 @@ export function Tag(props: {
   const color = props.color || 'gray';
   const children = props.children;
   const dataTestId = props['data-testid'];
+  const style = props.style || {};
 
   if (system === 'shoreline') {
     return <ShorelineTag
       color={color}
       variant={variant}
       data-testid={dataTestId}
+      style={style}
     >
       {children}
     </ShorelineTag>;
@@ -52,6 +55,7 @@ export function Tag(props: {
     data-testid={dataTestId}
     type="next"
     text={children as string}
+    style={style}
   />;
 }
 

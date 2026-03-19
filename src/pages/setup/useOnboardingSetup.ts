@@ -2,13 +2,12 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOnboardingStatus, ensureProjectAndUser } from '../../services/onboarding.service';
 import { initializeUserContext, initializeWeniPlatformContext } from '../../services/setup.service';
-import { setAgentBuilder, setFlowsChannelUuid, setInitialLoading, setProjectUuid, setWppCloudAppUuid } from '../../store/projectSlice';
-import { setWhatsAppPhoneNumber } from '../../store/userSlice';
+import { setAgentBuilder, setInitialLoading, setProjectUuid } from '../../store/projectSlice';
 import { setOnboardingStatus } from '../../store/onboardSlice';
 import store from '../../store/provider.store';
-import { checkWppIntegration } from '../../services/channel.service';
-import { setWhatsAppIntegrated } from '../../store/userSlice';
+import { refreshChannelIntegrations } from '../../services/channel.service';
 import { checkAgentIntegration } from '../../services/agent.service';
+import { loadProjectDetail } from '../../services/project.service';
 
 export function useOnboardingSetup() {
   const navigate = useNavigate();
@@ -21,6 +20,7 @@ export function useOnboardingSetup() {
 
       if (embeddedWithin === 'Weni Platform') {
         initializeWeniPlatformContext(searchParams);
+        await loadProjectDetail();
         navigate('/dash');
         return;
       }
@@ -46,21 +46,20 @@ export function useOnboardingSetup() {
       if (projectUuid) {
         store.dispatch(setProjectUuid(projectUuid));
 
-        // TODO: check in the future if this will be needed when we have the new dashboard and settings page
-        const wppIntegrationResponse = await checkWppIntegration(projectUuid);
-        if (!wppIntegrationResponse.success || wppIntegrationResponse?.error) {
-          throw new Error(JSON.stringify(wppIntegrationResponse.error))
-        }
-        const { has_whatsapp = false, flows_channel_uuid = null, wpp_cloud_app_uuid = null, phone_number = null } = wppIntegrationResponse.data || {};
-        if (has_whatsapp && wpp_cloud_app_uuid && flows_channel_uuid) {
-          store.dispatch(setWhatsAppIntegrated(true));
-          store.dispatch(setWppCloudAppUuid(wpp_cloud_app_uuid));
-          store.dispatch(setFlowsChannelUuid(flows_channel_uuid));
-          store.dispatch(setWhatsAppPhoneNumber(phone_number ? phone_number.replace(/\D/g, '') : null));
+        const [{ wppResponse, webchatResponse }, agentIntegrationResponse] = await Promise.all([
+          refreshChannelIntegrations(projectUuid),
+          checkAgentIntegration(projectUuid),
+          loadProjectDetail(),
+        ]);
+
+        if (!wppResponse.success || wppResponse?.error) {
+          throw new Error(JSON.stringify(wppResponse.error))
         }
 
-        // TODO: check in the future if this will be needed when we have the new dashboard and settings page
-        const agentIntegrationResponse = await checkAgentIntegration(projectUuid);
+        if (!webchatResponse.success || webchatResponse?.error) {
+          throw new Error(JSON.stringify(webchatResponse.error))
+        }
+
         if (agentIntegrationResponse?.error || !agentIntegrationResponse.data) {
           throw new Error(JSON.stringify(agentIntegrationResponse.error))
         }
@@ -83,7 +82,7 @@ export function useOnboardingSetup() {
 
       }
 
-      if (onboardingStatus.data.completed) {
+      if (onboardingStatus.data.completed || onboardingStatus.data.skipped) {
         navigate('/dash');
         return;
       }
