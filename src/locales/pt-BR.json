@@ -1169,8 +1169,8 @@
         "conversion_rate": "Taxa de Conversão",
         "average_order_value": "Ticket Médio"
     },
-    "recent_activity": {
-        "title": "Atividade Recente",
+    "audit": {
+        "title": "Auditoria",
         "view_details": "Ver detalhes",
         "unnamed_contact": "[Contato sem nome]",
         "resolution": {

@@ -2,7 +2,7 @@ import { Button, Flex, Heading } from '@vtex/shoreline';
 import { useTranslation } from 'react-i18next';
 import { openPlatformUrl } from '../../utils/platform';
 
-export function RecentActivityHeader({showViewDetailsButton}: {showViewDetailsButton: boolean}) {
+export function AuditHeader({showViewDetailsButton}: {showViewDetailsButton: boolean}) {
   const { t } = useTranslation();
 
   function handleViewDetails() {
@@ -12,12 +12,12 @@ export function RecentActivityHeader({showViewDetailsButton}: {showViewDetailsBu
   return (
     <Flex align="center" justify="space-between">
       <Heading variant="display2">
-        {t('recent_activity.title')}
+        {t('audit.title')}
       </Heading>
 
       {showViewDetailsButton && (
         <Button variant="secondary" onClick={handleViewDetails}>
-          {t('recent_activity.view_details')}
+          {t('audit.view_details')}
         </Button>
       )}
     </Flex>

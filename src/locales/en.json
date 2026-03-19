@@ -1178,8 +1178,8 @@
     "conversion_rate": "Conversion Rate",
     "average_order_value": "Average Order Value"
   },
-  "recent_activity": {
-    "title": "Recent Activity",
+  "audit": {
+    "title": "Audit",
     "view_details": "View details",
     "unnamed_contact": "[Unnamed contact]",
     "resolution": {
