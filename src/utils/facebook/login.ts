@@ -154,24 +154,28 @@ export function startFacebookLogin(project_uuid: string) {
         }, LOGIN_TIMEOUT_MS);
 
         FB.login(
-            async (response) => {
+            (response) => {
                 clearLoginTimeout();
                 cleanupSessionInfoListener();
 
-                try {
-                    if (response.authResponse) {
-                        const code = response.authResponse.code;
-                        console.log("Login Successful.");
-                        await createChannel(code, project_uuid, wabaId, phoneId);
-                    } else {
-                        console.error("Login canceled or not fully authorized.");
-                    }
-                } catch (error) {
-                    console.error("Failed to create channel:", error);
-                } finally {
+                if (!response.authResponse) {
+                    console.error("Login canceled or not fully authorized.");
                     loginInProgress = false;
                     store.dispatch(setWppLoading(false));
+                    return;
                 }
+
+                const code = response.authResponse.code;
+                console.log("Login Successful.");
+
+                createChannel(code, project_uuid, wabaId, phoneId)
+                    .catch((error) => {
+                        console.error("Failed to create channel:", error);
+                    })
+                    .finally(() => {
+                        loginInProgress = false;
+                        store.dispatch(setWppLoading(false));
+                    });
             },
             loginOptions
         );
