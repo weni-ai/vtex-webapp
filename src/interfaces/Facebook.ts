@@ -18,11 +18,22 @@ export interface FBLoginResponse {
     };
 }
 
+/** Extras for WhatsApp Embedded Signup v3 */
+export interface FBLoginExtrasV3 {
+    featureType: string;
+    sessionInfoVersion: number;
+    features: Array<{ name: string }>;
+    setup: {
+        preVerifiedPhone?: {
+            ids: string[];
+        };
+    };
+    version: string;
+}
+
 export interface FBLoginOptions {
     config_id: string;
     response_type: string;
     override_default_response_type: boolean;
-    extras: {
-        sessionInfoVersion: number;
-    };
+    extras: FBLoginExtrasV3;
 }

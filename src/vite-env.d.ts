@@ -20,7 +20,15 @@ declare global {
         response_type: string;
         override_default_response_type: boolean;
         extras: {
+          featureType: string;
           sessionInfoVersion: number;
+          features: Array<{ name: string }>;
+          setup: {
+            preVerifiedPhone?: {
+              ids: string[];
+            };
+          };
+          version: string;
         };
       }
     ) => void;
