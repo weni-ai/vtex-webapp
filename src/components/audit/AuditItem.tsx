@@ -35,11 +35,11 @@ function formatCsat(csat: number, label: string): string {
   return `${config.emoji} ${label} | CSAT: ${csat}`;
 }
 
-interface RecentActivityItemProps {
+interface AuditItemProps {
   conversation: SupervisorConversation;
 }
 
-export function RecentActivityItem({ conversation }: RecentActivityItemProps) {
+export function AuditItem({ conversation }: AuditItemProps) {
   const { t } = useTranslation();
   const resolutionConfig = RESOLUTION_CONFIG[conversation.resolution];
   const showCsat =
@@ -52,7 +52,7 @@ export function RecentActivityItem({ conversation }: RecentActivityItemProps) {
       <TableCell>
         <Flex direction="column" gap="$space-0">
           <Text variant="emphasis">
-            {conversation.name ?? t('recent_activity.unnamed_contact')}
+            {conversation.name ?? t('audit.unnamed_contact')}
           </Text>
           <Text variant="caption2" color="$fg-base-soft">
             {formatUrn(conversation.urn)}
