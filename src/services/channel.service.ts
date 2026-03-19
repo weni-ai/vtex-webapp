@@ -17,7 +17,7 @@ export async function checkWppIntegration(project_uuid: string) {
  * Used in Embedded Signup to fill setup.preVerifiedPhone.ids.
  * Returns an empty array if the endpoint is not configured or fails.
  */
-export async function fetchPreVerifiedPhoneIds(_project_uuid: string): Promise<string[]> {
+export async function fetchPreVerifiedPhoneIds(): Promise<string[]> {
   try {
     const response = await getPreVerifiedPhoneIds();
     if (response?.error) {

@@ -125,7 +125,7 @@ export function startFacebookLogin(project_uuid: string) {
         window.addEventListener("message", sessionInfoListener);
 
         store.dispatch(setWppLoading(true));
-        const preVerifiedIds = await fetchPreVerifiedPhoneIds(project_uuid);
+        const preVerifiedIds = await fetchPreVerifiedPhoneIds();
 
         const loginOptions: FBLoginOptions = {
             config_id: configId ?? "",
