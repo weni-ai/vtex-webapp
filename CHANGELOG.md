@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.4.1] - 2026-03-19
+
+### Fixed
+- fix(facebook-login): improve error handling and streamline login process
+
 ## [2.4.0] - 2026-03-19
 
 ### Added
