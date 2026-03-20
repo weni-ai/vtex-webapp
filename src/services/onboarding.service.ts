@@ -2,12 +2,13 @@ import {
   ActivateInStoreResponse,
   EnsureProjectAndUserResponse,
   OnboardStatusResponse,
-  StartCrawlingResponse,
+  StartOnboardingSetupResponse,
   UpdateDisplayRatioResponse,
   UpdateOnboardingResponse,
   VTEXOnboardAdapter,
 } from "../api/onboarding/adapters";
-import type { CrawlingChannel } from "../constants/onboarding";
+import type { SetupChannel } from "../constants/onboarding";
+import type { WhatsAppChannelData } from "../api/onboarding/requests";
 
 const onboardingAdapter = new VTEXOnboardAdapter();
 
@@ -19,8 +20,13 @@ export async function ensureProjectAndUser(vtex_account: string, user_email: str
   return onboardingAdapter.ensureProjectAndUser(vtex_account, user_email);
 }
 
-export async function startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse> {
-  return onboardingAdapter.startCrawling(vtex_account, url, channel);
+export async function startOnboardingSetup(
+  vtex_account: string,
+  url: string,
+  channel: SetupChannel,
+  channelData?: WhatsAppChannelData,
+): Promise<StartOnboardingSetupResponse> {
+  return onboardingAdapter.startOnboardingSetup(vtex_account, url, channel, channelData);
 }
 
 export async function updateOnboarding(
@@ -51,7 +57,7 @@ export async function updateDisplayRatio(
 }
 
 export async function activateInStore(
-  channel: CrawlingChannel,
+  channel: SetupChannel,
   appUuid: string,
   accountId: string,
 ): Promise<ActivateInStoreResponse> {

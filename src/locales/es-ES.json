@@ -70,6 +70,18 @@
             "placeholder": "Elige la URL de tu tienda",
             "help_text": "Confirma tu URL original para que podamos construir una base de conocimiento precisa para tus agentes."
         },
+        "whatsapp_activation": {
+            "title": "¿Cómo quieres activar WhatsApp?",
+            "sandbox": {
+                "title": "Usar un número de prueba (Sandbox)",
+                "tag": "Más rápido",
+                "description": "Usa un número temporal VTEX Agentic para validar tus flujos ahora. Después de las pruebas, puedes mantenerlo como número permanente o cambiarlo por uno oficial en cualquier momento. <0>Sin permisos de Meta ni soporte de TI necesarios para comenzar.</0>"
+            },
+            "official": {
+                "title": "Conectar tu número oficial",
+                "description": "Inicia sesión en Meta para autorizar el envío de mensajes a través de tu cuenta oficial de Business Manager."
+            }
+        },
         "onboard_setup": {
             "title": "Tu equipo de IA se está preparando",
             "test_button": "Probar",

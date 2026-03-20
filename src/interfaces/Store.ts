@@ -1,4 +1,4 @@
-import { CrawlingChannel } from "../constants/onboarding";
+import { SetupChannel } from "../constants/onboarding";
 
 export interface AuthState {
   token: string;
@@ -139,7 +139,7 @@ export interface OnboardStatus {
   crawler_result?: string;
   config?: {
     channels: {
-      [key in CrawlingChannel]?: {
+      [key in SetupChannel]?: {
         app_uuid: string | null;
       }
     }
