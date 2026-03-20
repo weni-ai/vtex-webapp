@@ -85,6 +85,7 @@
     "onboard_setup": {
       "title": "Your AI Team is getting ready",
       "test_button": "Test",
+      "whatsapp_preview_title": "Abandoned Cart Recovery preview:",
       "progress": {
         "stage_prefix": "Stage {{current}}/{{total}}",
         "stages": {

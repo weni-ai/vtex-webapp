@@ -85,6 +85,7 @@
         "onboard_setup": {
             "title": "Tu equipo de IA se está preparando",
             "test_button": "Probar",
+            "whatsapp_preview_title": "Vista previa de Recuperación de Carrito Abandonado:",
             "progress": {
                 "stage_prefix": "Etapa {{current}}/{{total}}",
                 "stages": {

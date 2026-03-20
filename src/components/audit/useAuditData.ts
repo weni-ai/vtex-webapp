@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectOnboardingStatus } from '../../store/onboardSlice';
 import { fetchSupervisorConversations } from '../../api/supervisor/requests';
-import { isProgressComplete } from '../../pages/onboarding/webchat/progressSteps';
+import { isProgressComplete } from '../../pages/onboarding/shared/progressSteps';
 import type { SupervisorConversation } from '../../interfaces/Supervisor';
 
 export type AuditDataState =
