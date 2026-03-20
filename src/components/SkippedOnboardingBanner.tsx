@@ -7,8 +7,8 @@ import { selectUser } from '../store/userSlice';
 import { selectOnboardingStatus, setOnboardingStatus } from '../store/onboardSlice';
 import { updateOnboarding } from '../services/onboarding.service';
 import { ONBOARDING_PAGES, SUPPORT_EMAIL } from '../constants/onboarding';
-import { useOnboardProgress } from '../pages/onboarding/webchat/useOnboardProgress';
-import { ProgressBar } from '../pages/onboarding/webchat/ProgressBar';
+import { useOnboardProgress } from '../pages/onboarding/shared/useOnboardProgress';
+import { ProgressBar } from '../pages/onboarding/shared/ProgressBar';
 
 export function SkippedOnboardingBanner() {
   const { t } = useTranslation();

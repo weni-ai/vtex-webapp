@@ -1,23 +1,30 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Flex, Link, Text, toast } from '@vtex/shoreline';
+import {
+  Bleed,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Link,
+  Page,
+  PageContent,
+  PageHeader,
+  PageHeaderRow,
+  PageHeading,
+  Stack,
+  Text,
+  toast,
+} from '@vtex/shoreline';
 import { selectUser } from '../../../store/userSlice';
 import { updateOnboarding } from '../../../services/onboarding.service';
 import { selectOnboardingStatus, setOnboardingStatus } from '../../../store/onboardSlice';
 import { ONBOARDING_PAGES, SUPPORT_EMAIL } from '../../../constants/onboarding';
 import { useOnboardProgress } from '../shared/useOnboardProgress';
 import { ProgressBar } from '../shared/ProgressBar';
-import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
-import { UseCaseId } from './webchatUseCases';
-
-const SETUP_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
-  catalog_concierge: 'onboarding.onboard_setup.use_cases.catalog_concierge.description',
-  cancellations: 'onboarding.onboard_setup.use_cases.cancellations.description',
-  order_status: 'onboarding.onboard_setup.use_cases.order_status.description',
-  faq_assistant: 'onboarding.onboard_setup.use_cases.faq_assistant.description',
-};
+import { WhatsAppPreview } from './WhatsAppPreview';
 
 function FailedToastContent({ message, actionLabel }: { message: string; actionLabel: string }) {
   return (
@@ -35,7 +42,7 @@ function FailedToastContent({ message, actionLabel }: { message: string; actionL
   );
 }
 
-export function WebchatOnboardSetup() {
+export function WhatsAppOnboardSetup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -76,16 +83,13 @@ export function WebchatOnboardSetup() {
     if (!vtexAccount || !onboardingStatus) return;
 
     setIsTesting(true);
-    updateOnboarding(vtexAccount, { current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_TEST });
-    dispatch(setOnboardingStatus(
-      {
-        ...onboardingStatus!,
-        current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_TEST,
-      }
-    ));
+    updateOnboarding(vtexAccount, { current_page: ONBOARDING_PAGES.ONBOARD_WHATSAPP_TEST });
+    dispatch(setOnboardingStatus({
+      ...onboardingStatus,
+      current_page: ONBOARDING_PAGES.ONBOARD_WHATSAPP_TEST,
+    }));
   }, [userData?.account, onboardingStatus, dispatch]);
 
-  // Programmatic anchor click works reliably inside iframes, unlike window.open which can be blocked by popup blockers or sandbox restrictions
   const handleContactSupport = useCallback(() => {
     const anchor = document.createElement('a');
     anchor.href = `mailto:${SUPPORT_EMAIL}`;
@@ -94,37 +98,60 @@ export function WebchatOnboardSetup() {
     anchor.click();
   }, []);
 
-  const useCaseDescriptions = useMemo(
-    () => Object.fromEntries(
-      Object.entries(SETUP_DESCRIPTION_KEYS).map(([id, key]) => [id, t(key)]),
-    ) as Record<UseCaseId, string>,
-    [t],
-  );
-
   const primaryAction = isFailed
-    ? {
-        label: t('onboarding.onboard_setup.progress.failed.contact_support'),
-        onClick: handleContactSupport,
-      }
-    : {
-        label: t('onboarding.onboard_setup.test_button'),
-        onClick: handleTest,
-        disabled: !isComplete || isTesting,
-      };
+    ? { label: t('onboarding.onboard_setup.progress.failed.contact_support'), onClick: handleContactSupport }
+    : { label: t('onboarding.onboard_setup.test_button'), onClick: handleTest, disabled: !isComplete || isTesting };
 
   const skipAction = isFailed
     ? undefined
     : { onClick: handleSkip, disabled: !isComplete };
 
   return (
-    <WebchatOnboardingLayout
-      type="preview"
-      title={t('onboarding.onboard_setup.title')}
-      primaryAction={primaryAction}
-      skipAction={skipAction}
-      topSection={<ProgressBar currentStep={currentStep} progress={progress} isFailed={isFailed} />}
-      useCasesTitle={t('onboarding.onboard_setup.use_cases.title')}
-      useCaseDescriptions={useCaseDescriptions}
-    />
+    <Page style={{ height: '100vh' }}>
+      <PageHeader>
+        <PageHeaderRow>
+          <PageHeading>{t('onboarding.onboard_setup.title')}</PageHeading>
+          <Stack space="$space-3" horizontal>
+            {skipAction && (
+              <Bleed top="$space-2" bottom="$space-2">
+                <Button
+                  variant="secondary"
+                  size="large"
+                  onClick={skipAction.onClick}
+                >
+                  {t('common.skip')}
+                </Button>
+              </Bleed>
+            )}
+            <Bleed top="$space-2" bottom="$space-2">
+              <Button
+                variant="primary"
+                size="large"
+                onClick={primaryAction.onClick}
+                disabled={primaryAction.disabled}
+              >
+                {primaryAction.label}
+              </Button>
+            </Bleed>
+          </Stack>
+        </PageHeaderRow>
+      </PageHeader>
+
+      <PageContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Flex direction="column" gap="$space-5" grow={1} style={{ minHeight: 0 }}>
+          <ProgressBar currentStep={currentStep} progress={progress} isFailed={isFailed} />
+
+          <Divider />
+
+          <Flex direction="column" gap="$space-4" style={{ flex: 1, minHeight: 0 }}>
+            <Heading variant="display3">
+              {t('onboarding.onboard_setup.whatsapp_preview_title')}
+            </Heading>
+
+            <WhatsAppPreview />
+          </Flex>
+        </Flex>
+      </PageContent>
+    </Page>
   );
 }
