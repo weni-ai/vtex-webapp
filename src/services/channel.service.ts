@@ -17,6 +17,14 @@ export async function checkWebchatIntegration(project_uuid: string) {
   return webchatAdapter.checkIntegration(project_uuid);
 }
 
+export async function getWhatsAppConfig(wppCloudAppUuid: string, projectUUID: string) {
+  return whatsappAdapter.getWhatsAppConfig(wppCloudAppUuid, projectUUID);
+}
+
+export async function getWhatsAppProfile(wppCloudAppUuid: string) {
+  return whatsappAdapter.getWhatsAppProfile(wppCloudAppUuid);
+}
+
 export async function refreshChannelIntegrations(projectUuid: string) {
   const [wppResponse, webchatResponse] = await Promise.all([
     checkWppIntegration(projectUuid),

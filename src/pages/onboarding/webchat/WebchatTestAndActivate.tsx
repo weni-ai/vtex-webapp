@@ -5,9 +5,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Divider,
   Flex,
-  Heading,
-  IconCheckCircleFill,
-  Text,
 } from '@vtex/shoreline';
 import { selectAccount, selectUser } from '../../../store/userSlice';
 import { selectOnboardingStatus, setOnboardingStatus } from '../../../store/onboardSlice';
@@ -20,6 +17,7 @@ import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
 import { Instructions } from '../../../components/manager/Instructions';
 import { SETUP_CHANNEL } from '../../../constants/onboarding';
+import { CompletionBanner } from '../shared/CompletionBanner';
 import { ActivationSection } from '../../../components/shared/ActivationSection';
 import { DISPLAY_RATIO } from '../../../components/shared/activationConstants';
 import type { ActivationMode } from '../../../components/shared/activationConstants';
@@ -31,35 +29,6 @@ const TEST_DESCRIPTION_KEYS: Record<UseCaseId, string> = {
   order_status: 'onboarding.onboard_test.scenarios.order_status',
   faq_assistant: 'onboarding.onboard_test.scenarios.faq_assistant',
 };
-
-function CompletionBanner() {
-  const { t } = useTranslation();
-
-  const completionItems = [
-    t('onboarding.onboard_test.completion.knowledge_base'),
-    t('onboarding.onboard_test.completion.business_rules'),
-    t('onboarding.onboard_test.completion.agents_ready'),
-  ];
-
-  return (
-    <Flex direction="column" gap="$space-3">
-      <Flex gap="$space-2" align="center">
-        <IconCheckCircleFill style={{ color: 'var(--sl-color-green-8)', fontSize: 20 }} />
-        <Heading variant="display3">
-          {t('onboarding.onboard_test.completion.heading')}
-        </Heading>
-      </Flex>
-
-      <Flex gap="$space-4">
-        {completionItems.map((item) => (
-          <Text key={item} variant="body">
-            {`✓ ${item}`}
-          </Text>
-        ))}
-      </Flex>
-    </Flex>
-  );
-}
 
 export function WebchatTestAndActivate() {
   const { t } = useTranslation();
@@ -129,6 +98,12 @@ export function WebchatTestAndActivate() {
     }
   }, [accountData?.id, webchatAppUuid, userData?.account, navigate, dispatch, onboardingStatus]);
 
+  const completionItems = useMemo(() => [
+    t('onboarding.onboard_test.completion.knowledge_base'),
+    t('onboarding.onboard_test.completion.business_rules'),
+    t('onboarding.onboard_test.completion.agents_ready'),
+  ], [t]);
+
   const useCaseDescriptions = useMemo(
     () => Object.fromEntries(
       Object.entries(TEST_DESCRIPTION_KEYS).map(([id, key]) => [id, t(key)]),
@@ -163,7 +138,7 @@ export function WebchatTestAndActivate() {
         onClick: handleSkip,
         disabled: isSkipping,
       }}
-      topSection={<CompletionBanner />}
+      topSection={<CompletionBanner completionItems={completionItems} />}
       useCasesTitle={t('onboarding.onboard_test.scenarios.title')}
       useCaseDescriptions={useCaseDescriptions}
       belowCards={belowCards}

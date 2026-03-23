@@ -218,7 +218,18 @@
                 "heading": "Entrenamiento completo: tus agentes están listos para la acción",
                 "knowledge_base": "Base de conocimiento de retail creada y optimizada",
                 "business_rules": "Reglas de negocio y políticas de retail completamente mapeadas",
-                "agents_ready": "Agentes expertos activos y listos"
+                "agents_ready": "Agentes expertos activos y listos",
+                "abandoned_cart_ready": "Especialista en Carrito Abandonado listo"
+            },
+            "whatsapp": {
+                "preview_title": "Prueba de Recuperación de Carrito Abandonado",
+                "profile_settings_title": "Configuración del perfil de WhatsApp",
+                "live_test_title": "Enviar una prueba en vivo",
+                "live_test_country_code_help": "Código de país",
+                "live_test_phone_help": "Número de teléfono",
+                "live_test_add_phone": "Agregar teléfono",
+                "live_test_send": "Enviar",
+                "live_test_description": "El mensaje se enviará al número indicado para que valides el flujo en tu dispositivo móvil."
             },
             "scenarios": {
                 "title": "Haz clic para probar un escenario:",

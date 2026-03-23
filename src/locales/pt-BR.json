@@ -212,7 +212,18 @@
                 "heading": "Treinamento concluído: Seus agentes estão prontos para ação",
                 "knowledge_base": "Base de conhecimento de varejo criada e otimizada",
                 "business_rules": "Regras de negócio e políticas de varejo totalmente mapeadas",
-                "agents_ready": "Agentes especialistas ativos e prontos"
+                "agents_ready": "Agentes especialistas ativos e prontos",
+                "abandoned_cart_ready": "Especialista em Carrinho Abandonado pronto"
+            },
+            "whatsapp": {
+                "preview_title": "Teste de Recuperação de Carrinho Abandonado",
+                "profile_settings_title": "Configurações do perfil WhatsApp",
+                "live_test_title": "Enviar um teste ao vivo",
+                "live_test_country_code_help": "Código do país",
+                "live_test_phone_help": "Número de telefone",
+                "live_test_add_phone": "Adicionar telefone",
+                "live_test_send": "Enviar",
+                "live_test_description": "A mensagem será enviada para o número acima para você validar o fluxo no seu dispositivo móvel."
             },
             "scenarios": {
                 "title": "Clique para testar um agente:",

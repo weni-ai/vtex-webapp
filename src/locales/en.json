@@ -218,7 +218,18 @@
         "heading": "Training complete: Your agents are ready for action",
         "knowledge_base": "Retail knowledge base created and optimized",
         "business_rules": "Business rules and retail policies fully mapped",
-        "agents_ready": "Expert agents active and ready"
+        "agents_ready": "Expert agents active and ready",
+        "abandoned_cart_ready": "Abandoned Cart specialist ready"
+      },
+      "whatsapp": {
+        "preview_title": "Abandoned Cart Recovery Test",
+        "profile_settings_title": "WhatsApp profile Settings",
+        "live_test_title": "Send a live test",
+        "live_test_country_code_help": "Country code",
+        "live_test_phone_help": "Phone Number",
+        "live_test_add_phone": "Add phone",
+        "live_test_send": "Send",
+        "live_test_description": "The message will be sent to the number above for you to validate the flow on your mobile device."
       },
       "scenarios": {
         "title": "Click to test a scenario:",

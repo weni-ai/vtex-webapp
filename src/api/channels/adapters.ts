@@ -1,4 +1,4 @@
-import { checkWebChatIntegration, checkWhatsAppIntegration, getWhatsAppConfig } from "./requests";
+import { checkWebChatIntegration, checkWhatsAppIntegration, getWhatsAppConfig, getWhatsAppProfile } from "./requests";
 
 export interface WhatsAppIntegrationResponse {
     success: boolean;
@@ -20,9 +20,18 @@ export interface WhatsAppConfigResult {
     };
 }
 
+export interface WhatsAppProfileResult {
+    success: boolean;
+    error?: string;
+    data?: {
+        photoUrl: string;
+    };
+}
+
 export interface WhatsAppAdapter {
     checkIntegration(projectUUID: string): Promise<WhatsAppIntegrationResponse>;
     getWhatsAppConfig(wppCloudAppUuid: string, projectUUID: string): Promise<WhatsAppConfigResult>;
+    getWhatsAppProfile(wppCloudAppUuid: string): Promise<WhatsAppProfileResult>;
 }
 
 export class VTEXWhatsAppAdapter implements WhatsAppAdapter {
@@ -55,6 +64,22 @@ export class VTEXWhatsAppAdapter implements WhatsAppAdapter {
             };
         } catch (error: unknown) {
             console.error('error getting WhatsApp config:', error);
+            return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
+        }
+    }
+
+    async getWhatsAppProfile(wppCloudAppUuid: string): Promise<WhatsAppProfileResult> {
+        try {
+            const response = await getWhatsAppProfile(wppCloudAppUuid);
+
+            return {
+                success: true,
+                data: {
+                    photoUrl: response.photo_url,
+                },
+            };
+        } catch (error: unknown) {
+            console.error('error getting WhatsApp profile:', error);
             return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
         }
     }

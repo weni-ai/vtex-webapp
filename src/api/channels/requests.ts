@@ -109,4 +109,26 @@ export const getWhatsAppConfig = async (wppCloudAppUuid: string, projectUUID: st
   );
 
   return response;
+};
+
+export interface WhatsAppProfileResponse {
+  status: string;
+  business: {
+    description: string | null;
+    vertical: string;
+    vertical_choices: string[];
+  };
+  photo_url: string;
 }
+
+export const getWhatsAppProfile = async (wppCloudAppUuid: string) => {
+  const response = await proxy<WhatsAppProfileResponse>(
+    'GET',
+    `${getEnv('VITE_APP_INTEGRATIONS_URL')}/api/v1/apptypes/wpp-cloud/apps/${wppCloudAppUuid}/profile/`,
+    {
+      headers: {},
+    }
+  );
+
+  return response;
+};

@@ -10,7 +10,12 @@ const PREVIEW_BY_LANGUAGE: Record<string, string> = {
   pt: previewPt,
 };
 
-export function WhatsAppPreview() {
+interface WhatsAppPreviewProps {
+  showBanner?: boolean;
+  centerContent?: boolean;
+}
+
+export function WhatsAppPreview({ showBanner = true, centerContent = false }: WhatsAppPreviewProps) {
   const { i18n, t } = useTranslation();
 
   const previewSrc = PREVIEW_BY_LANGUAGE[i18n.language] ?? previewEn;
@@ -26,22 +31,24 @@ export function WhatsAppPreview() {
       }}
       gap="$space-0"
     >
-      <Flex
-        align="center"
-        justify="center"
-        style={{
-          flexShrink: 0,
-          padding: 'var(--sl-space-3)',
-          background: 'var(--sl-bg-base)',
-          border: '1px solid var(--sl-color-blue-3)',
-          borderTopLeftRadius: 'var(--sl-radius-2)',
-          borderTopRightRadius: 'var(--sl-radius-2)',
-        }}
-      >
-        <Text variant="caption2" style={{ textAlign: 'center' }}>
-          {t('onboarding.onboard_setup.preview.banner')}
-        </Text>
-      </Flex>
+      {showBanner && (
+        <Flex
+          align="center"
+          justify="center"
+          style={{
+            flexShrink: 0,
+            padding: 'var(--sl-space-3)',
+            background: 'var(--sl-bg-base)',
+            border: '1px solid var(--sl-color-blue-3)',
+            borderTopLeftRadius: 'var(--sl-radius-2)',
+            borderTopRightRadius: 'var(--sl-radius-2)',
+          }}
+        >
+          <Text variant="caption2" style={{ textAlign: 'center' }}>
+            {t('onboarding.onboard_setup.preview.banner')}
+          </Text>
+        </Flex>
+      )}
 
       <Flex
         justify="center"
@@ -49,8 +56,10 @@ export function WhatsAppPreview() {
           flex: 1,
           minHeight: 0,
           background: 'var(--sl-bg-informational)',
+          borderRadius: showBanner ? undefined : 'var(--sl-radius-2)',
           borderBottomLeftRadius: 'var(--sl-radius-2)',
           borderBottomRightRadius: 'var(--sl-radius-2)',
+          alignItems: centerContent ? 'center' : undefined,
         }}
       >
         <img
@@ -60,9 +69,9 @@ export function WhatsAppPreview() {
             height: '80%',
             maxWidth: '100%',
             objectFit: 'contain',
-            borderRadius: '40px',
-            marginTop: 'auto',
+            marginTop: centerContent ? undefined : 'auto',
             boxShadow: 'var(--sl-shadow-2)',
+            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.08))',
           }}
         />
       </Flex>
