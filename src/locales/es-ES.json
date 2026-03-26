@@ -1179,8 +1179,8 @@
         "conversion_rate": "Tasa de Conversión",
         "average_order_value": "Valor Promedio del Pedido"
     },
-    "recent_activity": {
-        "title": "Actividad Reciente",
+    "audit": {
+        "title": "Auditoría",
         "view_details": "Ver detalles",
         "unnamed_contact": "[Contacto sin nombre]",
         "resolution": {

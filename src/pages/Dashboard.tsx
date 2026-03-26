@@ -28,7 +28,7 @@ import { isWhatsAppIntegrated } from '../store/userSlice';
 import { AITeamPerformance } from '../components/AITeamPerformance';
 import { NotificationPerformance } from '../components/NotificationPerformance';
 import { AbandonedCartRecovery } from '../components/AbandonedCartRecovery';
-import { RecentActivity } from '../components/RecentActivity/RecentActivity';
+import { Audit } from '../components/audit/Audit';
 import { SkippedOnboardingBanner } from '../components/SkippedOnboardingBanner';
 import { ConversationUsageBanner } from '../components/ConversationUsageBanner';
 import { selectProject, selectProjectDetail } from '../store/projectSlice';
@@ -168,44 +168,39 @@ function DashboardTabbedContent({
   const tabStore = useTabStore();
 
   return (
-    <TabProvider store={tabStore}>
-      <TabList>
-        <Tab id="abandoned-cart-recovery">
-          {t('dashboard.tabs.abandoned_cart_recovery')}
-        </Tab>
-        <Tab id="agent-performance">
-          {t('dashboard.tabs.agent_performance')}
-        </Tab>
-      </TabList>
+    <Flex direction="column" gap="$space-4">
+      <PerformanceSectionHeader
+        title={t('dashboard.performance')}
+        isFilterVisible={isFilterVisible}
+        period={period}
+        onPeriodChange={onPeriodChange}
+      />
 
-      <TabPanel tabId="abandoned-cart-recovery" style={{ padding: '0' }}>
-        <Flex direction="column" gap="$space-4">
-          <PerformanceSectionHeader
-            title={t('dashboard.performance')}
-            isFilterVisible={isFilterVisible}
-            period={period}
-            onPeriodChange={onPeriodChange}
-          />
-          <WhatsAppDashboardContent
-            skillMetricsData={skillMetricsData}
-            dateRange={dateRange}
-            isSkillMetricsLoading={isSkillMetricsLoading}
-          />
-        </Flex>
-      </TabPanel>
+      <TabProvider store={tabStore}>
+        <Flex direction="column" gap="$space-3">
+          <TabList>
+            <Tab id="abandoned-cart-recovery">
+              {t('dashboard.tabs.abandoned_cart_recovery')}
+            </Tab>
+            <Tab id="agent-performance">
+              {t('dashboard.tabs.agent_performance')}
+            </Tab>
+          </TabList>
 
-      <TabPanel tabId="agent-performance" style={{ padding: '0' }}>
-        <Flex direction="column" gap="$space-4">
-          <PerformanceSectionHeader
-            title={t('dashboard.performance')}
-            isFilterVisible={isFilterVisible}
-            period={period}
-            onPeriodChange={onPeriodChange}
-          />
-          <AITeamPerformance dateRange={dateRange} />
+          <TabPanel tabId="abandoned-cart-recovery" style={{ padding: '0' }}>
+            <WhatsAppDashboardContent
+              skillMetricsData={skillMetricsData}
+              dateRange={dateRange}
+              isSkillMetricsLoading={isSkillMetricsLoading}
+              />
+          </TabPanel>
+
+          <TabPanel tabId="agent-performance" style={{ padding: '0' }}>
+            <AITeamPerformance dateRange={dateRange} />
+          </TabPanel>
         </Flex>
-      </TabPanel>
-    </TabProvider>
+      </TabProvider>
+    </Flex>
   );
 }
 
@@ -336,7 +331,7 @@ export function Dashboard() {
               <ConversationUsageBanner onViewPlans={handleViewPlans} />
             )}
 
-            <RecentActivity />
+            <Audit />
           </Flex>
         ) : (
           <DashboardLoading />

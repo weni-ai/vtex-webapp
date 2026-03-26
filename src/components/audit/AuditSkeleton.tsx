@@ -41,7 +41,7 @@ function SkeletonRow() {
   );
 }
 
-export function RecentActivitySkeleton() {
+export function AuditSkeleton() {
   return (
     <Table columnWidths={TABLE_COLUMN_WIDTHS}>
       <TableHeader>

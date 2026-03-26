@@ -1,10 +1,10 @@
 import { Button, EmptyState, EmptyStateActions, Flex, Heading, Text } from '@vtex/shoreline';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { RecentActivityHeader } from './RecentActivityHeader';
-import { RecentActivityTable } from './RecentActivityTable';
-import { RecentActivitySkeleton } from './RecentActivitySkeleton';
-import { useRecentActivity } from './useRecentActivity';
+import { AuditHeader } from './AuditHeader';
+import { AuditTable } from './AuditTable';
+import { AuditSkeleton } from './AuditSkeleton';
+import { useAuditData } from './useAuditData';
 
 function SkippedOnboardingEmpty({ isActivationEnabled }: { isActivationEnabled: boolean }) {
   const { t } = useTranslation();
@@ -12,15 +12,15 @@ function SkippedOnboardingEmpty({ isActivationEnabled }: { isActivationEnabled: 
 
   return (
     <EmptyState size="medium">
-      <Heading>{t('recent_activity.empty.skipped.title')}</Heading>
-      <Text>{t('recent_activity.empty.skipped.description')}</Text>
+      <Heading>{t('audit.empty.skipped.title')}</Heading>
+      <Text>{t('audit.empty.skipped.description')}</Text>
       <EmptyStateActions>
         <Button
           variant="primary"
           disabled={!isActivationEnabled}
           onClick={() => navigate('/onboarding')}
         >
-          {t('recent_activity.empty.skipped.button')}
+          {t('audit.empty.skipped.button')}
         </Button>
       </EmptyStateActions>
     </EmptyState>
@@ -32,25 +32,25 @@ function NoConversationsEmpty() {
 
   return (
     <EmptyState size="medium"> 
-      <Heading>{t('recent_activity.empty.no_data.title')}</Heading>
-      <Text>{t('recent_activity.empty.no_data.description')}</Text>
+      <Heading>{t('audit.empty.no_data.title')}</Heading>
+      <Text>{t('audit.empty.no_data.description')}</Text>
     </EmptyState>
   );
 }
 
-export function RecentActivity() {
-  const { state, conversations, isActivationEnabled } = useRecentActivity();
+export function Audit() {
+  const { state, conversations, isActivationEnabled } = useAuditData();
 
   const showViewDetailsButton = state === 'data' && conversations.length > 0;
 
   return (
     <Flex direction="column" gap="$space-4">
-      <RecentActivityHeader showViewDetailsButton={showViewDetailsButton} />
+      <AuditHeader showViewDetailsButton={showViewDetailsButton} />
 
-      {state === 'loading' && <RecentActivitySkeleton />}
+      {state === 'loading' && <AuditSkeleton />}
       {state === 'onboarding_skipped' && <SkippedOnboardingEmpty isActivationEnabled={isActivationEnabled} />}
       {state === 'empty' && <NoConversationsEmpty />}
-      {state === 'data' && <RecentActivityTable conversations={conversations} />}
+      {state === 'data' && <AuditTable conversations={conversations} />}
     </Flex>
   );
 }

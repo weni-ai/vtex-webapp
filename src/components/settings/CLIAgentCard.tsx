@@ -74,7 +74,7 @@ export function CLIAgentCard({ uuid, name, description, code, type, assignedAgen
               {agentName}
             </Text>
 
-            <Text variant="caption1" color="$fg-base-soft">
+            <Text variant="caption1" color="$fg-base-soft" style={{ textWrap: 'nowrap' }}>
               PT-BR
             </Text>
           </Flex>
