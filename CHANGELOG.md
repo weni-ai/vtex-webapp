@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.5.0] - 2026-04-15
+
+### Changed
+- feat: add deprecation modal for CX Dashboard migration
+
+## [2.4.2] - 2026-03-27
+
+### Changed
+- feat: Prevent Pixel Script From Loading Multiple Times
+
 ## [2.4.1] - 2026-03-19
 
 ### Fixed
