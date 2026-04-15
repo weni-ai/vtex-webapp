@@ -28,6 +28,12 @@
         "clear": "Limpar",
         "apply": "Aplicar"
     },
+    "deprecation_modal": {
+        "description": "O CX Dashboard agora está disponível em <0>Storefront > CX > Dashboard</0>, totalmente funcional com todos os dados e configurações preservados.",
+        "discontinuation_notice": "Este aplicativo será descontinuado. Recomendamos acessá-lo a partir do novo local.",
+        "go_to_dashboard": "Ir para o Dashboard",
+        "title": "O CX Dashboard mudou de lugar"
+    },
     "onboarding": {
         "channel_selection": {
             "title": "A plataforma de Experiência Conversacional Inteligente da VTEX para marcas e varejistas.",

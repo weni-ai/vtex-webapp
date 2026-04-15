@@ -28,6 +28,12 @@
         "clear": "Limpiar",
         "apply": "Aplicar"
     },
+    "deprecation_modal": {
+        "description": "CX Dashboard ahora está disponible en <0>Storefront > CX > Dashboard</0>, completamente funcional con todos los datos y configuraciones preservados.",
+        "discontinuation_notice": "Esta aplicación será descontinuada. Recomendamos acceder desde la nueva ubicación.",
+        "go_to_dashboard": "Ir al Dashboard",
+        "title": "CX Dashboard cambió de ubicación"
+    },
     "onboarding": {
         "select_agent": {
             "title": "Asignar el primer agente a tu equipo"
