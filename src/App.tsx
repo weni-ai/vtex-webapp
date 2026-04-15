@@ -17,6 +17,7 @@ import { AgentIndex } from './pages/agent/Index';
 import { Onboarding } from './pages/Onboarding';
 import { Adapters } from './pages/Adapters';
 import { BillingPlans } from './pages/billing/BillingPlans';
+import { DeprecationModal } from './components/DeprecationModal';
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function App() {
 
   return (
     <>
+      <DeprecationModal />
       {isInitialLoading ? (
         <Grid
           rows="1fr"
