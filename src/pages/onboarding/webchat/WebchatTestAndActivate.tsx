@@ -19,7 +19,7 @@ import {
 import { WebchatOnboardingLayout } from './WebchatOnboardingLayout';
 import { UseCaseId } from './webchatUseCases';
 import { Instructions } from '../../../components/manager/Instructions';
-import { CRAWLING_CHANNEL } from '../../../constants/onboarding';
+import { SETUP_CHANNEL } from '../../../constants/onboarding';
 import { ActivationSection } from '../../../components/shared/ActivationSection';
 import { DISPLAY_RATIO } from '../../../components/shared/activationConstants';
 import type { ActivationMode } from '../../../components/shared/activationConstants';
@@ -115,7 +115,7 @@ export function WebchatTestAndActivate() {
 
     setIsActivating(true);
     try {
-      const activation = await activateInStore(CRAWLING_CHANNEL.webchat, webchatAppUuid, vtexAccountId);
+      const activation = await activateInStore(SETUP_CHANNEL.webchat, webchatAppUuid, vtexAccountId);
       if (activation.success) {
         await updateOnboarding(vtexAccount, { completed: true });
         dispatch(setOnboardingStatus({

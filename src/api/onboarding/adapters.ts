@@ -2,14 +2,14 @@ import { OnboardStatus } from "../../interfaces/Store";
 import { 
   ensureProjectAndUser, 
   fetchOnboardingStatus, 
-  startCrawling, 
+  startOnboardingSetup,
   updateOnboarding, 
   updateWebchatDisplayRatio, 
   activatePixelApp,
   getWebchatConfig,
 } from "./requests";
-import type { WebchatConfigResponse } from "./requests";
-import type { CrawlingChannel } from "../../constants/onboarding";
+import type { WebchatConfigResponse, WhatsAppChannelData } from "./requests";
+import type { SetupChannel } from "../../constants/onboarding";
 
 export interface OnboardStatusResponse {
   success: boolean;
@@ -23,7 +23,7 @@ export interface EnsureProjectAndUserResponse {
   data?: { project_uuid: string; user_uuid: string };
 }
 
-export interface StartCrawlingResponse {
+export interface StartOnboardingSetupResponse {
   success: boolean;
   error?: string;
   data?: { status: string };
@@ -58,10 +58,10 @@ export interface GetWebchatConfigResponse {
 export interface OnboardAdapter {
   getOnboardingStatus(vtex_account: string): Promise<OnboardStatusResponse>;
   ensureProjectAndUser(vtex_account: string, user_email: string): Promise<EnsureProjectAndUserResponse>;
-  startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse>;
+  startOnboardingSetup(vtex_account: string, url: string, channel: SetupChannel, channelData?: WhatsAppChannelData): Promise<StartOnboardingSetupResponse>;
   updateOnboarding(vtex_account: string, data: { current_page?: string; completed?: boolean; skipped?: boolean }): Promise<UpdateOnboardingResponse>;
   updateDisplayRatio(webchatAppUuid: string, newConfig: object): Promise<UpdateDisplayRatioResponse>;
-  activateInStore(channel: CrawlingChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse>;
+  activateInStore(channel: SetupChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse>;
   getWebchatConfig(webchatAppUuid: string): Promise<GetWebchatConfigResponse>;
 }
 
@@ -92,15 +92,15 @@ export class VTEXOnboardAdapter implements OnboardAdapter {
     }
   }
 
-  async startCrawling(vtex_account: string, url: string, channel: CrawlingChannel): Promise<StartCrawlingResponse> {
+  async startOnboardingSetup(vtex_account: string, url: string, channel: SetupChannel, channelData?: WhatsAppChannelData): Promise<StartOnboardingSetupResponse> {
     try {
-      const response = await startCrawling(vtex_account, url, channel);
+      const response = await startOnboardingSetup(vtex_account, url, channel, channelData);
       if (!response) {
-        throw new Error('error starting crawling.');
+        throw new Error('error starting onboarding setup.');
       }
       return { success: true, data: { status: response.status } };
     } catch (error) {
-      console.error('error starting crawling:', error);
+      console.error('error starting onboarding setup:', error);
       return { success: false, error: error instanceof Error ? error.message : 'unknown error' };
     }
   }
@@ -137,7 +137,7 @@ export class VTEXOnboardAdapter implements OnboardAdapter {
     }
   }
 
-  async activateInStore(channel: CrawlingChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse> {
+  async activateInStore(channel: SetupChannel, appUuid: string, accountId: string): Promise<ActivateInStoreResponse> {
     try {
       await activatePixelApp(channel, appUuid, accountId);
       return { success: true };
