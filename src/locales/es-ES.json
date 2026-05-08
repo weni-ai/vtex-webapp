@@ -30,7 +30,7 @@
     },
     "deprecation_modal": {
         "description": "CX Dashboard ahora está disponible en <0>Storefront > CX > Dashboard</0>, completamente funcional con todos los datos y configuraciones preservados.",
-        "discontinuation_notice": "Esta aplicación será descontinuada. Recomendamos acceder desde la nueva ubicación.",
+        "discontinuation_notice": "Como esta aplicación será descontinuada pronto, recomendamos acceder desde la nueva ubicación y desinstalar esta versión.",
         "go_to_dashboard": "Ir al Dashboard",
         "title": "CX Dashboard cambió de ubicación"
     },
