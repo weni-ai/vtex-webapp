@@ -36,9 +36,9 @@ export function DeprecationModal() {
             i18nKey="deprecation_modal.description"
             components={[<strong />]}
           />
-        </Text>
 
-        <Text variant="body">
+          <br />
+
           {t('deprecation_modal.discontinuation_notice')}
         </Text>
       </ModalContent>
