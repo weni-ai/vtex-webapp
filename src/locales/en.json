@@ -430,6 +430,14 @@
         "active_order_status": {
           "title": "Active Order Status",
           "description": "Agent responsible for triggering order status templates, based on the status received from VTEX - Order Status"
+        },
+        "active_cart_abandonment": {
+          "title": "WhatsApp Cart Recovery",
+          "description": "Agent responsible for triggering cart abandonment templates, based on cart data received from VTEX - Cart Abandonment"
+        },
+        "payment_agent_pix_recovery": {
+          "title": "Whatsapp Payment Recovery",
+          "description": "Agent responsible for triggering templates for payment recovery, when the order was created but didn't have a payment confirmation"
         }
       }
     },
