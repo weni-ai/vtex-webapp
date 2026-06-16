@@ -64,7 +64,7 @@ export function Modal(props: {
     size={sizeMap[props.size as keyof typeof sizeMap] || 'lg'}
     title={props.header}
     showCloseIcon={true}
-    onUpdate:modelValue={onUpdateModelValue}
+    {...{ 'onUpdate:modelValue': onUpdateModelValue }}
   >
     {props.children}
   </UnnnicModal>;

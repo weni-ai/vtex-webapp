@@ -1,4 +1,3 @@
-import './previewWebChat.css';
 import i18n from '../../../i18n';
 
 export interface WebChatInitConfig {

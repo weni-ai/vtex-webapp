@@ -35,7 +35,7 @@ export function Checkbox(props: {
     <section style={{ display: 'flex', alignItems: 'center', gap: 'var(--sl-space-2)' }}>
       <UnnnicCheckbox
         modelValue={props.checked}
-        onUpdate:modelValue={props.onChange}
+        {...{ 'onUpdate:modelValue': props.onChange }}
         data-testid={props['data-testid']}
         size="md"
       >

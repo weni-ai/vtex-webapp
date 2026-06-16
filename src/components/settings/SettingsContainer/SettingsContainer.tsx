@@ -1,5 +1,4 @@
 import { DrawerProvider, DrawerPopover, DrawerHeader, DrawerDismiss, DrawerHeading, DrawerFooter, Button, Spinner, toast } from "@vtex/shoreline";
-import './SettingsContainer.style.css';
 import { PreferencesOrderStatusActive } from "../OrderStatusActive";
 import { PreferencesAbandonedCartActive } from "../AbandonedCartActive";
 import { useState } from "react";

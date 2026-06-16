@@ -45,7 +45,7 @@ export function Radio(props: {
     <UnnnicRadio
       modelValue={props.checked ? props.value : `no-${props.value}`}
       value={props.value}
-      onUpdate:modelValue={onUpdateModelValue}
+      {...{ 'onUpdate:modelValue': onUpdateModelValue }}
       size="md"
     >
       {props.children}

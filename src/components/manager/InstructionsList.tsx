@@ -2,8 +2,6 @@ import { Tab, TabPanel, TabProvider, useTabStore, Flex, Text, Skeleton, TabList,
 import { Button } from "../adapters/Button";
 import { useEffect, useMemo, useState } from "react";
 
-import './InstructionsList.css';
-
 export function InstructionsList({
   customInstructionsState,
   customInstructionsList,
