@@ -1,7 +1,7 @@
 import getEnv from "../../utils/env";
 import { proxy } from "../proxy";
 import { OnboardStatus } from "../../interfaces/Store";
-import type { CrawlingChannel } from "../../constants/onboarding";
+import type { SetupChannel } from "../../constants/onboarding";
 
 export interface WebchatConfigResponse {
   displayRatio: number;
@@ -34,14 +34,26 @@ export const ensureProjectAndUser = async (vtex_account: string, user_email: str
   return response;
 }
 
-export const startCrawling = async (vtex_account: string, url: string, channel: CrawlingChannel) => {
+export interface WhatsAppChannelData {
+  auth_code: string;
+  waba_id: string;
+  phone_number_id: string;
+}
+
+export const startOnboardingSetup = async (
+  vtex_account: string,
+  url: string,
+  channel: SetupChannel,
+  channelData?: WhatsAppChannelData,
+) => {
   const response = await proxy<{ status: string }>(
     'POST',
-    `${getEnv('VITE_APP_COMMERCE_URL')}/api/onboard/${vtex_account}/start-crawling/`,
+    `${getEnv('VITE_APP_COMMERCE_URL')}/api/onboard/${vtex_account}/start-setup/`,
     {
-      data: { 
+      data: {
         crawl_url: `https://${url}`,
         channel,
+        ...(channelData && { channel_data: channelData }),
       },
     }
   );
@@ -79,7 +91,7 @@ export const updateWebchatDisplayRatio = async (
   return response;
 }
 
-export const activatePixelApp = async (channel: CrawlingChannel, appUuid: string, accountId: string) => {
+export const activatePixelApp = async (channel: SetupChannel, appUuid: string, accountId: string) => {
   const response = await proxy<{ uuid: string }>(
     'POST',
     `${getEnv('VITE_APP_COMMERCE_URL')}/api/onboard/${channel}/activate/`,

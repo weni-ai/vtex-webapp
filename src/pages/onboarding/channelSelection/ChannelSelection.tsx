@@ -5,10 +5,13 @@ import { Flex, Grid, Heading, Text } from "@vtex/shoreline";
 import { OnboardChannel } from "../../../interfaces/Store";
 import { setSelectedChannel, selectOnboardingStatus, setOnboardingStatus } from "../../../store/onboardSlice";
 import { selectAccount, selectUser } from "../../../store/userSlice";
-import { startCrawling, updateOnboarding } from "../../../services/onboarding.service";
+import { startOnboardingSetup, updateOnboarding } from "../../../services/onboarding.service";
+import { startFacebookLogin } from "../../../utils/facebook/login";
+import type { FacebookLoginResult } from "../../../utils/facebook/login";
 import { ChannelCard } from "./ChannelCard";
 import { SelectAccountHostModal } from "./SelectAccountHostModal";
-import { CRAWLING_CHANNEL, ONBOARDING_PAGES } from "../../../constants/onboarding";
+import { WhatsAppActivationModal } from "./WhatsAppActivationModal";
+import { ONBOARD_CHANNEL, SETUP_CHANNEL, ONBOARDING_PAGES } from "../../../constants/onboarding";
 import { TermsAndConditionsModal } from "./TermsAndConditionsModal";
 
 export function ChannelSelection() {
@@ -19,43 +22,36 @@ export function ChannelSelection() {
   const accountData = useSelector(selectAccount);
   const userData = useSelector(selectUser);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isWebchatHostModalOpen, setIsWebchatHostModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [isWhatsAppActivationModalOpen, setIsWhatsAppActivationModalOpen] = useState(false);
+  const [isWhatsAppLoginLoading, setIsWhatsAppLoginLoading] = useState(false);
+  const [isWhatsAppHostModalOpen, setIsWhatsAppHostModalOpen] = useState(false);
+  const [whatsAppCredentials, setWhatsAppCredentials] = useState<FacebookLoginResult | null>(null);
 
   const hosts = accountData?.hosts ?? [];
 
   function handleCardClick(channel: OnboardChannel) {
     dispatch(setSelectedChannel(channel));
 
-    if (channel === "webchat") {
-      setIsModalOpen(true);
+    if (channel === ONBOARD_CHANNEL.WEBCHAT) {
+      setIsWebchatHostModalOpen(true);
       return;
     }
 
-    navigateToLegacyOnboarding();
+    if (channel === ONBOARD_CHANNEL.WHATSAPP) {
+      setIsWhatsAppActivationModalOpen(true);
+      return;
+    }
   }
 
-  async function navigateToLegacyOnboarding() {
-    const vtexAccount = userData?.account;
-    if (!vtexAccount) return;
-
-    updateOnboarding(vtexAccount, { current_page: ONBOARDING_PAGES.ONBOARD_LEGACY });
-
-    dispatch(
-      setOnboardingStatus({
-        ...onboardingStatus!,
-        current_page: ONBOARDING_PAGES.ONBOARD_LEGACY,
-      }),
-    );
-  }
-
-  async function handleConfirm(host: string) {
+  async function handleWebchatHostConfirm(host: string) {
     const vtexAccount = userData?.account;
     if (!vtexAccount) return;
 
     updateOnboarding(vtexAccount, { current_page: ONBOARDING_PAGES.ONBOARD_WEBCHAT_SETUP });
 
-    startCrawling(vtexAccount, host, CRAWLING_CHANNEL.webchat);
+    startOnboardingSetup(vtexAccount, host, SETUP_CHANNEL.webchat);
 
     dispatch(
       setOnboardingStatus({
@@ -64,7 +60,50 @@ export function ChannelSelection() {
       }),
     );
 
-    setIsModalOpen(false);
+    setIsWebchatHostModalOpen(false);
+  }
+
+  function handleWhatsAppContinue() {
+    setIsWhatsAppLoginLoading(true);
+
+    startFacebookLogin("", {
+      onSuccess: handleFacebookLoginSuccess,
+      onCancel: handleFacebookLoginCancel,
+    });
+  }
+
+  function handleFacebookLoginSuccess(result: FacebookLoginResult) {
+    setIsWhatsAppLoginLoading(false);
+    setIsWhatsAppActivationModalOpen(false);
+    setWhatsAppCredentials(result);
+    setIsWhatsAppHostModalOpen(true);
+  }
+
+  function handleFacebookLoginCancel() {
+    setIsWhatsAppLoginLoading(false);
+  }
+
+  async function handleWhatsAppHostConfirm(host: string) {
+    const vtexAccount = userData?.account;
+    if (!vtexAccount || !whatsAppCredentials) return;
+
+    await startOnboardingSetup(vtexAccount, host, SETUP_CHANNEL.whatsapp, {
+      auth_code: whatsAppCredentials.code,
+      waba_id: whatsAppCredentials.wabaId,
+      phone_number_id: whatsAppCredentials.phoneId,
+    });
+
+    updateOnboarding(vtexAccount, { current_page: ONBOARDING_PAGES.ONBOARD_WHATSAPP_SETUP });
+
+    dispatch(
+      setOnboardingStatus({
+        ...onboardingStatus!,
+        current_page: ONBOARDING_PAGES.ONBOARD_WHATSAPP_SETUP,
+      }),
+    );
+
+    setIsWhatsAppHostModalOpen(false);
+    setWhatsAppCredentials(null);
   }
 
   return (
@@ -99,7 +138,7 @@ export function ChannelSelection() {
           description={t("onboarding.channel_selection.webchat.description")}
           benefits={t("onboarding.channel_selection.webchat.benefits", { returnObjects: true }) as string[]}
           footer={t("onboarding.channel_selection.webchat.footer")}
-          onClick={() => handleCardClick("webchat")}
+          onClick={() => handleCardClick(ONBOARD_CHANNEL.WEBCHAT)}
           isRecommended
         />
 
@@ -108,7 +147,7 @@ export function ChannelSelection() {
           description={t("onboarding.channel_selection.whatsapp.description")}
           benefits={t("onboarding.channel_selection.whatsapp.benefits", { returnObjects: true }) as string[]}
           footer={t("onboarding.channel_selection.whatsapp.footer")}
-          onClick={() => handleCardClick("whatsapp")}
+          onClick={() => handleCardClick(ONBOARD_CHANNEL.WHATSAPP)}
         />
       </Grid>
 
@@ -133,9 +172,26 @@ export function ChannelSelection() {
       </Flex>
 
       <SelectAccountHostModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleConfirm}
+        open={isWebchatHostModalOpen}
+        onClose={() => setIsWebchatHostModalOpen(false)}
+        onConfirm={handleWebchatHostConfirm}
+        hosts={hosts}
+      />
+
+      <WhatsAppActivationModal
+        open={isWhatsAppActivationModalOpen}
+        isLoading={isWhatsAppLoginLoading}
+        onClose={() => setIsWhatsAppActivationModalOpen(false)}
+        onContinue={handleWhatsAppContinue}
+      />
+
+      <SelectAccountHostModal
+        open={isWhatsAppHostModalOpen}
+        onClose={() => {
+          setIsWhatsAppHostModalOpen(false);
+          setWhatsAppCredentials(null);
+        }}
+        onConfirm={handleWhatsAppHostConfirm}
         hosts={hosts}
       />
 

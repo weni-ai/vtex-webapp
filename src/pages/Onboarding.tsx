@@ -3,6 +3,7 @@ import { selectOnboardingStatus } from "../store/onboardSlice";
 import { ChannelSelection } from "./onboarding/channelSelection/ChannelSelection";
 import { WebchatOnboardSetup } from "./onboarding/webchat/WebchatOnboardSetup";
 import { WebchatTestAndActivate } from "./onboarding/webchat/WebchatTestAndActivate";
+import { WhatsAppOnboardSetup } from "./onboarding/whatsapp/WhatsAppOnboardSetup";
 import { LegacyOnboarding } from "./onboarding/legacyOnboarding/LegacyOnboarding";
 import { ONBOARDING_PAGES } from "../constants/onboarding";
 
@@ -10,6 +11,7 @@ const PAGE_COMPONENTS: Record<string, React.ComponentType> = {
   [ONBOARDING_PAGES.ONBOARD_CHANNEL_SELECTION]: ChannelSelection,
   [ONBOARDING_PAGES.ONBOARD_WEBCHAT_SETUP]: WebchatOnboardSetup,
   [ONBOARDING_PAGES.ONBOARD_WEBCHAT_TEST]: WebchatTestAndActivate,
+  [ONBOARDING_PAGES.ONBOARD_WHATSAPP_SETUP]: WhatsAppOnboardSetup,
   [ONBOARDING_PAGES.ONBOARD_LEGACY]: LegacyOnboarding,
 };
 

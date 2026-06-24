@@ -4,6 +4,17 @@ import getEnv from "../env";
 import { setWppLoading } from "../../store/projectSlice";
 import store from "../../store/provider.store";
 
+export interface FacebookLoginResult {
+    code: string;
+    wabaId: string;
+    phoneId: string;
+}
+
+export interface FacebookLoginOptions {
+    onSuccess?: (result: FacebookLoginResult) => void;
+    onCancel?: () => void;
+}
+
 const LOGIN_TIMEOUT_MS = 10 * 60 * 1000;
 
 function initFacebookSDK(appId: string, loginCallback: () => Promise<void>) {
@@ -75,7 +86,7 @@ function resetLoginState() {
     store.dispatch(setWppLoading(false));
 }
 
-export function startFacebookLogin(project_uuid: string) {
+export function startFacebookLogin(project_uuid: string, options?: FacebookLoginOptions) {
     const fbAppId = getEnv("VITE_APP_FACEBOOK_APP_ID");
     const configId = getEnv("VITE_APP_WHATSAPP_FACEBOOK_APP_ID");
 
@@ -151,6 +162,7 @@ export function startFacebookLogin(project_uuid: string) {
         loginTimeoutId = setTimeout(() => {
             console.warn("Facebook login timed out, cleaning up.");
             resetLoginState();
+            options?.onCancel?.();
         }, LOGIN_TIMEOUT_MS);
 
         FB.login(
@@ -162,20 +174,27 @@ export function startFacebookLogin(project_uuid: string) {
                     console.error("Login canceled or not fully authorized.");
                     loginInProgress = false;
                     store.dispatch(setWppLoading(false));
+                    options?.onCancel?.();
                     return;
                 }
 
                 const code = response.authResponse.code;
                 console.log("Login Successful.");
 
-                createChannel(code, project_uuid, wabaId, phoneId)
-                    .catch((error) => {
-                        console.error("Failed to create channel:", error);
-                    })
-                    .finally(() => {
-                        loginInProgress = false;
-                        store.dispatch(setWppLoading(false));
-                    });
+                if (options?.onSuccess) {
+                    options.onSuccess({ code, wabaId, phoneId });
+                    loginInProgress = false;
+                    store.dispatch(setWppLoading(false));
+                } else {
+                    createChannel(code, project_uuid, wabaId, phoneId)
+                        .catch((error) => {
+                            console.error("Failed to create channel:", error);
+                        })
+                        .finally(() => {
+                            loginInProgress = false;
+                            store.dispatch(setWppLoading(false));
+                        });
+                }
             },
             loginOptions
         );
